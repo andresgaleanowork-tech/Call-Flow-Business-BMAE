@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial · DiagSystem B&amp;M</title>
+<meta name="description" content="Onboarding del equipo comercial B&M: guiones NEURO Iberdrola para PYMES y Residencial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --font-display:'Inter Tight','Inter',-apple-system,sans-serif;
+    --font-body:'Inter',-apple-system,sans-serif;
+    --negro:#0A0A0A; --negro-suave:#2A2A2A; --gris-oscuro:#4A4A4A;
+    --gris-medio:#6B6B6B; --gris-claro:#999999; --gris-linea:#E5E5E5;
+    --gris-fondo:#FAFAF9; --blanco:#FFF;
+    --verde:#00A650; --verde-oscuro:#007A3B;
+    --radio:8px; --sombra:0 4px 16px rgba(0,0,0,.06);
+    --ease:cubic-bezier(.4,0,.2,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font-body);background:var(--gris-fondo);color:var(--negro-suave);
+       min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--font-display);font-weight:500;letter-spacing:.02em;color:var(--negro)}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:4px}
+  header{background:var(--blanco);border-bottom:1px solid var(--gris-linea);
+    padding:20px 32px;display:flex;align-items:center;gap:16px}
+  header .back{font-size:.82rem;color:var(--gris-medio);margin-right:auto;transition:color .15s}
+  header .back:hover{color:var(--negro)}
+  .brand h1{font-size:1rem;font-weight:500}
+  .brand small{display:block;font-size:.72rem;color:var(--gris-medio)}
+  main{flex:1;width:100%;max-width:1140px;margin:0 auto;padding:60px 32px 40px}
+  .intro{max-width:64ch;margin-bottom:44px}
+  .intro .kicker{font-size:.68rem;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--verde-oscuro);margin-bottom:12px}
+  .intro h2{font-size:clamp(1.7rem,3vw,2.2rem);font-weight:400;line-height:1.2;margin-bottom:14px}
+  .intro p{font-size:1rem;line-height:1.7;color:var(--gris-oscuro)}
+  .menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:56px}
+  .card{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);
+    padding:34px 30px 38px;display:flex;flex-direction:column;min-height:230px;
+    position:relative;transition:all .22s var(--ease);cursor:pointer}
+  .card:hover{border-color:var(--verde);box-shadow:var(--sombra);transform:translateY(-3px)}
+  .card:hover .card-arrow{opacity:1;transform:translateX(0);color:var(--verde)}
+  .card-emoji{font-size:1.9rem;line-height:1;margin-bottom:22px}
+  .card-tag{font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--verde-oscuro);margin-bottom:10px}
+  .card h3{font-size:1.15rem;font-weight:500;margin-bottom:8px;line-height:1.3}
+  .card p{font-size:.88rem;line-height:1.65;color:var(--gris-medio);flex:1}
+  .card-arrow{position:absolute;bottom:22px;right:24px;font-size:1.05rem;color:var(--gris-claro);
+    opacity:.5;transform:translateX(-4px);transition:all .22s var(--ease)}
+  .shortcut{border-top:1px solid var(--gris-linea);padding-top:36px;max-width:720px}
+  .shortcut h3{font-size:1.02rem;font-weight:500;margin-bottom:8px}
+  .shortcut p{font-size:.88rem;line-height:1.65;color:var(--gris-medio);margin-bottom:18px}
+  .shortcut-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:6px;
+    border:1px solid var(--gris-linea);background:var(--blanco);color:var(--negro);
+    font-family:var(--font-body);font-size:.85rem;font-weight:500;
+    padding:11px 18px;border-radius:6px;min-height:44px;cursor:pointer;
+    transition:all .15s var(--ease)}
+  .btn:hover{border-color:var(--negro);background:var(--negro);color:var(--blanco)}
+  footer{text-align:center;font-size:.72rem;color:var(--gris-claro);padding:28px 20px;
+    border-top:1px solid var(--gris-linea);background:var(--blanco)}
+  @media (max-width:640px){
+    header{padding:16px 20px;flex-wrap:wrap}
+    header .back{margin-right:0;width:100%;margin-bottom:8px}
+    main{padding:36px 20px}
+    .menu{grid-template-columns:1fr}
+    .intro h2{font-size:1.4rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="index.html">← Menú principal</a>
+  <div class="brand">
+    <h1>Tutorial · DiagSystem</h1>
+    <small>Onboarding del equipo comercial</small>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <div class="kicker">Elige tu segmento</div>
+    <h2>Cada segmento tiene su propio onboarding</h2>
+    <p>La mecánica de la herramienta es la misma, pero las objeciones, los ejemplos y el roleplay son específicos del tipo de cliente. Haz el tutorial del segmento con el que vayas a trabajar la primera semana; después ya puedes usar el guion directamente.</p>
+  </div>
+
+  <nav class="menu" aria-label="Elige tutorial">
+    <a class="card" href="pymes.html#tutorial" aria-label="Empezar tutorial PYMES">
+      <div class="card-emoji" aria-hidden="true">🏭</div>
+      <span class="card-tag">~60 min · PYMES</span>
+      <h3>Tutorial PYMES</h3>
+      <p>Para el comercial de empresas: tour de la herramienta, objeciones de hostelería y talleres, cierres técnicos (6.1TD, placas, cuadros) y roleplay del Ocupado y el Desconfiado.</p>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a class="card" href="residencial.html#tutorial" aria-label="Empezar tutorial Residencial">
+      <div class="card-emoji" aria-hidden="true">🏠</div>
+      <span class="card-tag">~60 min · Residencial</span>
+      <h3>Tutorial Residencial</h3>
+      <p>Para el comercial de hogares: pisos, chalets, segundas residencias. Objeciones de precio, decisiones en pareja, PVPC, placas solares y verificación anti-timo.</p>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <section class="shortcut">
+    <h3>¿Ya hiciste el tutorial?</h3>
+    <p>Abre el guion directamente y empieza a llamar. El árbol, las objeciones y los cierres están listos.</p>
+    <div class="shortcut-btns">
+      <a class="btn" href="pymes.html#guion">🏭 Guion PYMES →</a>
+      <a class="btn" href="residencial.html#guion">🏠 Guion Residencial →</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Herramienta interna · Uso exclusivo de B&amp;M Asesores Energéticos · © 2026
+</footer>
+
+</body>
+</html>

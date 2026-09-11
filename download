@@ -1,0 +1,12 @@
+# Material de trabajo del desarrollador — NUNCA publicar en GitHub
+_dev/
+
+# Dependencias de testing
+node_modules/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+# Caché npm local
+.npm/

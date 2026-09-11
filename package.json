@@ -1,0 +1,16 @@
+{
+  "name": "b-m-diagsystem",
+  "version": "3.0.0",
+  "private": true,
+  "description": "DiagSystem — Sistema de Diálogo Interactivo Callcenter · Guion de ventas neuro interactivo + onboarding PYMES en un solo HTML (offline)",
+  "license": "LicenseRef-Proprietary",
+  "author": "Andrés Galeano",
+  "scripts": {
+    "test": "node tests/bateria-qa.js && node tests/bateria-residencial.js",
+    "test:pymes": "node tests/bateria-qa.js",
+    "test:residencial": "node tests/bateria-residencial.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}
