@@ -1,4 +1,4 @@
-# DiagSystem · B&M Asesores Energéticos
+# Call Flow Business · B&M Asesores Energéticos
 
 Sistema de diálogo interactivo para el equipo comercial. Guiones NEURO de 
 Iberdrola con árbol de decisión en vivo, objeciones con naturalidad española, 
@@ -19,10 +19,10 @@ por URL.
 
 ## URLs tras desplegar
 
-- Menú: `https://andresgaleanowork-tech.github.io/B-M-DiagSystem/`
-- PYMES: `https://andresgaleanowork-tech.github.io/B-M-DiagSystem/pymes.html`
-- Residencial: `https://andresgaleanowork-tech.github.io/B-M-DiagSystem/residencial.html`
-- Tutorial: `https://andresgaleanowork-tech.github.io/B-M-DiagSystem/tutorial.html`
+- Menú: `https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/`
+- PYMES: `https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/pymes.html`
+- Residencial: `https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/residencial.html`
+- Tutorial: `https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/tutorial.html`
 
 Atajos con hash:
 

@@ -1,8 +1,8 @@
 {
-  "name": "b-m-diagsystem",
+  "name": "call-flow-business-bmae",
   "version": "3.0.0",
   "private": true,
-  "description": "DiagSystem — Sistema de Diálogo Interactivo Callcenter · Guion de ventas neuro interactivo + onboarding PYMES en un solo HTML (offline)",
+  "description": "Call Flow Business — Sistema de Diálogo Interactivo Callcenter · Guion de ventas neuro interactivo + onboarding PYMES en un solo HTML (offline)",
   "license": "LicenseRef-Proprietary",
   "author": "Andrés Galeano",
   "scripts": {
