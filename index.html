@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4C3EBF">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Call Flow Business · B&M Asesores Energéticos</title>
 <meta name="description" content="Call Flow Business — Sistema de Diálogo Interactivo del equipo comercial de B&M Asesores Energéticos. Guiones NEURO para PYMES y Residencial.">
 <meta property="og:type" content="website">
@@ -132,5 +134,11 @@
   Herramienta interna · Uso exclusivo de B&amp;M Asesores Energéticos · © 2026
 </footer>
 
+<script>
+/* PWA: registrar service worker solo servido por http(s); en file:// se ignora silenciosamente */
+if(location.protocol.indexOf('http')===0&&'serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+</script>
 </body>
 </html>

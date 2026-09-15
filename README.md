@@ -1,5 +1,7 @@
 # Call Flow Business · B&M Asesores Energéticos
 
+> Estado: **v1.1** (14-09-2026) · ver el [registro de cambios](CHANGELOG.md)
+
 Sistema de diálogo interactivo para el equipo comercial. Guiones NEURO de 
 Iberdrola con árbol de decisión en vivo, objeciones con naturalidad española, 
 roleplay y onboarding completo.
