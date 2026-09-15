@@ -3510,7 +3510,7 @@ body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='1.2', GUIAFECHA='14-09-2026';
+var VERSION='1.2.1', GUIAFECHA='14-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=(function(){ try{ return localStorage.getItem('bm_tut_omitido_res')!==null?'_res':''; }catch(e){ return ''; } })();
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -6172,7 +6172,7 @@ function req(metodo,url,cuerpo,cb){
    .then(function(r){ return r.text().then(function(txt){ var j=null; try{j=JSON.parse(txt);}catch(e){} cb&&cb(r.status,j); }); })
    .catch(function(){ cb&&cb(0,null); });
 }
-var _pushT=null, _estado='pausada', _ultima=null;
+var _pushT=null, _retEst=0, _estado='pausada', _ultima=null;
 function cfbSyncPush(espera){
   if(location.protocol.indexOf('http')!==0&&!LSg('cfb_sync_token','')&&typeof window==='object'){ /* exe/apk también sincronizan si hay clave */ }
   if(!token()||!perfil().slug){ _estado='sin clave'; return; }
@@ -6180,7 +6180,7 @@ function cfbSyncPush(espera){
   _pushT=setTimeout(function(){
     var u=urlPerfil(); if(!u){ _estado='sin perfil'; return; }
     _estado='guardando…'; cfbSyncEstado(true);
-    req('GET',url,undefined,function(st,j){
+    req('GET',u,undefined,function(st,j){
       var sha=(st===200&&j&&j.sha)?j.sha:undefined;
       var snap=snapshot();
       var cuerpo={message:'sync: '+perfil().slug+' · '+snap.ts,content:btoa(unescape(encodeURIComponent(JSON.stringify(snap)))),branch:RAMA};
@@ -6226,7 +6226,7 @@ window.cfbSyncPull=cfbSyncPull;
 /* pinta el estado en el hub (se cuelga después del render 1.1) */
 function cfbSyncEstado(antemano){
   var box=document.getElementById('cfbHub-caja')||document.querySelector('#cfbHub .cfb-hub-caja');
-  if(!box){ if(!antemano) setTimeout(function(){cfbSyncEstado(false);},200); return; }
+  if(!box){ if(!antemano&&++_retEst<60) setTimeout(function(){cfbSyncEstado(false);},200); return; }
   box.id='cfbHub-caja';
   var viejo=document.getElementById('cfbSyncBloque'); if(viejo) viejo.remove();
   var p=perfil(), pilla=document.createElement('div'); pilla.id='cfbSyncBloque';
@@ -6246,8 +6246,8 @@ function cfbSyncEstado(antemano){
     +(p.slug?(' <button type="button" class="cfb-btn cfb-sec" onclick="cfbPidePerfil(function(ok){if(ok){cfbSyncEstado()}})">Cambiar de persona</button>'):'')
     +'</div>'
     +'<div class="cfb-nota">Sin red o sin clave, eres 100 % local: nada se pierde y todo vuelve a sincronizar al volver. Rotación de puestos: cada uno elige su nombre al abrir y su burbuja sale sola.</div>';
-  var util=box.querySelector('.cfb-nota');
-  box.insertBefore(pilla, util||null);
+  var ref=box.querySelector('h3');
+  box.insertBefore(pilla, ref?ref.nextSibling:box.firstChild);
 }
 window.cfbSyncEstado=cfbSyncEstado;
 /* engancharse al render del hub 1.1 sin tocarlo */

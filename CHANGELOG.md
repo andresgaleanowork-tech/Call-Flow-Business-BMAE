@@ -1,5 +1,13 @@
 # Registro de cambios · Call Flow Business
 
+
+## v1.2.1 · 15-09-2026 (hotfix de sync, mismo día)
+- 🐛 **`url`→`u`**: el push moría antes de tocar la red (el guardado automático no llegaba a GitHub).
+- 🐛 **Bloque ☁ invisible**: `insertBefore` apuntaba a una `.cfb-nota` no hija directa → el bloque de sync nunca se pintaba en «Mi semana».
+- 🧹 Reintentos de estado limitados (antes poll de 200 ms infinito con el hub cerrado).
+- 🧪 Batería: camino feliz con clave cubierto (GET+PUT a Contents API) + regresión estática de ambos bugs. **69/69 + 57/57, 0 errores JS.**
+- ✅ Sello E2E real contra GitHub: Dispositivo A sube → Dispositivo B (vacío) restaura byte a byte.
+
 ## v1.2 — 14-09-2026
 - ☁ Sync GitHub (auto-guardado): cada comercial tiene burbuja propia y todo lo local (`bm_*`)
   se guarda solo en el repo privado de datos (Contents API) — con silencio offline y sin pasos manuales.
