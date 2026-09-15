@@ -1,0 +1,14 @@
+{
+  "name": "Call Flow Business",
+  "short_name": "Call Flow",
+  "description": "Guiones de llamada interactivos PYMES y Residencial — B&M Asesores Energéticos",
+  "lang": "es-ES",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#4C3EBF",
+  "icons": [
+    { "src": "diagsystem-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }
+  ]
+}

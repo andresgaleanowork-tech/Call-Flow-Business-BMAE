@@ -3510,7 +3510,7 @@ body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='1.1', GUIAFECHA='14-09-2026';
+var VERSION='1.2', GUIAFECHA='14-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=(function(){ try{ return localStorage.getItem('bm_tut_omitido_res')!==null?'_res':''; }catch(e){ return ''; } })();
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3556,7 +3556,7 @@ function checkVersion(){
 /* ═══ C1 · estadísticas locales (anónimas, en este dispositivo) ═══ */
 function statsGet(){ return LSg('bm_stats'+SUF,{veces:{},nodo:[],obj:{},sesiones:0,dias:[],roleplay:0,casos:0,quizAciertos:0,quizTotal:0,desde:(new Date()).toISOString().slice(0,10)}); }
 window.cfbStatsGet=statsGet;
-function statsSet(s){ LSs('bm_stats'+SUF,s); }
+function statsSet(s){ LSs('bm_stats'+SUF,s); try{ if(window.cfbPref) LSs(cfbPref('stats'+SUF),s); }catch(e){} }
 function bumpVid(v){
   var s=statsGet();
   var hoy=(new Date()).toISOString().slice(0,10);
@@ -6093,6 +6093,188 @@ var qrcode = function() {
 }));
 
 </script>
+<script id="cfbSync12">
+/* ═══ Call Flow Business · v1.2 — Perfil local + Sync GitHub (auto-guardado) ═══
+   · Cada comercial tiene burbuja propia de actividad (estadísticas/insignias/accesibilidad).
+   · Guarda TODO lo que empiece por bm_* en  repo-portátil  CFB-datos-equipo/datos/<perfil>.json
+     mediante Contents API (token fine-grained pegado una vez por dispositivo).
+   · Restaura en silencio si la nube traía versión más reciente que lo local (entre dispositivos).
+   · Sin red o sin clave: nada se rompe; la app vive 100 % local.   */
+(function(){
+"use strict";
+var OWNER='andresgaleanowork-tech', REPO='CFB-datos-equipo', RAMA='main';
+var VERSION=(window.CFB_VERSION||'1.2');
+function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
+function LSs(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function SUF(){ try{ return localStorage.getItem('bm_tut_omitido_res')!==null?'_res':''; }catch(e){ return ''; } }
+function slugify(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,20)||'comun'; }
+function toast(m){ try{ guiToast(m,true);}catch(e){ try{ alert(m);}catch(_){} } }
+
+/* ═══ 1 · PERFIL ═══ */
+function perfil(){ return LSg('cfb_perfil'+SUF(),{nombre:'',slug:''}); }
+window.cfbPerfil=perfil;
+function pref(k){ return 'bm_'+k+'_'+(perfil().slug||'comun'); }
+window.cfbPref=pref;
+/* migración suave: lo genérico se hereda al primer perfil que lo use */
+function migracion(){
+  ['stats'+SUF(),'badges'+SUF(),'a11y'+SUF()].forEach(function(k){
+    var gen=LSg('bm_'+k,null); if(gen===null) return;
+    var propio=LSg(pref(k),null);
+    if(propio===null){ LSs(pref(k),gen); }
+  });
+}
+function pidePerfil(cb){
+  var act=perfil();
+  var nombre=prompt('¿Quién está trabajando ahora? (nombre o apodo del equipo — solo se guarda en este dispositivo y en el repo privado de datos)',act.nombre);
+  if(nombre===null){ cb&&cb(false); return; }
+  nombre=(nombre||'').trim();
+  if(!nombre){ cb&&cb(false); return; }
+  LSs('cfb_perfil'+SUF(),{nombre:nombre,slug:slugify(nombre)});
+  migracion();
+  toast('👤 Bienvenido/a, '+nombre.split(' ')[0]+' — tu burbuja está activa');
+  try{ window.cfbStatsGetRebind&&cfbStatsGetRebind(); }catch(e){}
+  cb&&cb(true);
+  try{ cfbSyncEstado(); }catch(e){}
+}
+window.cfbPidePerfil=pidePerfil;
+/* rebote de lectores del módulo 1.1 → claves del perfil activo */
+window.cfbStatsGetRebind=function(){
+  var s=LSg(pref('stats'+SUF()),null);
+  if(s!==null) LSs('bm_stats'+SUF(),s);   // vista compartida abajo queda reflejo del perfil
+};
+
+/* ═══ 2 · SYNC GITHUB (Contents API) ═══ */
+function token(){ return window.CFB_SYNC_TOKEN||LSg('cfb_sync_token',''); }
+window.cfbSetToken=function(){
+  var k=prompt('Pegue aquí la clave de sincronización (una vez por dispositivo — se pasa de boca a boca, nunca por correo público):','');
+  if(k===null) return;
+  if((k=k.trim()).length<10){ toast('✘ Esa clave parece corta — prueba completa'); return; }
+  LSs('cfb_sync_token',k);
+  toast('✔ Sync activada para este dispositivo');
+  cfbSyncEstado(); cfbSyncPush(1500);
+};
+function urlPerfil(){
+  var p=perfil(); if(!p.slug) return null;
+  return 'https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/datos/'+p.slug+'.json';
+}
+function snapshot(){
+  var kv={};
+  try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i);
+    if(k&&k.indexOf('bm_')===0){ kv[k]=LSg(k,null); } } }catch(e){}
+  return {version:VERSION, perfil:perfil(), ts:(new Date()).toISOString(), kv:kv};
+}
+function kvAplicar(kv){
+  Object.keys(kv||{}).forEach(function(k){ if(k.indexOf('bm_')===0){ LSs(k,kv[k]); } });
+}
+function req(metodo,url,cuerpo,cb){
+  var ctrl=null; try{ ctrl=new AbortController(); setTimeout(function(){ try{ctrl.abort();}catch(e){} },9000); }catch(e){}
+  fetch(url,{method:metodo,headers:{'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Authorization':'Bearer '+token(),'Content-Type':'application/json'},body:cuerpo===undefined?undefined:JSON.stringify(cuerpo),signal:ctrl?ctrl.signal:undefined})
+   .then(function(r){ return r.text().then(function(txt){ var j=null; try{j=JSON.parse(txt);}catch(e){} cb&&cb(r.status,j); }); })
+   .catch(function(){ cb&&cb(0,null); });
+}
+var _pushT=null, _estado='pausada', _ultima=null;
+function cfbSyncPush(espera){
+  if(location.protocol.indexOf('http')!==0&&!LSg('cfb_sync_token','')&&typeof window==='object'){ /* exe/apk también sincronizan si hay clave */ }
+  if(!token()||!perfil().slug){ _estado='sin clave'; return; }
+  clearTimeout(_pushT);
+  _pushT=setTimeout(function(){
+    var u=urlPerfil(); if(!u){ _estado='sin perfil'; return; }
+    _estado='guardando…'; cfbSyncEstado(true);
+    req('GET',url,undefined,function(st,j){
+      var sha=(st===200&&j&&j.sha)?j.sha:undefined;
+      var snap=snapshot();
+      var cuerpo={message:'sync: '+perfil().slug+' · '+snap.ts,content:btoa(unescape(encodeURIComponent(JSON.stringify(snap)))),branch:RAMA};
+      if(sha) cuerpo.sha=sha;
+      req('PUT',u,cuerpo,function(st2){
+        if(st2===200||st2===201){ _estado='ok'; _ultima=(new Date()).toLocaleTimeString('es-ES').slice(0,5); LSs('cfb_lastpush'+SUF(),_ultima); }
+        else if(st2===0){ _estado='sin red'; }
+        else { _estado='error '+(st2||''); }
+        cfbSyncEstado(true);
+      });
+    });
+  },espera===undefined?9000:espera);
+}
+window.cfbSyncPush=cfbSyncPush;
+function cfbSyncPull(alArrancar){
+  if(!token()||!perfil().slug||location.protocol.indexOf('http')!==0) return;
+  var u=urlPerfil(); if(!u) return;
+  req('GET',u,undefined,function(st,j){
+    if(st!==200||!j||!j.content) return;
+    try{
+      var limpio=j.content.replace(/\s+/g,'');
+      var obj=JSON.parse(decodeURIComponent(escape(atob(limpio))));
+      var ultimaLocal=LSg('cfb_lastpull'+SUF(),null); var localTs=LSg('cfb_localts'+SUF(),'');
+      if(obj.ts&&obj.ts>localTs){
+        kvAplicar(obj.kv||{});
+        LSs('cfb_localts'+SUF(),obj.ts);
+        LSs('cfb_lastpull'+SUF(),obj.ts);
+        if(!alArrancar) toast('☁ Restaurado tu guardado de la nube ('+(obj.ts||'').slice(0,10)+')');
+        try{ window.cfbInit&&cfbInit(); }catch(e){}
+      }
+    }catch(e){}
+  });
+}
+window.cfbSyncPull=cfbSyncPull;
+/* toque de sincronización al modificar cualquier clave bm_* */
+(function(){
+  try{
+    var orig=localStorage.setItem.bind(localStorage);
+    localStorage.setItem=function(k,v){ orig(k,v);
+      if(String(k).indexOf('bm_')===0||String(k).indexOf('cfb_perfil')===0){ cfbSyncPush(9500); } };
+  }catch(e){}
+})();
+/* pinta el estado en el hub (se cuelga después del render 1.1) */
+function cfbSyncEstado(antemano){
+  var box=document.getElementById('cfbHub-caja')||document.querySelector('#cfbHub .cfb-hub-caja');
+  if(!box){ if(!antemano) setTimeout(function(){cfbSyncEstado(false);},200); return; }
+  box.id='cfbHub-caja';
+  var viejo=document.getElementById('cfbSyncBloque'); if(viejo) viejo.remove();
+  var p=perfil(), pilla=document.createElement('div'); pilla.id='cfbSyncBloque';
+  pilla.className='cfb-bloque'; pilla.style.borderTop='2px solid #4C3EBF';
+  var hay=!!token();
+  var txt='';
+  if(!p.slug){ txt='👤 Sin perfil — revisa «Mi semana» para decir quién eres y, si hay clave, tu burbuja guardará en la nube.'; }
+  else if(!hay){ txt='☁ Sync: en pausa en este dispositivo (falta la clave). Pegue el botón «Activar sync».'; }
+  else { txt='☁ Sync GitHub: <b>'+_estado+'</b>'+(_ultima?(' · última '+_ultima):'')+' · datos/'+p.slug+'.json (repo privado '+REPO+')'; }
+  pilla.innerHTML='<b>☁ Guardado en la nube (auto)</b>'
+    +'<div class="cfb-fila"><span>'+txt+'</span></div>'
+    +'<div style="margin-top:6px">'
+    +(p.slug?('<button type="button" class="cfb-btn cfb-sec" onclick="cfbSyncPush(0)">Guardar ahora</button>')
+             :('<button type="button" class="cfb-btn cfb-sec" onclick="cfbPidePerfil(function(ok){if(ok)cfbSyncEstado()})">👤 Dime quién eres</button>'))
+    +(hay?(' <button type="button" class="cfb-btn cfb-sec" onclick="cfbSyncPush(0)">Sincronizar</button>')
+         :(' <button type="button" class="cfb-btn cfb-sec" onclick="cfbSetToken()">Activar sync (pegar clave)</button>'))
+    +(p.slug?(' <button type="button" class="cfb-btn cfb-sec" onclick="cfbPidePerfil(function(ok){if(ok){cfbSyncEstado()}})">Cambiar de persona</button>'):'')
+    +'</div>'
+    +'<div class="cfb-nota">Sin red o sin clave, eres 100 % local: nada se pierde y todo vuelve a sincronizar al volver. Rotación de puestos: cada uno elige su nombre al abrir y su burbuja sale sola.</div>';
+  var util=box.querySelector('.cfb-nota');
+  box.insertBefore(pilla, util||null);
+}
+window.cfbSyncEstado=cfbSyncEstado;
+/* engancharse al render del hub 1.1 sin tocarlo */
+(function(){
+  var orig=window.renderHubSafe||null;
+  var prev=window.cfbHubAbrir;
+  window.cfbHubAbrir=function(){
+    prev&&prev.apply(this,arguments);
+    setTimeout(function(){ cfbSyncEstado(false); },60);
+  };
+})();
+/* arranque */
+function arranque(){
+  var p=perfil();
+  if(p.slug) migracion();
+  setTimeout(function(){
+    /* señal de reloj local para conflictos: */
+    var s=LSg('bm_stats'+SUF(),null);
+    LSs('cfb_localts'+SUF(),LSg('cfb_localts'+SUF(),'')||'');
+    cfbSyncPull(true);
+    cfbSyncEstado(false);
+  },2500);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',arranque); else arranque();
+})();
+</script>
+
 </body>
 </html>
 
