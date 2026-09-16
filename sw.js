@@ -1,8 +1,8 @@
-/* Call Flow Business · service worker (v1.5.1)
+/* Call Flow Business · service worker (v2.3.2 «Silencio»)
    Documentos (HTML): network-first → siempre la versión nueva cuando hay red,
    con caché como respaldo offline. Resto (assets): caché con actualización en
    segundo plano. */
-const CACHE = 'cfb-v231';
+const CACHE = 'cfb-v240'; /* v2.4.0 «Lógica» */
 const ARCHIVOS = ['./','index.html','admin.html','pymes.html','residencial.html','tutorial.html',
   'manifest.webmanifest','diagsystem-logo.png','diagsystem-social-preview.png'];
 self.addEventListener('install',e=>{ e.waitUntil(
@@ -18,8 +18,8 @@ self.addEventListener('fetch',e=>{
   if(esDoc){
     e.respondWith(
       fetch(e.request).then(r=>{
-        if(r&&r.ok){ const copia=r.clone(); caches.open(CACHE).then(c=>c.put(e.request,copia)); }
-        return r;
+        if(r&&r.ok){ const copia=r.clone(); caches.open(CACHE).then(c=>c.put(e.request,copia)); return r; }
+        return caches.match(e.request).then(hit=>hit||r);   /* v2.3.2 «Silencio» (CAZA#A2): ante 404/500, la copia buena */
       }).catch(()=>caches.match(e.request))
     );
     return;

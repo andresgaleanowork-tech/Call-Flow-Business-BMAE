@@ -111,3 +111,19 @@ Jornada de auditoría sobre v2.3.0 (informe completo: `_documentos/CAZA-BUGS-202
 - 🟡 **CAZA#5 · version.json sin sanear**: versión/fecha/url remotos entraban al DOM tal cual (única entrada remota de la app). Charset blanco `\w.-`, fecha con `xh()`, url solo `https://`.
 - 🔧 **CAZA#7 (en la propia batería)**: el test del aviso ✨ devolvía un `Promise` sin `await` → siempre verde **y** llamaba a `checkVersion()` que no era pública. Test reparado de verdad; nuevo export `cfbCheckVersion()`.
 - 🧪 Baterías: **174/174 + 58/58 · 0 errores JS** (7 checks nuevos clavando cada bug: E1–E6 + F1 funcional). Trampas de caza re-ejecutadas: todas en OK. sw `cfb-v231`, APK v16.
+
+## v2.3.2 — 16-09-2026 · «Silencio»: se cierran los 2 avisos funcionales de la caza
+- 🪟 **CAZA#A1 · el EXE ya no muere en silencio**: con `-H windowsgui` los errores iban a un stderr invisible (doble clic y «no pasa nada»). Ahora `exit()` abre un **MessageBoxW nativo** (user32.dll vía syscall, sin dependencias; `aviso_windows.go`/`aviso_other.go` con build tags) y el caso «sin navegador» incluye la ruta del HTML para abrirlo a mano.
+- 📦 **CAZA#A2 · sw**: ante una respuesta !ok (404/500 del hosting) el network-first servía el error aun teniendo copia buena → ahora cae a caché (`hit||r`). sw `cfb-v232`.
+- ⚪ **CAZA#A3 (keystore en repo)**: decisión documentada en `build.sh` — riesgo aceptado mientras el repo sea privado; si algún día se hace público, rotar keystore y mover la contraseña a secrets.
+- ⚪ **CAZA#A4**: comentarios saneados (main.go «5 HTML»); las Google Fonts externas se quedan CONSCIENTEMENTE (`display=swap` + stack del sistema: offline degradan sin romper nada).
+- 🧪 Baterías: **176/176 + 58/58 · 0 errores JS** (E7/E8 nuevos). APK v17.
+
+## v2.4.0 — 16-09-2026 · «Lógica»: cada área con un único dueño
+Revisión de lógica del producto a petición del equipo — se elimina lo redundante y se cierran los huecos de flujo:
+- 👤 **«Mi semana» → «Mi Cuenta»** en guiones y panel admin. Dentro, nuevo bloque **👤 Sesión** con **🚪 Cerrar sesión** (limpia `cfb_perfil` y vuelve al menú; el progreso queda intacto).
+- ☁ **La sync sale de Mi Cuenta**: la pilla «Guardado en la nube» desaparece del hub; la app sigue guardando sola y **el estado/clave se gestionan en el panel admin**.
+- 🔑 **El admin ya EDITA el token** (antes solo lo comprobaba): «✏️ Cambiar la clave de ESTE dispositivo» → pega la nueva → se verifica en vivo contra GitHub → si responde ✔ queda activa al instante; si falla, restaura la anterior.
+- ⚖️ **El aviso legal («ANTES DE LLAMAR…») lleva ✕ «no volver a mostrar»**: persiste en `bm_compliance_off` → viaja con la sync del usuario y respeta los dos perfiles (pymes/residencial).
+- 🔁➡️🗑 **Retirada TOTAL del apartado QR** («Entre dispositivos»): con la sync por usuario no tenía sentido. Fuera jsQR + qrcode-generator + import/export de códigos + overlay de cámara → **los guiones adelgazan ~27 %** (722→528 KB). La APK pierde el **permiso de cámara** (`CfbChrome` eliminado).
+- 🧪 **168/168 + 58/58 · 0 errores JS** (retirados 15 checks de funciones muertas, 10 nuevos fijando cada cambio: L1–L7 estáticos + 3 funcionales). sw `cfb-v240`, APK v18, EXE firmado.

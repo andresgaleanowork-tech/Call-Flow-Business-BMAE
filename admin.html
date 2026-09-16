@@ -92,6 +92,12 @@
       <span class="estado" id="claveEstado">comprobando…</span>
       <button class="btn" style="margin-left:8px" onclick="comprobarClave(true)">Comprobar ahora</button>
       <p class="nota">Caduca periódicamente en GitHub (90 días). Para rotarla: GitHub → Settings → Developer settings → Fine-grained tokens → regenerate y avisa: la nueva se embebe y todos los dispositivos se vacunan solos al abrir la app.</p>
+      <details style="margin-top:10px"><summary style="cursor:pointer;font-size:.9rem;font-weight:600">✏️ Cambiar la clave de ESTE dispositivo</summary>
+        <p class="sub" style="margin-top:6px">Cuando GitHub la rote y no quiera esperar a la próxima versión: péguela aquí. Se comprueba en vivo y, si responde ✔, queda guardada al instante en este dispositivo (la embebida no se toca; el equipo se vacuna solo como siempre).</p>
+        <div class="fila"><input id="claveNueva" type="password" placeholder="github_pat_…" autocomplete="off" style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font:500 13px ui-monospace,monospace">
+        <button class="btn" onclick="claveCambiar()">Comprobar y guardar</button></div>
+        <div class="nota" id="claveCambioMsg"></div>
+      </details>
     </div>
 
     <div class="card">
@@ -116,7 +122,7 @@
     </div>
     <div class="card">
       <h2>📈 Llamadas del equipo <span id="dashPeriodo" class="badge-admin"></span></h2>
-      <p class="sub">📞 = el comercial pulsa «Registrar llamada» al colgar (botón en «Mi semana») · 🎭 = usos del guion llegando al cierre + roleplays, automático · Semana = lunes → hoy · ▲/▼ = frente a la semana pasada · 📊 = llamadas por día (28 últimos) · fila salmón = ≥3 días laborables sin registrar.</p>
+      <p class="sub">📞 = el comercial pulsa «Registrar llamada» al colgar (botón en «Mi Cuenta») · 🎭 = usos del guion llegando al cierre + roleplays, automático · Semana = lunes → hoy · ▲/▼ = frente a la semana pasada · 📊 = llamadas por día (28 últimos) · fila salmón = ≥3 días laborables sin registrar.</p>
       <button class="btn" onclick="dashboard()">↻ Actualizar</button>
       <button class="btn" onclick="dashCSV()">⬇ CSV (Excel)</button>
       <span class="estado" id="dashEstado" style="margin-left:8px">…</span>
@@ -177,6 +183,19 @@ window.comprobarClave=function(){
     if(st===200){ e.className='estado ok'; e.textContent='✔ clave activa · acceso a la caja fuerte'; }
     else if(st===0){ e.className='estado mal'; e.textContent='✘ sin red ahora mismo'; }
     else { e.className='estado mal'; e.textContent='✘ clave rechazada ('+st+') — toca rotar'; }
+  });
+};
+/* ── v2.4 «Lógica»: el admin también CAMBIA el token (no solo lo comprueba) ── */
+window.claveCambiar=function(){
+  var i=document.getElementById('claveNueva'), m=document.getElementById('claveCambioMsg');
+  var nueva=String(i.value||'').trim().replace(/\s+/g,'');
+  if(!nueva||nueva.length<20){ m.style.color='#C62828'; m.textContent='Pega la clave completa (github_pat_…).'; return; }
+  var vieja=token();
+  LSs('cfb_sync_token',nueva);
+  m.style.color='#666'; m.textContent='Comprobando la clave nueva en GitHub…';
+  req('GET','https://api.github.com/repos/'+OWNER+'/'+REPO,undefined,function(st){
+    if(st===200){ m.style.color='#1B5E20'; m.textContent='✔ Clave nueva verificada y ACTIVA en este dispositivo.'; i.value=''; comprobarClave(); }
+    else { LSs('cfb_sync_token',vieja); m.style.color='#C62828'; m.textContent='✘ Rechazada ('+st+') — se restauró la clave anterior.'; comprobarClave(); }
   });
 };
 /* ── equipo ── */
