@@ -160,3 +160,10 @@ El equipo cazó el fallo en producción: el botón **«Ocultar» de la nota ráp
 - ✔ **«Ocultar» ahora solo esconde la nota** (clase `.qn-off`); el guion sigue en pantalla limpia.
 - ✔ **La nota reaparece sola al entrar de nuevo en Foco** (next hook determinista sobre `guiToggleFoco` — nada de timers espurios), vía el mecanismo `cadena()` ya usado por los contadores de prácticas.
 - 🧪 **192/192 + 58/58** (Q1/Q2 prueban el comportamiento exacto: Ocultar + persistencia del Foco + reaparición al re-entrar). sw `cfb-v272`, APK v21, EXE 2.7.2.
+
+## v2.7.3 — 16-09-2026 · «el toast ya sale por delante» (bug de campo, nota rápida)
+Segunda pasada al área de la nota rápida tras el reporte del equipo «los botones no hacen nada»:
+- 🔎 **Causa cazada por z-index**: la nota de Foco flota en `z-index:20000` y el **toast único de la app va en `z-index:200`** → tras «✎ Guardar» u «Ocultar», el mensaje de confirmación quedaba **escondido exactamente bajo el cuadro blanco** (en móvil, el ancho del cuadro ≈ pantalla entera). Los botones sí funcionaban; el feedback era invisible.
+- ✔ Corrección de una línea: `.toast` sube a `z-index:100002` — visible sobre nota, hub, modales y píldora de versión (es transitorio por diseño; no tapa nada a posteriori).
+- ✅ Verificación de integridad añadida tras un episodio de lecturas corruptas del panel: `admin.html` auditado byte a byte (JS válido, marcadores v2.5 presentes, md5 estable con su copia del lanzador).
+- 🧪 **193/193 + 58/58** (Q3 clava que el toast quede siempre por encima de la nota). sw `cfb-v273`, APK v22, EXE 2.7.3.

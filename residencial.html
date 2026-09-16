@@ -515,7 +515,7 @@ select.jump:hover,.tree-btn:hover{border-color:#B9B9B4;background:var(--beige)}
 
 footer{text-align:center;font-size:.72rem;color:var(--gris-claro);padding:18px}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--negro);color:#fff;
-  padding:11px 20px;border-radius:var(--radio-sm);font-size:.82rem;font-weight:500;transition:transform var(--t-base);z-index:200}
+  padding:11px 20px;border-radius:var(--radio-sm);font-size:.82rem;font-weight:500;transition:transform var(--t-base);z-index:100002}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 /* ── MODO FOCO (solo el discurso durante la llamada) ────────────────── */
@@ -3406,7 +3406,7 @@ body.focus #cfbQuickNote{display:block}
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.7.2', GUIAFECHA='16-09-2026';
+var VERSION='2.7.3', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF='_res'; /* v1.5.1 determinista: residencial */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }

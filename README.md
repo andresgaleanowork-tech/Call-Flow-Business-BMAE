@@ -1,6 +1,6 @@
 # Call Flow Business · B&M Asesores Energéticos
 
-> Estado: **v2.7.2** (16-09-2026 · hotfix campo) · ver el [registro de cambios](CHANGELOG.md)
+> Estado: **v2.7.3** (16-09-2026 · hotfixes nota rápida) · ver el [registro de cambios](CHANGELOG.md)
 
 Sistema de diálogo para el equipo comercial: guion NEURO de Iberdrola con árbol
 de decisión en vivo, objeciones, roleplay, onboarding completo, CRM local de
@@ -52,7 +52,7 @@ la realiza el responsable; cada empleado entra solo con su ID Iberdrola).
 
 ## Calidad
 
-Baterías automáticas por ruta: **192 comprobaciones** (QA + core, jsdom) +
+Baterías automáticas por ruta: **193 comprobaciones** (QA + core, jsdom) +
 **58** (humo residencial) · **0 errores JS** de carga. Regeneración editorial:
 `cd WEB && node ../_dev/editorial/build.js` (golden hash incluido en la QA).
 
