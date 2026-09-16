@@ -161,6 +161,31 @@ El equipo cazó el fallo en producción: el botón **«Ocultar» de la nota ráp
 - ✔ **La nota reaparece sola al entrar de nuevo en Foco** (next hook determinista sobre `guiToggleFoco` — nada de timers espurios), vía el mecanismo `cadena()` ya usado por los contadores de prácticas.
 - 🧪 **192/192 + 58/58** (Q1/Q2 prueban el comportamiento exacto: Ocultar + persistencia del Foco + reaparición al re-entrar). sw `cfb-v272`, APK v21, EXE 2.7.2.
 
+## v2.7.6 — 16-09-2026 · Caza definitiva del «área rota»: cfbCss estaba en <body> (visores estrictos la ignoran) + blindaje inline
+
+- **Síntoma persistente**: tras v2.7.5 el usuario seguía viendo la nota sin estilos en el visor web del móvil.
+- **Causa**: `<style id="cfbCss">` vivía en el `<body>` (las hojas que sí se aplican —cssTut/cssGuion/cssBridge— están en `<head>`). Los visores estrictos (p. ej. el de Arena) descartan las hojas del body → la nota se veía al desnudo aunque el CSS fuese correcto.
+- **Fix estructural**: cfbCss movida a `<head>` en ambas plantillas.
+- **Blindaje extra**: la nota lleva ahora su estilo crítico inline (tarjeta flotante) y `window.qnSync()` gobierna su `display` (Foco ∧ ¬oculta), sincronizando en cada clic — funciona aunque un visor ignore todas las hojas.
+- **Verificación comportamental (jsdom)**: arranque none → Foco block → «Ocultar» none (Foco intacto) → salir none → volver block ✔.
+- Tests Q8–Q10 (head, inline, qnSync) → **203/203 + 58/58** · sw `cfb-v276`.
+
+## v2.7.5 — 16-09-2026 · CAZA REAL: la nota rápida llevaba SIN ESTILOS desde v2.7 (reglas dentro de @media print)
+
+- **Causa raíz (captura del usuario)**: al añadir el diploma (v2.7), el bloque CSS nuevo —`#cfbCertPrint`, pulso del cronómetro, `prefers-reduced-motion` y **todas las reglas de `#cfbQuickNote`**— quedó anidado *dentro* de `@media print{…}`. En pantalla no se aplicaba nada: la nota salía en el flujo del documento, sin tarjeta, campos desbordados y botones nativos; solo se hubiera visto bien AL IMPRIMIR.
+- **Fix**: reestructurado `cfbCss` — `@media print` contiene sólo reglas de impresión; el resto vuelve a pantalla (pymes + residencial).
+- **Efectos colaterales curados**: el certificado del diploma ya se puede previsualizar bien, el cronómetro del examen pulsa en rojo a partir de 60 s y `prefers-reduced-motion` vuelve a respetarse.
+- **Tests**: Q7a–d estructurales (cierre de llaves real, no regex) → NINGUNA regla de pantalla puede volver a colarse en `@media print`. Verificación adicional con estilo computado (jsdom): `display:none · position:fixed · min(320px,86vw)` en ambas versiones.
+- Batería: **200/200 + 58/58** · sw `cfb-v275`.
+
+## v2.7.4 — 16-09-2026 · Nota rápida: back reforzado + front de los botones ✎/Ocultar
+
+- **Front (causa raíz del reporte «botones raros»)**: `.cfb-btn` solo tenía estilo *dentro* de `#cfbHub`; los botones de la nota rápida (fuera del hub) salían con el look nativo del navegador (gris, sinsombra). Nuevas reglas `#cfbQuickNote .cfb-btn` y `.cfb-sec` (violeta corporativo, `flex:1`, feedback táctil `:active`).
+- **Back verificado** (`cliAnadir`, persistencia `localStorage['cli_registros']`, sanitización `<>&"`, límites 60/300, tapón 80 fichas + 20 notas, purga RGPD 180 días): sano. Refuerzos:
+  - `qnGuardar` valida con `trim`, enfoca el campo vacío, mantiene el nombre del cliente a propósito (varias notas en la misma llamada), refresca **Mis clientes** al instante (`cliVerTodo`) y devuelve el foco al nombre.
+  - Redundancia Foco: listener en captura sobre `#btnFoco` re-muestra la nota aunque `guiToggleFoco` falle; `window.qnMostrar` público.
+- Batería: **196/196 + 58/58** (nuevas Q4 estilos, Q5 validación+refresco, Q6 redundancia Foco). sw `cfb-v274`.
+
 ## v2.7.3 — 16-09-2026 · «el toast ya sale por delante» (bug de campo, nota rápida)
 Segunda pasada al área de la nota rápida tras el reporte del equipo «los botones no hacen nada»:
 - 🔎 **Causa cazada por z-index**: la nota de Foco flota en `z-index:20000` y el **toast único de la app va en `z-index:200`** → tras «✎ Guardar» u «Ocultar», el mensaje de confirmación quedaba **escondido exactamente bajo el cuadro blanco** (en móvil, el ancho del cuadro ≈ pantalla entera). Los botones sí funcionaban; el feedback era invisible.

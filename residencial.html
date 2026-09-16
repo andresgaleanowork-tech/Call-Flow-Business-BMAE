@@ -608,6 +608,73 @@ body.modo-guion .tree-nav{padding-bottom:120px}
       border-color:var(--negro,#0A0A0A);
     }
 </style>
+<style id="cfbCss">
+/* ═══ Call Flow Business · módulo v1.1 ═══ */
+#cfbBtnHub{}
+.cfb-badge{display:inline-block;margin-top:6px;font-size:11px;letter-spacing:.4px;opacity:.55}
+/* Aviso «hay versión nueva» (solo con red) */
+#cfbVerNote{position:fixed;right:14px;bottom:14px;z-index:99999;background:#111;color:#fff;border:1px solid #333;border-radius:10px;padding:10px 12px;font-size:13px;max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+#cfbVerNote a{color:#A9F;white-space:nowrap}
+#cfbVerNote button.cfb-ver-x{position:absolute;top:4px;right:7px;background:none;border:0;color:#888;font-size:14px;cursor:pointer;padding:2px 4px}
+/* Hub «Mi Cuenta» */
+#cfbHub{position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:14px}
+#cfbHub.cfb-on{display:flex}
+#cfbHub .cfb-hub-caja{background:#fff;color:#111;border-radius:12px;max-width:640px;width:100%;max-height:92vh;overflow:auto;padding:18px 18px 14px;box-shadow:0 18px 60px rgba(0,0,0,.35);font-size:14px;line-height:1.45}
+#cfbHub h3{margin:0 0 4px;font-size:17px}
+#cfbHub .cfb-x{float:right;border:0;background:none;font-size:19px;cursor:pointer;color:#667}
+#cfbHub .cfb-bloque{border:1px solid #E4E1F5;border-radius:10px;padding:10px 12px;margin:9px 0;background:#FAF9FE}
+#cfbHub .cfb-bloque>b{display:block;margin-bottom:5px;font-size:13.5px}
+#cfbHub .cfb-fila{display:flex;gap:8px;justify-content:space-between;font-size:13px;padding:1px 0}
+#cfbHub .cfb-fila b{font-weight:600}
+#cfbHub .cfb-pill{display:inline-block;background:#EFEDFA;border-radius:99px;padding:2px 9px;font-size:12px;margin:2px 3px 2px 0}
+#cfbHub .cfb-insignia{display:inline-block;background:#fff;border:1px solid #C4BDEA;border-radius:8px;padding:4px 8px;font-size:12.5px;margin:2px 4px 2px 0}
+#cfbHub .cfb-insignia.cfb-off{opacity:.35}
+#cfbHub .cfb-barra{background:#E9E6F7;border-radius:99px;height:9px;overflow:hidden;margin:5px 0 2px}
+#cfbHub .cfb-barra>span{display:block;height:100%;background:#4C3EBF;width:0;transition:width .4s}
+#cfbHub .cfb-btn{display:inline-block;background:#4C3EBF;color:#fff;border:0;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;margin:3px 4px 3px 0;text-decoration:none}
+#cfbHub .cfb-btn.cfb-sec{background:#fff;color:#4C3EBF;border:1px solid #4C3EBF}
+#cfbHub textarea{width:100%;height:64px;border:1px solid #d9d4f0;border-radius:8px;font:12px/1.35 monospace;padding:6px;box-sizing:border-box}
+#cfbHub svg{display:block;margin:8px auto;border:6px solid #fff;box-shadow:0 0 0 1px #ddd}
+#cfbHub .cfb-nota{font-size:12px;color:#666}
+/* Alta contraste / letra grande (persistente) */
+html.cfb-fz body{font-size:109%}
+body.cfb-hc{filter:invert(1) hue-rotate(180deg)}
+body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
+/* Ficha de llamada para imprimir/PDF */
+#cfbFichaPrint{display:none;background:#fff;color:#000;padding:26px 30px;font-size:13px;line-height:1.5}
+#cfbFichaPrint h1{font-size:18px;margin:0 0 2px}
+#cfbFichaPrint h2{font-size:13.5px;margin:14px 0 4px;border-bottom:1px solid #999;padding-bottom:2px}
+#cfbFichaPrint .pf-meta{font-size:12px;color:#444;margin-bottom:8px}
+#cfbFichaPrint table{border-collapse:collapse;width:100%;font-size:12.5px}
+#cfbFichaPrint td,#cfbFichaPrint th{border:1px solid #bbb;padding:4px 6px;text-align:left}
+#cfbFichaPrint .pf-firma{margin-top:22px;display:flex;gap:40px}
+#cfbFichaPrint .pf-firma div{flex:1;border-top:1px solid #000;padding-top:4px;font-size:12px}
+@media print{
+  body.cfb-printing>*{display:none !important}
+  body.cfb-printing #cfbFichaPrint{display:block !important;position:static}
+  body.cfb-printing #cfbCertPrint{display:block !important;position:static}
+  @page{margin:14mm}
+}
+#cfbCertPrint{display:none}
+#cfbCertPrint .cert-caja{max-width:640px;margin:0 auto;border:2px solid #111;border-radius:14px;padding:36px 30px;text-align:center;font-family:Georgia,serif}
+#cfbCertPrint .cert-tit{font-size:30px;letter-spacing:.06em}
+#cfbCertPrint .cert-sub{margin-top:14px;font-size:13px;color:#333}
+#cfbCertPrint .cert-nom{font-size:26px;font-weight:700;margin:18px 0;border-bottom:1px solid #999;display:inline-block;padding:0 26px 6px}
+#cfbCertPrint .cert-txt{font-size:14px;line-height:1.7}
+#cfbCertPrint .cert-fir{display:flex;gap:60px;justify-content:center;margin-top:60px}
+#cfbCertPrint .cert-fir div{border-top:1px solid #000;padding-top:4px;font-size:11px;flex:1;max-width:200px}
+.btn-blanco.timer-on{background:#C62828 !important;color:#fff !important;border-color:#C62828 !important;animation:cfbPulseG 1.2s ease-in-out infinite}
+@keyframes cfbPulseG{ 0%,100%{ box-shadow:0 0 0 0 rgba(198,40,40,.55) } 50%{ box-shadow:0 0 0 7px rgba(198,40,40,0) } }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; scroll-behavior:auto !important } }
+#cfbQuickNote{display:none;position:fixed;left:12px;bottom:12px;z-index:20000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.18);padding:10px 12px;width:min(320px,86vw)}
+body.focus #cfbQuickNote{display:block}
+#cfbQuickNote.qn-off{display:none !important}
+#cfbQuickNote .qn-tit{font:600 12.5px Inter,sans-serif;margin-bottom:6px}
+#cfbQuickNote .qn-inp{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #ddd;border-radius:8px;margin-bottom:6px;font:500 13px Inter,sans-serif}
+#cfbQuickNote .cfb-btn{flex:1;background:#4C3EBF;color:#fff;border:0;border-radius:8px;padding:7px 6px;font:600 12.5px Inter,sans-serif;cursor:pointer}
+#cfbQuickNote .cfb-btn.cfb-sec{flex:0 0 auto;background:#fff;color:#4C3EBF;border:1px solid #4C3EBF}
+#cfbQuickNote .cfb-btn:active{transform:scale(.97)}
+</style>
 </head>
 <body>
 <script>
@@ -760,7 +827,7 @@ window.addEventListener('hashchange',()=>{
 <script>/* v2.4 «Lógica»: aviso legal silenciado por el usuario (persiste y sincroniza con su cuenta) */
 try{ if(JSON.parse(localStorage.getItem('bm_compliance_off_res')||'null')==='1'){ var ca=document.getElementById('cmpAviso'); if(ca) ca.style.display='none'; } }catch(e){}</script>
 
-<div id="cfbQuickNote" role="complementary" aria-label="Nota rápida de la llamada">
+<div id="cfbQuickNote" role="complementary" aria-label="Nota rápida de la llamada" style="display:none;position:fixed;left:12px;bottom:12px;z-index:20000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.18);padding:10px 12px;width:min(320px,86vw)">
   <div class="qn-tit">📝 Nota rápida de la llamada</div>
   <input id="qnNombre" class="qn-inp" placeholder="Cliente (p. ej. Bar La Mareta)" aria-label="Nombre del cliente" maxlength="60" type="text">
   <textarea id="qnNota" class="qn-inp" rows="2" placeholder="Lo acordado, lo pendiente…" aria-label="Nota rápida de la llamada" maxlength="300"></textarea>
@@ -3334,70 +3401,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
 
 
 
-<style id="cfbCss">
-/* ═══ Call Flow Business · módulo v1.1 ═══ */
-#cfbBtnHub{}
-.cfb-badge{display:inline-block;margin-top:6px;font-size:11px;letter-spacing:.4px;opacity:.55}
-/* Aviso «hay versión nueva» (solo con red) */
-#cfbVerNote{position:fixed;right:14px;bottom:14px;z-index:99999;background:#111;color:#fff;border:1px solid #333;border-radius:10px;padding:10px 12px;font-size:13px;max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
-#cfbVerNote a{color:#A9F;white-space:nowrap}
-#cfbVerNote button.cfb-ver-x{position:absolute;top:4px;right:7px;background:none;border:0;color:#888;font-size:14px;cursor:pointer;padding:2px 4px}
-/* Hub «Mi Cuenta» */
-#cfbHub{position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:14px}
-#cfbHub.cfb-on{display:flex}
-#cfbHub .cfb-hub-caja{background:#fff;color:#111;border-radius:12px;max-width:640px;width:100%;max-height:92vh;overflow:auto;padding:18px 18px 14px;box-shadow:0 18px 60px rgba(0,0,0,.35);font-size:14px;line-height:1.45}
-#cfbHub h3{margin:0 0 4px;font-size:17px}
-#cfbHub .cfb-x{float:right;border:0;background:none;font-size:19px;cursor:pointer;color:#667}
-#cfbHub .cfb-bloque{border:1px solid #E4E1F5;border-radius:10px;padding:10px 12px;margin:9px 0;background:#FAF9FE}
-#cfbHub .cfb-bloque>b{display:block;margin-bottom:5px;font-size:13.5px}
-#cfbHub .cfb-fila{display:flex;gap:8px;justify-content:space-between;font-size:13px;padding:1px 0}
-#cfbHub .cfb-fila b{font-weight:600}
-#cfbHub .cfb-pill{display:inline-block;background:#EFEDFA;border-radius:99px;padding:2px 9px;font-size:12px;margin:2px 3px 2px 0}
-#cfbHub .cfb-insignia{display:inline-block;background:#fff;border:1px solid #C4BDEA;border-radius:8px;padding:4px 8px;font-size:12.5px;margin:2px 4px 2px 0}
-#cfbHub .cfb-insignia.cfb-off{opacity:.35}
-#cfbHub .cfb-barra{background:#E9E6F7;border-radius:99px;height:9px;overflow:hidden;margin:5px 0 2px}
-#cfbHub .cfb-barra>span{display:block;height:100%;background:#4C3EBF;width:0;transition:width .4s}
-#cfbHub .cfb-btn{display:inline-block;background:#4C3EBF;color:#fff;border:0;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;margin:3px 4px 3px 0;text-decoration:none}
-#cfbHub .cfb-btn.cfb-sec{background:#fff;color:#4C3EBF;border:1px solid #4C3EBF}
-#cfbHub textarea{width:100%;height:64px;border:1px solid #d9d4f0;border-radius:8px;font:12px/1.35 monospace;padding:6px;box-sizing:border-box}
-#cfbHub svg{display:block;margin:8px auto;border:6px solid #fff;box-shadow:0 0 0 1px #ddd}
-#cfbHub .cfb-nota{font-size:12px;color:#666}
-/* Alta contraste / letra grande (persistente) */
-html.cfb-fz body{font-size:109%}
-body.cfb-hc{filter:invert(1) hue-rotate(180deg)}
-body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
-/* Ficha de llamada para imprimir/PDF */
-#cfbFichaPrint{display:none;background:#fff;color:#000;padding:26px 30px;font-size:13px;line-height:1.5}
-#cfbFichaPrint h1{font-size:18px;margin:0 0 2px}
-#cfbFichaPrint h2{font-size:13.5px;margin:14px 0 4px;border-bottom:1px solid #999;padding-bottom:2px}
-#cfbFichaPrint .pf-meta{font-size:12px;color:#444;margin-bottom:8px}
-#cfbFichaPrint table{border-collapse:collapse;width:100%;font-size:12.5px}
-#cfbFichaPrint td,#cfbFichaPrint th{border:1px solid #bbb;padding:4px 6px;text-align:left}
-#cfbFichaPrint .pf-firma{margin-top:22px;display:flex;gap:40px}
-#cfbFichaPrint .pf-firma div{flex:1;border-top:1px solid #000;padding-top:4px;font-size:12px}
-@media print{
-  body.cfb-printing>*{display:none !important}
-  body.cfb-printing #cfbFichaPrint{display:block !important;position:static}
-#cfbCertPrint{display:none}
-body.cfb-printing #cfbCertPrint{display:block !important;position:static}
-#cfbCertPrint .cert-caja{max-width:640px;margin:0 auto;border:2px solid #111;border-radius:14px;padding:36px 30px;text-align:center;font-family:Georgia,serif}
-#cfbCertPrint .cert-tit{font-size:30px;letter-spacing:.06em}
-#cfbCertPrint .cert-sub{margin-top:14px;font-size:13px;color:#333}
-#cfbCertPrint .cert-nom{font-size:26px;font-weight:700;margin:18px 0;border-bottom:1px solid #999;display:inline-block;padding:0 26px 6px}
-#cfbCertPrint .cert-txt{font-size:14px;line-height:1.7}
-#cfbCertPrint .cert-fir{display:flex;gap:60px;justify-content:center;margin-top:60px}
-#cfbCertPrint .cert-fir div{border-top:1px solid #000;padding-top:4px;font-size:11px;flex:1;max-width:200px}
-.btn-blanco.timer-on{background:#C62828 !important;color:#fff !important;border-color:#C62828 !important;animation:cfbPulseG 1.2s ease-in-out infinite}
-@keyframes cfbPulseG{ 0%,100%{ box-shadow:0 0 0 0 rgba(198,40,40,.55) } 50%{ box-shadow:0 0 0 7px rgba(198,40,40,0) } }
-@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; scroll-behavior:auto !important } }
-#cfbQuickNote{display:none;position:fixed;left:12px;bottom:12px;z-index:20000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.18);padding:10px 12px;width:min(320px,86vw)}
-body.focus #cfbQuickNote{display:block}
-#cfbQuickNote.qn-off{display:none !important}
-#cfbQuickNote .qn-tit{font:600 12.5px Inter,sans-serif;margin-bottom:6px}
-#cfbQuickNote .qn-inp{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #ddd;border-radius:8px;margin-bottom:6px;font:500 13px Inter,sans-serif}
-  @page{margin:14mm}
-}
-</style>
+
 
 <script id="cfbModule">
 /* ═════════════════════════ Call Flow Business · módulo v1.1 ═════════════════════════
@@ -3406,7 +3410,7 @@ body.focus #cfbQuickNote{display:block}
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.7.3', GUIAFECHA='16-09-2026';
+var VERSION='2.7.6', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF='_res'; /* v1.5.1 determinista: residencial */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3649,11 +3653,21 @@ window.cfbSeg=function(tipo){
 window.qnGuardar=function(){
   var n=document.getElementById('qnNombre'), t=document.getElementById('qnNota');
   if(!n||!t) return;
-  if(!cliAnadir(n.value,t.value)){ try{ toast('✘ Rellene cliente y nota'); }catch(e){} return; }
-  t.value=''; try{ toast('✎ Nota guardada en Mis clientes'); }catch(e){}
+  var nombre=n.value.trim(), texto=t.value.trim();
+  if(!nombre||!texto){
+    try{ toast('✘ Rellene cliente y nota'); }catch(e){}
+    try{ (nombre?t:n).focus(); }catch(e){}
+    return;
+  }
+  if(!cliAnadir(nombre,texto)){ try{ toast('✘ No se pudo guardar la nota'); }catch(e){} return; }
+  t.value='';
+  try{ n.focus(); }catch(e){}              /* llamada en curso: seguir apuntando del mismo cliente */
+  try{ if(window.cliVerTodo) window.cliVerTodo(); }catch(e){}   /* Mis clientes se refresca al instante */
+  try{ toast('✎ Nota guardada en Mis clientes'); }catch(e){}
 };
 window.qnOcultar=function(){
   var q=document.getElementById('cfbQuickNote'); if(q) q.classList.add('qn-off');
+  window.qnSync();
   try{ toast('📝 Nota oculta — volverá sola al entrar de nuevo en Foco'); }catch(e){}
 };
 
@@ -3962,6 +3976,17 @@ cadena('guiToggleFoco',function(){
   if(!document.body.classList.contains('focus')) return;
   var qn=document.getElementById('cfbQuickNote'); if(qn) qn.classList.remove('qn-off');
 });
+/* v2.7.6 · qnSync: la visibilidad de la nota la gobierna JS (a prueba de visores que ignoran <style> en <body>) */
+window.qnSync=function(){ try{ var q=document.getElementById('cfbQuickNote'); if(!q) return; var on=document.body.classList.contains('focus')&&!q.classList.contains('qn-off'); q.style.display=on?'block':'none'; }catch(e){} };
+window.qnMostrar=function(){ var q=document.getElementById('cfbQuickNote'); if(q) q.classList.remove('qn-off'); window.qnSync(); };
+document.addEventListener('click',function(ev){
+  try{
+    var b=ev.target&&ev.target.closest? ev.target.closest('#btnFoco'):null;
+    if(b&&document.body.classList.contains('focus')) window.qnMostrar();
+  }catch(e){}
+  try{ setTimeout(window.qnSync,0); }catch(e){}
+},true);
+try{ window.qnSync(); }catch(e){}
 cadena('renderHub',pintarMini);
 cadena('cfbHubAbrir',pintarMini);
 cadena('cfbInit',function(){});
