@@ -154,3 +154,9 @@ Tras la auditoría en profundidad recién entregada (`_documentos/AUDITORIA-QA-S
 - ♿ Labels accesibles en la nota de Foco y el CRM (`aria-label`, el placeholder ya no hace de nombre) + `aria-pressed` en el ⏱.
 - 🎨 `theme-color` en plantillas y `description` en `instalar.html` (SEO mínimo/A1).
 - 🧪 **190/190 + 58/58 · 0 errores JS** (P1–P3 nuevos). sw `cfb-v271`, APK v20, EXE 2.7.1 firmado.
+
+## v2.7.2 — 16-09-2026 · «Ocultar NO saca del Foco» (bug de campo)
+El equipo cazó el fallo en producción: el botón **«Ocultar» de la nota rápida (modo Foco) cerraba el modo Foco ENTERO** — siguiendo el flujo del guion, perder el Foco en mitad de una llamada es lo peor posible. Era consecuencia de un acceso directo a `guiToggleFoco` heredado de v2.6; el auditor lo verificó en el DOM y trazó el comportamiento exacto:
+- ✔ **«Ocultar» ahora solo esconde la nota** (clase `.qn-off`); el guion sigue en pantalla limpia.
+- ✔ **La nota reaparece sola al entrar de nuevo en Foco** (next hook determinista sobre `guiToggleFoco` — nada de timers espurios), vía el mecanismo `cadena()` ya usado por los contadores de prácticas.
+- 🧪 **192/192 + 58/58** (Q1/Q2 prueban el comportamiento exacto: Ocultar + persistencia del Foco + reaparición al re-entrar). sw `cfb-v272`, APK v21, EXE 2.7.2.
