@@ -9,7 +9,7 @@
     "test": "node tests/bateria-qa.js && node tests/bateria-residencial.js",
     "test:pymes": "node tests/bateria-qa.js",
     "test:residencial": "node tests/bateria-residencial.js",
-    "build:editorial": "node ../_dev/editorial/build.js"
+    "build:editorial": "node ../../tools/factory/build.js"
   },
   "devDependencies": {
     "jsdom": "^24.1.3"

@@ -161,6 +161,13 @@ El equipo cazó el fallo en producción: el botón **«Ocultar» de la nota ráp
 - ✔ **La nota reaparece sola al entrar de nuevo en Foco** (next hook determinista sobre `guiToggleFoco` — nada de timers espurios), vía el mecanismo `cadena()` ya usado por los contadores de prácticas.
 - 🧪 **192/192 + 58/58** (Q1/Q2 prueban el comportamiento exacto: Ocultar + persistencia del Foco + reaparición al re-entrar). sw `cfb-v272`, APK v21, EXE 2.7.2.
 
+## v2.7.7 — 16-09-2026 · Portada de marca (logos Iberdrola × B&M en primer plano) + fin del discurso «sin conexión»
+
+- **Hero de marca**: nueva sección en primer plano con el logo oficial Iberdrola y el de B&M servidos como PNG (`logo-iberdrola.png`, `logo-bm.png` — los data-URI internos pasan a archivos cacheables por GitHub Pages y el sw). Tarjeta blanca con sombra, «×» divisorio y subtítulo «Socia Colaboradora Oficial de Iberdrola».
+- **Offline fuera del relato**: la app vive en GitHub Pages → se eliminan el claim «Funciona sin conexión» del intro, el bloque «Sin conexión» del pie (sustituido por «Conexión y nube del equipo») y el **modo local** de la puerta (función + enlace + chip del saludo). El error de red ahora dice: «Comprueba tu conexión y vuelve a intentarlo». (El soporte interno `_pp.local` de los guiones se mantiene por compatibilidad; la puerta ya no ofrece crear perfiles locales.)
+- **Limpieza estructural detectada en caliente**: el CSS de la puerta ID estaba pegado ×4 y el script anti-flash ×4 (copia-pega heredado) → ×1 cada uno. index.html: 25,4 KB → 20,6 KB.
+- Tests: 2 nuevos (hero+PNGs, rebranding sin claims offline) → **204/204 + 58/58** · sw `cfb-v277` (con los 2 logos en caché) · version.json 2.7.7.
+
 ## v2.7.6 — 16-09-2026 · Caza definitiva del «área rota»: cfbCss estaba en <body> (visores estrictos la ignoran) + blindaje inline
 
 - **Síntoma persistente**: tras v2.7.5 el usuario seguía viendo la nota sin estilos en el visor web del móvil.

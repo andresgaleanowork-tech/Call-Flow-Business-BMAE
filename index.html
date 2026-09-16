@@ -63,6 +63,22 @@
   .info-block p{font-size:.83rem;line-height:1.65;color:var(--gris-medio)}
   footer{text-align:center;font-size:.72rem;color:var(--gris-claro);padding:28px 20px;
     border-top:1px solid var(--gris-linea);background:var(--blanco)}
+  /* ═══ v2.7.7 · hero de marca: Iberdrola × B&M en primer plano ═══ */
+  .hero{display:flex;flex-direction:column;align-items:center;gap:16px;margin:-28px auto 48px}
+  .hero-card{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);padding:26px 44px;display:flex;align-items:center;gap:30px}
+  .hero-logo{display:block;object-fit:contain}
+  .hero-ib{height:58px;width:auto}
+  .hero-bm{height:68px;width:auto}
+  .hero-x{font-family:var(--font-display);font-size:1.5rem;color:var(--gris-claro);line-height:1;user-select:none}
+  .hero-sub{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gris-medio);text-align:center;line-height:1.6}
+  @media (max-width:640px){
+    .hero-card{padding:20px 22px;gap:18px}
+    .hero-ib{height:40px}.hero-bm{height:46px}
+    .hero{margin:-12px auto 40px}
+  }
+
   @media (max-width:640px){
     header{padding:16px 20px}
     main{padding:40px 20px}
@@ -71,57 +87,6 @@
   }
 
   
-
-  /* ═══ puerta ID ═══ */
-  .cfbCerrado #cfbMenuWrap{display:none!important}
-  .cfbGateOu{max-width:460px;margin:8px auto 40px}
-  .cfbGateCard{text-align:left}
-  .cfbGateInput{width:100%;padding:11px 13px;border:1px solid var(--gris-linea);border-radius:var(--radio);font-size:.95rem;margin:2px 0 10px}
-  .cfbGateInput:focus{border-color:var(--verde);outline:none}
-  .cfbGateError{display:none;background:#FDECEA;color:#A33;padding:9px 12px;border-radius:6px;font-size:.82rem;margin:8px 0}
-  .cfbGateNota{font-size:.78rem;color:var(--gris-medio);margin-top:12px;line-height:1.5}
-  .cfb-btn{border:1px solid var(--gris-linea);background:var(--blanco);border-radius:var(--radio);padding:8px 14px;font-size:.82rem;cursor:pointer;font-family:var(--font-body);transition:all .18s var(--ease)}
-  .cfb-btn:hover{border-color:var(--verde);color:var(--verde-oscuro)}
-  .cfb-btn.cfbMain{background:var(--verde);border-color:var(--verde);color:#fff;font-weight:600;padding:11px 20px;font-size:.9rem}
-  .cfb-btn.cfbMain:hover{background:var(--verde-oscuro);color:#fff}
-  .cfbSaludo{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);padding:12px 16px;font-size:.88rem;margin-bottom:26px}
-  .cfbSaludo .mark{width:10px;height:10px}
-  .cfbSaludo-tag{color:var(--gris-medio);font-size:.78rem}
-
-
-  /* ═══ puerta ID ═══ */
-  .cfbCerrado #cfbMenuWrap{display:none!important}
-  .cfbGateOu{max-width:460px;margin:8px auto 40px}
-  .cfbGateCard{text-align:left}
-  .cfbGateInput{width:100%;padding:11px 13px;border:1px solid var(--gris-linea);border-radius:var(--radio);font-size:.95rem;margin:2px 0 10px}
-  .cfbGateInput:focus{border-color:var(--verde);outline:none}
-  .cfbGateError{display:none;background:#FDECEA;color:#A33;padding:9px 12px;border-radius:6px;font-size:.82rem;margin:8px 0}
-  .cfbGateNota{font-size:.78rem;color:var(--gris-medio);margin-top:12px;line-height:1.5}
-  .cfb-btn{border:1px solid var(--gris-linea);background:var(--blanco);border-radius:var(--radio);padding:8px 14px;font-size:.82rem;cursor:pointer;font-family:var(--font-body);transition:all .18s var(--ease)}
-  .cfb-btn:hover{border-color:var(--verde);color:var(--verde-oscuro)}
-  .cfb-btn.cfbMain{background:var(--verde);border-color:var(--verde);color:#fff;font-weight:600;padding:11px 20px;font-size:.9rem}
-  .cfb-btn.cfbMain:hover{background:var(--verde-oscuro);color:#fff}
-  .cfbSaludo{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);padding:12px 16px;font-size:.88rem;margin-bottom:26px}
-  .cfbSaludo .mark{width:10px;height:10px}
-  .cfbSaludo-tag{color:var(--gris-medio);font-size:.78rem}
-
-
-  /* ═══ puerta ID ═══ */
-  .cfbCerrado #cfbMenuWrap{display:none!important}
-  .cfbGateOu{max-width:460px;margin:8px auto 40px}
-  .cfbGateCard{text-align:left}
-  .cfbGateInput{width:100%;padding:11px 13px;border:1px solid var(--gris-linea);border-radius:var(--radio);font-size:.95rem;margin:2px 0 10px}
-  .cfbGateInput:focus{border-color:var(--verde);outline:none}
-  .cfbGateError{display:none;background:#FDECEA;color:#A33;padding:9px 12px;border-radius:6px;font-size:.82rem;margin:8px 0}
-  .cfbGateNota{font-size:.78rem;color:var(--gris-medio);margin-top:12px;line-height:1.5}
-  .cfb-btn{border:1px solid var(--gris-linea);background:var(--blanco);border-radius:var(--radio);padding:8px 14px;font-size:.82rem;cursor:pointer;font-family:var(--font-body);transition:all .18s var(--ease)}
-  .cfb-btn:hover{border-color:var(--verde);color:var(--verde-oscuro)}
-  .cfb-btn.cfbMain{background:var(--verde);border-color:var(--verde);color:#fff;font-weight:600;padding:11px 20px;font-size:.9rem}
-  .cfb-btn.cfbMain:hover{background:var(--verde-oscuro);color:#fff}
-  .cfbSaludo{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);padding:12px 16px;font-size:.88rem;margin-bottom:26px}
-  .cfbSaludo .mark{width:10px;height:10px}
-  .cfbSaludo-tag{color:var(--gris-medio);font-size:.78rem}
-
 
   /* ═══ puerta ID ═══ */
   .cfbCerrado #cfbMenuWrap{display:none!important}
@@ -160,21 +125,6 @@
 try{var __p=JSON.parse(localStorage.getItem('cfb_perfil')||'null');
 if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.documentElement.className+=' cfbCerrado';}catch(e){document.documentElement.className+=' cfbCerrado';}
 </script>
-<script>
-/* puerta ID · ocultar el menú hasta identificarse (anti-flash) */
-try{var __p=JSON.parse(localStorage.getItem('cfb_perfil')||'null');
-if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.documentElement.className+=' cfbCerrado';}catch(e){document.documentElement.className+=' cfbCerrado';}
-</script>
-<script>
-/* puerta ID · ocultar el menú hasta identificarse (anti-flash) */
-try{var __p=JSON.parse(localStorage.getItem('cfb_perfil')||'null');
-if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.documentElement.className+=' cfbCerrado';}catch(e){document.documentElement.className+=' cfbCerrado';}
-</script>
-<script>
-/* puerta ID · ocultar el menú hasta identificarse (anti-flash) */
-try{var __p=JSON.parse(localStorage.getItem('cfb_perfil')||'null');
-if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.documentElement.className+=' cfbCerrado';}catch(e){document.documentElement.className+=' cfbCerrado';}
-</script>
 <header>
   <span class="mark" aria-hidden="true"></span>
   <div class="brand">
@@ -184,10 +134,19 @@ if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.document
 </header>
 
 <main>
+  <section class="hero" aria-label="Iberdrola y B&M">
+    <div class="hero-card">
+      <img class="hero-logo hero-ib" src="logo-iberdrola.png" alt="Iberdrola">
+      <span class="hero-x" aria-hidden="true">×</span>
+      <img class="hero-logo hero-bm" src="logo-bm.png" alt="B&M Asesores Energéticos">
+    </div>
+    <p class="hero-sub">B&amp;M Asesores Energéticos · Socia Colaboradora Oficial de Iberdrola</p>
+  </section>
+
   <div class="intro">
     <div class="kicker">Selecciona tu herramienta</div>
     <h2>¿Con qué segmento vas a llamar hoy?</h2>
-    <p>Cada guion abre su tutorial la primera vez y directamente el árbol de llamada las siguientes. Funciona sin conexión: puedes guardarlo en el escritorio y abrirlo con doble clic.</p>
+    <p>Cada guion abre su tutorial la primera vez y directamente el árbol de llamada las siguientes. Tu trabajo se sincroniza con la nube del equipo: se necesita conexión para entrar y guardar el registro.</p>
   </div>
 
   <div id="cfbGate" hidden></div>
@@ -225,8 +184,8 @@ if(!(__p&&__p.slug&&(__p.autorizado===true||__p.local===true)))document.document
       <p>Emoción primero, dato después. Cada frase del guion tiene su mecanismo visible con el interruptor 🔬 y su versión más natural con 🇪🇸.</p>
     </div>
     <div class="info-block">
-      <h4>Sin conexión</h4>
-      <p>Cada archivo funciona completo en el navegador. Se guarda en el escritorio, se abre con doble clic y se usa en llamada sin depender de nada.</p>
+      <h4>Conexión y nube del equipo</h4>
+      <p>Alojada en GitHub Pages y sincronizada con la nube privada del equipo: entras con tu ID Iberdrola y tu registro queda guardado. Necesitas conexión a internet.</p>
     </div>
     <div class="info-block">
       <h4>Uso interno</h4>
@@ -318,7 +277,7 @@ function saludo(){
   g.removeAttribute('hidden');
   var chips='<button type="button" class="cfb-btn" onclick="cfbCambiarUsuario()">Cambiar de usuario</button>';
   if(p.admin) chips+=' <a class="cfb-btn" href="admin.html" style="display:inline-block;text-decoration:none">🛠 Panel admin</a>';
-  var nube=p.local?' · 🌫 modo local (solo este dispositivo)':(token()?' · ☁ guardado en la nube del equipo':'');
+  var nube=(token()&&!p.local)?' · ☁ guardado en la nube del equipo':'';
   var equipo=p.admin&&eq?(' · equipo: '+((eq.autorizados||[]).length)+' IDs'):'';
   html('<div class="cfbSaludo"><span class="mark" aria-hidden="true"></span> Hola, <b>'+esc(p.nombre||p.id)+'</b>'
       +' <span class="cfbSaludo-tag">ID '+esc(p.id)+nube+equipo+'</span> '+chips+'</div>');
@@ -353,7 +312,7 @@ window.cfbEntraId=function(f){
   var id=(f&&f.querySelector('#cfbId').value||'').trim(); if(!id) return false;
   error('Verificando tu ID…');
   equipoGet(function(eq){
-    if(!eq){ error('Sin conexión y sin lista guardada. Prueba con red, o <a href="#" onclick="cfbModoLocal();return false">entra en modo local</a>.'); return; }
+    if(!eq){ error('No se pudo conectar con la nube del equipo. Comprueba tu conexión y vuelve a intentarlo.'); return; }
     if(eq._404){ primerArranque(id); return; }
     var yo=buscarID(eq,id);
     if(!yo){ error('Ese ID no está autorizado todavía. <a href="'+cfbMailAlta(id)+'">✉️ Pide tu alta aquí</a> y te damos acceso.'); return; }
@@ -396,21 +355,6 @@ function completar(id,nombre,admin){
 window.cfbCambiarUsuario=function(){
   if(!confirm('¿Cambiar de usuario en este dispositivo? (tu trabajo guardado no se pierde)')) return;
   localStorage.removeItem('cfb_perfil'); location.reload();
-};
-window.cfbModoLocal=function(){
-  pideNombre('local',function(nombre){
-    html(tarjeta('🌫 Modo local · último paso',
-      'Tu trabajo NO saldrá de este dispositivo. Cuando quieras la nube, pulsa «Cambiar de usuario» e identifícate.',
-      '<form onsubmit="return cfbLocalOk(this)"><input id="cfbIdL" class="cfbGateInput" placeholder="Tu ID o apodo" required>'
-      +'<button class="cfb-btn cfbMain" type="submit">Entrar en modo local</button></form>'));
-    window.__cfbLocalNombre=nombre;
-    setTimeout(function(){ var i=document.getElementById('cfbIdL'); if(i) i.focus(); },60);
-  });
-};
-window.cfbLocalOk=function(f){
-  var id=(f.querySelector('#cfbIdL').value||'').trim(); if(!id) return false;
-  LSs('cfb_perfil',{id:id, nombre:window.__cfbLocalNombre||id, slug:'local-'+slugId(id), local:true, autorizado:true, tsLogin:Date.now()});
-  entrada(); return false;
 };
 window.cfbEstadoIdentidad=estadoIdentidad;
 /* arranque: con clave embebida el empleado va DIRECTO al ID */

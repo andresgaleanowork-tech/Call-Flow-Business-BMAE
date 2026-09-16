@@ -54,6 +54,6 @@ la realiza el responsable; cada empleado entra solo con su ID Iberdrola).
 
 Baterías automáticas por ruta: **193 comprobaciones** (QA + core, jsdom) +
 **58** (humo residencial) · **0 errores JS** de carga. Regeneración editorial:
-`cd WEB && node ../_dev/editorial/build.js` (golden hash incluido en la QA).
+`cd apps/web && node ../tools/factory/build.js` (golden hash incluido en la QA).
 
 Herramienta interna · Uso exclusivo de *B&M Asesores Energéticos* · © 2026
