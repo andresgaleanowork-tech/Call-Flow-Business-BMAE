@@ -127,3 +127,30 @@ Revisión de lógica del producto a petición del equipo — se elimina lo redun
 - ⚖️ **El aviso legal («ANTES DE LLAMAR…») lleva ✕ «no volver a mostrar»**: persiste en `bm_compliance_off` → viaja con la sync del usuario y respeta los dos perfiles (pymes/residencial).
 - 🔁➡️🗑 **Retirada TOTAL del apartado QR** («Entre dispositivos»): con la sync por usuario no tenía sentido. Fuera jsQR + qrcode-generator + import/export de códigos + overlay de cámara → **los guiones adelgazan ~27 %** (722→528 KB). La APK pierde el **permiso de cámara** (`CfbChrome` eliminado).
 - 🧪 **168/168 + 58/58 · 0 errores JS** (retirados 15 checks de funciones muertas, 10 nuevos fijando cada cambio: L1–L7 estáticos + 3 funcionales). sw `cfb-v240`, APK v18, EXE firmado.
+
+## v2.5.0 — 16-09-2026 · «Salud»: la llamada se cronometra y el error llega al responsable
+- ⏱ **Cronómetro de llamada real** (botón «⏱ Llamada» en la cabecera de ambos guiones): pulse al descolgar y de nuevo al colgar → la llamada se **registra sola** (como el +1) **con su duración** (`bm_dias.[fecha].segs`). Si solo quiere el cronómetro sin registro, basta con no colgarlo desde el botón.
+- 📈 **El panel admin gana la columna «⏱ Media»**: duración media de las llamadas de la semana — el dato que dice si se respetan los 2–3 minutos de conversación útil. También sale en el CSV.
+- 🩺 **Salud por comercial en el panel**: la línea «🩺 sin errores registrados / N error(es) · último…» lee `bm_errores*` de cada burbuja (ya viajaban con la sync) y despliega los 3 últimos errores captados del dispositivo (tipo, perfil, hora, mensaje). Un comercial en rojo = la herramienta se está rompiendo en su móvil/PC.
+- 🧪 **174/174 + 58/58 · 0 errores JS** (S1–S6 nuevos; el test v2.1/AUD3-G del colspan pasa a 8 columnas).
+
+## v2.6.0 — 16-09-2026 · «Plantilla»: el seguimiento se escribe solo y la nota vive en el Foco
+- 📨 **«Seguimiento al cliente» en Mi Cuenta**: un toque abre tu *correo* o *WhatsApp* con el texto de seguimiento **ya personalizado** con el nombre del cliente y el del comercial (toma «📋 Datos de la llamada»). Editable siempre antes de enviar.
+- 📝 **Nota CRM en modo Foco**: con el guion en pantalla limpia, abajo a la izquierda aparece «📝 Nota rápida de la llamada» (cliente + nota) que se guarda **directo en Mis clientes** del CRM local — sin salir de la llamada, sin abrir menús.
+- 🧪 **179/179 + 58/58 · 0 errores JS** (E1–E5 nuevos: estáticos y dos ciclos funcionales completos).
+
+## v2.7.0 — 16-09-2026 · «Diploma»: examen final cronometrado y certificado imprimible
+- 🎓 **Examen final** (Mi Cuenta → 🎓 Diploma): 10 preguntas al azar del banco del curso, 8 minutos de reloj, aprobado con 8/10. El resultado convive con la mejor nota (`bm_diploma`, con sufijo por perfil) y se puede repetir la vez que haga falta.
+- 📜 **Certificado imprimible**: al aprobar se habilita «📜 Certificado PDF» — diploma con nombre, programa, nota y fecha listo para imprimir o guardar como PDF (reutiliza el sistema de impresión de la ficha de llamada).
+- 🔔 **Auto-aviso de versiones ACTIVADO**: las plantillas ya consultan el `version.json` público (v2.3 lo dejaba preparado comentado) — cuando salga una versión nueva, el aviso ✨ aparece solo en PC y móvil.
+- 📲 **Página «Instalar en tu móvil»** (`instalar.html`): pasos ilustrados para iPhone (Safari → «Añadir a pantalla de inicio») y Android (instalación PWA nativa), enlazada desde la página de entrada y cacheada por el service worker.
+- 🧪 **187/187 + 58/58 · 0 errores JS** (D1–D6 y PAR-PWA1/2 nuevos; el check v2.3-F3 ahora exige la URL activa). sw `cfb-v270`, APK v19, EXE firmado.
+
+## v2.7.1 — 16-09-2026 · «DIA»: a un vistazo del auditor (QA senior en caliente)
+Tras la auditoría en profundidad recién entregada (`_documentos/AUDITORIA-QA-SENIOR-v2.7.0.md`), se corrigen en el acto sus hallazgos seguros:
+- 🔴→✔ **El ⏱ no pulsaba**: la regla `.timer-on` referenciaba `@keyframes cfbPulseG` que no existía. Se define (latido rojo + halo) y se deja comprobado.
+- 🟡→✔ **Examen accesible** (WCAG 2.2 4.1.2 / ARIA 1.2): `role="dialog"`, `aria-modal`, `aria-label`, foco inicial, retorno de foco al cerrar y **Escape**.
+- 🟡→✔ **WCAG 2.3.3**: `prefers-reduced-motion` en las plantillas editoriales y en index/admin/tutorial — animación y transición cortadas para quien lo pidió.
+- ♿ Labels accesibles en la nota de Foco y el CRM (`aria-label`, el placeholder ya no hace de nombre) + `aria-pressed` en el ⏱.
+- 🎨 `theme-color` en plantillas y `description` en `instalar.html` (SEO mínimo/A1).
+- 🧪 **190/190 + 58/58 · 0 errores JS** (P1–P3 nuevos). sw `cfb-v271`, APK v20, EXE 2.7.1 firmado.

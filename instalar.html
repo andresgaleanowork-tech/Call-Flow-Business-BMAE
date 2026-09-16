@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#004d2d">
+<meta name="description" content="Cómo instalar Call Flow Business como app en su móvil: iPhone (Safari) y Android (PWA o app oficial).">
+<title>Instalar Call Flow Business · B&M Asesores Energéticos</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  :root{ --verde:#007A3B; --verde-oscuro:#005C2E; --gris:#f4f6f5; --gris-linea:#dfe5e2; --gris-oscuro:#3f4a45; }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--gris);color:#1a2620;line-height:1.55}
+  main{max-width:640px;margin:0 auto;padding:22px 16px 40px}
+  header{text-align:center;padding:26px 0 14px}
+  header h1{font-size:1.35rem;color:#004d2d}
+  header p{color:var(--gris-oscuro);font-size:.85rem;margin-top:4px}
+  .tarjeta{background:#fff;border:1px solid var(--gris-linea);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .tarjeta h2{font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  ol{margin:0 0 0 20px;font-size:.92rem}
+  li{padding:6px 0}
+  .chip{display:inline-block;background:var(--gris);border:1px solid var(--gris-linea);border-radius:6px;padding:1px 8px;font-size:.85rem}
+  .btn{display:inline-block;margin-top:12px;background:var(--verde);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:.95rem;font-weight:600;cursor:pointer;text-decoration:none;text-align:center}
+  #btnInstalar{display:none;width:100%}
+  .nota{font-size:.78rem;color:var(--gris-oscuro);margin-top:14px;line-height:1.6}
+  footer{text-align:center;font-size:.72rem;color:#9aa5a0;padding:26px 12px}
+  a{color:var(--verde)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>📲 Instalar en su móvil</h1>
+    <p>La herramienta funciona como app: a pantalla completa, con su icono y sin barras del navegador.</p>
+  </header>
+  <div class="tarjeta">
+    <h2>🍎 iPhone / iPad (Safari)</h2>
+    <ol>
+      <li>Abra esta página en <b>Safari</b> (tiene que ser Safari).</li>
+      <li>Pulse el botón <b>Compartir</b> <span class="chip">⬆️ cuadrado con flecha</span> (abajo en el centro).</li>
+      <li>Baje y pulse <b>«Añadir a pantalla de inicio»</b>.</li>
+      <li>Pulse <b>«Añadir»</b> arriba a la derecha. Listo: tendrá el icono en su pantalla de inicio.</li>
+    </ol>
+    <p class="nota">La primera vez que la abra desde el icono, identifíquese con su ID Iberdrola como siempre: sus avances viajan con su ID y se recuperan al abrirla.</p>
+  </div>
+  <div class="tarjeta">
+    <h2>🤖 Android (Chrome)</h2>
+    <p style="font-size:.92rem">La mayoría de móviles ofrecen instalarla directamente:</p>
+    <button id="btnInstalar" class="btn">⬇ Instalar Call Flow Business</button>
+    <ol style="margin-top:10px">
+      <li>Si no aparece el botón: abra el menú <b>⋮</b> (arriba a la derecha).</li>
+      <li>Pulse <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li>
+      <li>Confirme. El icono aparecerá con sus apps.</li>
+    </ol>
+    <p class="nota">Si el equipo usa la <b>app oficial de Android (APK)</b> entregada por su responsable, no necesita esta página: la webapp empaquetada ya va dentro de la app.</p>
+  </div>
+  <div class="tarjeta">
+    <h2>💻 En el PC</h2>
+    <p style="font-size:.92rem">En escritorio no hace falta instalar nada: use el <b>programa de Windows</b> entregado por su responsable o abra directamente la web del equipo. En cualquier caso, sus avances viajan con su ID.</p>
+    <a class="btn" href="index.html">← Volver a la app</a>
+  </div>
+  <p class="nota">✉️ Si algo no funciona, escribanos a <a href="mailto:canalpymes@bmae.es?subject=Ayuda%20instalación%20Call%20Flow%20Business">canalpymes@bmae.es</a> contándonos el modelo de móvil y iPhone o Android.</p>
+</main>
+<footer>Herramienta interna · Uso exclusivo de B&amp;M Asesores Energéticos · © 2026</footer>
+<script>
+  var _instalPrompt=null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); _instalPrompt=e;
+    var b=document.getElementById('btnInstalar');
+    if(b){ b.style.display='block';
+      b.addEventListener('click', function(){
+        b.style.display='none';
+        if(!_instalPrompt) return;
+        _instalPrompt.prompt();
+        _instalPrompt.userChoice.finally(function(){ _instalPrompt=null; });
+      });
+    }
+  });
+  if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+</script>
+</body>
+</html>

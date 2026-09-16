@@ -66,7 +66,8 @@
     border-top:1px solid var(--gris-linea);background:var(--blanco)}
   footer a{color:var(--verde-oscuro)}
   @media (max-width:640px){ header{padding:16px 18px} main{padding:28px 16px} }
-</style>
+
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; scroll-behavior:auto !important } }</style>
 </head>
 <body>
 <header>
@@ -122,12 +123,12 @@
     </div>
     <div class="card">
       <h2>📈 Llamadas del equipo <span id="dashPeriodo" class="badge-admin"></span></h2>
-      <p class="sub">📞 = el comercial pulsa «Registrar llamada» al colgar (botón en «Mi Cuenta») · 🎭 = usos del guion llegando al cierre + roleplays, automático · Semana = lunes → hoy · ▲/▼ = frente a la semana pasada · 📊 = llamadas por día (28 últimos) · fila salmón = ≥3 días laborables sin registrar.</p>
+      <p class="sub">📞 = el comercial pulsa «Registrar llamada» al colgar (botón en «Mi Cuenta») · 🎭 = usos del guion llegando al cierre + roleplays, automático · Semana = lunes → hoy · ▲/▼ = frente a la semana pasada · 📊 = llamadas por día (28 últimos) · fila salmón = ≥3 días laborables sin registrar · ⏱ Media = duración media de las llamadas de la semana hechas con el cronómetro · 🩺 = errores JS captados automáticamente en el dispositivo del comercial (rojo = la herramienta se está rompiendo en su móvil/PC).</p>
       <button class="btn" onclick="dashboard()">↻ Actualizar</button>
       <button class="btn" onclick="dashCSV()">⬇ CSV (Excel)</button>
       <span class="estado" id="dashEstado" style="margin-left:8px">…</span>
       <table id="dashTabla" style="margin-top:12px"><thead><tr>
-        <th>Comercial</th><th>📞 Hoy</th><th>📞 Semana</th><th>📞 Mes</th><th>🎭 Semana</th><th title="Llamadas por día, últimos 28 días">📊 28 días</th><th>Visto</th>
+        <th>Comercial</th><th>📞 Hoy</th><th>📞 Semana</th><th>📞 Mes</th><th>🎭 Semana</th><th title="Duración media de las llamadas de la semana hechas con el cronómetro ⏱">⏱ Media</th><th title="Llamadas por día, últimos 28 días">📊 28 días</th><th>Visto</th>
       </tr></thead><tbody><tr><td style="color:var(--gris-medio)">cargando…</td></tr></tbody></table>
       <p class="nota">Cada dato viene de la burbuja sincronizada de su dueño (<code>datos/&lt;perfil&gt;.json</code> → <code>bm_dias</code>). Se actualiza conforme sincroniza cada dispositivo (~10 s tras cada cambio).</p>
     </div>
@@ -279,8 +280,8 @@ var _dashFilas=[];
 function csvCelda(v){ v=String(v==null?'':v); return (/[;"\n]/.test(v))?('"'+v.replace(/"/g,'""')+'"'):v; }
 window.dashCSVTxt=function(){
   var sep=';', NL='\r\n';
-  var lin=[['Comercial','ID','Llamadas hoy','Semana (lun-hoy)','Semana anterior','Delta','Mes','Automatico semana','Ultima llamada','Visto'].join(sep)];
-  _dashFilas.forEach(function(x){ var delta=x.sem-x.semAnt; lin.push([x.nombre,x.slug,x.hoy,x.sem,x.semAnt,(delta>0?'+'+delta:delta),x.mes,x.auto,(x.ult||'—'),x.visto].map(csvCelda).join(sep)); });
+  var lin=[['Comercial','ID','Llamadas hoy','Semana (lun-hoy)','Semana anterior','Delta','Mes','Automatico semana','Media semana (mm:ss)','Errores JS','Ultima llamada','Visto'].join(sep)];
+  _dashFilas.forEach(function(x){ var delta=x.sem-x.semAnt; lin.push([x.nombre,x.slug,x.hoy,x.sem,x.semAnt,(delta>0?'+'+delta:delta),x.mes,x.auto,(x.media?fmtSeg(x.media):'—'),x.eN,(x.ult||'—'),x.visto].map(csvCelda).join(sep)); });
   return '\ufeff'+lin.join(NL);
 };
 window.dashCSV=function(){
@@ -290,6 +291,7 @@ window.dashCSV=function(){
   document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },500);
 };
 function sumaDias(dias,desde,campo){ var t=0; Object.keys(dias||{}).forEach(function(k){ if(k>=desde) t+=(dias[k]&&dias[k][campo]||0); }); return t; }
+function fmtSeg(s){ s=Math.max(0,s|0); var m=(s/60)|0, ss=s%60; return m+':'+(ss<10?'0':'')+ss; }
 window.dashboard=function(){
   var est=document.getElementById('dashEstado'); est.className='estado'; est.textContent='leyendo la caja fuerte…';
   document.getElementById('dashPeriodo').textContent=hoyClave().slice(8,10)+'/'+hoyClave().slice(5,7);
@@ -318,22 +320,28 @@ window.dashboard=function(){
             base[day]=base[day]||{}; var r=d[day]||{};
             base[day].llamadas=(base[day].llamadas||0)+(r.llamadas||0);
             base[day].cierres=(base[day].cierres||0)+(r.cierres||0);
-            base[day].practicas=(base[day].practicas||0)+(r.practicas||0);
+            base[day].practicas=(base[day].practicas||0)+(r.practicas||0); base[day].segs=(base[day].segs||0)+(r.segs||0);
           }); }); return base;
         }
         var dias=diasDe('bm_dias');
         var visto=o.ts?Math.max(0,Math.round((Date.now()-Date.parse(o.ts))/36e5)):null;
         var ult=ultimaCon(dias,'llamadas');
+        var segsSem=sumaDias(dias,LUN,'segs');
+        var errs=[]; ['bm_errores','bm_errores_res'].forEach(function(ek){ (kv[ek]||[]).forEach(function(e){ errs.push({f:String(e.f||'').slice(5,16).replace('T',' · '),p:ek.indexOf('_res')>-1?'res':'pymes',t:esc(e.t||''),m:esc(String(e.m||'')).slice(0,140)}); }); });
+        errs.sort(function(a1,b1){ return a1.f<b1.f?1:(a1.f>b1.f?-1:0); });
+        var eDet=errs.slice(0,3).map(function(e){ return '<div style="padding:2px 0;border-top:1px dotted #ddd"><b>'+e.f+'</b> · '+e.p+' · '+e.t+'<br>'+e.m+'</div>'; }).join('');
         return {nombre:(o.perfil&&o.perfil.nombre)||slug, slug:slug,
           hoy:sumaDias(dias,HOY,'llamadas'), sem:sumaDias(dias,LUN,'llamadas'), mes:sumaDias(dias,MES,'llamadas'),
           semAnt:sumaEntre(dias,lunesPas(),domPas(),'llamadas'), s28:serie28(dias),
+          media:(segsSem&&sumaDias(dias,LUN,'llamadas'))?Math.round(segsSem/sumaDias(dias,LUN,'llamadas')):0,
+          eN:errs.length, eUl:errs.length?esc(errs[0].f):'', eDet:eDet,
           ult:ult, sin:laborablesSin(ult),
           auto:sumaDias(dias,LUN,'cierres')+sumaDias(dias,LUN,'practicas'),
           visto:visto===null?'—':(visto<1?'ahora':(visto<24?('hace '+visto+' h'):('hace '+Math.round(visto/24)+' d')))};
       }).sort(function(a,b){ return (b.mes-a.mes)||(b.sem-a.sem); });
       _dashFilas=filas;
       var tb=document.querySelector('#dashTabla tbody'); tb.innerHTML='';
-      if(!filas.length){ tb.innerHTML='<tr><td colspan="7" style="color:var(--gris-medio)">aún sin datos</td></tr>'; }
+      if(!filas.length){ tb.innerHTML='<tr><td colspan="8" style="color:var(--gris-medio)">aún sin datos</td></tr>'; }
       filas.forEach(function(x){
         var tr=document.createElement('tr');
         var delta=x.sem-x.semAnt;
@@ -345,10 +353,13 @@ window.dashboard=function(){
         var tot28=x.s28.reduce(function(a,b){ return a+b; },0);
         tr.innerHTML='<td><b>'+esc(x.nombre)+'</b> <span style="color:var(--gris-medio);font-size:.72rem">'+esc(x.slug)+'</span>'
           +(inactivo?('<div style="color:#C62828;font-size:.72rem;font-weight:600;margin-top:2px">⚠ '
-            +(x.ult?('sin 📞 desde '+fmtF(x.ult)+' ('+x.sin+' días laborables)'):'sin 📞 registradas todavía')+'</div>'):'')+'</td>'
+            +(x.ult?('sin 📞 desde '+fmtF(x.ult)+' ('+x.sin+' días laborables)'):'sin 📞 registradas todavía')+'</div>'):'')
+          +'<div style="font-size:.72rem;margin-top:2px;color:'+(x.eN?'#C62828':'var(--gris-medio)')+'">🩺 '+(x.eN?(x.eN+' error(es) · último '+x.eUl):'sin errores registrados')+'</div>'
+          +(x.eN?('<details style="font-size:.7rem;margin-top:2px"><summary style="cursor:pointer">ver los últimos</summary>'+x.eDet+'</details>'):'')+'</td>'
           +'<td><b>'+x.hoy+'</b></td>'
           +'<td><b>'+x.sem+'</b>'+dHtml+'</td>'
           +'<td><b>'+x.mes+'</b></td><td>'+x.auto+'</td>'
+          +'<td>'+(x.media?fmtSeg(x.media):'—')+'</td>'
           +'<td title="📞 por día (últimos 28) · total: '+tot28+' · hoy: '+x.s28[27]+'">'+spark(x.s28)+'</td>'
           +'<td style="color:var(--gris-medio);font-size:.78rem">'+x.visto+'</td>';
         tb.appendChild(tr);

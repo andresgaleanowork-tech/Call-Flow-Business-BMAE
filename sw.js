@@ -2,8 +2,8 @@
    Documentos (HTML): network-first → siempre la versión nueva cuando hay red,
    con caché como respaldo offline. Resto (assets): caché con actualización en
    segundo plano. */
-const CACHE = 'cfb-v240'; /* v2.4.0 «Lógica» */
-const ARCHIVOS = ['./','index.html','admin.html','pymes.html','residencial.html','tutorial.html',
+const CACHE = 'cfb-v271'; /* v2.7.1 «DIA» */
+const ARCHIVOS = ['./','index.html','admin.html','pymes.html','residencial.html','tutorial.html','instalar.html',
   'manifest.webmanifest','diagsystem-logo.png','diagsystem-social-preview.png'];
 self.addEventListener('install',e=>{ e.waitUntil(
   caches.open(CACHE).then(c=>c.addAll(ARCHIVOS)).then(()=>self.skipWaiting()));

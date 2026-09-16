@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#004d2d">
 <title>Guion NEURO · Iberdrola Dpto. PYMES · B&M — Guion + Onboarding (archivo único)</title>
 <meta name="description" content="Call Flow Business — guion de ventas neuro interactivo + onboarding PYMES en un solo HTML (sin conexión).">
 <!-- Open Graph / vista previa al compartir la URL de GitHub Pages -->
@@ -738,7 +739,7 @@ window.addEventListener('hashchange',()=>{
   </div>
   <div class="header-actions">
     <button type="button" class="btn btn-blanco" id="btnCapaGlobal" onclick="guiCapaGlobal()">🔬 Capa neuro: OFF</button>
-    <button type="button" class="btn btn-blanco" id="btnFoco" onclick="guiToggleFoco()">🎯 Foco</button>
+    <button type="button" class="btn btn-blanco" id="btnFoco" onclick="guiToggleFoco()">🎯 Foco</button><button type="button" class="btn btn-blanco" id="btnTimer" onclick="cfbLlamadaToggle()" title="Cronometra la llamada real: pulse al iniciar y al colgar (se registra sola con su duración)">⏱ Llamada</button>
     <button type="button" class="btn btn-blanco" onclick="guiOpenModal()">📋 Datos de la llamada</button>
     <button type="button" class="btn btn-ghost" onclick="guiActivarTab('tab-roleplay')">🎭 Roleplay</button>
     <button type="button" class="btn btn-ghost" onclick="guiResetLlamada()">↺ Reiniciar</button>
@@ -758,6 +759,16 @@ window.addEventListener('hashchange',()=>{
 </div>
 <script>/* v2.4 «Lógica»: aviso legal silenciado por el usuario (persiste y sincroniza con su cuenta) */
 try{ if(JSON.parse(localStorage.getItem('bm_compliance_off')||'null')==='1'){ var ca=document.getElementById('cmpAviso'); if(ca) ca.style.display='none'; } }catch(e){}</script>
+
+<div id="cfbQuickNote" role="complementary" aria-label="Nota rápida de la llamada">
+  <div class="qn-tit">📝 Nota rápida de la llamada</div>
+  <input id="qnNombre" class="qn-inp" placeholder="Cliente (p. ej. Bar La Mareta)" aria-label="Nombre del cliente" maxlength="60" type="text">
+  <textarea id="qnNota" class="qn-inp" rows="2" placeholder="Lo acordado, lo pendiente…" aria-label="Nota rápida de la llamada" maxlength="300"></textarea>
+  <div style="display:flex;gap:6px">
+    <button type="button" class="cfb-btn" onclick="qnGuardar()">✎ Guardar en Mis clientes</button>
+    <button type="button" class="cfb-btn cfb-sec" onclick="qnOcultar()">Ocultar</button>
+  </div>
+</div>
 
 <div class="progress-wrap">
   <ol class="progress-steps" id="progressSteps"></ol>
@@ -3507,6 +3518,22 @@ body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
 @media print{
   body.cfb-printing>*{display:none !important}
   body.cfb-printing #cfbFichaPrint{display:block !important;position:static}
+#cfbCertPrint{display:none}
+body.cfb-printing #cfbCertPrint{display:block !important;position:static}
+#cfbCertPrint .cert-caja{max-width:640px;margin:0 auto;border:2px solid #111;border-radius:14px;padding:36px 30px;text-align:center;font-family:Georgia,serif}
+#cfbCertPrint .cert-tit{font-size:30px;letter-spacing:.06em}
+#cfbCertPrint .cert-sub{margin-top:14px;font-size:13px;color:#333}
+#cfbCertPrint .cert-nom{font-size:26px;font-weight:700;margin:18px 0;border-bottom:1px solid #999;display:inline-block;padding:0 26px 6px}
+#cfbCertPrint .cert-txt{font-size:14px;line-height:1.7}
+#cfbCertPrint .cert-fir{display:flex;gap:60px;justify-content:center;margin-top:60px}
+#cfbCertPrint .cert-fir div{border-top:1px solid #000;padding-top:4px;font-size:11px;flex:1;max-width:200px}
+.btn-blanco.timer-on{background:#C62828 !important;color:#fff !important;border-color:#C62828 !important;animation:cfbPulseG 1.2s ease-in-out infinite}
+@keyframes cfbPulseG{ 0%,100%{ box-shadow:0 0 0 0 rgba(198,40,40,.55) } 50%{ box-shadow:0 0 0 7px rgba(198,40,40,0) } }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; scroll-behavior:auto !important } }
+#cfbQuickNote{display:none;position:fixed;left:12px;bottom:12px;z-index:20000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.18);padding:10px 12px;width:min(320px,86vw)}
+body.focus #cfbQuickNote{display:block}
+#cfbQuickNote .qn-tit{font:600 12.5px Inter,sans-serif;margin-bottom:6px}
+#cfbQuickNote .qn-inp{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #ddd;border-radius:8px;margin-bottom:6px;font:500 13px Inter,sans-serif}
   @page{margin:14mm}
 }
 </style>
@@ -3518,7 +3545,7 @@ body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.4.0', GUIAFECHA='14-09-2026';
+var VERSION='2.7.1', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=''; /* v1.5.1 determinista: pymes */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3539,7 +3566,7 @@ function pinBadge(){
 }
 
 /* ═══ A1 · notificador de versión (silencioso sin red o en file://) ═══ */
-window.CFB_UPDATE_URL=window.CFB_UPDATE_URL||'';   // ACTIVAR (FABRICA v2.3): URL pública del version.json de vuestra página (p. ej. https://USUARIO.github.io/REPO/version.json) → EXE/APK oirán el aviso de nuevas versiones
+window.CFB_UPDATE_URL=window.CFB_UPDATE_URL||'https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/version.json';   // ACTIVAR (FABRICA v2.3): URL pública del version.json de vuestra página (p. ej. https://USUARIO.github.io/REPO/version.json) → EXE/APK oirán el aviso de nuevas versiones
 function checkVersion(){
   if(window.CFB_NO_VERCHECK) return;
   var url=window.CFB_UPDATE_URL||'version.json', ctrl=null, done=false;
@@ -3660,6 +3687,114 @@ window.cliCopia=function(nombre){
 window.cliReset=function(){ if(confirm('⚠ ¿VACIAR todas las fichas de clientes de ESTE dispositivo?')){ cliGuardarTodo({}); toast('🗑 Registro de clientes vaciado'); window.cliVerTodo(); } };
 /* superficie pública mínima (tests + reutilización futura) */
 window.cfbRacha=racha; window.cfbMisInsignias=misInsignias; window.cliAnadir=cliAnadir; window.cliBorrar=cliBorrar; window.cliBorrarNota=cliBorrarNota;
+/* ═══ v2.7 «Diploma» · examen final cronometrado + certificado ═══ */
+function dipUmbral(){ return (typeof CONFIG!=='undefined'&&CONFIG.notaAprobado)?CONFIG.notaAprobado:8; }
+function dipGet(){ return LSg('bm_diploma'+SUF,{})||{}; }
+function dipTxt(){ var d=dipGet(); return d.nota==null?'—':(d.nota+'/10'+(d.aprobado?' ✔ aprobado':'')+' · '+(d.fecha||'')); }
+window.cfbCertificado=function(){
+  var d=dipGet();
+  if(!d.aprobado){ try{ toast('✘ Primero apruebe el examen ('+dipUmbral()+'/10)'); }catch(e){} return; }
+  var viejo=document.getElementById('cfbCertPrint'); if(viejo) viejo.remove();
+  var nom=((LSg('cfb_perfil',{})||{}).nombre)||'________________';
+  var guion=(document.title||'').replace(/\s*\(archivo único\)/,'').trim();
+  var h='<div id="cfbCertPrint"><div class="cert-caja">'
+   +'<div class="cert-tit">Call Flow Business</div>'
+   +'<div class="cert-sub">B\u0026M Asesores Energéticos certifica la superación del examen final por</div>'
+   +'<div class="cert-nom">'+xh(nom)+'</div>'
+   +'<div class="cert-txt">con nota <b>'+d.nota+'/10</b> en «'+xh(guion)+'»<br>'+xh(d.fecha||'')+' · v'+VERSION+'</div>'
+   +'<div class="cert-fir"><div>El/La participante</div><div>El/La responsable</div></div>'
+   +'</div></div>';
+  document.body.insertAdjacentHTML('beforeend',h);
+  document.body.classList.add('cfb-printing');
+  var fin=function(){ document.body.classList.remove('cfb-printing'); var o=document.getElementById('cfbCertPrint'); if(o) o.remove(); };
+  window.addEventListener('afterprint',fin);
+  window.print(); setTimeout(fin,1500);
+  try{ renderHub(true); }catch(e){}
+};
+window.cfbExamen=function(){
+  if(typeof QUIZ==='undefined'||!QUIZ.length){ try{ toast('✘ El banco de preguntas no está en esta página'); }catch(e){} return; }
+  var viejo=document.getElementById('cfbExamOv'); if(viejo) viejo.remove();
+  var ov=document.createElement('div'); ov.id='cfbExamOv';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:60000;display:flex;align-items:center;justify-content:center;padding:14px';
+  ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Examen final');
+  var _prevF=document.activeElement||null;
+  function cierrExam(){ clearInterval(finT); ov.remove(); try{ if(_prevF&&_prevF.focus) _prevF.focus(); }catch(e){} }
+  ov.addEventListener('keydown',function(e){ if(e.key==='Escape'){ cierrExam(); } });
+  var orden=QUIZ.map(function(q,i){ return i; }).sort(function(){ return Math.random()-0.5; });
+  var rest=8*60, finT=null;
+  function pinta(){
+    var h='<div style="background:#fff;border-radius:14px;max-width:640px;width:100%;padding:16px;max-height:92vh;overflow:auto">'
+     +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>🎓 Examen final</b><span id="examReloj" style="font:700 14px ui-monospace,monospace">8:00</span></div>'
+     +'<div class="cfb-nota" style="margin:6px 0">'+QUIZ.length+' preguntas · aprobado con '+dipUmbral()+'/'+QUIZ.length+' · sin ayudas 😉</div>';
+    orden.forEach(function(qi,n){
+      var q=QUIZ[qi];
+      h+='<div class="exam-q" data-q="'+n+'" data-qi="'+qi+'" style="border-top:1px solid #eee;padding:8px 0"><b>'+(n+1)+'. '+xh(q.q)+'</b>';
+      q.o.forEach(function(op,j){
+        h+='<label style="display:block;padding:4px 6px;border-radius:8px;cursor:pointer">'
+         +'<input type="radio" name="exam-'+n+'" value="'+j+'"> '+xh(op)+'</label>';
+      });
+      h+='</div>';
+    });
+    h+='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="cfb-btn" id="examCorr">Corregir examen</button>'
+     +'<button type="button" class="cfb-btn cfb-sec" id="examCancel">Cancelar</button></div></div>';
+    ov.innerHTML=h;
+    ov.addEventListener('change',function(e){
+      var r=e.target; if(!r||r.type!=='radio') return;
+      var box=r.closest('[data-q]'); if(box) box.setAttribute('data-ans',r.value);
+    });
+    ov.querySelector('#examCancel').onclick=function(){ cierrExam(); };
+    ov.querySelector('#examCorr').onclick=function(){ corrige(); };
+  }
+  function corrige(){
+    clearInterval(finT);
+    var aciertos=0;
+    orden.forEach(function(qi,n){
+      var box=ov.querySelector('[data-q="'+n+'"]'); if(!box) return;
+      var ans=parseInt(box.getAttribute('data-ans')||'-1',10);
+      if(ans===QUIZ[qi].ok) aciertos++; else box.style.opacity=ans>=0?0.6:0.8;
+    });
+    var apr=aciertos>=dipUmbral();
+    var anterior=dipGet();
+    if(anterior.nota==null||aciertos>=anterior.nota) LSs('bm_diploma'+SUF,{nota:aciertos,fecha:hoyLocal(),aprobado:apr||(anterior.aprobado===true)});
+    var rel=ov.querySelector('#examReloj'); if(rel) rel.textContent=aciertos+'/'+QUIZ.length+(apr?' ✔ APROBADO':'');
+    var b=ov.querySelector('#examCorr'); if(b){ b.textContent='Cerrar'; b.onclick=function(){ cierrExam(); try{ renderHub(true); }catch(e){} }; }
+    try{ toast(apr?'🎓 ¡Aprobado! Ya puedes generar tu 📜 certificado (Mi Cuenta → 🎓 Diploma)':'🎓 '+aciertos+'/'+QUIZ.length+' — te faltan '+Math.max(0,dipUmbral()-aciertos)+'. Inténtalo cuando quieras'); }catch(e){}
+  }
+  pinta();
+  document.body.appendChild(ov);
+  var f0=ov.querySelector('input,button'); if(f0){ try{ f0.focus(); }catch(e){} }
+  finT=setInterval(function(){
+    rest--;
+    var el=ov.querySelector('#examReloj'); if(!el){ clearInterval(finT); return; }
+    var m=(rest/60)|0,s=rest%60; el.textContent=m+':'+(s<10?'0':'')+s;
+    if(rest<=0) corrige();
+  },1000);
+};
+/* ═══ v2.6 «Plantilla» · seguimiento personalizado + nota CRM en Foco ═══ */
+function segTexto(){
+  var v=LSg('guion_vars'+SUF,{})||{};
+  var nom=String(v.NOMBRE_CLIENTE||'').trim(), com=String(v.NOMBRE_COMERCIAL||'').trim();
+  var l1='Buenas'+(nom?' '+nom:'')+',';
+  return l1+'\n\nLe escribo'+(com?' ('+com+')':'')+' de Iberdrola, como continuación de nuestra conversación de hoy. Le dejo lo acordado y los próximos pasos:\n\n· Punto 1: \n· Punto 2: \n\nQuedo a la espera de cualquier duda. Un saludo.';
+}
+window.cfbSeg=function(tipo){
+  var cuerpo=segTexto();
+  try{
+    if(tipo==='wa'){ window.open('https://wa.me/?text='+encodeURIComponent(cuerpo),'_blank'); }
+    else { window.open('mailto:?subject='+encodeURIComponent('Seguimiento de nuestra conversación · Iberdrola')+'&body='+encodeURIComponent(cuerpo),'_self'); }
+  }catch(e){}
+  try{ toast('📨 Se abrió tu '+(tipo==='wa'?'WhatsApp':'correo')+' con el texto listo'); }catch(e){}
+};
+window.qnGuardar=function(){
+  var n=document.getElementById('qnNombre'), t=document.getElementById('qnNota');
+  if(!n||!t) return;
+  if(!cliAnadir(n.value,t.value)){ try{ toast('✘ Rellene cliente y nota'); }catch(e){} return; }
+  t.value=''; try{ toast('✎ Nota guardada en Mis clientes'); }catch(e){}
+};
+window.qnOcultar=function(){
+  try{ if(typeof guiToggleFoco==='function'){ guiToggleFoco(); return; } }catch(e){}
+  try{ document.body.classList.remove('focus'); var b=document.getElementById('btnFoco'); if(b){ b.classList.remove('on'); b.textContent='🎯 Foco'; } }catch(e){}
+};
 
 function statsSet(s){ LSs('bm_stats'+SUF,s); try{ if(window.cfbPref) LSs(cfbPref('stats'+SUF),s); }catch(e){} }
 function hoyLocal(){ var d=new Date(),p=function(n){return (n<10?'0':'')+n;}; return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
@@ -3840,16 +3975,23 @@ function renderHub(silencio){
      +'<div class="cfb-fila"><span>Hoy</span><b id="cfbDiaHoyN">0</b></div>'
      +'<div class="cfb-fila"><span>Esta semana</span><b id="cfbDiaSemN">0</b></div>'
      +'<button type="button" class="cfb-btn" onclick="cfbRegLlamada()">📞 Registrar llamada +1</button></div>'
+   +'<div class="cfb-bloque"><b>📨 Seguimiento al cliente</b><div class="cfb-nota">Abre tu correo o WhatsApp con el texto ya personalizado con los datos de la llamada (editable antes de enviar).</div>'
+     +'<button type="button" class="cfb-btn" onclick="cfbSeg(\'mail\')">✉️ Email de seguimiento</button>'
+     +'<button type="button" class="cfb-btn cfb-sec" onclick="cfbSeg(\'wa\')">💬 WhatsApp</button></div>'
 
    +'<div class="cfb-bloque"><b>📇 Mis clientes</b><div class="cfb-nota">Notas por cliente: motivo de la llamada, lo acordado, lo pendiente. <b>Solo en ESTE dispositivo</b>: no se sube a la nube ni al panel. Las notas de +180 días se purgan solas.</div>'
-     +'<input id="cliNombre" placeholder="Cliente (p. ej. Bar La Mareta)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #ddd;border-radius:8px;margin:6px 0 4px;font:500 13px Inter,sans-serif">'
-     +'<textarea id="cliNota" placeholder="Nota rápida (p. ej. hablar con Manolo el jueves 12:00)" style="width:100%;box-sizing:border-box;min-height:46px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;font:500 13px Inter,sans-serif"></textarea>'
+     +'<input id="cliNombre" aria-label="Nombre del cliente" placeholder="Cliente (p. ej. Bar La Mareta)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #ddd;border-radius:8px;margin:6px 0 4px;font:500 13px Inter,sans-serif">'
+     +'<textarea id="cliNota" aria-label="Nota del cliente" placeholder="Nota rápida (p. ej. hablar con Manolo el jueves 12:00)" style="width:100%;box-sizing:border-box;min-height:46px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;font:500 13px Inter,sans-serif"></textarea>'
      +'<div style="display:flex;gap:8px;margin:6px 0"><button type="button" class="cfb-btn" onclick="cliGuardaNueva()">✎ Guardar nota</button>'
      +'<button type="button" class="cfb-btn cfb-sec" onclick="cliReset()">🗑 Vaciar registro</button></div>'
      +'<div id="cliLista"></div></div>'
    +'<div class="cfb-bloque"><b>Recorrido (nodos más usados)</b><div>'+pills+'</div>'
      +'<b style="margin-top:6px">Objeciones abordadas</b><div>'+(objs.length?objs.map(function(k){return '<span class="cfb-pill">'+xh(k)+'</span>';}).join(' '):'<span class="cfb-nota">ninguna aún</span>')+'</div></div>'
    +'<div class="cfb-bloque"><b>🏅 Insignias</b><div>'+insHtml+'</div></div>'
+   +'<div class="cfb-bloque"><b>🎓 Diploma</b><div class="cfb-nota">Examen final: 10 preguntas, 8 minutos, aprobado con 8/10. Al aprobar se habilita el certificado imprimible.</div>'
+     +'<div class="cfb-fila"><span>Mejor nota</span><b>'+dipTxt()+'</b></div>'
+     +'<button type="button" class="cfb-btn" onclick="cfbExamen()">🎓 Hacer el examen</button>'
+     +'<button type="button" class="cfb-btn cfb-sec" onclick="cfbCertificado()">📜 Certificado PDF</button></div>'
    +'<div class="cfb-bloque"><b>🖨️ Ficha de llamada</b><div class="cfb-nota">Resumen con personalización, recorrido y observaciones para imprimir o guardar en PDF.</div>'
      +'<button type="button" class="cfb-btn" onclick="cfbFicha()">Generar ficha imprimible</button></div>'
    +'<div class="cfb-bloque"><b>Accesibilidad</b>'
@@ -3914,10 +4056,10 @@ function lunesClave(){ var d=new Date(); var w=(d.getDay()+6)%7; d.setDate(d.get
 function diasGet(){ return LSg('bm_dias'+_S(),{}); }
 function diasSet(o){ LSs('bm_dias'+_S(),o); try{ if(window.cfbPref) LSs(cfbPref('dias'+_S()),o); }catch(e){} }
 function tope(o){ var ks=Object.keys(o); if(ks.length>400){ ks.sort(); ks.slice(0,ks.length-400).forEach(function(k){ delete o[k]; }); } return o; }
-function diaBump(campo){
+function diaBump(campo,n){
   var o=diasGet(), h=hoyClave();
   o[h]=o[h]||{llamadas:0,cierres:0,practicas:0};
-  o[h][campo]=(o[h][campo]||0)+1;
+  o[h][campo]=(o[h][campo]||0)+(n||1);
   diasSet(tope(o)); pintarMini();
 }
 function sumaDesde(desde,campo){ var o=diasGet(),t=0; Object.keys(o).forEach(function(k){ if(k>=desde&&/^\d{4}-\d{2}-\d{2}$/.test(k)) t+=(o[k]&&o[k][campo]||0); }); return t; }
@@ -3937,6 +4079,25 @@ function cadena(fn,extra){
   window[fn]=function(){ var r=p.apply(this,arguments); try{ extra.apply(null,arguments); }catch(e){} return r; };
 }
 cadena('guiRenderTree',function(id){ if(id&&String(id).indexOf('cierre')===0) diaBump('cierres'); });
+/* ═══ v2.5 «Salud» · ⏱ cronómetro de llamada real: al colgar se registra sola (con su duración) ═══ */
+function timerKey(){ return 'bm_timer'+(_S()); }
+function fmtSeg(s){ s=Math.max(0,s|0); var m=(s/60)|0, ss=s%60; return m+':'+(ss<10?'0':'')+ss; }
+function pintarTimer(){
+  var b=document.getElementById('btnTimer'); if(!b) return;
+  var t=LSg(timerKey(),null);
+  b.setAttribute('aria-pressed',(t&&t.start)?'true':'false');
+  if(t&&t.start){ b.classList.add('timer-on'); b.innerHTML='⏱ '+fmtSeg(Math.round((Date.now()-t.start)/1000))+' <b>· Colgar</b>'; }
+  else { b.classList.remove('timer-on'); b.innerHTML='⏱ Llamada'; }
+}
+window.cfbLlamadaToggle=function(){
+  var k=timerKey(), t=LSg(k,null);
+  if(!t){ LSs(k,{start:Date.now()}); pintarTimer(); try{ toast('⏱ Cronometrando la llamada — al colgar pulse de nuevo «⏱»'); }catch(e){} return; }
+  var segs=Math.max(1,Math.round((Date.now()-(t.start||Date.now()))/1000));
+  try{ localStorage.removeItem(k); }catch(e){}
+  diaBump('llamadas'); diaBump('segs',segs); pintarTimer();
+  try{ toast('📞 Llamada registrada · '+fmtSeg(segs)+' · hoy llevas '+sumaDesde(hoyClave(),'llamadas')); }catch(e){}
+};
+setInterval(pintarTimer,1000);
 window.cfbGatePillOff=function(b){ try{ localStorage.setItem('bm_gatepill_off','1'); }catch(e){} try{ var p=b&&b.parentNode; if(p) p.remove(); }catch(e){} };
 cadena('guiRpExit',function(){ diaBump('practicas'); });
 cadena('renderHub',pintarMini);
