@@ -1,0 +1,17 @@
+const FAQ = [
+ ['¿Necesita internet la herramienta?','No. Funciona offline al completo; solo las tipografías viajan por red (y si fallan, usa fuentes del sistema). Guárdela en el escritorio y ábrala con doble clic.'],
+ ['¿Qué navegador uso?','Chrome o Edge en su versión actual. Firefox también funciona. En el móvil, cualquier navegador moderno, aunque en llamada el ordenador da más juego (dos paneles a la vista).'],
+ ['¿Se pierden mis datos al cerrar?','No. Los datos del modal, los KPIs y el progreso de este tutorial se guardan en localStorage del navegador. Ojo: borrar datos de navegación los borra también.'],
+ ['¿Puedo usarla en varias pestañas?','Sí, pero cada pestaña lleva su llamada. No use la misma pestaña para dos llamadas a la vez: el árbol solo tiene un hilo.'],
+ ['¿Qué hago si el cliente se adelanta al cierre?','Atajo «🤝 Ir al cierre» del panel izquierdo. El guion sirve al cliente, no al revés: si pide alta ya, no le haga escuchar el pitch entero.'],
+ ['¿Y si me equivoco de botón en mitad de la llamada?','«← Volver» le devuelve un paso. Nunca se rompe nada; la peor torpeza es dejar al cliente escuchando su silencio de pánico.'],
+ ['¿Cuándo uso la capa neuro en llamada real?','La primera semana, nunca. Después, solo si lleva meses y quiere revisar un bloque concreto. La regla de oro es: visible para entrenar, oculta para vender.'],
+ ['¿Qué son las marcas [PAUSA 2s] y [TONO ↑]?','Instrucciones de interpretación. La pausa marcada es silencio que trabaja para usted: no lo llene. El tono arriba abre; el tono abajo cierra y suena a verdad.'],
+ ['¿Puedo saltarme fases?','Puede saltar al cierre con el atajo, y el progreso lo marca igual. No hay «fases obligatorias» rígidas: hay conversaciones. Dicho esto, saltarse la detección mata el pitch personalizado.'],
+ ['¿Cuántas objeciones aguanto antes de retirarme?','Dos «no» seguidos a la misma puerta. Ahí entra la retirada elegante: imagen sembrada, WhatsApp entregado, puerta abierta. Insistir más es pelear contra la cosecha de dentro de seis meses.'],
+ ['¿Qué hago si el cliente me manda la factura y luego desaparece?','Cadencia del plan: novedad a las 24–48 h (el estudio empezado ES la novedad), caso de su sector a la semana, tercer toque a los 15 días. Con estudio hecho, la segunda llamada es de cierre, no de persecución.'],
+ ['¿Puedo editar los textos yo mismo?','Sí, todo el contenido vive en el <script> final del HTML. Pero edite siempre sobre una copia y pase cualquier frase nueva por el filtro idiomático de la pestaña 🇪🇸 Glosario. El responsable coordina la versión oficial del equipo para no multiplicar guiones distintos.'],
+ ['¿Cómo se actualiza el guion para todo el equipo?','El responsable edita la versión oficial, la prueba (carga, flujo básico, una objeción) y la redistribuye como archivo único: correo, carpeta compartida o intranet. Cada uno la descarga y listo: no hay instalación.'],
+ ['¿Qué pasa si el cliente pregunta de dónde tenemos sus datos?','Tiene su objeción propia en el guion: transparencia total, Robinson consultada, y si pide no recibir llamadas se anota y se cumple al instante. Esa elegancia también es venta.'],
+ ['¿A quién pido ayuda si la herramienta falla?','Al responsable de formación (ver tabla de configuración). Apunte qué hizo, en qué bloque estaba y una captura si puede. Las incidencias se corrigen en la siguiente revisión del archivo.']
+];

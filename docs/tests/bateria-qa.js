@@ -296,7 +296,7 @@ step(/LSs\('cfb_localts',\(new Date\(\)\).toISOString\(\)\)/.test(src),'AUD-C: c
 step(/_restaurando/.test(src)&&/_restaurando=true/.test(src),'AUD-D: restauración no rebota push (sin commit eco)');
 step(/var r=p\.apply\(this,arguments\); try\{ extra\.apply/.test(src),'AUD-E: hooks después del render (números pintan al abrir)');
 step(/CFB_VERSION=\(typeof VERSION!=='undefined'\)/.test(src),'AUD-F: versión del snapshot viva');
-step(/network-first/.test(swSrc)&&/cfb-v291/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
+step(/network-first/.test(swSrc)&&/cfb-v293/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
 step(/cfbGatePill/.test(src)&&/bm_gatepill_off/.test(src),'AUD-I: pastilla «identifícate desde el menú» en guiones');
 step(!/bm_tut_prog_res'\+SUF/.test(srcR)&&!/bm_tut_omitido_res'\+SUF/.test(srcR),'AUD-J: sin dobles sufijos _res_res en residencial');
 step((function(){
@@ -652,17 +652,25 @@ step(src.includes('cfaCobertura'), 'W8-8 % cobertura');
 step(src.includes('cfaChip'), 'W8-9 chip idioma reabre selector');
 step(src.includes('I18N.fr.nodes.inicio') && src.includes('I18N.pt.obj.ya_tengo'), 'W8-10 semilla ola-1');
 
-// ── W9 · cobertura real por idioma (motor ejecutado en vm) ──
+// ── W9 · cobertura real + ola 2 (objeciones completas FR/PT) ──
 {
   const vm=require('vm');
   const m=src.match(/var I18N=[\s\S]*?(?=\/\* ── motor ──)/);
-  const driver="\nfunction cfaCobertura(L){var p=I18N[L]||{},totN=Object.keys(NODES||{}).length||1,totO=Object.keys(OBJECTIONS||{}).length||1;var n=Object.keys(p.nodes||{}).length,o=Object.keys(p.obj||{}).length;return Math.min(100,Math.round((n/totN*0.7+o/totO*0.3)*100))}\nvar __cov={fr:cfaCobertura('fr'),pt:cfaCobertura('pt'),frUI:Object.keys(I18N.fr.ui).length,ptUI:Object.keys(I18N.pt.ui).length,uiTotOK:(Object.keys(I18N.fr.ui).length===Object.keys(I18N.pt.ui).length)};";
-  const ctx={NODES:{a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:10},OBJECTIONS:{x:1,y:2,z:3}}; vm.createContext(ctx);
+  const CLAVES=['ya_tengo','permanencia','no_interesa','mas_caro','tiempo','despues','no_decisor','email','lo_pienso','no_cambiar','contento','desconfianza','momento','ya_llamaron','datos'];
+  const driver="\nfunction cfaCobertura(L){var p=I18N[L]||{},totN=Object.keys(NODES||{}).length||1,totO=Object.keys(OBJECTIONS||{}).length||1;var n=Object.keys(p.nodes||{}).length,o=Object.keys(p.obj||{}).length;return Math.min(100,Math.round((n/totN*0.7+o/totO*0.3)*100))}\nvar __cov={fr:cfaCobertura('fr'),pt:cfaCobertura('pt'),frUI:Object.keys(I18N.fr.ui).length,ptUI:Object.keys(I18N.pt.ui).length,uiTotOK:(Object.keys(I18N.fr.ui).length===Object.keys(I18N.pt.ui).length),frO:Object.keys(I18N.fr.obj).length,ptO:Object.keys(I18N.pt.obj).length};";
+  const NODES40={}; for(let i=0;i<40;i++) NODES40['n'+i]=1;
+  const OBJ15={}; CLAVES.forEach(k=>OBJ15[k]=1);
+  const ctx={NODES:NODES40,OBJECTIONS:OBJ15}; vm.createContext(ctx);
   let cov=null; try{ vm.runInContext((m?m[0]:'')+driver,ctx); cov=ctx.__cov; }catch(e){ step(false,'W9-0 motor evaluable: '+e.message); }
   if(cov){
-    step(cov.fr>0&&cov.fr<100, 'W9-1 FR % cobertura válido ('+cov.fr+'%)');
-    step(cov.pt>0&&cov.pt<100, 'W9-2 PT % cobertura válido ('+cov.pt+'%)');
+    step(cov.fr>25&&cov.fr<100, 'W9-1 FR % cobertura en banda ola-2 ('+cov.fr+'%)');
+    step(cov.pt>25&&cov.pt<100, 'W9-2 PT % cobertura en banda ola-2 ('+cov.pt+'%)');
     step(cov.uiTotOK===true&&cov.frUI>=25, 'W9-3 UI cromo FR/PT a la par ('+cov.frUI+' cadenas)');
-    step(cov.fr===cov.pt, 'W9-4 paridad FR/PT en semilla');
+    step(cov.fr===cov.pt, 'W9-4 paridad FR/PT global');
+    step(cov.frO===15&&cov.ptO===15, 'W9-5 las 15 objeciones cubiertas en FR y PT ('+cov.frO+'/'+cov.ptO+')');
   }
+  CLAVES.forEach(k=>{
+    step(src.includes('I18N.fr.obj.'+k+'=')&&src.includes('I18N.pt.obj.'+k+'='), 'W9-6 '+k+' FR/PT presente');
+  });
+  step(src.includes("'round2'")&&/dialogo','round2'\]/.test(src), 'W9-7 motor mezcla tambien round2');
 }

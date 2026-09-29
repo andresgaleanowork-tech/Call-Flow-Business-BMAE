@@ -6,7 +6,7 @@ El onboarding (tutorial, quiz, diploma, casos, FAQ) **sigue en español** hasta 
 | Ola | Contenido | Peso aprox. | Estado |
 |-----|-----------|-------------|--------|
 | 1 | Motor de idiomas + selector por sesión + chip 🌐 + cromo UI (28 cadenas FR/PT) + semilla: `NODES.inicio` y `OBJECTIONS.ya_tengo` FR+PT | ~3 KB/idioma | ✅ v2.9.0 |
-| 2 | **Objeciones completas** FR+PT (las 10-12 manejos) | ~29 KB ×2 | pendiente |
+| 2 | **Objeciones completas** FR+PT (las 15 manejos, incl. `round2`) | ~40 KB ×2 | ✅ v2.9.2 |
 | 3 | **Árbol de decisión completo** FR+PT (nodos paso a paso) | ~44,5 KB ×2 | pendiente |
 | 4 | Glosario + casos de escucha adaptados a cada mercado | ~7,5 KB ×2 + trabajo editorial | pendiente |
 

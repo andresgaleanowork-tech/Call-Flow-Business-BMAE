@@ -3555,7 +3555,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.9.1', GUIAFECHA='16-09-2026';
+var VERSION='2.9.3', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=''; /* v1.5.1 determinista: pymes */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3865,6 +3865,315 @@ I18N.pt.obj.ya_tengo={nombre:'« Já tenho comercializadora »',
   {t:'« A pergunta é outra: quanto lhe custa por mês não olhar para ela? »', n:'PERDA ATUAL'}],
  avance:[{t:'« Diga-me uma coisa: a última fatura, passou de quatrocentos euros ou andou por aí? »', n:'ABERTA COM ÂNCORA · “andou por aí”'}]};
 
+
+/* ── Ola 2 · objeciones PYMES completas FR/PT (v2.9.2) · nat/glosa = ola 4 ── */
+I18N.fr.obj.permanencia={nombre:'« Je suis engagé / sous contrat »',
+ validacion:[{t:'« Heureux que vous maîtrisiez ça, ça montre que vous êtes quelqu’un de sérieux. »', n:'VALIDATION · FIERTÉ'}],
+ desactiva:[{t:'« Et soyez tranquille : aujourd’hui on ne touche à rien. Ni ce mois-ci d’ailleurs. »', n:'CORTISOL ↓ · TEMPS'}],
+ reencuadre:[{t:'« Regardez, la date exacte de fin figure sur votre facture. Des fois, il y a des bonnes surprises. »', n:'ZEIGARNIK · “des bonnes”'},
+  {t:'« Et en attendant, chaque mois la même somme sort de la caisse. Attendre a aussi un coût. »', n:'PERTE ACTUELLE'}],
+ avance:[{t:'« On regarde ça ensemble tout de suite… ou vous m’envoyez une photo et je vous le couche par écrit ? »', n:'CHOIX A/B · “par écrit”'}],
+ dialogo:[['cliente','Impossible, je suis engagé jusqu’à l’année prochaine.'],
+  ['comercial','Heureux que vous maîtrisiez ça. Et tranquille : aujourd’hui on ne touche à rien. Mais regardez : la date exacte est sur votre facture, et en attendant, chaque mois la même somme s’en va. On le regarde ensemble ou vous m’envoyez une photo et je vous le mets par écrit ?']],
+ round2:[{t:'« L’étude est gratuite et on la prépare aujourd’hui. Et le jour où elle devient rentable… ça démarre tout seul. »', n:'GRATUIT · AUTOMATIQUE · CORTISOL ↓'},
+  {t:'« Je vous le prépare avec la facture… ou on se voit un petit moment ? »', n:'CHOIX A/B · “un petit moment”'}]};
+I18N.pt.obj.permanencia={nombre:'« Estou vinculado / tenho fidelização »',
+ validacion:[{t:'« Ainda bem que tem isso controlado, diz muito a seu favor. »', n:'VALIDAÇÃO · ORGULHO'}],
+ desactiva:[{t:'« E descanse: hoje não mexemos em nada. Nem este mês também não. »', n:'CORTISOL ↓ · TEMPO'}],
+ reencuadre:[{t:'« Olhe, na fatura vem a data exata em que termina. Às vezes há surpresas das boas. »', n:'ZEIGARNIK · “das boas”'},
+  {t:'« E ouça, enquanto esse dia não chega, todos os meses sai o mesmo da caixa. Esperar também custa. »', n:'PERDA ATUAL'}],
+ avance:[{t:'« Vemos isso agora juntos… ou manda-me uma foto e eu deixo-lho por escrito? »', n:'ESCOLHA A/B · “por escrito”'}],
+ dialogo:[['cliente','Não posso, tenho fidelização até ao próximo ano.'],
+  ['comercial','Ainda bem que tem isso controlado, diz muito a seu favor. E descanse, que hoje não mexemos em nada. Mas olhe: a data exata está na sua fatura, e enquanto chega, todos os meses sai o mesmo. Vemos agora juntos ou manda-me uma foto e deixo-lhe por escrito?']],
+ round2:[{t:'« O estudo é grátis e preparamo-lo hoje. E no dia em que lhe ficar grátis… arranca sozinho. »', n:'GRÁTIS · AUTOMÁTICO · CORTISOL ↓'},
+  {t:'« Deixo-lho pronto com a fatura… ou vemo-lo um bocadinho, pessoalmente? »', n:'ESCOLHA A/B · DIMINUTIVO “bocadinho”'}]};
+I18N.fr.obj.no_interesa={nombre:'« Ça ne m’intéresse pas »',
+ validacion:[{t:'« Je vous comprends parfaitement, [NOMBRE_CLIENTE], c’est tout à fait normal. »', n:'VALIDATION · NOM'}],
+ desactiva:[{t:'« Et je ne vous demande pas de l’intérêt, pas d’inquiétude. Je vous demande une demi-minute. »', n:'CORTISOL ↓ · RARETÉ · “demi-minute”'}],
+ reencuadre:[{t:'« L’intérêt, ça ne se possède pas, écoutez. Ça se découvre. »', n:'RE-CADRAGE · PHRASE ANCRE'},
+  {t:'« Les entreprises de [SECTOR] que j’ai appelées cette semaine n’en avaient pas non plus… jusqu’à ce qu’elles voient leur chiffre. »', n:'PREUVE SOCIALE · ZEIGARNIK'}],
+ avance:[{t:'« Dites-moi : cette année, votre facture vous a augmenté peu… ou beaucoup ? »', n:'CHOIX DOUBLE · PERTE'}],
+ dialogo:[['cliente','Ça ne m’intéresse pas.'],
+  ['comercial','Je vous comprends parfaitement, c’est normal. Et je ne vous demande pas de l’intérêt : je vous demande une demi-minute. Les entreprises de votre secteur que j’ai appelées cette semaine n’en avaient pas non plus… jusqu’à ce qu’elles voient leur chiffre. Dites-moi, cette année elle vous a augmenté peu ou beaucoup ?'],
+  ['cliente','Beaucoup, à vrai dire.'],
+  ['comercial','Eh bien voilà votre chiffre. Une photo et demain vous l’avez, gratuitement. WhatsApp ou e-mail ?']],
+ round2:[{t:'« Je vous laisse mon WhatsApp et un cadeau : l’étude gratuite, prête quand vous voulez. »', n:'CONTRÔLE CLIENT · RÉCIPROCITÉ'},
+  {t:'« Je vous l’envoie aujourd’hui… ou je vous rappelle dans un mois, sans engagement ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_interesa={nombre:'« Não me interessa »',
+ validacion:[{t:'« Compreendo-o perfeitamente, [NOMBRE_CLIENTE], faltava mais. »', n:'VALIDAÇÃO · NOME'}],
+ desactiva:[{t:'« E não lhe peço interesse, não se preocupe. Peço-lhe meio minuto. »', n:'CORTISOL ↓ · ESCASSEZ · “meio minuto”'}],
+ reencuadre:[{t:'« É que o interesse não se tem, ouça. Descobre-se. »', n:'REENQUADRAMENTO · FRASE ÂNCORA'},
+  {t:'« As empresas de [SECTOR] a quem liguei esta semana também não tinham… até verem o seu número. »', n:'PROVA SOCIAL · ZEIGARNIK'}],
+ avance:[{t:'« Diga-me: este ano a fatura subiu-lhe pouco… ou subiu-lhe bastante? »', n:'ESCOLHA DUPLA · PERDA'}],
+ dialogo:[['cliente','Não me interessa.'],
+  ['comercial','Compreendo-o perfeitamente, faltava mais. E não lhe peço interesse: peço-lhe meio minuto. As empresas do seu setor a quem liguei esta semana também não tinham… até verem o seu número. Diga-me, este ano subiu-lhe pouco ou bastante?'],
+  ['cliente','Bastante, a verdade é essa.'],
+  ['comercial','Pois aí tem o seu número. Uma foto e amanhã tem-no, grátis. WhatsApp ou e-mail?']],
+ round2:[{t:'« Deixo-lhe o meu WhatsApp e um presente: o estudo grátis, pronto para quando quiser. »', n:'CONTROLO AO CLIENTE · RECIPROCIDADE'},
+  {t:'« Mando-lho hoje… ou ligo-lhe daqui a um mês, sem compromisso? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.mas_caro={nombre:'« C’est plus cher / Iberdrola est chère »',
+ validacion:[{t:'« Merci de me le dire aussi franchement. Je préfère la vérité à la politesse, écoutez. »', n:'VALIDATION · RESPECT'}],
+ desactiva:[{t:'« Et je ne vais pas vous contredire, non. Les chiffres se défendent tout seuls. »', n:'CORTISOL ↓ · “non” emphatique [TON ↓]'}],
+ reencuadre:[{t:'« Regardez ce qu’on voit chaque semaine : des entreprises avec l’énergie pas chère… et la puissance très chère, en sommeil. »', n:'RE-CADRAGE · PREUVE SOCIALE'},
+  {t:'« Par ici, en moyenne, il s’en va entre dix et vingt pour cent chaque mois. Mois après mois. »', n:'ANCRE % · PERTE ACTUELLE · “il s’en va”'},
+  {t:'« Et un prix à l’aveugle, je ne vous le donne pas, ce serait vous tromper. Votre vérité est dans votre facture, pas chez moi. »', n:'HONNÊTETÉ — le non-prix EST l’argument'}],
+ avance:[{t:'« On regarde quoi d’abord : les puissances… ou le prix de l’énergie ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','Iberdrola est chère, tout le monde le sait.'],
+  ['comercial','Merci de me le dire clairement. Et je ne vous contredis pas, écoutez : les chiffres se défendent seuls. Chaque semaine on voit des entreprises avec l’énergie pas chère et la puissance très chère, en sommeil : entre dix et vingt pour cent qui s’en vont chaque mois. Un prix à l’aveugle, je ne vous le donne pas ; je vous le donne avec votre facture devant nous. On regarde d’abord puissances ou énergie ?']],
+ round2:[{t:'« Et ajoutez ceci au compte : un gestionnaire personnel, l’audit de chaque facture et l’urgence vingt-quatre heures. »', n:'VALEUR AJOUTÉE · EXCLUSIF'},
+  {t:'« On le compare gratuitement avec votre facture… ou vous passez au bureau et on le regarde devant un café ? »', n:'CHOIX A/B · RÉCIPROCITÉ'}]};
+I18N.pt.obj.mas_caro={nombre:'« É mais caro / a Iberdrola é cara »',
+ validacion:[{t:'« Obrigado por mo dizer tão claro. Prefiro a verdade à cortesia, ouça. »', n:'VALIDAÇÃO · RESPEITO'}],
+ desactiva:[{t:'« E não vou discutir consigo, não. Os números discutem sozinhos. »', n:'CORTISOL ↓ · “não” enfático [TOM ↓]'}],
+ reencuadre:[{t:'« Repare no que vemos todas as semanas: empresas com a energia barata… e a potência caríssima, a dormir. »', n:'REENQUADRAMENTO · PROVA SOCIAL'},
+  {t:'« Por esta zona, em média, foge entre dez e vinte por cento todos os meses. Mês sim, mês também. »', n:'ÂNCORA % · PERDA ATUAL · “foge”'},
+  {t:'« E um preço às cegas não lho dou, porque seria enganá-lo. A sua verdade está na sua fatura, não comigo. »', n:'HONESTIDADE — o não-preço É o argumento'}],
+ avance:[{t:'« O que vemos primeiro: as potências… ou o preço da energia? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','A Iberdrola é cara, toda a gente sabe isso.'],
+  ['comercial','Obrigado por mo dizer claramente. E não discuto consigo, ouça: os números discutem sozinhos. Todas as semanas vemos empresas com a energia barata e a potência caríssima, a dormir: entre dez e vinte por cento que lhes foge todos os meses. Um preço às cegas não lho dou; dou-lho com a sua fatura à frente. Vemos primeiro potências ou energia?']],
+ round2:[{t:'« E junte uma coisa à conta: gestor pessoal, auditoria de cada fatura e emergência vinte e quatro horas. »', n:'VALOR ACRESCENTADO · EXCLUSIVO'},
+  {t:'« Comparamos grátis com a sua fatura… ou passa pelo escritório e vemo-lo com um café? »', n:'ESCOLHA A/B · RECIPROCIDADE'}]};
+I18N.fr.obj.tiempo={nombre:'« Je n’ai pas le temps »',
+ validacion:[{t:'« Bien sûr, je vous en prie. Vous êtes en train de travailler, je comprends. »', n:'VALIDATION · “je comprends”'}],
+ desactiva:[{t:'« Et je ne vous prends pas du temps : je vous enlève du travail. »', n:'CORTISOL ↓ · RE-CADRAGE DU TEMPS'},
+  {t:'« C’est une photo. Une demi-minute. Le reste, c’est moi qui le fais. »', n:'EFFORT MINIMUM'}],
+ reencuadre:[{t:'« Vous gérez votre affaire et moi, pendant ce temps, je vous trouve l’argent. »', n:'RÉCIPROCITÉ · FUTURE PACING'},
+  {t:'« Vous ne vous en rendrez même pas compte. »', n:'CORTISOL ↓ · une brièveté qui vend'}],
+ avance:[{t:'« Par WhatsApp ou par e-mail ? Comme vous préférez. »', n:'CHOIX A/B DE CANAL'}],
+ dialogo:[['cliente','Je n’ai pas le temps.'],
+  ['comercial','Je comprends, je vous en prie. Écoutez, je ne vous prends pas du temps : je vous enlève du travail. Une photo, une demi-minute, et pendant que vous gérez votre affaire, moi je vous trouve l’argent. Vous ne vous en rendrez même pas compte. Par WhatsApp ou par e-mail ?']],
+ round2:[{t:'« Et si même la photo ne rentre pas aujourd’hui, je m’adapte à votre horloge, bien sûr. »', n:'CONTRÔLE CLIENT'},
+  {t:'« Qu’est-ce qui vous gêne le moins : première heure du matin… ou fin d’après-midi ? »', n:'CHOIX A/B · HUMOUR LÉGER'}]};
+I18N.pt.obj.tiempo={nombre:'« Não tenho tempo »',
+ validacion:[{t:'« Claro, pois não. O senhor está a trabalhar, já percebo. »', n:'VALIDAÇÃO · “já percebo”'}],
+ desactiva:[{t:'« E não lhe tiro tempo: tiro-lhe trabalho. »', n:'CORTISOL ↓ · REENQUADRAMENTO DO TEMPO'},
+  {t:'« É uma foto. Meio minuto. O resto faço eu. »', n:'ESFORÇO MÍNIMO'}],
+ reencuadre:[{t:'« O senhor atende o seu negócio e eu, entretanto, encontro-lhe o dinheiro. »', n:'RECIPROCIDADE · FUTURE PACING'},
+  {t:'« Nem dá por isso. »', n:'CORTISOL ↓ · brevidade que vende'}],
+ avance:[{t:'« Por WhatsApp ou por e-mail? Como lhe der mais jeito. »', n:'ESCOLHA A/B DE CANAL'}],
+ dialogo:[['cliente','Não tenho tempo.'],
+  ['comercial','Já percebo, pois não. Olhe, não lhe tiro tempo: tiro-lhe trabalho. Uma foto, meio minuto, e enquanto o senhor atende o seu negócio eu encontro-lhe o dinheiro. Nem dá por isso. Por WhatsApp ou por e-mail?']],
+ round2:[{t:'« E se nem a foto dá hoje, adapto-me ao seu relógio, faltava mais. »', n:'CONTROLO AO CLIENTE'},
+  {t:'« O que o incomoda menos: a primeira hora da manhã… ou a última da tarde? »', n:'ESCOLHA A/B · HUMOR LEVE'}]};
+I18N.fr.obj.despues={nombre:'« Rappelez-moi plus tard / un autre jour »',
+ validacion:[{t:'« Parfait, c’est votre temps qui commande. Bien sûr. »', n:'VALIDATION · CONTRÔLE CLIENT'}],
+ desactiva:[{t:'« Et comme ça le prochain appel dure deux minutes, pas dix. »', n:'CORTISOL ↓ · RARETÉ'}],
+ reencuadre:[{t:'« Je vous laisse mon WhatsApp tout de suite. Si vous m’envoyez la photo en avance, je vous rappelle avec l’étude déjà prête. »', n:'RÉCIPROCITÉ · ZEIGARNIK'},
+  {t:'« Imaginez : vous décrochez le téléphone… et les chiffres sont déjà là. »', n:'FUTURE PACING · SOULAGEMENT'}],
+ avance:[{t:'« Qu’est-ce qui vous arrange le mieux : demain de bonne heure, vers neuf heures et demie, ou l’après-midi, genre cinq heures ? »', n:'CHOIX A/B · “vous arrange” · jour et heure TOUJOURS concrets'}],
+ dialogo:[['cliente','Rappelez-moi la semaine prochaine.'],
+  ['comercial','Votre temps commande, bien sûr. Je vous laisse mon WhatsApp tout de suite : si vous m’envoyez la photo de la facture en avance, je vous rappelle avec l’étude prête et je vous prends deux minutes, pas dix. Ça vous va lundi à neuf heures et demie, ou mardi vers cinq heures ?']],
+ round2:[{t:'« Si la semaine devient compliquée, ce n’est pas grave : les chiffres vous attendent sur WhatsApp. »', n:'CORTISOL ↓ · ZEIGARNIK ÉCRIT'},
+  {t:'« Je vous écris lundi… ou mardi ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.despues={nombre:'« Ligue-me mais tarde / outro dia »',
+ validacion:[{t:'« Perfeito, o seu tempo manda. Faltava mais. »', n:'VALIDAÇÃO · CONTROLO AO CLIENTE'}],
+ desactiva:[{t:'« E assim a próxima chamada são dois minutos, não dez. »', n:'CORTISOL ↓ · ESCASSEZ'}],
+ reencuadre:[{t:'« Deixo-lhe o meu WhatsApp já. Se me adiantar a foto, ligo-lhe já com o estudo feito. »', n:'RECIPROCIDADE · ZEIGARNIK'},
+  {t:'« Imagine: levanta o telefone… e os números já lá estão. »', n:'FUTURE PACING · ALÍVIO'}],
+ avance:[{t:'« O que lhe fica melhor: amanhã de manhã cedo, por volta das nove e meia, ou à tarde, tipo cinco? »', n:'ESCOLHA A/B · “fica” · dia e hora SEMPRE concretos'}],
+ dialogo:[['cliente','Ligue-me para a semana.'],
+  ['comercial','O seu tempo manda, faltava mais. Deixo-lhe já o meu WhatsApp: se me adiantar a foto da fatura, ligo-lhe com o estudo feito e tiro-lhe dois minutos, não dez. Fica-lhe bem segunda às nove e meia ou terça, tipo cinco?']],
+ round2:[{t:'« Se a semana se lhe complicar, não faz mal: os números esperam por si no WhatsApp. »', n:'CORTISOL ↓ · ZEIGARNIK ESCRITO'},
+  {t:'« Escrevo-lhe segunda… ou terça? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.no_decisor={nombre:'« Je ne suis pas le responsable »',
+ validacion:[{t:'« Merci de me le dire, vraiment. Comme ça je ne vous fais pas perdre de temps. »', n:'VALIDATION · RESPECT'}],
+ desactiva:[{t:'« Et ça ne vous engage à rien, soyez tranquille. »', n:'CORTISOL ↓'}],
+ reencuadre:[{t:'« Vous connaissez cette maison mieux que personne, c’est évident. »', n:'FIERTÉ — le filtre devient expert'},
+  {t:'« Pour celui qui décide, ce sera utile de le savoir avant la fin du mois. Parce que chaque mois compte. »', n:'PERTE TEMPS · ALLIÉ INTERNE'}],
+ avance:[{t:'« Qui s’occupe de l’électricité ici… et à quelle heure je le trouve le plus disponible ? »', n:'OUVERTE DOUBLE · formule téléphonique'},
+  {t:'« Et vous me notez votre nom, pour que je dise que j’appelle de votre part ? »', n:'ALLIÉ · APPARTENANCE'}],
+ dialogo:[['cliente','Ici, c’est le patron qui décide, et à l’instant il n’est pas là.'],
+  ['comercial','Merci de me le dire, comme ça je ne vous fais pas perdre de temps. Vous connaissez cette maison mieux que personne : pour celui qui décide, ça viendra bien de le savoir avant la fin du mois. Comment il s’appelle et à quelle heure je le trouve le plus disponible ? …C’est noté. Et vous me donnez votre nom, pour dire que j’appelle de votre part ?']],
+ round2:[{t:'« Si vous préférez, je vous laisse le résumé par e-mail pour que vous le lui transmettiez… et comme ça c’est vous le héros. »', n:'ALLIÉ · FIERTÉ'},
+  {t:'« Je l’envoie au mail de l’entreprise… ou je vous le laisse et vous lui montrez ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_decisor={nombre:'« Não sou o responsável »',
+ validacion:[{t:'« Obrigado por mo dizer, a sério. Assim não lhe faço perder tempo. »', n:'VALIDAÇÃO · RESPEITO'}],
+ desactiva:[{t:'« E a si não o compromete a nada, fique descansado. »', n:'CORTISOL ↓'}],
+ reencuadre:[{t:'« O senhor conhece esta casa melhor que ninguém, isso é claro. »', n:'ORGULHO — o filtro passa a especialista'},
+  {t:'« A quem decide vai dar-lhe jeito saber isto antes de acabar o mês. Que cada mês conta. »', n:'PERDA TEMPO · ALIADO INTERNO'}],
+ avance:[{t:'« Quem trata do tema da luz aqui… e a que horas o apanho mais sossegado? »', n:'ABERTA DUPLA · fórmula telefónica'},
+  {t:'« E aponta-me o seu nome, para dizer que ligo da sua parte? »', n:'ALIADO · PERTENÇA'}],
+ dialogo:[['cliente','Aqui quem decide é o patrão, e agora mesmo não está.'],
+  ['comercial','Obrigado por mo dizer, assim não lhe faço perder tempo. O senhor conhece esta casa melhor que ninguém: a quem decide vai ser-lhe útil saber isto antes de fim de mês. Como se chama e a que horas o apanho mais sossegado? …Anotado. E diz-me o seu nome, para dizer que ligo da sua parte?']],
+ round2:[{t:'« Se preferir, deixo-lhe o resumo por e-mail para lhe fazer chegar… e assim fica você como um rei. »', n:'ALIADO · ORGULHO'},
+  {t:'« Mando para o e-mail da empresa… ou deixo consigo e mostra-lhe? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.email={nombre:'« Envoyez-moi un e-mail »',
+ validacion:[{t:'« Avec plaisir, vous l’avez aujourd’hui même. »', n:'VALIDATION · ENGAGEMENT'}],
+ desactiva:[{t:'« Et non, pas de brochures : seulement votre cas. »', n:'CORTISOL ↓ · PERSONNEL'}],
+ reencuadre:[{t:'« Pour qu’il ne se perde pas parmi tant de boîtes mail, je le personnalise avec votre secteur. »', n:'PERSONNALISATION'},
+  {t:'« Les entreprises de [SECTOR] de [CIUDAD] trouvent de l’argent en sommeil chaque mois, regardez. »', n:'PREUVE SOCIALE SPÉCIFIQUE · PERTE · ZEIGARNIK'}],
+ avance:[{t:'« Votre facture du mois, elle dépasse souvent les cinq cents euros… ou elle est en dessous ? »', n:'CHOIX · “en dessous”'},
+  {t:'« Vous l’avez aujourd’hui dans votre boîte et demain je vous appelle deux minutes : à dix heures ou à cinq ? »', n:'CHOIX A/B — e-mail sans appel fixé = e-mail mort'}],
+ dialogo:[['cliente','Envoyez-moi un mail et je le regarderai.'],
+  ['comercial','Avec plaisir, aujourd’hui même. Et pas de brochures : seulement votre cas. Pour le personnaliser : votre facture dépasse souvent les cinq cents euros ou elle est en dessous ? …Parfait. Je vous prépare quelque chose avec des entreprises de votre secteur. Vous l’avez aujourd’hui et demain je vous appelle deux minutes : à dix heures ou à cinq ?']],
+ round2:[{t:'« Si le mail se perd entre les papiers, ce n’est pas grave : je vous retrouve le fil. »', n:'HUMOUR · PERSISTANCE ÉLÉGANTE'},
+  {t:'« Je vous écris plutôt jeudi… ou lundi prochain, plus tranquillement ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.email={nombre:'« Mande-me um e-mail »',
+ validacion:[{t:'« Com certeza, hoje mesmo o tem. »', n:'VALIDAÇÃO · COMPROMISSO'}],
+ desactiva:[{t:'« E quê, nada de folhetos: só o seu caso. »', n:'CORTISOL ↓ · PESSOAL'}],
+ reencuadre:[{t:'« Para não se perder no meio de tanta caixa de entrada, personalizo-o com o seu setor. »', n:'PERSONALIZAÇÃO'},
+  {t:'« As empresas de [SECTOR] de [CIUDAD] estão a encontrar dinheiro adormecido todos os meses, veja lá. »', n:'PROVA SOCIAL ESPECÍFICA · PERDA · ZEIGARNIK'}],
+ avance:[{t:'« A sua fatura do mês passa normalmente de quinhentos euros… ou anda por baixo? »', n:'ESCOLHA · “anda por baixo”'},
+  {t:'« Hoje o tem no correio e amanhã ligo-lhe uns dois minutos: às dez ou às cinco? »', n:'ESCOLHA A/B — e-mail sem chamada marcada = e-mail morto'}],
+ dialogo:[['cliente','Mande-me um e-mail e depois vejo.'],
+  ['comercial','Com certeza, hoje mesmo. E nada de folhetos: só o seu caso. Para personalizá-lo: a sua fatura costuma passar de quinhentos euros ou anda por baixo? …Perfeito. Preparo-lhe algo com empresas do seu setor. Hoje o tem e amanhã ligo-lhe uns dois minutos: às dez ou às cinco?']],
+ round2:[{t:'« Se o e-mail se perder entre papéis, não faz mal: eu reencontro-lhe o fio. »', n:'HUMOR · PERSISTÊNCIA ELEGANTE'},
+  {t:'« Escrevo-lhe melhor quinta… ou na segunda-feira, com mais calma? »', n:'ESCOLHA A/B'}]};
+
+
+I18N.fr.obj.lo_pienso={nombre:'« Je vais y réfléchir »',
+ validacion:[{t:'« Bien sûr que vous y réfléchissez. Les bonnes choses se réfléchissent. »', n:'VALIDATION · FIERTÉ'}],
+ desactiva:[{t:'« Et ce n’est pas moi qui décide à votre place, loin s’en faut. »', n:'CORTISOL ↓ · CONTRÔLE'}],
+ reencuadre:[{t:'« Mais réfléchir sans données, ce n’est pas réfléchir, écoutez. C’est deviner. »', n:'RE-CADRAGE · PHRASE ANCRE'},
+  {t:'« Laissez-moi vous donner les chiffres, ils sont gratuits, et vous réfléchirez avec la calculatrice, pas avec le doute. »', n:'RÉCIPROCITÉ · SYSTÈME 2 AU SERVICE'},
+  {t:'« Parce que pendant que vous réfléchissez, chaque mois la même somme s’en va. Ça, ça ne se réfléchit pas. Ça se paie. »', n:'PERTE ACTUELLE · RYTHME'}],
+ avance:[{t:'« Je vous prépare l’étude avec la facture… ou je vous envoie d’abord le résumé par WhatsApp ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','J’y réfléchirai.'],
+  ['comercial','Bien sûr, les bonnes choses se réfléchissent, et ce n’est pas moi qui décide à votre place, loin s’en faut. Mais réfléchir sans données, c’est deviner. Je vous donne vos chiffres gratuitement et vous réfléchissez avec la calculatrice. Parce que pendant que vous y réfléchissez, chaque mois la même somme s’en va. Je vous prépare l’étude avec la facture ou je vous envoie le résumé par WhatsApp ?']],
+ round2:[{t:'« Je vous laisse l’étude prête de toute façon, les chiffres n’expirent pas. »', n:'RÉCIPROCITÉ · ZEIGARNIK'},
+  {t:'« On en reparle la semaine prochaine : lundi… ou mardi ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.lo_pienso={nombre:'« Vou pensar nisso »',
+ validacion:[{t:'« Claro que pensa. As coisas boas pensam-se. »', n:'VALIDAÇÃO · ORGULHO'}],
+ desactiva:[{t:'« E eu não decido por si, nem era preciso. »', n:'CORTISOL ↓ · CONTROLO'}],
+ reencuadre:[{t:'« Mas pensar sem dados não é pensar, ouça. É adivinhar. »', n:'REENQUADRAMENTO · FRASE ÂNCORA'},
+  {t:'« Deixe-me dar-lhe os números, que são grátis, e pensa com a calculadora e não com a dúvida. »', n:'RECIPROCIDADE · SISTEMA 2 AO SERVIÇO'},
+  {t:'« Porque enquanto pensa, todos os meses sai o mesmo. Isso não se pensa. Paga-se. »', n:'PERDA ATUAL · RITMO'}],
+ avance:[{t:'« Preparo-lhe o estudo com a fatura… ou mando-lhe antes o resumo por WhatsApp? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','Já hei de pensar nisso.'],
+  ['comercial','Claro, as coisas boas pensam-se, e eu não decido por si, nem era preciso. Mas pensar sem dados é adivinhar. Dou-lhe os seus números de graça e pensa com a calculadora. Porque enquanto pensa, todos os meses sai o mesmo. Preparo-lhe o estudo com a fatura ou mando-lhe o resumo por WhatsApp?']],
+ round2:[{t:'« Deixo-lhe o estudo feito na mesma, que os números não caducam. »', n:'RECIPROCIDADE · ZEIGARNIK'},
+  {t:'« Falamos para a semana: segunda… ou terça? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.no_cambiar={nombre:'« Je ne veux pas changer de fournisseur »',
+ validacion:[{t:'« Parfait. Votre entreprise, vos règles. Je n’entre pas là-dedans. »', n:'VALIDATION · CONTRÔLE'}],
+ desactiva:[{t:'« Et on ne touche à rien, écoutez. Pas même une virgule. »', n:'CORTISOL ↓ · “pas une virgule”'}],
+ reencuadre:[{t:'« Je ne vous demande pas de bouger. Je vous demande de regarder. »', n:'CONTRASTE · MICRO-DÉCISION'},
+  {t:'« Regarder est gratuit. Ne pas regarder, écoutez, se paie chaque mois. »', n:'GRATUIT · PERTE ACTUELLE'},
+  {t:'« Et avec le chiffre devant vous, vous décidez mieux… même si c’est pour rester comme ça. »', n:'CONTRÔLE — permission de ne pas bouger'}],
+ avance:[{t:'« Question honnête : vous savez aujourd’hui ce que vous payez le kilowatt… ou aucune idée ? »', n:'OUVERTE · HUMOUR — les deux réponses justifient l’étude'}],
+ dialogo:[['cliente','Je ne veux pas changer de fournisseur.'],
+  ['comercial','Parfait : votre entreprise, vos règles, et on ne touche pas à une virgule. Je ne vous demande pas de bouger, je vous demande de regarder. Regarder est gratuit ; ne pas regarder se paie chaque mois. Dites-moi, la main sur le cœur : vous savez ce que vous payez le kilowatt… ou aucune idée ?'],
+  ['cliente','Eh bien… aucune idée, honnêtement.'],
+  ['comercial','C’est là que commence l’argent en sommeil. Une photo et demain vous le savez. WhatsApp ou e-mail ?']],
+ round2:[{t:'« Et en cadeau, la révision des puissances, celle-là se fait sans toucher rien de chez vous. »', n:'RÉCIPROCITÉ · CORTISOL ↓'},
+  {t:'« On commence par là… ou vous préférez l’étude complète ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_cambiar={nombre:'« Não quero mudar de companhia »',
+ validacion:[{t:'« Perfeito. A sua empresa, as suas regras. Aí não entro. »', n:'VALIDAÇÃO · CONTROLO'}],
+ desactiva:[{t:'« E não se mexe em nada, ouça. Nem uma vírgula. »', n:'CORTISOL ↓ · “nem uma vírgula”'}],
+ reencuadre:[{t:'« Não lhe peço que se mexa. Peço-lhe que olhe. »', n:'CONTRASTE · MICRO-DECISÃO'},
+  {t:'« Olhar é grátis. Não olhar, ouça, paga-se todos os meses. »', n:'GRÁTIS · PERDA ATUAL'},
+  {t:'« E com o número à frente decide melhor… nem que seja para ficar igual. »', n:'CONTROLO — licença para não mexer'}],
+ avance:[{t:'« Pergunta honesta: sabe hoje o que paga por cada quilowatt… ou não faz ideia? »', n:'ABERTA · HUMOR — as duas respostas justificam o estudo'}],
+ dialogo:[['cliente','Não quero mudar de companhia.'],
+  ['comercial','Perfeito: a sua empresa, as suas regras, e não se mexe nem numa vírgula. Não lhe peço que se mexa, peço-lhe que olhe. Olhar é grátis; não olhar paga-se todos os meses. Diga-me com a mão no coração: sabe o que paga por cada quilowatt… ou não faz ideia?'],
+  ['cliente','Pois… não faço ideia, a verdade é essa.'],
+  ['comercial','Pois é aí que começa o dinheiro adormecido. Uma foto e amanhã sabe. WhatsApp ou e-mail?']],
+ round2:[{t:'« E de oferta, a revisão de potências, que essa faz-se sem tocar em nada seu. »', n:'RECIPROCIDADE · CORTISOL ↓'},
+  {t:'« Começamos por aí… ou prefere o estudo inteiro? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.contento={nombre:'« Je suis content de mon fournisseur actuel »',
+ validacion:[{t:'« Je m’en réjouis, vraiment. C’est l’essentiel. »', n:'VALIDATION SINCÈRE'}],
+ desactiva:[{t:'« Et que ça vous dure longtemps. Personne ne vient vous gâcher ça. »', n:'CORTISOL ↓ · “que ça dure”'}],
+ reencuadre:[{t:'« Je vous livre un secret du métier : les plus contents… étaient ceux qui payaient le plus. Figurez-vous. »', n:'ZEIGARNIK · CONTRASTE'},
+  {t:'« Être content et payer trop cher vont très bien ensemble. Jusqu’à ce que quelqu’un regarde. »', n:'PERTE CACHÉE'},
+  {t:'« Un restaurant d’ici a dit exactement ça. On a regardé : trois cent quarante euros en sommeil par mois. Aujourd’hui il est toujours content… mais avec trois cent quarante de plus en caisse. »', n:'STORYTELLING · MÊME ZONE · PIC'}],
+ avance:[{t:'« Je vous fais le même test gratuit… ou je vous raconte d’abord comment marche l’urgence 24 heures ? »', n:'CHOIX A/B · GRATUIT'}],
+ dialogo:[['cliente','Moi je suis très content du mien.'],
+  ['comercial','Je m’en réjouis, et que ça dure. Je vous livre un secret du métier : les plus contents étaient ceux qui payaient le plus. Un restaurant d’ici a dit pareil ; on a regardé et il avait trois cent quarante par mois en sommeil. Aujourd’hui il est toujours content, mais avec cet argent en caisse. Je vous fais le même test gratuit ou je vous raconte d’abord l’urgence vingt-quatre heures ?']],
+ round2:[{t:'« Je vous laisse une dernière image : samedi soir, panne, le fournil à l’arrêt. La dernière fois, en combien de temps on vous a dépanné ? »', n:'SCÉNARIO · PEUR MESURÉE'},
+  {t:'« Avec nous : vingt-quatre heures et technicien maison. On le vérifie gratuitement… ou vous passez et je vous montre ? »', n:'CHOIX A/B · “maison”'}]};
+I18N.pt.obj.contento={nombre:'« Estou contente com a minha companhia atual »',
+ validacion:[{t:'« Alegro-me imenso, a verdade é essa. Isso é o primeiro. »', n:'VALIDAÇÃO SINCERA'}],
+ desactiva:[{t:'« E que lhe dure muito. Ninguém vem estragar-lhe isso. »', n:'CORTISOL ↓ · “que lhe dure”'}],
+ reencuadre:[{t:'« Conto-lhe um segredo do ofício: os mais contentes… eram os que mais pagavam. Veja lá que coisa. »', n:'ZEIGARNIK · CONTRASTE'},
+  {t:'« Estar contente e pagar a mais dão-se muito bem. Até alguém olhar. »', n:'PERDA OCULTA'},
+  {t:'« Um restaurante aqui da zona disse exatamente isso. Vimos: trezentos e quarenta euros adormecidos por mês. Hoje continua contente… mas com mais trezentos e quarenta na caixa. »', n:'STORYTELLING · MESMA ZONA · PICO'}],
+ avance:[{t:'« Faço-lhe a mesma prova grátis… ou conto-lhe antes como funciona o da emergência 24 horas? »', n:'ESCOLHA A/B · GRÁTIS'}],
+ dialogo:[['cliente','Eu estou muito contente com a minha.'],
+  ['comercial','Alegro-me, e que lhe dure. Conto-lhe um segredo do ofício: os mais contentes eram os que mais pagavam. Um restaurante aqui da zona disse o mesmo; vimos e tinha trezentos e quarenta por mês adormecidos. Hoje continua contente, mas com esse dinheiro na caixa. Faço-lhe a mesma prova grátis ou conto-lhe primeiro a emergência vinte e quatro horas?']],
+ round2:[{t:'« Deixo-lhe uma última imagem: sábado à noite, avaria, o fabrico parado. Da última vez, em quanto tempo o atenderam? »', n:'CENÁRIO · MEDO MEDIDO'},
+  {t:'« Connosco: vinte e quatro horas e técnico da casa. Verificamos grátis… ou passa cá e mostro-lhe? »', n:'ESCOLHA A/B · “da casa”'}]};
+I18N.fr.obj.desconfianza={nombre:'« Je ne me fie pas / c’est fiable ? »',
+ validacion:[{t:'« Vous avez très raison de ne pas vous fier. Écoutez, je ferais pareil. »', n:'VALIDATION TOTALE'}],
+ desactiva:[{t:'« Je ne vous demande pas de me croire. Je vous demande de me vérifier. »', n:'CORTISOL ↓ · VIRAGE — la méfiance se combat par la vérification'}],
+ reencuadre:[{t:'« Un : des bureaux officiels, porte ouverte et café, quand vous voulez. »', n:'PREUVE PHYSIQUE VÉRIFIABLE'},
+  {t:'« Deux : par téléphone je ne vous demanderai ni donnée bancaire ni signature. Une photo de la facture et c’est tout. »', n:'SÉCURITÉ · RÈGLE DU 3 · “et c’est tout”'},
+  {t:'« Trois : si l’étude ne vous convainc pas, il ne s’est rien passé. »', n:'SORTIE FACILE'}],
+ avance:[{t:'« Qu’est-ce qui vous convient le mieux : venir au bureau… ou qu’on passe chez vous ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','C’est que je ne me fie plus à ces appels…'],
+  ['comercial','Vous avez très raison. C’est pour ça que je ne vous demande pas de me croire : je vous demande de me vérifier. Un : des bureaux officiels, porte ouverte et café. Deux : par téléphone ni données bancaires ni signatures, une photo et c’est tout. Trois : si l’étude ne vous convainc pas, il ne s’est rien passé. Vous préférez venir ou qu’on passe chez vous ?']],
+ round2:[{t:'« On travaille avec des commerces et des ateliers de la zone ; si vous voulez, vous parlez d’abord à l’un d’eux. Parole de voisin. »', n:'PREUVE SOCIALE SPÉCIFIQUE · RÉFÉRENCE VIVANTE'},
+  {t:'« Je vous passe le contact d’un client de votre secteur… ou on commence par le café au bureau ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.desconfianza={nombre:'« Não me fio / isto é fiável? »',
+ validacion:[{t:'« Faz muito bem em não se fiar. E ouça, eu faria o mesmo. »', n:'VALIDAÇÃO TOTAL'}],
+ desactiva:[{t:'« Não lhe peço que se fie de mim. Peço-lhe que me comprove. »', n:'CORTISOL ↓ · VOLTA — a desconfiança combate-se com verificação'}],
+ reencuadre:[{t:'« Primeiro: escritórios oficiais, porta aberta e café, quando quiser. »', n:'PROVA FÍSICA VERIFICÁVEL'},
+  {t:'« Segundo: por telefone não lhe vou pedir nem dado do banco nem assinatura. Uma foto da fatura e pronto. »', n:'SEGURANÇA · REGRA DO 3 · “e pronto”'},
+  {t:'« Terceiro: se o estudo não o convencer, aqui não se passou nada. »', n:'SAÍDA FÁCIL'}],
+ avance:[{t:'« O que lhe assenta melhor: vir o senhor ao escritório… ou irmos nós ao seu negócio? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','É que já não me fio nestes telefonemas…'],
+  ['comercial','Faz muito bem. Por isso não lhe peço que se fie: peço-lhe que me comprove. Primeiro: escritórios oficiais, porta aberta e café. Segundo: por telefone nem dados do banco nem assinaturas, uma foto e pronto. Terceiro: se o estudo não o convencer, aqui não se passou nada. Fica-lhe melhor vir cá ou passarmos pelo seu negócio?']],
+ round2:[{t:'« Trabalhamos com comércios e oficinas da zona; se quiser, fala antes com algum. Palavra de vizinho. »', n:'PROVA SOCIAL ESPECÍFICA · REFERÊNCIA VIVA'},
+  {t:'« Passo-lhe o contacto de um cliente do seu setor… ou começamos pelo café no escritório? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.momento={nombre:'« Ce n’est pas le bon moment » (saison, coûts…)',
+ validacion:[{t:'« Je comprends. Ce sont les calendriers qui commandent, on n’y peut rien. »', n:'VALIDATION'}],
+ desactiva:[{t:'« Et je ne vous demande pas une décision. Je vous demande une donnée. »', n:'CORTISOL ↓ · MICRO-DÉCISION'}],
+ reencuadre:[{t:'« Justement quand le mois tire… c’est là que donner de l’argent fait le plus mal. »', n:'PERTE EN CONTEXTE'},
+  {t:'« Réduire sur l’électricité ne licencie personne, ne baisse pas la qualité… ça bouche juste une fuite. »', n:'RE-CADRAGE · “bouche une fuite”'}],
+ avance:[{t:'« Vous m’envoyez la facture aujourd’hui… ou demain, quand vous soufflerez ? »', n:'CHOIX A/B DOUX · “quand vous soufflerez”'}],
+ dialogo:[['cliente','Ce n’est pas le moment, on est justes de partout.'],
+  ['comercial','Je comprends, ce sont les calendriers qui commandent. Et justement quand ça tire, c’est là que donner de l’argent chaque mois fait le plus mal. Réduire sur l’électricité ne licencie personne : ça bouche juste une fuite. Je ne vous demande pas une décision, je vous demande une donnée : vous m’envoyez la facture aujourd’hui ou demain, quand vous soufflerez ?']],
+ round2:[{t:'« Si c’est une question de saison, dites-moi : quand le rythme ralentit dans votre secteur ? On le note pour cette semaine-là… avec l’étude déjà prête. »', n:'FUTURE PACING'},
+  {t:'« En août… ou en septembre ? »', n:'CHOIX A/B — adaptez à leur vrai calendrier'}]};
+I18N.pt.obj.momento={nombre:'« Agora não é bom momento » (época, custos…)',
+ validacion:[{t:'« Já percebo. Os tempos é que mandam, não há outra coisa. »', n:'VALIDAÇÃO'}],
+ desactiva:[{t:'« E não lhe peço uma decisão. Peço-lhe um dado. »', n:'CORTISOL ↓ · MICRO-DECISÃO'}],
+ reencuadre:[{t:'« Justo quando o mês aperta… é quando mais dói dar dinheiro. »', n:'PERDA EM CONTEXTO'},
+  {t:'« Cortar na luz não despede ninguém, não baixa qualidade… só tapa uma fuga. »', n:'REENQUADRAMENTO · “tapa uma fuga”'}],
+ avance:[{t:'« Manda-me a fatura hoje… ou amanhã, quando respirar? »', n:'ESCOLHA A/B SUAVE · “quando respirar”'}],
+ dialogo:[['cliente','Agora não é momento, andamos apertados de tudo.'],
+  ['comercial','Já percebo, os tempos é que mandam. E justo quando aperta é quando mais dói dar dinheiro todos os meses. Cortar na luz não despede ninguém: só tapa uma fuga. Não lhe peço uma decisão, peço-lhe um dado: manda-me a fatura hoje ou amanhã, quando respirar?']],
+ round2:[{t:'« Se é coisa de época, diga-me: quando é que abranda o ritmo no seu setor? Deixamos apontado para essa semana… com o estudo já feito. »', n:'FUTURE PACING'},
+  {t:'« Em agosto… ou em setembro? »', n:'ESCOLHA A/B — adapte ao calendário real'}]};
+I18N.fr.obj.ya_llamaron={nombre:'« On m’a déjà appelé / déjà proposé »',
+ validacion:[{t:'« Tant mieux, ça m’évite la présentation. »', n:'VALIDATION · HUMOUR'}],
+ desactiva:[{t:'« Et tranquillité, moi je ne répète pas de scripts. Je travaille avec des chiffres. »', n:'CORTISOL ↓ · DIFFÉRENCIATION'}],
+ reencuadre:[{t:'« Une chose est qu’on vous appelle, une autre qu’on vous fasse VOTRE étude avec VOTRE facture, regardez. »', n:'CONTRASTE'},
+  {t:'« Dites-moi : vous avez reçu un chiffre en euros… ou de belles paroles ? »', n:'ZEIGARNIK · OUVERTE — c’était presque toujours des paroles'}],
+ avance:[{t:'« Si vous n’avez pas votre chiffre, demain vous l’avez : vous m’envoyez la facture… ou on se voit dix petites minutes ? »', n:'CHOIX A/B · “petites minutes”'}],
+ dialogo:[['cliente','On m’a déjà appelé d’Iberdrola il y a un mois.'],
+  ['comercial','Tant mieux, ça m’épargne la présentation. Et tranquillité, moi je ne répète pas de scripts : je travaille avec des chiffres. Une chose est qu’on vous appelle, une autre qu’on vous fasse votre étude avec votre facture. Vous avez reçu un chiffre en euros ou de belles paroles ? …Voilà. Demain vous l’avez : vous m’envoyez la photo ou on se voit dix petites minutes ?']],
+ round2:[{t:'« Si on vous a déjà fait une étude et que ça n’a pas avancé, c’est presque sûrement le suivi qui a manqué. Moi j’appelle quand je dis que j’appelle. »', n:'DIFFÉRENCIATION'},
+  {t:'« Vérifiez-le : je vous appelle jeudi à dix heures… ou vendredi à midi ? »', n:'CHOIX A/B · DÉMONSTRATION IMMÉDIATE'}]};
+I18N.pt.obj.ya_llamaron={nombre:'« Já me ligaram / já mo ofereceram »',
+ validacion:[{t:'« Ainda melhor, poupo-me a apresentação. »', n:'VALIDAÇÃO · HUMOR'}],
+ desactiva:[{t:'« E descanse, que eu não repito guiões. Eu trabalho com números. »', n:'CORTISOL ↓ · DIFERENCIAÇÃO'}],
+ reencuadre:[{t:'« Uma coisa é ligarem-lhe, outra é fazerem-lhe O SEU estudo com A SUA fatura, veja lá. »', n:'CONTRASTE'},
+  {t:'« Diga-me: chegou-lhe um número em euros… ou palavras bonitas? »', n:'ZEIGARNIK · ABERTA — quase sempre foram palavras'}],
+ avance:[{t:'« Se não tem o seu número, amanhã tem: manda-me a fatura… ou vimo-nos dez minutinhos? »', n:'ESCOLHA A/B · DIMINUTIVO “minutinhos”'}],
+ dialogo:[['cliente','Já me ligaram da Iberdrola há um mês.'],
+  ['comercial','Ainda melhor, poupo-me a apresentação. E descanse, que eu não repito guiões: trabalho com números. Uma coisa é ligarem-lhe e outra é fazerem-lhe o seu estudo com a sua fatura. Chegou-lhe um número em euros ou palavras bonitas? …Pois é. Amanhã tem: manda-me a foto ou vimo-nos dez minutinhos?']],
+ round2:[{t:'« Se já lhe fizeram estudo e não foi para a frente, quase de certeza falhou o seguimento. Eu ligo quando digo que ligo. »', n:'DIFERENCIAÇÃO'},
+  {t:'« Comprove-o: ligo-lhe quinta às dez… ou sexta às doze? »', n:'ESCOLHA A/B · DEMONSTRAÇÃO IMEDIATA'}]};
+I18N.fr.obj.datos={nombre:'« D’où avez-vous mes données ? » (conformité)',
+ validacion:[{t:'« Question plus que juste. Je vous réponds avec la vérité entière. »', n:'VALIDATION · HONNÊTETÉ'}],
+ desactiva:[{t:'« Et si vous me dites plus d’appels, c’est fini. Immédiatement. »', n:'CONTRÔLE TOTAL CLIENT · CORTISOL ↓'}],
+ reencuadre:[{t:'« Nous appelons des entreprises de la zone, aux horaires légaux et après vérification de la liste d’opposition. »', n:'TRANSPARENCE TOTALE'},
+  {t:'« Ni combines ni bases bizarres. C’est clair comme ça. »', n:'SIMPLICITÉ · CONFIANCE'}],
+ avance:[{t:'« Et maintenant c’est vous qui commandez : je vous explique en une demi-minute pourquoi ça vaut le coup… ou je vous note et je vous laisse tranquille ? »', n:'CHOIX HONNÊTE — offrir la sortie rend le calme'}],
+ dialogo:[['cliente','Et d’où avez-vous eu mon téléphone ?'],
+  ['comercial','Question plus que juste : nous appelons des entreprises de la zone depuis le service PME d’Iberdrola, aux horaires légaux et après consultation de la liste d’opposition. Si vous préférez ne plus recevoir d’appels, je vous note immédiatement et affaire classée. Ceci dit : je vous explique en une demi-minute pourquoi ça peut vous intéresser… ou je vous note et je vous laisse tranquille ?']],
+ round2:[{t:'« Noté : vous ne m’entendrez plus. »', n:'CONFORMITÉ IMMÉDIATE — si refus, respecté et enregistré'},
+  {t:'« Bonne journée, vraiment. »', n:'FIN PROPRE · PEAK-END'}]};
+I18N.pt.obj.datos={nombre:'« De onde tiraram os meus dados? » (compliance)',
+ validacion:[{t:'« Pergunta mais que justa. Respondo-lhe com a verdade toda. »', n:'VALIDAÇÃO · HONESTIDADE'}],
+ desactiva:[{t:'« E se me disser que não quer mais chamadas, acabou. No momento. »', n:'CONTROLO TOTAL AO CLIENTE · CORTISOL ↓'}],
+ reencuadre:[{t:'« Ligamos a empresas da zona, em horário legal e vendo antes a lista de oposição. »', n:'TRANSPARÊNCIA TOTAL'},
+  {t:'« Nem truques nem bases de dados esquisitas. Assim de claro. »', n:'SIMPLICIDADE · CONFIANÇA'}],
+ avance:[{t:'« E agora o senhor manda: conto-lhe em meio minuto porque vale a pena… ou aponto-o e deixo-o descansado? »', n:'ESCOLHA HONESTA — dar a saída devolve a calma'}],
+ dialogo:[['cliente','E de onde é que arranjaram o meu telefone?'],
+  ['comercial','Pergunta mais que justa: ligamos a empresas da zona desde o Departamento PME da Iberdrola, em horário legal e consultando antes a lista de oposição. Se preferir não receber mais chamadas, aponto-o no momento e assunto arrumado. Dito isto: conto-lhe em meio minuto porque lhe pode interessar… ou aponto-o e deixo-o descansado?']],
+ round2:[{t:'« Anotado: não volta a ouvir-me. »', n:'CUMPRIMENTO IMEDIATO — se pedir a baixa, respeita-se e regista-se'},
+  {t:'« Bom dia para si, a sério. »', n:'FINAL LIMPO · PEAK-END'}]};
+
 /* ── motor ── */
 window.cfaLangGet=function(){ try{ return sessionStorage.getItem('cfa_lang')||'es'; }catch(e){ return 'es'; } };
 var __cfaOrig=null;
@@ -3876,7 +4185,7 @@ window.cfaApply=function(L){
     Object.keys(NODES).forEach(function(id){ var ov=P.nodes&&P.nodes[id]||{}, orig=o.nodes[id]||{};
       ['titulo','micro','notas','opciones','script','fase','step'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) NODES[id][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     Object.keys(OBJECTIONS).forEach(function(k){ var ov=P.obj&&P.obj[k]||{}, orig=o.obj[k]||{};
-      ['nombre','validacion','desactiva','reencuadre','avance','dialogo'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
+      ['nombre','validacion','desactiva','reencuadre','avance','dialogo','round2'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     window.cfaLang=L; try{ sessionStorage.setItem('cfa_lang',L); }catch(e){}
     cfaChrome(L); try{ guiRenderTree(NODES[guiNodoActual]); }catch(e){}
     var chip=document.getElementById('cfaChip'); if(chip) chip.textContent='🌐 '+(L==='es'?'ES':(L==='fr'?'FR':'PT'));
@@ -3935,12 +4244,17 @@ function cfaCobertura(L){
   nav.appendChild(b);
 })();
 /* selector 1ª vez por sesión al entrar al guion (los enganches se montan tras cargar `cadena`) */
-function cfaEnganchar(){
-  if(window.__cfaHook) return; window.__cfaHook=true;
-  try{ cadena('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { window.cfaApply(window.cfaLangGet()); } }catch(e){ cfaApply('es'); } }); }catch(e){}
-  try{ cadena('guiIrA',function(){ try{ cfaChrome(window.cfaLang||'es'); }catch(e){} }); }catch(e){}
+function cfaEnganchar(n){
+  n=n||0;
+  if(window.__cfaHook) return;
+  /* enganche robusto por wraps (probado en producción) + reintentos por si tarda en cargar */
+  if(typeof wraps!=='function'||typeof window.tutAbrirGuion!=='function'){ if(n<60) setTimeout(function(){cfaEnganchar(n+1)},250); return; }
+  window.__cfaHook=true;
+  try{ wraps('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { setTimeout(function(){cfaApply(window.cfaLangGet())},50); } }catch(e){ setTimeout(function(){cfaApply('es')},50); } }); }catch(e){}
+  try{ if(typeof window.guiIrA==='function') wraps('guiIrA',function(){ try{ setTimeout(function(){cfaChrome(window.cfaLang||'es')},50); }catch(e){} }); }catch(e){}
 }
-if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',cfaEnganchar); } else { setTimeout(cfaEnganchar,0); }
+cfaEnganchar(0);
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',function(){cfaEnganchar(0)}); }
 
 /* ═══ v2.6 «Plantilla» · seguimiento personalizado + nota CRM en Foco ═══ */
 function segTexto(){

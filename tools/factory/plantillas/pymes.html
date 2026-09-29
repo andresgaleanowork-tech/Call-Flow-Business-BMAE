@@ -945,328 +945,33 @@ try{ if(JSON.parse(localStorage.getItem('bm_compliance_off')||'null')==='1'){ va
 <!-- ════════════ SCRIPT 1 · TUTORIAL (datos + motor) ════════════ -->
 <script>
 /* ══════════ CONFIG — variables del onboarding (responsable de formación) ══════════ */
-const CONFIG = {
-  duracionOnboarding:'60 min de tutorial + 90 min de práctica',
-  modulosObligatorios:6,            // M0, M1, M2, M3, M10 + evaluación
-  notaAprobado:8,                   // sobre 10
-  roleplaysMinimos:2,               // antes de llamar en real
-  sectoresEjemplo:['hostelería','talleres','clínicas','comercios'],
-  responsableFormacion:'[Responsable de formación]',
-  ultimaActualizacion:'10-09-2026',
-  guion:'#guion'                  // vista INTERNA: el guion de ventas vive en este mismo archivo (#guionRoot)
-};
+@@EDITORIAL:CONFIG@@
 
 /* ══════════ ESTRUCTURA DE NAVEGACIÓN ══════════ */
-const SECTIONS = [
-  {id:'guia', cat:'Empezar', label:'Guía rápida', esModulo:false},
-  {id:'m0', cat:'Módulos', num:'0', label:'Bienvenida', esModulo:true},
-  {id:'m1', cat:'Módulos', num:'1', label:'Tour por la interfaz', esModulo:true},
-  {id:'m2', cat:'Módulos', num:'2', label:'Preparar la llamada', esModulo:true},
-  {id:'m3', cat:'Módulos', num:'3', label:'Ejecutar la llamada', esModulo:true},
-  {id:'m4', cat:'Módulos', num:'4', label:'Objeciones', esModulo:true},
-  {id:'m5', cat:'Módulos', num:'5', label:'Cierres y seguimiento', esModulo:true},
-  {id:'m6', cat:'Módulos', num:'6', label:'Capa neuro', esModulo:true},
-  {id:'m7', cat:'Módulos', num:'7', label:'Roleplay', esModulo:true},
-  {id:'m8', cat:'Módulos', num:'8', label:'KPIs', esModulo:true},
-  {id:'m9', cat:'Módulos', num:'9', label:'Editar la herramienta', esModulo:true},
-  {id:'m10', cat:'Módulos', num:'10', label:'Compliance (obligatorio)', esModulo:true},
-  {id:'m11', cat:'Módulos', num:'11', label:'Evaluación final', esModulo:true},
-  {id:'checklist', cat:'Práctica y examen', label:'Checklist operativa', esModulo:false},
-  {id:'video', cat:'Práctica y examen', label:'Guion de video-curso', esModulo:false},
-  {id:'quiz', cat:'Práctica y examen', label:'Quiz de evaluación', esModulo:false},
-  {id:'casos', cat:'Práctica y examen', label:'Casos prácticos', esModulo:false},
-  {id:'rutas', cat:'Referencias', label:'Rutas por rol', esModulo:false},
-  {id:'faq', cat:'Referencias', label:'FAQ', esModulo:false},
-  {id:'sesion', cat:'Referencias', label:'Sesión presencial 90’', esModulo:false},
-  {id:'config', cat:'Referencias', label:'Configuración y mantenimiento', esModulo:false}
-];
+@@EDITORIAL:SECTIONS@@
 
 /* ══════════ CONTENIDO DE LOS MÓDULOS (EDITAR AQUÍ) ══════════
    Cada módulo: qué vas a aprender (máx. 3), cuerpo (máx. 3 conceptos),
    ejemplo real y ejercicio.                                             */
-const MODULOS = {
-
-m0:{titulo:'Bienvenida — para qué existe todo esto', dur:'5 min', nivel:'básico', oblig:true, prev:'guia',
-va:['Para qué sirve el guion: vender a la tripa y justificar con la razón','Qué NO es: ni teletrólex ni sustituto de su criterio','Los tres principios que no se negocian jamás'],
-body:`
-<div class="bloque"><h3>Vender a la tripa, justificar con la razón</h3>
-<p>El dueño de una PYME no decide con una hoja de cálculo: decide con el miedo a que le fallen y con el alivio de saberse cubierto. Este guion habla primero a ese estómago —emoción, escena, pérdida— y solo después entrega los euros para que la cabeza firme lo que la tripa ya decidió.</p></div>
-<div class="bloque"><h3>Qué NO es</h3>
-<p>No es un teletrólex: si lo lee como un robot, el cliente cuelga. Las frases son la partitura; usted pone la voz, las pausas y el oído. Y no sustituye su criterio: si el guion dice A y el cliente pide B con claridad, manda el cliente.</p></div>
-<div class="bloque"><h3>Los tres principios irrenunciables</h3>
-<ul><li><b>Emoción antes que dato.</b> Los primeros 30 segundos de cada bloque mueven una emoción, no un número.</li>
-<li><b>Cierre por elección.</b> Nunca «¿le interesa?». Siempre A/B: canal, día, hora o alcance.</li>
-<li><b>Compliance por encima de todo.</b> Lista Robinson, horarios, verdades verificables. Una venta legal hoy vale más que diez dudosas mañana.</li></ul></div>
-<div class="ejemplo"><b class="tag">Cómo se abre la herramienta</b><p>Doble clic en <code class="k">pymes.html</code> con Chrome o Edge (Firefox también va). Funciona offline: solo las fuentes letra viajan por red. Guion y tutorial viven en el mismo archivo: entre con el botón verde «Abrir el guion» de la cabecera. Consejo: una pestaña fija a la izquierda de su pantalla, CRM a la derecha, y manos libres siempre.</p></div>`,
-ej:`Abra el guion, localice el botón «↺ Reiniciar», el banner ámbar de compliance y la pestaña 🇪🇸 Glosario. Después lea en voz alta la apertura del bloque 1 mirando al techo cada dos frases: si suena a leído, repítala.`},
-
-m1:{titulo:'Tour por la interfaz — dónde está cada cosa', dur:'10 min', nivel:'básico', oblig:true,
-va:['Los cuatro anclajes: cabecera, banner, progreso y paneles','Las 7 pestañas del panel derecho y para qué sirve cada una','El modal de «Datos de la llamada» y el color ámbar punteado'],
-body:`
-<div class="bloque"><h3>La cabecera, de izquierda a derecha</h3>
-<ul><li><b>🔬 Capa neuro:</b> muestra/oculta las etiquetas de todos los bloques a la vez (entrenamiento).</li>
-<li><b>🎯 Foco:</b> esconde distracciones (avisos, progreso y pestañas extra) y agranda el discurso —el árbol sigue a la vista. Oro puro en vivo.</li>
-<li><b>📋 Datos de la llamada:</b> el modal de 13 variables que personaliza el guion.</li>
-<li><b>🎭 Roleplay y ↺ Reiniciar:</b> simulador y vuelta a empezar.</li></ul></div>
-<div class="bloque"><h3>La barra de progreso</h3>
-<p>Nueve fases: Apertura → Presentación → Motivo → Permiso → Detección → Pitch → Objeción → Cierre → Seguimiento. El punto verde marca dónde está la llamada. Sirve de brújula: si lleva 6 minutos en Motivo, acelere.</p></div>
-<div class="bloque"><h3>Los dos paneles</h3>
-<p><b>Izquierdo (árbol):</b> las respuestas posibles del cliente como botones, un desplegable para abrir cualquier objeción y los atajos (Volver, Reiniciar, Ir al cierre). <b>Derecho (discurso):</b> siete pestañas — 🗣 Discurso, 🛡 Objeciones, 🤝 Cierre y seguimiento, 🧠 Anexo neuro, 🇪🇸 Glosario, 📈 KPIs, 🎭 Roleplay. En la llamada vivirá en la primera; el resto es escuela y consulta.</p></div>
-<div class="ejemplo"><b class="tag">El color ámbar punteado</b><p>En los textos verá <span style="background:#F5F1E8;border-bottom:1px dotted #B4A272;padding:1px 4px">[NOMBRE_CLIENTE]</span>: son variables sin rellenar. En cuanto las escribe en el modal, el ámbar se convierte en el dato real. Ámbar = le falta contexto al guion.</p></div>`,
-ej:`Sin ayuda, localice en 60 segundos: ① el desplegable de objeciones, ② la pestaña KPIs, ③ el botón Volver, ④ el modal de datos, ⑤ la marca de [PAUSA 2s] (active la capa neuro de la apertura). Cronómetro.`},
-
-m2:{titulo:'Preparar la llamada — los 5 minutos que deciden la venta', dur:'5 min', nivel:'básico', oblig:true,
-va:['Rellenar el modal de datos sin dejarse campos clave','Qué datos hay según la fuente del lead (Iberdrola, IBERCRM, IBERU)','Los dos chequeos legales: Lista Robinson y horario'],
-body:`
-<div class="bloque"><h3>El modal, campo a campo</h3>
-<p>Abra «📋 Datos de la llamada» y rellene arriba-abajo: nombre del cliente y su nombre primero (van a sonar toda la llamada), después empresa, sector y ciudad, y por último lo comercial: comercializadora, tarifa, consumo, potencia. Cada campo escrito sustituye al ámbar punteado al momento. No hace falta guardar: se aplica solo y se recuerda entre llamadas.</p></div>
-<div class="bloque"><h3>Qué sabe de cada lead</h3>
-<table class="mini"><tr><th>Fuente</th><th>Qué tiene</th><th>Qué falta</th></tr>
-<tr><td><b>Cliente Iberdrola</b></td><td>Todo</td><td>Nada: vaya al grano</td></tr>
-<tr><td><b>Lead IBERCRM</b></td><td>Contacto y empresa</td><td>Tarifa y compañía actual: se descubren en Detección</td></tr>
-<tr><td><b>IBERU</b></td><td>Consumos por distribuidora</td><td>Confirme identidad y Robinson</td></tr></table></div>
-<div class="bloque"><h3>Los dos chequeos legales</h3>
-<p>① Lista Robinson: consulte IberU antes de marcar. Si está inscrito, no se llama. ② Horario: 9:00–13:30 y 16:30–20:00. Fuera de ahí, ni el mejor discurso del mundo le salva de una reclamación. Y la regla del nombre: el nombre del cliente debe sonar <b>mínimo tres veces</b> durante la llamada — la familiaridad vende sola.</p></div>
-<div class="ejemplo"><b class="tag">Ejemplo — ficha en 40 segundos</b><p>Lead frío: Bar «El Faro», Puerto de Sagunto. Usted apunta: nombre Manolo · hostelería · Puerto de Sagunto · frío. Listo. La tarifa de luz no la sabe: perfecto, es la segunda pregunta de Detección, no una laguna.</p></div>`,
-ej:`Rellene el modal con esta ficha ficticia: Carmen Ruiz, «Clínica Dental Sonría», clínicas, Sagunto, lead entrante. Compruebe que en la apertura aparecen Carmen y su clínica en lugar del ámbar.`},
-
-m3:{titulo:'Ejecutar la llamada — el ciclo leer–escuchar–pulsar', dur:'15 min', nivel:'básico', oblig:true,
-va:['El ciclo de cada bloque: leer un párrafo, escuchar, pulsar, repetir','Cómo se interpretan las [PAUSA 2s] y los [TONO ↑ ↓]','Cuándo usar la capa neuro y el modo foco en vivo'],
-body:`
-<div class="bloque"><h3>El ciclo que manda</h3>
-<p>① Lea UN párrafo del discurso. ② Calle y escuche de verdad. ③ Pulse en el árbol la respuesta más parecida a lo que ha oído. ④ El guion salta al bloque correcto. Repita. Jamás lea dos párrafos seguidos sin escuchar: la llamada la conduce el cliente; usted solo pisa los pedales.</p>
-<p>Si pisa el botón equivocado, «← Volver» le devuelve. Y si el cliente se adelanta («¡mándeme eso ya!»), use el atajo «🤝 Ir al cierre»: el guion sirve al cliente, no al revés.</p></div>
-<div class="bloque"><h3>Pausas y tonos</h3>
-<p>Con la capa neuro visible (botón 🔬) verá marcas en cursiva: <i>‖ [PAUSA 2s]</i> es silencio sagrado — ahí el cerebro del cliente trabaja para usted, no lo rellene; <i>↗ [TONO ↑]</i> suba energía en preguntas abiertas; <i>↘ [TONO ↓]</i> baje la voz al cerrar: la voz grave suena a verdad.</p></div>
-<div class="bloque"><h3>Capa y foco en vivo</h3>
-<p>Regla de la primera semana: <b>capa neuro OFF en llamada real</b>. Las etiquetas son de entrenamiento; en vivo distraen. En cambio, el modo 🎯 Foco sí es de batalla: tras elegir la respuesta en el árbol, actívelo: el árbol sigue a mano y el discurso se lee a lo grande, sin distracciones.</p></div>
-<div class="ejemplo"><b class="tag">Ejemplo — recorrido real de 3 minutos</b>
-<p class="dial"><span class="cl">Cliente:</span> «¿Sí, dígame?»</p>
-<p class="dial"><span class="co">Usted:</span> apertura completa, pausa, escucha. El cliente suelta: «Pues este mes la luz me ha dado un susto…» → pulse <b>Detección → Dolor de PRECIO</b>. El guion le da el pitch de la fuga con su sector. Termina en «¿WhatsApp o correo?» y el cliente elige WhatsApp. Pulse <b>Cierre B</b> y ejecute. Tres minutos, tres pulsaciones, cero improvisación.</p></div>`,
-ej:`Llamada simulada completa, solo con un compañero o un grabador: cliente «restaurante de playa, paga mucho, acepta mandar la factura». Recorra Apertura→Permiso→Detección→Pitch→Cierre B→Seguimiento leyendo en voz alta y respetando cada [PAUSA 2s]. Grábese y escúchese una vez.`},
-
-m4:{titulo:'Objeciones — el miedo detrás de cada “no”', dur:'10 min', nivel:'intermedio', oblig:false,
-va:['El protocolo de 4 pasos: Validar → Desactivar → Reencuadrar → Avanzar','La 2ª ronda y el regalo de desbloqueo','La regla de los dos “no”: salir con elegancia'],
-body:`
-<div class="bloque"><h3>El protocolo de 4 pasos</h3>
-<p>Toda objeción es un miedo disfrazado; por eso nunca se rebate en frío. ① <b>Validar:</b> «le entiendo, faltaría más» — baja la guardia. ② <b>Desactivar la amenaza:</b> «sin tocar nada, sin compromiso ninguno» — baja el cortisol. ③ <b>Reencuadrar:</b> pérdida actual, historia o contraste, nunca discutir. ④ <b>Avanzar:</b> pregunta abierta o elección A/B, jamás sí/no. En la herramienta cada objeción se abre desde el desplegable del árbol y muestra los cuatro pasos coloreados.</p></div>
-<div class="bloque"><h3>La 2ª ronda y el regalo</h3>
-<p>Si tras los 4 pasos insiste, pulse «Insiste en la objeción»: entra la 2ª ronda, que añade el desbloqueo permitido —<b>estudio de ahorro gratis</b> o <b>detalle de bienvenida (merchandising)</b>— más la prueba social de su sector y zona. El regalo no es soborno: es reciprocidad, la moneda más antigua de la venta.</p></div>
-<div class="bloque"><h3>La regla de los dos “no”</h3>
-<p>Dos negativas seguidas a la misma puerta = cierre de puerta, no de relación. Pulse «Retirada elegante»: agradecido, una imagen sembrada (el sábado sin luz, la factura que se dispara), su WhatsApp entregado y «que le vaya muy bien». Hoy pierde la batalla; en seis meses gana el cliente.</p></div>
-<div class="ejemplo"><b class="tag">Ejemplo — «ya tengo compañía»</b>
-<p class="dial"><span class="cl">Cliente:</span> «Es que ya tengo compañía.»</p>
-<p class="dial"><span class="co">Usted:</span> «Claro, faltaría más, es lo normal. Y tranquilo, que no tocamos nada. Solo una curiosidad: ¿cuánto le cuesta al mes no mirarla? La última factura, ¿pasó de los cuatrocientos?»</p>
-<p class="dial"><span class="cl">Cliente:</span> «Pues… anduvo por los cuatrocientos cincuenta.»</p>
-<p>Objeción resuelta sin rebatir: validó, desactivó, reencuadró con pérdida y avanzó con ancla.</p></div>`,
-ej:`Abra el desplegable, elija tres objeciones al azar y léalas en voz alta con un compañero haciendo de cliente borde. Después de cada una, diga qué paso del protocolo le funcionó mejor. Diez minutos al día esta semana.`},
-
-m5:{titulo:'Cierres y seguimiento — donde se gana o se pierde todo', dur:'8 min', nivel:'intermedio', oblig:false,
-va:['Los 4 tipos de cierre y cuándo toca cada uno','Peak-End: pico emocional + final limpio + voz alta','El plan de seguimiento multicanal y su cadencia'],
-body:`
-<div class="bloque"><h3>El cierre correcto para cada cliente</h3>
-<table class="mini"><tr><th>Cliente</th><th>Cierre</th><th>Señal</th></tr>
-<tr><td><b>Caliente</b> (pregunta precios, plazos)</td><td>C Alta o A cita esta semana</td><td>Compra ya: no lo enfríe</td></tr>
-<tr><td><b>Tibio</b> (interesa, va liado)</td><td>B foto de factura</td><td>Micro-compromiso: una foto</td></tr>
-<tr><td><b>Técnico</b> (placas, cuadros, 6.1TD)</td><td>D visita del ingeniero</td><td>Vende la visita, no el proyecto</td></tr>
-<tr><td><b>Frío / dos no</b></td><td>Retirada elegante</td><td>Pierde hoy, gana en 6 meses</td></tr></table></div>
-<div class="bloque"><h3>Peak-End</h3>
-<p>El cerebro recuerda el pico y el final, no la media. Antes de pedir el compromiso dispare el pico: «imagínese mañana a esta hora abrir el móvil y ver en euros lo que le cuesta no mirarlo». Después, final limpio: acuerdo repetido <b>en voz alta por el cliente</b> («pues quedamos así») y resumen por WhatsApp <b>en menos de 5 minutos</b> — anti-arrepentimiento.</p></div>
-<div class="bloque"><h3>El seguimiento que no molesta</h3>
-<p>Cadencia: 1er toque 24–48 h con una novedad · 2º a la semana con un caso de su sector · 3º a los 15 días · luego puerta abierta mensual. Cada toque lleva un regalo y cierra con elección; jamás un «¿le sigue interesando?» vacío. WhatsApp manda; email apoya; SMS refuerza.</p></div>`,
-ej:`Asigne cierre a estos tres: ① encargado de chiringuito interesado pero en pleno servicio, ② dueño de taller que pregunta por placas y baterías, ③ directora de clínica que ha dicho dos veces «el jueves sin falta le espero». Solución: ① B · ② D · ③ A, con WhatsApp de confirmación hoy mismo en los tres.`},
-
-m6:{titulo:'Capa neuro — ver los hilos del guion', dur:'10 min', nivel:'intermedio', oblig:false,
-va:['Qué es la capa neuro y cómo se activa (bloque y global)','Cómo leer las ocho etiquetas principales','Entrenar con capa visible, vender con capa oculta'],
-body:`
-<div class="bloque"><h3>Qué es</h3>
-<p>Cada frase del guion lleva pegados en gris fino los mecanismos que la mueven: el porqué funciona. Con el interruptor general «🔬 Capa neuro» de la cabecera se ven todos; con el botón 🔬 de cada bloque, solo los de ese bloque. Active la capa siempre que entrene —nunca en llamada real la primera semana.</p></div>
-<div class="bloque"><h3>Las ocho etiquetas que más verá</h3>
-<table class="mini"><tr><th>Etiqueta</th><th>Qué hace</th></tr>
-<tr><td><b>PÉRDIDA</b></td><td>Reformula el beneficio como dinero que se escapa hoy</td></tr>
-<tr><td><b>ANCLA</b></td><td>El primer número grande que condiciona la comparación</td></tr>
-<tr><td><b>PRUEBA SOCIAL</b></td><td>“Tres talleres de su zona ya lo tienen” — imita a los iguales</td></tr>
-<tr><td><b>ZEIGARNIK</b></td><td>Pregunta pendiente que el cliente necesita cerrar</td></tr>
-<tr><td><b>ELECCIÓN A/B</b></td><td>El cierre sin el “no”: canal, día, hora, lugar</td></tr>
-<tr><td><b>CORTISOL ↓</b></td><td>“Sin tocar nada, sin compromiso” — baja la amenaza</td></tr>
-<tr><td><b>FUTURE PACING</b></td><td>Transporta al cliente al día en que ya lo tiene</td></tr>
-<tr><td><b>PEAK-END</b></td><td>Pico emocional + final limpio, lo que se recuerda</td></tr></table></div>
-<div class="bloque"><h3>Uso dual</h3>
-<p><b>Entrenar:</b> capa ON, lea un bloque y nombre cada etiqueta en voz alta. <b>Vender:</b> capa OFF, el mecanismo ya va dentro de su voz. La pestaña 🧠 Anexo lista las 12 leyes en una línea, el checklist de 10 puntos y las tablas de mecanismos por bloque — autogeneradas desde el propio guion.</p></div>`,
-ej:`Active la capa global y analice tres bloques en voz alta: Apertura, Pitch de la fuga y Cierre B. De cada uno, nombre: la emoción que abre, el escenario que pinta, la micro-decisión que pide y dónde está la justificación diferida.`},
-
-m7:{titulo:'Roleplay — el gimnasio donde no cuestan las caídas', dur:'8 min', nivel:'intermedio', oblig:false,
-va:['Cómo funciona el simulador y sus dos escenarios','Cómo se lee el feedback (leyes aplicadas o rotas)','Cómo usarlo justo antes de una campaña'],
-body:`
-<div class="bloque"><h3>Cómo funciona</h3>
-<p>La pestaña 🎭 Roleplay pone al sistema de cliente difícil. Usted lee su intervención, dice su respuesta en voz alta (sí, en voz alta: la voz entrena distinto) y elige la opción más parecida. Cada fallo explica qué ley rompió; cada acierto, qué hilos tiró bien. Dos escenarios: <b>🍽 El Ocupado</b> (restauración en pleno servicio) y <b>🕵️ El Desconfiado</b> (taller quemado por malas llamadas).</p></div>
-<div class="bloque"><h3>Cómo sacarle jugo</h3>
-<p>Antes de una campaña de hostelería: repita El Ocupado hasta pasarlo sin ❌. Semanal: un escenario al día, cada día leyendo en voz alta distinta (más rápido, más lento, más grave). Las opciones buenas contienen las frases del guion real: lo que aquí ensaya, allí sale solo.</p></div>
-<div class="ejemplo"><b class="tag">Ejemplo de feedback útil</b><p>Elige «¿me podría regalar un minuto?» y el simulador responde: latinismo detectado, pregunta de sí/no y palabra “oferta” — tres errores en diez palabras. Ese golpe no se olvida jamás en una llamada real.</p></div>`,
-ej:`Complete hoy El Ocupado sin ninguna ❌ (si falla, repita desde el inicio). Anote en una tarjeta la frase que le desbloqueó el paso más difícil: esa tarjeta va pegada a su monitor.`},
-
-m8:{titulo:'KPIs — el embudo que le dice dónde repasar', dur:'5 min', nivel:'básico', oblig:false,
-va:['Los 4 números que apuntan el día','Las 4 tasas que calcula solas','Qué repasar según dónde pierde el embudo'],
-body:`
-<div class="bloque"><h3>Cuatro entradas, cuatro verdades</h3>
-<p>Al final de cada jornada rellene en 📈 KPIs: llamadas, contactos con decisor, estudios/citas y ventas. La herramienta calcula sola: tasa de contacto, citas por contacto, cierre por cita y conversión global. Se guardan en su navegador; cada lunes, foto y a la reunión.</p></div>
-<div class="bloque"><h3>Leer el embudo</h3>
-<p>Cada caída tiene su módulo de repaso: muchas llamadas y pocos contactos → <b>Apertura</b> (franjas y ancla de pérdida); contactos que no dan estudio → <b>Detección y Pitch</b> (regalo primero, petición mínima); atasco en objeciones → <b>protocolo y Roleplay</b>; citas sin venta → <b>Peak-End y confirmación en voz alta</b>.</p></div>
-<div class="ejemplo"><b class="tag">Ejemplo con números</b><p>Semana: 60 llamadas, 22 contactos, 8 citas, 3 ventas → 37 % contacto, 36 % citas, 38 % cierre, 5 % global. Lectura: cae en el primer tramo; toca trabajar apertura y franjas horarias, no el pitch.</p></div>`,
-ej:`Meta los números de su última semana (reales o inventados) y escriba una sola frase: «esta semana repaso ___ porque el embudo cae en ___». Esa frase es su plan.`},
-
-m9:{titulo:'Editar la herramienta — para el responsable', dur:'10 min', nivel:'avanzado', oblig:false,
-va:['Dónde vive el contenido editable (todo en el script final)','Las tres estructuras: línea hablada, marca y contexto','Añadir una objeción y colores sin romper nada'],
-body:`
-<div class="bloque"><h3>Dónde está todo</h3>
-<p>Abra el HTML con el Bloc de notas, VS Code o similar y baje al <code class="k">&lt;script&gt;</code> final. Ahí viven: <code class="k">NODES</code> (guion), <code class="k">OBJECTIONS</code>, <code class="k">CIERRE_SECCIONES</code>, <code class="k">SEGUIMIENTO_PLAN</code>, <code class="k">SCENARIOS</code>, <code class="k">LEYES</code>, <code class="k">GLOSARIO</code> y los colores en el <code class="k">:root</code> del CSS. Regla de oro: <b>duplique el archivo antes de tocar</b>.</p></div>
-<div class="bloque"><h3>Las tres formas de línea</h3>
-<ul><li><code class="k">{t:'texto para leer', n:'ETIQUETA · ETIQUETA'}</code> — lo que se dice en voz alta.</li>
-<li><code class="k">{mark:'[PAUSA 2s]'}</code> o <code class="k">{mark:'[TONO ↑]'}</code> — marcas de interpretación.</li>
-<li><code class="k">{ctx:'…'}</code> — contexto interno, no se lee al cliente.
-Opcional por bloque: <code class="k">nat:{alt:[…], notas:[…], zona:'…'}</code> alimenta el botón 🇪🇸.</li></ul></div>
-<div class="bloque"><h3>Añadir una objeción nueva en 4 pasos</h3>
-<p>① Copie un bloque de <code class="k">OBJECTIONS</code> existente entero. ② Cambie la clave (sin espacios, p. ej. <code class="k">cambio_autonomo</code>) y el <code class="k">nombre</code>. ③ Rellene los 6 campos siguiendo el protocolo. ④ Guardar y recargar: aparece sola en el desplegable del árbol y en la pestaña de objeciones, y el Anexo 🧠 se regenera con sus mecanismos. Si algo falla, validación rápida: consola del navegador (F12) le dirá la línea rota.</p></div>`,
-ej:`En una copia del archivo: cambie una frase del Motivo (ahora más pérdida), recargue el guion, abra el Anexo y confirme que las etiquetas del bloque Motivo han cambiado. Si lo logra, ya domina el ciclo editar–probar–verificar.`},
-
-m10:{titulo:'Compliance — la parte que no se negocia', dur:'5 min', nivel:'básico', oblig:true,
-va:['Los dos filtros previos: Robinson y consentimiento','Las prohibiciones absolutas y por qué son sansalvavidas','Qué hacer con los datos de las facturas (RGPD)'],
-body:`
-<div class="bloque"><h3>Antes de marcar, siempre</h3>
-<p>① <b>Lista Robinson:</b> consulte IberU; si el número está inscrito, no se llama y punto. ② <b>Consentimiento:</b> si el lead no es propio, verifique que existe base para llamar; hoy no hay protocolo documentado, así que ante la duda, no llame y avise al responsable. ③ <b>Horario:</b> 9:00–13:30 y 16:30–20:00. ④ <b>Grabaciones:</b> hoy no se graban; cuando se activen, se informa al cliente al inicio.</p></div>
-<div class="bloque"><h3>Prohibiciones absolutas</h3>
-<ul><li>Precios concretos sin estudio previo (orientativos en %, sí; cifra cerrada, no).</li>
-<li>Prometer permanencias… ni prometer quitarlas: se mira la fecha en la factura y ya.</li>
-<li>Nombrar a la competencia, ni para bien ni para mal.</li>
-<li>Decir «no puedo»: siempre «lo que sí hago es…».</li>
-<li>Prometer lo no verificable: todo lo que el guion asegura existe (estudio gratis, emergencia 24h, oficinas de Sagunto y el Puerto).</li></ul>
-<div class="ley-tip"><b>Cortafuegos</b>La persuasión de este guion viaja montada en verdades. La forma es neuro; el contenido, literal. Eso también es compliance.</div></div>
-<div class="bloque"><h3>Facturas y datos (RGPD)</h3>
-<p>La factura del cliente contiene datos sensibles: se pide por el canal acordado (WhatsApp o email), se usa solo para su estudio, no se reenvía a terceros fuera del equipo autorizado, se custodia con cuidado y se elimina cuando la finalidad se agota. Si el cliente pide no ser llamado: se anota y se cumple al instante.</p></div>`,
-ej:`Clasifique estas seis frases en “permitida / prohibida”: ① «le quito la permanencia» · ② «el estudio es gratis» · ③ «entre un 10 y un 20 % suelen mejorar» · ④ «su compañía actual es un desastre» · ⑤ «no se graban llamadas» · ⑥ «mañana le digo el precio exacto sin ver nada». Solución: P, ✅, ✅, P, ✅, P.`},
-
-m11:{titulo:'Evaluación final — la prueba de fuego', dur:'5 min', nivel:'básico', oblig:false,
-va:['En qué consiste: quiz + casos prácticos','El criterio de aprobación','Qué hacer si no sale a la primera'],
-body:`
-<div class="bloque"><h3>Las dos pruebas</h3>
-<p>① <b>Quiz:</b> 10 preguntas tipo test sobre mecánica de la herramienta, protocolo y compliance. Cada pregunta se autocorrige al instante con su justificación. ② <b>Casos prácticos:</b> 3 situaciones de llamada real donde elegir la respuesta, la objeción y el cierre correctos.</p></div>
-<div class="bloque"><h3>Criterio de aprobación</h3>
-<p>Aprobado con <b>${CONFIG.notaAprobado}/10</b> en el quiz y <b>3/3</b> en los casos. Si no sale: el resultado le dice qué módulos repasar (el quiz los referencia en cada justificación) y repite cuando quiera — el simulador no se cansa. Una vez aprobado, ya puede llamar con guion en la mano; la maestría llega con las primeras 50 llamadas.</p></div>`,
-ej:`Pulse abajo el botón para ir al quiz. Y recuerde la regla madre mientras responde: emoción primero, dato después; cierre por elección; compliance por encima de todo.`}
-};
+@@EDITORIAL:MODULOS@@
 
 /* ══════════ QUIZ (EDITAR preguntas aquí) ══════════ */
-const QUIZ = [
- {q:'¿Qué va siempre primero en cualquier bloque del guion?',o:['Un dato de ahorro en euros para llamar la atención','Una emoción o una escena mental','La presentación completa de Iberdrola y B&M','La pregunta de cierre'],ok:1,j:'Sistema 1 antes que Sistema 2: la decisión nace emocional y luego se justifica con datos. Módulo 0 y 6.'},
- {q:'El cliente dice «esto está carísimo». ¿Qué hace usted antes de rebatir?',o:['Le ofrece un descuento inmediato','Le cuelga con educación','Valida («le entiendo») y desactiva la amenaza («sin tocar nada»)','Le pide la factura sin mediar palabra'],ok:2,j:'Protocolo: validar → desactivar → reencuadrar → avanzar. Rebatir en frío sube el cortisol y mata la venta. Módulo 4.'},
- {q:'¿Cuál de estos es un cierre correcto según el guion?',o:['«¿Le interesa la propuesta?»','«¿Quiere que le llame otro día?»','«¿Le mando la información y ya me dice?»','«¿Por WhatsApp o por correo?»'],ok:3,j:'Cierre por elección A/B, nunca sí/no. El “no” no se invoca. Módulo 5.'},
- {q:'¿Cuántas veces debe sonar el nombre del cliente durante la llamada?',o:['Una sola, al saludar','Al menos tres','Siempre en cada frase','Ninguna: suena a guion'],ok:1,j:'Ley 12 (mera exposición): lo familiar vende. Tres veces, en momentos clave. Módulo 2.'},
- {q:'¿Qué comprueba SIEMPRE antes de marcar un número nuevo?',o:['Que el cliente tenga web','La Lista Robinson en IberU','La previsión del tiempo','Que el CRM esté actualizado al 100 %'],ok:1,j:'Cumplimiento primero: Robinson y consentimiento razonable. Módulo 10.'},
- {q:'¿Para qué sirve la 2ª ronda de una objeción?',o:['Para repetir el mismo argumento más alto','Para insistir hasta cinco veces más','Para ofrecer el desbloqueo (estudio gratis / detalle) cuando el cliente insiste','Para cerrar sin escuchar'],ok:2,j:'La insistencia se responde con regalo y prueba social, no con volumen. Módulo 4.'},
- {q:'Peak-End significa que el cliente recuerda sobre todo…',o:['El principio de la llamada','El dato más técnico','El pico emocional y el final','El precio final'],ok:2,j:'Por eso el cierre dispara una escena de alivio y termina limpio con su nombre. Módulo 5.'},
- {q:'¿Cuál de estos resultados cuenta como éxito de llamada?',o:['Solo el alta firmada','Facturas recibidas, cita concertada, alta o visita técnica','Que el cliente prometa pensarlo','Que no cuelgue en el primer minuto'],ok:1,j:'Cualquiera de los cuatro gana la llamada. Los compromisos pequeños también venden. Módulo 3 y 5.'},
- {q:'¿Qué NO se puede prometer jamás?',o:['El estudio de ahorro gratuito','La emergencia eléctrica 24 h','Quitar la permanencia que tenga activa','La revisión de potencias'],ok:2,j:'Ni permanencias ni quitarlas: se mira la fecha en la factura. Los otros tres son verdad verificable. Módulo 10.'},
- {q:'¿Cuándo conviene activar la capa neuro en llamada real la primera semana?',o:['Siempre, para no perder el hilo','Solo con clientes difíciles','Nunca: es de entrenamiento, no de batalla','Solo si el cliente pregunta'],ok:2,j:'Visible para entrenar, oculta para vender. En vivo, use el modo Foco. Módulo 3 y 6.'}
-];
+@@EDITORIAL:QUIZ@@
 
 /* ══════════ CASOS PRÁCTICOS (EDITAR aquí) ══════════ */
-const CASOS = [
- {titulo:'Caso 1 · El restaurante en pleno servicio',
-  escena:'Restaurante en la playa, lunes 13:05. Coge el encargado: «¿Sí, dígame? Estoy con la barra llena…»',
-  o:['«No se preocupe, le cuento rapidito nuestra oferta de luz, son solo unos minutos»','«Le cojo en un mal momento, perdone. Una pregunta y le dejo: ¿este mes han pagado más de luz que antes del verano… o mucho más?»','«Le llamo otro día mejor, adiós»'],ok:1,
-  sol:'La única respuesta que respeta su tiempo Y abre conversación: empatía («le cojo en un mal momento», suena a España), escasez («una pregunta») y elección doble de pérdida — responda lo que responda, el dolor queda admitido. La primera cierra la puerta con “oferta”; la tercera regala el contacto.'},
- {titulo:'Caso 2 · El taller con permanencia y desconfianza',
-  escena:'Taller de camiones. El dueño: «Ya me colaron una vez de otra compañía, y además creo que firmé permanencia hasta el año que viene».',
-  o:['«No se preocupe, la permanencia la quitamos nosotros y aquí nadie le va a colar nada, palabra»','«Hace bien en revisarlo. Hoy no se toca nada: la fecha exacta está en su factura y, mientras llega, cada mes se le va lo mismo. ¿Lo miramos ahora juntos con la factura delante… o me manda una foto y se lo dejo escrito? Y si quiere comprobar quién soy: oficinas en Sagunto y el Puerto, puerta abierta»','«Pues cuando le acabe la permanencia ya le llamo otro día»'],ok:1,
-  sol:'Dos verdades endurecidas: ① no se promete quitar permanencias (prohibido), se consulta la fecha real; ② la desconfianza se combate con verificación física (oficinas de verdad), no con juramentos. Después, pérdida del tiempo de espera y elección de modalidad. La tercera opción regala doce meses de fuga.'},
- {titulo:'Caso 3 · La clínica contenta que pide precio',
-  escena:'Directora de clínica dental, educada: «Yo estoy encantada con mi compañía, la verdad. Pero dígame, ¿en cuánto les saldría a nosotros?»',
-  o:['Darle un precio orientativo al momento para no perderla','«Me alegro mucho, y que le dure. Un precio a ciegas no se lo doy porque sería engañarla: mire, un restaurante de por aquí decía lo mismo y tenía 340 € dormidos al mes. ¿Le hago el estudio gratis con una foto de la factura… o prefiere conocer primero la emergencia 24 horas?»','«Entonces no le puedo decir nada, buenas tardes»'],ok:1,
-  sol:'Pide precio: señal de interés, no de cierre. La respuesta correcta valida su satisfacción, convierte el NO-precio en prueba de honestidad, usa storytelling de un igual (mismo dolor, misma zona) y cierra por elección sin sí/no. Dar precio sin factura rompe la regla compliance y además quema la única palanca que tiene: el estudio.'}
-];
+@@EDITORIAL:CASOS@@
 
 /* ══════════ VIDEO-CURSO (11 vídeos: duración, planos, locución) ══════════ */
-const VIDEOS = [
- {t:'V0 · Bienvenida (45 s)',planos:['Plano medio, oficina Sagunto','Inserto: la herramienta abierta','Rótulo: los 3 principios'],
-  loc:'Buenos días. Esto es el guion con el que va a llamar desde hoy, y le cuento lo esencial en menos de un minuto. No es un texto para recitar: es un copiloto. El cliente no compra kilovatios; compra dormir tranquilo. Por eso todas nuestras frases empiezan por la emoción y acaban en euros, y no al revés. Tres reglas que no se negocian: emoción antes que dato, cierre siempre por elección, y compliance por encima de cualquier venta. Abra el archivo con Chrome, déjelo anclado a la izquierda de su pantalla, y vamos a ver cómo se usa.'},
- {t:'V1 · La interfaz (60 s)',planos:['Pantalla completa, zoom a cada zona','Subtítulos con nombres de elementos'],
-  loc:'Arriba, la cabecera: capa neuro para ver los hilos, foco para agrandar el discurso sin perder el árbol, datos de la llamada y reiniciar. Debajo, el banner ámbar: antes de cada llamada, léalo. Lista Robinson, horario, prohibiciones. La línea de nueve puntos es su brújula: la fase verde es donde está la llamada. A la izquierda, el árbol: aquí pulsa usted lo que le contesta el cliente. A la derecha, siete pestañas: en la llamada vive en Discurso; las demás son su escuela. El botón Datos de la llamada abre el modal de trece campos: todo lo amarillo es lo que falta.'},
- {t:'V2 · Preparar la llamada (50 s)',planos:['Inserto modal rellenándose','Recuadro: tabla de fuentes'],
-  loc:'Cinco minutos antes de marcar valen oro. Abra el modal y rellene de arriba abajo: nombre del cliente, empresa, sector, ciudad. Si es cliente de Iberdrola lo tiene todo; si viene de IBERCRM le faltarán tarifa y compañía, y eso se pregunta en Detección, no se inventa. Dos chequeos legales no opcionales: Lista Robinson en IberU y horario legal. Y una costumbre que vende sola: el nombre del cliente suena al menos tres veces durante la llamada. Rellene, respire, y a marcar.'},
- {t:'V3 · Ejecutar la llamada (75 s)',planos:['Split: árbol y discurso','Onda de voz con pausas marcadas'],
-  loc:'La mecánica es un ciclo de cuatro pasos: lee un párrafo, calla, escucha, y pulsa en el árbol lo que ha oído. Eso es todo. Nunca lea dos bloques seguidos sin escuchar: la llamada la conduce el cliente. Las marcas en cursiva son sus pedales: pausa de dos segundos es silencio sagrado, no lo rellene; tono arriba en la pregunta abierta; tono abajo al cerrar, que la voz grave suena a verdad. Primera semana, capa neuro apagada en vivo; el foco, encendido. Si se equivoca de botón, Volver le devuelve. Y si el cliente pide ya la oferta, atajo directo al cierre.'},
- {t:'V4 · Objeciones (70 s)',planos:['Zoom a los 4 pasos coloreados','Ejemplo sonado con actores'],
-  loc:'Toda objeción es un miedo con buenas maneras. Por eso nunca se rebate en frío. Cuatro pasos, siempre: validar, “le entiendo, faltaría más”; desactivar, “sin tocar nada”; reencuadrar con pérdida o historia; y avanzar con pregunta abierta o elección. Si insiste, segunda ronda: el regalo permitido, estudio gratis o detalle de bienvenida. Y la regla de oro: dos noes seguidos, salida elegante con imagen sembrada. Hoy se pierde la batalla; en seis meses se gana el cliente que recuerda al señor educado de Iberdrola.'},
- {t:'V5 · Cierres y seguimiento (60 s)',planos:['Tabla de 4 cierres','Inserto WhatsApp saliendo'],
-  loc:'Cuatro puertas de salida y cada cliente tiene la suya. Caliente: alta o cita esta semana. Tibio y liado: la foto de la factura. Técnico: visita del ingeniero. Dos noes: retirada elegante. Antes del compromiso, dispare el pico: “imagínese mañana a esta hora”. Después, final limpio: el cliente repite el acuerdo en voz alta — “pues quedamos así” — y usted manda el resumen por WhatsApp en menos de cinco minutos. Y el seguimiento: novedad a las 24 o 48 horas, caso de su sector a la semana, tercer toque a los quince días, y puerta abierta mensual. Cada toque, con regalo y con elección.'},
- {t:'V6 · La capa neuro (60 s)',planos:['Comparativa capa off/on','Zoom a etiquetas en gris'],
-  loc:'Todo el guion tiene los hilos a la vista si usted quiere. El interruptor de la cabecera enciende la capa neuro y cada frase muestra en gris finito por qué funciona: pérdida, porque duele más perder que ganar; ancla, porque el primer número manda; prueba social, porque imitamos a los iguales; elección, porque el no desaparece cuando hay dos síes donde elegir. Úsela así: capa encendida para entrenar, capa apagada para vender. En una semana, las etiquetas las llevará usted dentro y la capa le sobrará.'},
- {t:'V7 · Roleplay (50 s)',planos:['Screen del simulador','Feedback verde/rojo'],
-  loc:'El roleplay es el gimnasio donde fallar es gratis. Dos clientes difíciles de verdad: el Ocupado, que corta en pleno servicio, y el Desconfiado, quemado por malas llamadas. Usted lee al cliente, contesta en voz alta y elige la opción más parecida. Si falla, el feedback le dice qué ley rompió — y créame, ese golpe no lo repite nunca en una llamada real. Norma del equipo: antes de su primera llamada en vivo, supere los dos escenarios sin errores. Que le cueste aquí, no allí.'},
- {t:'V8 · KPIs (45 s)',planos:['Panel de KPIs en pantalla','Flechas del embudo'],
-  loc:'Al final del día, cuatro números: llamadas, contactos, citas y ventas. La herramienta calcula sola las tasas. Y ahora lo importante: dónde cae su embudo es dónde repasa. Muchas llamadas y pocos contactos: apertura, y a mejorar franjas. Contactos sin estudio: detección y pitch, más regalo inicial. Objeciones que atascan: roleplay, sin discusión. Citas sin cierre: pico emocional y confirmación en voz alta. Cada lunes, foto al panel y a la reunión de equipo,'},
- {t:'V9 · Editar la herramienta (60 s)',planos:['VS Code con el script','Guardar, recargar, ver anexo'],
-  loc:'Esto es solo para el responsable, pero que nadie tema: todo el contenido vive en el script final del archivo. Cada frase es una línea con texto y etiquetas. Duplique siempre el archivo antes de tocar. Para añadir una objeción: copie una existente, cambie la clave, rellene los seis campos, guarde y recargue: aparece sola en el desplegable, y el anexo con sus mecanismos se regenera. Los colores de marca viven en :root. Y cualquier frase nueva, pásela por el filtro idiomático de la pestaña Glosario antes de publicarla al equipo.'},
- {t:'V10 · Compliance (55 s)',planos:['Banner ámbar en pantalla','Rótulos: prohibiciones'],
-  loc:'Termino con lo que no se negocia. Antes de llamar: Lista Robinson consultada y horario legal — nueve a una y media, cuatro y media a ocho. Si el lead no es nuestro, verifique el consentimiento; ante la duda, no llame y avise. Prohibido: precios cerrados sin ver la factura, prometer permanencias ni quitarlas, nombrar a la competencia, y decir “no puedo”. La factura del cliente es un dato sensible: entra por el canal acordado, sirve solo para su estudio y se guarda con cuidado. Nuestra persuasión viaja siempre montada en verdades. Eso también es compliance.'}
-];
+@@EDITORIAL:VIDEOS@@
 
 /* ══════════ FAQ (15) ══════════ */
-const FAQ = [
- ['¿Necesita internet la herramienta?','No. Funciona offline al completo; solo las tipografías viajan por red (y si fallan, usa fuentes del sistema). Guárdela en el escritorio y ábrala con doble clic.'],
- ['¿Qué navegador uso?','Chrome o Edge en su versión actual. Firefox también funciona. En el móvil, cualquier navegador moderno, aunque en llamada el ordenador da más juego (dos paneles a la vista).'],
- ['¿Se pierden mis datos al cerrar?','No. Los datos del modal, los KPIs y el progreso de este tutorial se guardan en localStorage del navegador. Ojo: borrar datos de navegación los borra también.'],
- ['¿Puedo usarla en varias pestañas?','Sí, pero cada pestaña lleva su llamada. No use la misma pestaña para dos llamadas a la vez: el árbol solo tiene un hilo.'],
- ['¿Qué hago si el cliente se adelanta al cierre?','Atajo «🤝 Ir al cierre» del panel izquierdo. El guion sirve al cliente, no al revés: si pide alta ya, no le haga escuchar el pitch entero.'],
- ['¿Y si me equivoco de botón en mitad de la llamada?','«← Volver» le devuelve un paso. Nunca se rompe nada; la peor torpeza es dejar al cliente escuchando su silencio de pánico.'],
- ['¿Cuándo uso la capa neuro en llamada real?','La primera semana, nunca. Después, solo si lleva meses y quiere revisar un bloque concreto. La regla de oro es: visible para entrenar, oculta para vender.'],
- ['¿Qué son las marcas [PAUSA 2s] y [TONO ↑]?','Instrucciones de interpretación. La pausa marcada es silencio que trabaja para usted: no lo llene. El tono arriba abre; el tono abajo cierra y suena a verdad.'],
- ['¿Puedo saltarme fases?','Puede saltar al cierre con el atajo, y el progreso lo marca igual. No hay «fases obligatorias» rígidas: hay conversaciones. Dicho esto, saltarse la detección mata el pitch personalizado.'],
- ['¿Cuántas objeciones aguanto antes de retirarme?','Dos «no» seguidos a la misma puerta. Ahí entra la retirada elegante: imagen sembrada, WhatsApp entregado, puerta abierta. Insistir más es pelear contra la cosecha de dentro de seis meses.'],
- ['¿Qué hago si el cliente me manda la factura y luego desaparece?','Cadencia del plan: novedad a las 24–48 h (el estudio empezado ES la novedad), caso de su sector a la semana, tercer toque a los 15 días. Con estudio hecho, la segunda llamada es de cierre, no de persecución.'],
- ['¿Puedo editar los textos yo mismo?','Sí, todo el contenido vive en el <script> final del HTML. Pero edite siempre sobre una copia y pase cualquier frase nueva por el filtro idiomático de la pestaña 🇪🇸 Glosario. El responsable coordina la versión oficial del equipo para no multiplicar guiones distintos.'],
- ['¿Cómo se actualiza el guion para todo el equipo?','El responsable edita la versión oficial, la prueba (carga, flujo básico, una objeción) y la redistribuye como archivo único: correo, carpeta compartida o intranet. Cada uno la descarga y listo: no hay instalación.'],
- ['¿Qué pasa si el cliente pregunta de dónde tenemos sus datos?','Tiene su objeción propia en el guion: transparencia total, Robinson consultada, y si pide no recibir llamadas se anota y se cumple al instante. Esa elegancia también es venta.'],
- ['¿A quién pido ayuda si la herramienta falla?','Al responsable de formación (ver tabla de configuración). Apunte qué hizo, en qué bloque estaba y una captura si puede. Las incidencias se corrigen en la siguiente revisión del archivo.']
-];
+@@EDITORIAL:FAQ@@
 
 /* ══════════ CHECKLIST OPERATIVA ══════════ */
-const CHECKLIST = [
- {cat:' ANTES de la llamada (2 min)', items:[
-  'Lista Robinson mirada en IberU para este número',
-  'Horario legal OK (9:00–13:30 / 16:30–20:00)',
-  'Modal de datos relleno (mínimo: nombre, empresa, sector, ciudad)',
-  'Guion abierto a la izquierda, CRM a la derecha, manos libres puestos',
-  'Papel y boli para sus palabras exactas',
-  'Sonrisa puesta y bloque 0 leído (calentar la cabeza)']},
- {cat:'DURANTE la llamada', items:[
-  'Ciclo: leer un párrafo → escuchar → pulsar → repetir',
-  'Nombre del cliente dicho al menos 3 veces',
-  'Preguntas de detección anotadas con SUS palabras',
-  'Objeciones: validar → desactivar → reencuadrar → avanzar',
-  'Cero precios cerrados, cero permanencias prometidas',
-  'Cierre por elección A/B, nunca sí/no',
-  'Compromiso repetido en voz alta por el cliente',
-  'Peak-End: escena de alivio antes de despedirse']},
- {cat:'DESPUÉS de la llamada (3 min)', items:[
-  'WhatsApp de resumen enviado en menos de 5 minutos',
-  'Resultado registrado en la ficha (canal, fecha, próxima acción)',
-  'Seguimiento agendado (24–48 h / semana / 15 días / mensual)',
-  'Facturas recibidas guardadas con custodia (RGPD)',
-  'Un punto en cada KPI que toque',
-  'Si hubo “no”: retirada elegante anotada y puerta mensual']}
-];
+@@EDITORIAL:CHECKLIST@@
 
 /* ══════════ SESIÓN PRESENCIAL 90’ ══════════ */
-const SESION = [
- ['0–10 min','Apertura','La regla madre en una pizarra: emoción → escena → micro-decisión → dato. Cada uno dice su peor llamada y por qué falló.'],
- ['10–25 min','Tour guiado','La herramienta en pantalla grande. Cada asistente localiza y nombra 5 elementos del Módulo 1.'],
- ['25–45 min','Dinámica 1 · “¡Silencio!”','Parejas: uno hace la apertura del guion, el otro calla 3 segundos tras cada pregunta. Aprenden a no rellenar pausas.'],
- ['45–55 min','Descanso','—'],
- ['55–70 min','Dinámica 2 · “La objeción viajera”','En círculo: el formador lanza una objeción; quien la recibe responde con los 4 pasos y pasa otra distinta. Si rebate en frío, repite.'],
- ['70–82 min','Dinámica 3 · “El cierre exprés”','3 escenarios en pizarra; cada equipo elige cierre (A/B/C/D), frase exacta y redacta el WhatsApp de <5 min. Se votan los mejores.'],
- ['82–90 min','Evaluación y compromiso','Quiz relámpago de 5 preguntas del módulo en papel. Cada uno se lleva: su primera fecha de roleplay y sus 5 primeras llamadas agendadas.']
-];
+@@EDITORIAL:SESION@@
 
 /* ══════════ MOTOR DEL TUTORIAL (no editar) ══════════ */
 let prog = {done:[], chk:{}, quizBest:null, omitido:null};
@@ -1605,1264 +1310,20 @@ tutUpdateProgress();
    Naturalidad por bloque: nat:{alt:['…'], notas:['…'], zona:'…'}
    ════════════════════════════════════════════════════════════════════ */
 
-const VARS = [
-  ['NOMBRE_CLIENTE','Nombre del cliente'],
-  ['NOMBRE_COMERCIAL','Su nombre (Encargado/a)'],
-  ['SECTOR','Sector del negocio'],
-  ['COMERCIALIZADORA_ACTUAL','Compañía actual (nunca la nombre en voz alta)'],
-  ['TARIFA_ACTUAL','Tarifa actual (3.0TD / 6.1TD…)'],
-  ['CONSUMO_ANUAL','Consumo anual (kWh)'],
-  ['POTENCIA','Potencia que paga ahora (kW)'],
-  ['CUPS','CUPS'],
-  ['CIF','CIF'],
-  ['CIUDAD','Ciudad / población'],
-  ['TIPO_LEAD','Tipo de lead','select',['Frío','Entrante','Cliente antiguo','Seguimiento']],
-  ['DECISOR','Decisor','select',['Sí, hablo con el decisor','Filtro (encargado/administración)','Desconocido']],
-  ['CANAL_SEGUIMIENTO','Canal de seguimiento','select',['WhatsApp','Email','SMS','Llamada']]
-];
+@@EDITORIAL:VARS@@
 const guiVars = {};
 try{ Object.assign(guiVars, JSON.parse(localStorage.getItem('guion_vars')||'{}')); }catch(e){}
 
-const STEPS = ['Apertura','Presentación','Motivo','Permiso','Detección','Pitch','Objeción','Cierre','Seguimiento'];
+@@EDITORIAL:STEPS@@
 
 /* ── 3 · NODOS DEL ÁRBOL ─────────────────────────────────────────────── */
-const NODES = {
-
-inicio:{
-  step:0, fase:'Preparación',
-  titulo:'Antes de marcar — coger aire y tono (45 segundos)',
-  script:[
-    {ctx:'REGLA MADRE: al cliente no le entran las tarifas, le entran su miedo y su alivio. Los primeros 30 segundos de cada bloque son EMOCIÓN (Sistema 1). Los números llegan después, a justificar lo que la tripa ya decidió.'},
-    {ctx:'Ficha: lead [TIPO_LEAD] · sector [SECTOR] · ciudad [CIUDAD]. Cliente de Iberdrola: lo tiene todo. Lead IBERCRM: faltan tarifa y compañía — se sacan en detección. IBERU: consumos previos. Lista Robinson mirada. Horario bien. Sonrisa puesta, que se oye. Usted no llama a pedir nada: llama a REGALAR un diagnóstico.'},
-    {ctx:'Y hable como habla la calle: usted toda la llamada, frases cortas, pretérito perfecto ("¿le ha subido?", no "¿le subió?") y el nombre del cliente mínimo tres veces. Después de cada pregunta emocional: silencio. Que él rellene.'}
-  ],
-  notas:[
-    'De pie o bien sentado: la voz cambia y se nota.',
-    'Objetivo de la llamada: alta, factura recibida o cita. Uno de los tres y la llamada ha ganado.',
-    'Usted no "vende": usted encuentra dinero dormido y devuelve tranquilidad.'
-  ],
-  micro:'Entrar con la cabeza bien puesta: emoción primero, dato después.',
-  opciones:[
-    {ico:'📞', cls:'ok', label:'Llamada en frío', sub:'Primer contacto con la empresa', next:'apertura'},
-    {ico:'📥', cls:'ok', label:'Lead entrante', sub:'Ya mostró interés', next:'apertura'},
-    {ico:'🔁', cls:'ok', label:'Cliente antiguo / seguimiento', sub:'Ya hubo relación o contacto', next:'apertura_retorno'},
-    {ico:'📭', cls:'warn', label:'No coge / buzón', sub:'Dejarle con la miel en los labios', next:'no_contesta'}
-  ]
-},
-
-apertura:{
-  step:0, fase:'1 · Apertura',
-  titulo:'Apertura — identidad + pérdida + ancla (primeros 20 segundos)',
-  script:[
-    {say:[
-      {t:'«Buenos días, ¿hablo con [NOMBRE_CLIENTE]?»', n:'IDENTIDAD · MICRO-SÍ Nº1'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Le llamo del Departamento PYMES de Iberdrola.»', n:'AUTORIDAD · MERA EXPOSICIÓN'},
-      {t:'«¿Le cojo en un mal momento? No se preocupe, no le robo más de un minuto.»', n:'CORTISOL ↓ · EMPATÍA · ESCASEZ'},
-      {t:'«Fíjese en este dato: ocho de cada diez empresas de [SECTOR] están pagando de más cada mes…»', n:'FÍJESE · PRUEBA SOCIAL ESPECÍFICA · PÉRDIDA'},
-      {t:'«…entre 800 y 1.500 €. Sin que nadie les avise, oiga.»', n:'ANCLA ALTA · PÉRDIDA ACTUAL'},
-      {mark:'[PAUSA 2s]'},
-      {mark:'[TONO ↑]'},
-      {t:'«Dígame, [NOMBRE_CLIENTE]: su última factura, ¿le ha subido… o le ha subido mucho?»', n:'NOMBRE Nº2 · ELECCIÓN DOBLE · PRETÉRITO PERFECTO — ambas respuestas le meten en la conversación'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Buenos días, ¿me pone con [NOMBRE_CLIENTE], por favor?» (si contesta un filtro)',
-      '«Mire, no le quito ni un minuto: solo un dato y le dejo.»',
-      '«¿Le pillo en buen momento para una cosita rápida?»'
-    ],
-    notas:[
-      '«¿Le cojo en un mal momento?» es más empático que «¿tiene un momento?»: reconoce la molestia antes de que la nombre él, y eso desarma.',
-      '«¿Le ha subido?» (pretérito perfecto) es marca de España. «¿Le subió?» suena a latino al momento.',
-      '«Fíjese en este dato» capta atención sin sonar a teleoperador: es muletilla de calle, no de guion.',
-      'No diga «llamo para ofrecerle…»: activa la alarma de venta y le cuelgan.'
-    ],
-    zona:'España (general). Válido en toda la península; sin rasgo valenciano marcado.'
-  },
-  notas:[
-    'Los dos primeros segundos deciden la llamada: voz grave, ritmo lento, sonrisa.',
-    'Ni una palabra de tarifas ni producto en la apertura. Solo identidad + pérdida.',
-    'ESCUCHE el tono de la respuesta: curiosidad = siga el flujo; defensa = objeción directa.',
-    'Si contesta un filtro: «¿Me pone con quien lleva el tema de la luz, por favor?» — amable y al grano.'
-  ],
-  micro:'Primer micro-sí (su nombre) + curiosidad abierta que él quiere cerrar.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'«Sí, soy yo, dígame»', sub:'Curiosidad activada', next:'presentacion'},
-    {ico:'🤔', cls:'warn', label:'«¿De qué va esto? ¿Quién llama?»', next:'motivo'},
-    {ico:'🙅', cls:'bad', label:'«Aquí el encargado no soy yo»', sub:'Filtro', obj:'no_decisor', resume:'apertura'},
-    {ico:'⏰', cls:'bad', label:'«Ahora no puedo, ando liado»', obj:'tiempo', resume:'motivo'},
-    {ico:'🚫', cls:'bad', label:'«No me interesa»', obj:'no_interesa', resume:'motivo'}
-  ]
-},
-
-apertura_retorno:{
-  step:0, fase:'1 · Apertura',
-  titulo:'Apertura — cliente antiguo o seguimiento',
-  script:[
-    {say:[
-      {t:'«[NOMBRE_CLIENTE], ¡qué alegría oírle otra vez!»', n:'FAMILIARIDAD · MERA EXPOSICIÓN · NOMBRE'},
-      {t:'«Soy [NOMBRE_COMERCIAL], del Departamento PYMES de Iberdrola.»', n:'AUTORIDAD'},
-      {t:'«Mire, desde la última vez que hablamos ha pasado una cosa con las empresas de [CIUDAD]…»', n:'ZEIGARNIK — frase a medias: el cerebro pide el cierre'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Las que revisaron la factura duermen tranquilas. Las que no… pues siguen soltando un pico cada mes.»', n:'CONTRASTE · PÉRDIDA ACTUAL · LENGUAJE DE CALLE'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Se lo cuento ahora en un minuto… o le dejo el resumen por WhatsApp y lo mira con calma?»', n:'ELECCIÓN A/B · MÍNIMO ESFUERZO'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Le llamo para cerrar lo que dejamos a medias.»',
-      '«Cuando hablamos quedó una cosa pendiente… y tiene arreglo fácil.»'
-    ],
-    notas:[
-      '«Oírle otra vez» es más telefónico y cálido que «saludarle de nuevo».',
-      '«Soltar un pico» = perder una cantidad importante de dinero (coloquial, España). Úselo, que pinta la pérdida sin técnica.',
-      '«Con calma» ofrece la escapatoria tranquila: elección A/B donde las dos le traen de vuelta.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Retome EXACTAMENTE donde quedó la última conversación: lo inacabado tira del cliente (su factura pendiente es su aliada).',
-    'Nada de remover el pasado ni disculparse: mire al alivio de ahora.',
-    'La palabra clave de este bloque es "otra vez": usted ya no es un desconocido.'
-  ],
-  micro:'Reactivar la familiaridad y reabrir la conversación con curiosidad sana.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Receptivo, recuerda el contacto', next:'motivo'},
-    {ico:'🙂', cls:'warn', label:'«Ah, sí… ¿y qué hay?»', sub:'Tibio', next:'motivo'},
-    {ico:'🚫', cls:'bad', label:'«Ya me lo pienso / ahora no»', obj:'lo_pienso', resume:'motivo'}
-  ]
-},
-
-no_contesta:{
-  step:8, fase:'Seguimiento',
-  titulo:'No coge — dejarle con la miel en los labios (Zeigarnik puro)',
-  script:[
-    {say:[
-      {t:'«Buenos días, [NOMBRE_CLIENTE]. Soy [NOMBRE_COMERCIAL], del Departamento PYMES de Iberdrola.»', n:'NOMBRE · AUTORIDAD'},
-      {t:'«Le llamo por una cosa que están descubriendo las empresas de [CIUDAD]… y que a usted le interesa, fíjese.»', n:'ZEIGARNIK · PRUEBA SOCIAL — no lo cuente entero: la intriga le hace devolver la llamada'},
-      {t:'«Ahora le dejo un WhatsApp y mañana lo hablamos en dos minutos. Que le vaya bien.»', n:'MÍNIMO ESFUERZO · DESPEDIDA ESPAÑOLA'}
-    ]},
-    {ctx:'WhatsApp inmediato: «Buenas, [NOMBRE_CLIENTE]. Soy [NOMBRE_COMERCIAL], del Dpto. PYMES de Iberdrola 👋 Le he llamado por una cosa que están descubriendo las empresas de [CIUDAD]… Cuando tenga 2 minutos, se lo cuento. Saludos.» Ni tarifas ni números: solo intriga.'}
-  ],
-  nat:{
-    alt:[
-      '«Cuando tenga un momentito, me tiene por aquí.»',
-      '«Que vaya muy bien, ¿eh? Hasta mañana.»'
-    ],
-    notas:[
-      '«Que le vaya bien» es la despedida telefónica estándar en España. Jamás «que tenga un excelente día» (doblaje puro).',
-      '«Lo hablamos» con dativo es el español oral de toda la vida.',
-      '«Buenas» es el saludo natural de WhatsApp: ni «Buen día» (formal raro) ni «Hola» a secas (seco).'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Reintente en otra franja: si llamó a las 10, pruebe a las 12:30 o a las 17:00.',
-    'Máximo 3 intentos espaciados; luego, puerta abierta mensual.',
-    'Nunca cuente el motivo completo por escrito: el misterio es el anzuelo.'
-  ],
-  micro:'Que le quede una pregunta abierta en la cabeza y un canal directo suyo.',
-  opciones:[
-    {ico:'📆', cls:'ok', label:'Anotar reintento y reiniciar', next:'inicio'},
-    {ico:'✉️', cls:'warn', label:'Ver plantillas de seguimiento', next:'seguimiento'}
-  ]
-},
-
-presentacion:{
-  step:1, fase:'2 · Presentación',
-  titulo:'Presentación — autoridad, regalo y control (tres frases)',
-  script:[
-    {say:[
-      {t:'«Mire, se lo cuento rapidísimo, en tres frases.»', n:'REGLA DEL 3 · MIRE…'},
-      {t:'«Uno: soy el encargado del Departamento PYMES de Iberdrola en Valencia.»', n:'AUTORIDAD'},
-      {t:'«Dos: mi trabajo es regalarle el diagnóstico de su factura. Gratis total.»', n:'RECIPROCIDAD · GRATIS'},
-      {t:'«Tres: sin compromiso ninguno. Sin tocar nada. Usted manda.»', n:'CORTISOL ↓ · CONTROL AL CLIENTE'},
-      {mark:'[PAUSA 2s]'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Y si le dijera que en su factura tiene dinero suyo… dormido?»', n:'CONDICIONAL HIPNÓTICA · PÉRDIDA · ZEIGARNIK — el «¿y si…?» abre la escena sin pedir sí/no'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Le cuento en dos líneas quién soy y qué le traigo.»',
-      '«Voy al grano, que sé que está usted liado.»'
-    ],
-    notas:[
-      '«Gratis total» y «sin compromiso ninguno» son refuerzos dobles muy de España: niegan con énfasis sin sonar a guion.',
-      '«Usted manda» devuelve el control y baja las defensas: en España funciona mejor que «usted decide» (más de manual).',
-      '«Rapidísimo» promete brevedad oral; «en tres frases» pone el final a la vista.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Las tres frases caen seguidas, como cuenta atrás. Tono bajo en «usted manda»: es la palabra de seguridad del bloque.',
-    'ESCUCHE: un «¿dormido?» o un silencio interesado = luz verde.',
-    'Si ya conoce B&M, puede nombrarla; si no, mantenga solo Iberdrola. Nunca diga «comercial» ni «vendedor».'
-  ],
-  micro:'Autoridad puesta, amenaza a cero y primera imagen mental (dinero dormido).',
-  opciones:[
-    {ico:'👂', cls:'ok', label:'Escucha, le deja seguir', next:'motivo'},
-    {ico:'🤔', cls:'warn', label:'«Vale… ¿y usted qué quiere?»', sub:'Impaciente', next:'motivo'},
-    {ico:'🕵️', cls:'bad', label:'«¿Esto es para venderme algo?»', obj:'desconfianza', resume:'motivo'},
-    {ico:'📅', cls:'bad', label:'«Estoy atado, tengo permanencia»', obj:'permanencia', resume:'motivo'}
-  ]
-},
-
-motivo:{
-  step:2, fase:'3 · Motivo',
-  titulo:'Motivo — la fuga de todos los meses (emoción primero, cifra después)',
-  script:[
-    {say:[
-      {t:'«Le digo una cosa, [NOMBRE_CLIENTE]…»', n:'CONFIDENCIA · NOMBRE'},
-      {t:'«En [CIUDAD] hay empresas como la suya regalando dinero todos los meses.»', n:'PÉRDIDA ACTUAL'},
-      {t:'«Entre un diez y un veinte por ciento de cada factura. Mes sí, mes también.»', n:'ANCLA % · PÉRDIDA · “mes sí, mes también” = cada mes sin fallo'},
-      {t:'«No porque quieran, ojo. Porque nadie les avisa.»', n:'INJUSTICIA · “ojo” = matiz oral español'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Ahora imagínese ese dinero volviendo a su caja cada mes.»', n:'FUTURE PACING · ALIVIO · ESCENARIO'},
-      {mark:'[TONO ↓] — baje la voz: seguridad'},
-      {mark:'[TONO ↑] — suba para la pregunta'},
-      {t:'«¿Usted en qué lo gastaría: en la empresa… o en usted?»', n:'ELECCIÓN A/B · ESCENARIO DE DESEO'}
-    ]},
-    {ctx:'Los kilovatios, las potencias y la tarifa NO van aquí. Llegan en el pitch, con su factura delante: el Sistema 2 justificando lo que la tripa ya decidió.'}
-  ],
-  nat:{
-    alt:[
-      '«Mire, le voy a ser sincero…»',
-      '«Verá, le pongo en situación rapidísimo…»'
-    ],
-    notas:[
-      '«Mes sí, mes también» es la forma española de decir «todos los meses sin excepción». Muy natural.',
-      '«Ojo» matiza y da cercanía; se usa una vez, no tres.',
-      '«Le digo una cosa» abre confidencia: el cliente baja el volumen mental y escucha.',
-      '«Empresas como la suya» suena mejor que «su tipo de negocio» (frío, de manual).'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Frases cortas, máximo 12 palabras. Si se enreda, respire y baje el ritmo: el ritmo lento suena a verdad.',
-    'La pausa tras «nadie les avisa» es obligatoria: ahí nace el enfado sano que mueve al cliente.',
-    'ESCUCHE: si suelta «pues pagué cuatrocientos y pico…», tiene el dolor etiquetado: PRECIO.'
-  ],
-  micro:'Abrir la herida (pérdida) y cerrarla con alivio imaginado. La curiosidad le lleva solo al permiso.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Interés: «A ver, cuénteme»', next:'permiso'},
-    {ico:'😐', cls:'warn', label:'Silencio / duda', sub:'Pida permiso igualmente', next:'permiso'},
-    {ico:'🏢', cls:'bad', label:'«Ya tengo compañía»', obj:'ya_tengo', resume:'permiso'},
-    {ico:'💸', cls:'bad', label:'«Si es que Iberdrola es cara»', obj:'mas_caro', resume:'permiso'},
-    {ico:'😊', cls:'bad', label:'«Yo estoy contento con la mía»', obj:'contento', resume:'permiso'},
-    {ico:'🚫', cls:'bad', label:'«No me interesa»', obj:'no_interesa', resume:'permiso'},
-    {ico:'⏰', cls:'bad', label:'«No tengo tiempo / luego»', obj:'tiempo', resume:'permiso'}
-  ]
-},
-
-permiso:{
-  step:3, fase:'4 · Permiso',
-  titulo:'Permiso — tres preguntas y ya está (micro-síes encadenados)',
-  script:[
-    {say:[
-      {t:'«Le hago tres preguntas rápidas y ya está, [NOMBRE_CLIENTE].»', n:'REGLA DEL 3 · “y ya está” · NOMBRE'},
-      {t:'«Con eso le digo, gratis, si es su caso o no.»', n:'RECIPROCIDAD · GRATIS'},
-      {t:'«¿Le viene bien? Son dos minutos.»', n:'MICRO-SÍ Nº2 · YES-SET'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«¿Empezamos por la última factura… o le cuento antes el tema de las potencias?»', n:'ELECCIÓN A/B — las dos abren la detección'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Una cosita rápida y le dejo, ¿le parece?»',
-      '«Dos preguntas y cerramos el círculo.»'
-    ],
-    notas:[
-      '«Y ya está» minimiza la petición: es el diminutivo funcional español por excelencia.',
-      '«¿Le viene bien?» es la fórmula española de pedir paso sin agobiar. No abuse: una vez por bloque.',
-      '«El tema de las potencias» suena mejor que «la optimización de potencias contratadas» (eslogan, no calle).'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'El yes-set ya va cargado: nombre (sí), escuchó el motivo (sí), «¿le viene bien?» (sí). Cada sí empuja al siguiente.',
-    'Si dice que no: «Sin problema: se lo resumo en veinte segundos y usted decide con datos.» — jamás «¿puedo…?».'
-  ],
-  micro:'Permiso concedido por elección, no por petición.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'«Sí, venga, dígame»', sub:'Permiso concedido', next:'deteccion'},
-    {ico:'⚡', cls:'warn', label:'«Que sea rápido, ¿eh?»', sub:'Detección exprés: importe y compañía', next:'deteccion'},
-    {ico:'🚫', cls:'bad', label:'«Mire, ahora no»', obj:'momento', resume:'cierre_hub'},
-    {ico:'✉️', cls:'bad', label:'«Mándeme un correo»', obj:'email', resume:'cierre_hub'}
-  ]
-},
-
-deteccion:{
-  step:4, fase:'5 · Detección',
-  titulo:'Detección — dar antes de pedir: tres datos, tres porqués',
-  script:[
-    {ctx:'Regla: primero dé algo y luego pida (reciprocidad). Cada dato se pide como favor que le conviene A ÉL, no como necesidad suya. De uno en uno. Y después de preguntar: silencio, que él rellena.'},
-    {say:[
-      {t:'«Mire, primero le regalo un dato, [NOMBRE_CLIENTE]: el dinero dormido casi siempre está en las potencias.»', n:'DAR ANTES DE PEDIR · NOMBRE · ZEIGARNIK'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Lo primero, que es lo fácil: la factura del mes pasado. ¿Cuánto fue, más o menos?»', n:'MICRO-DECISIÓN · ABIERTA · “más o menos” = matizador español'},
-      {t:'«Se lo digo para que el ahorro sea de verdad, no de boquilla.»', n:'JUSTIFICACIÓN-BENEFICIO · HONESTIDAD'},
-      {t:'«Lo segundo: ¿con quién tiene la luz ahora mismo?»', n:'ABIERTA — anótela en [COMERCIALIZADORA_ACTUAL] y NO la nombre jamás en voz alta'},
-      {t:'«Y lo tercero: ¿le han mirado las potencias alguna vez?»', n:'ABIERTA · PRETÉRITO PERFECTO · SIEMBRA DE DUDA'},
-      {t:'«Si no lo tiene claro… normalmente ahí está el pico.»', n:'PÉRDIDA · ZEIGARNIK — la duda trabaja para usted'}
-    ]},
-    {ctx:'Bonus (abre ingeniería B&M): «Y ya de paso, curiosidad mía: ¿el local es suyo o de alquiler?» — local propio + factura alta = visita técnica casi segura.'}
-  ],
-  nat:{
-    alt:[
-      '«¿Me lo puede decir así, a ojo?»',
-      '«¿Tiene la factura a mano o se la pido luego?»'
-    ],
-    notas:[
-      '«A ojo» y «más o menos» quitan presión al número: el cliente redondea sin miedo.',
-      '«De boquilla» = de palabra, sin realidad. Muy español, y pinta la diferencia entre hablar y demostrar.',
-      '«La luz» es como habla todo dueño de PYME. Nadie en un bar dice «el suministro eléctrico».',
-      '«¿Tiene la factura a mano o se la pido luego?» es la forma española de pedir sin presionar.'
-    ],
-    zona:'España (general). Léxico PYME real.'
-  },
-  notas:[
-    'Anote TODO en los campos […]: importe, compañía, potencias y el dolor con sus palabras («pago un pastón», «se va la luz», «llamé y nada»).',
-    'La emoción importa más que la cifra: etiquete el dolor: PRECIO / SERVICIO / MIEDO A AVERÍAS.',
-    'Si no sabe sus datos: mejor todavía — la factura es su mini-cierre. No insista tres veces.'
-  ],
-  micro:'Tres datos anotados + dolor etiquetado + ya está colaborando (primera concesión).',
-  opciones:[
-    {ico:'💶', cls:'ok', label:'Dolor de PRECIO: «pago un pastón»', sub:'Pitch de la fuga', next:'pitch_ahorro'},
-    {ico:'⚡', cls:'ok', label:'Dolor de SERVICIO: cortes, averías, mala atención', sub:'Pitch de la tranquilidad', next:'pitch_valor'},
-    {ico:'😊', cls:'warn', label:'Sin dolor: está contento con todo', next:'pitch_valor'},
-    {ico:'🔁', cls:'ok', label:'Estuvo antes en Iberdrola', next:'pitch_retorno'},
-    {ico:'❓', cls:'warn', label:'«Ni idea, no llevo eso»', sub:'Pedir factura = mini-cierre', next:'cierre_facturas'},
-    {ico:'🚫', cls:'bad', label:'Le sale una objeción aquí', sub:'Ábrala en el desplegable de abajo', next:'deteccion', keepObj:true}
-  ]
-},
-
-pitch_ahorro:{
-  step:5, fase:'6 · Pitch',
-  titulo:'Pitch de la FUGA — para el que paga de más',
-  script:[
-    {ctx:'Tres emociones: pérdida, alivio y orgullo. Luego la historia. Luego la elección. Los kilovatios que los cuente la factura, no usted.'},
-    {say:[
-      {t:'«Le digo una cosa, [NOMBRE_CLIENTE]: tres puntos y acabo.»', n:'NOMBRE Nº3 · REGLA DEL 3'},
-      {t:'«Uno: hoy está pagando cosas que no usa. Todos los meses.»', n:'PÉRDIDA ACTUAL'},
-      {t:'«Dos: mi equipo de ingeniería lo encuentra y le dice exactamente cuánto es. En euros.»', n:'ALIVIO · EXPERTICIA'},
-      {t:'«Tres: los que ya lo han hecho ahora miran la caja de otra manera.»', n:'ORGULLO · PRUEBA SOCIAL · PRETÉRITO PERFECTO'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Fíjese: hace un par de meses estuve con un [SECTOR] de por aquí, a cuatro calles.»', n:'STORYTELLING · MISMO SECTOR · MISMA ZONA'},
-      {t:'«Se le iban casi 400 € al mes en potencias. Un pastón. Lo encontramos en una tarde.»', n:'ANCLA · PÉRDIDA RECUPERADA · lenguaje de calle medido'},
-      {t:'«Ahora ese dinero se queda en su casa. Donde tiene que estar.»', n:'ALIVIO · PEAK'},
-      {t:'«Y mire, se lo digo de corazón: si no hay nada que encontrar, se lo digo a la cara.»', n:'HONESTIDAD · CONFIANZA · “de corazón / a la cara”'},
-      {mark:'[TONO ↓]'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Qué le tira más: el ahorro de cada mes… o dormir tranquilo?»', n:'ELECCIÓN DOBLE · “tirar” = atraer (coloquial)'},
-      {t:'«Y para empezar solo hace falta una cosita: una foto de su factura.»', n:'MÍNIMO ESFUERZO · DIMINUTIVO SOCIAL'},
-      {t:'«¿Por WhatsApp o por correo? Como le venga mejor.»', n:'ELECCIÓN A/B DE CANAL'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Y aquí viene lo bueno…» (para volver sobre el beneficio)',
-      '«Le hago un resumen de tres líneas.»',
-      '«¿Cuál de las dos le pesa más?» (variante de la elección)'
-    ],
-    notas:[
-      '«¿Qué le tira más?» = qué le motiva más. Coloquial pero profesional; en España suena a conversación de verdad.',
-      '«De por aquí, a cuatro calles» crea cercanía territorial: la prueba social que de verdad muerde es la del vecino.',
-      '«Pastón» úselo UNA vez por llamada como mucho: marca el registro sin caer en vulgaridad.',
-      '«Se lo digo de corazón» + «a la cara» es la doble firma de honestidad española.'
-    ],
-    zona:'España (general). “De por aquí” personalícelo con su zona real.'
-  },
-  notas:[
-    'Repita SU cifra y SU sector: eso separa una conversación de un guion.',
-    'La historia dura 15-20 segundos: protagonista parecido, número concreto, final feliz.',
-    'ESCUCHE: un «¿y eso cómo lo veis?» es el Sistema 2 pidiendo justificación. Entregue el estudio, no la teoría.',
-    'Orientativo sí, promesa no: jamás una cifra cerrada de SU caso antes de ver la factura.'
-  ],
-  micro:'Decisión emocional tomada + petición mínima (una foto) con elección de canal.',
-  opciones:[
-    {ico:'📄', cls:'ok', label:'«Venga, le mando la factura»', sub:'Mini-cierre logrado', next:'cierre_facturas'},
-    {ico:'🗓', cls:'ok', label:'«Mejor lo vemos en persona»', next:'cierre_cita'},
-    {ico:'✍️', cls:'ok', label:'«Si sale bien, lo activo ya»', next:'cierre_alta'},
-    {ico:'💸', cls:'bad', label:'«¿Y cuánto me ahorro, exactamente?»', sub:'No dé la cifra: reencauce al estudio', obj:'mas_caro', resume:'cierre_hub'},
-    {ico:'🤷', cls:'bad', label:'«Ya me lo pienso»', obj:'lo_pienso', resume:'cierre_hub'},
-    {ico:'🔄', cls:'bad', label:'«No quiero moverme de donde estoy»', obj:'no_cambiar', resume:'cierre_hub'}
-  ]
-},
-
-pitch_valor:{
-  step:5, fase:'6 · Pitch',
-  titulo:'Pitch de la TRANQUILIDAD — el sábado a las ocho y media',
-  script:[
-    {ctx:'Para el contento o el que sufre averías. Técnica: abrir una herida imaginada (escena concreta) y cerrarla con alivio exclusivo. Miedo medido, nunca terror: con el cortisol alto no se compra, se huye.'},
-    {say:[
-      {t:'«Me alegro un montón de que le vaya bien, [NOMBRE_CLIENTE]. De verdad.»', n:'VALIDACIÓN · NOMBRE'},
-      {t:'«Ahora déjeme ponerle una escena. Solo una.»', n:'ZEIGARNIK · PREPARA EL ESCENARIO'},
-      {t:'«Sábado. Las ocho y media de la tarde. Se va la luz.»', n:'ESCENARIO SENSORIAL · MIEDO MEDIDO'},
-      {t:'«La cámara frigorífica. El horno. El compresor. Todo parado.»', n:'SENSORIAL · ADAPTADO A SU SECTOR [SECTOR]'},
-      {mark:'[PAUSA 2s] — déjele vivir la escena'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿A quién llama usted ese día… y quién le coge el teléfono?»', n:'ABIERTA · “coger el teléfono” = atender (España) — que la responda él: su respuesta es el argumento'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Con nosotros le coge el teléfono una persona de verdad. Y sale un técnico de la casa. A cualquier hora. Veinticuatro.»', n:'ALIVIO · EXCLUSIVO'},
-      {t:'«Eso hoy no se lo da nadie. Nadie.»', n:'EXCLUSIVIDAD · refuerzo doble'},
-      {t:'«Usted se ha dejado la piel en esa empresa. Se merece dormir tranquilo.»', n:'ORGULLO · IDENTIDAD · “dejarse la piel”'},
-      {mark:'[TONO ↓]'},
-      {t:'«¿Empezamos por el estudio gratis de la factura… o le presento primero al gestor que llevaría su zona?»', n:'ELECCIÓN A/B · GRATIS · PERSONAL'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Póngase en lo peor un segundo: un sábado por la noche sin luz.»',
-      '«Piense en su cámara un día de agosto sin luz.»'
-    ],
-    notas:[
-      '«Coger el teléfono» es la expresión española para atender una llamada. «Contestar el teléfono» suena a traducción.',
-      '«De la casa» = propio, del equipo. Muy usado en España: «un técnico de la casa».',
-      '«Dejarse la piel» conecta con el esfuerzo real del dueño de PYME: se siente visto, no vendido.',
-      '«Un montón» es informal pero cálido; encaja aquí porque sigue a una emoción positiva.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Adapte la escena a su sector: horno en panadería, cámara en restaurante, máquina en taller, clima en clínica.',
-    'El silencio tras «¿quién le coge el teléfono?» es el corazón del bloque. No lo rellene usted.',
-    'Si YA sufrió un apagón: es oro. «¿Y cuánto le costó aquel día?» y silencio.'
-  ],
-  micro:'El cliente ve el riesgo con sus ojos y le asocia a usted como la salida exclusiva.',
-  opciones:[
-    {ico:'📄', cls:'ok', label:'Acepta mandar la factura', next:'cierre_facturas'},
-    {ico:'🗓', cls:'ok', label:'Prefiere verse en persona', next:'cierre_cita'},
-    {ico:'🔧', cls:'ok', label:'Le interesa lo técnico (cuadros, placas, averías)', next:'cierre_tecnico'},
-    {ico:'😊', cls:'bad', label:'Insiste: «de verdad que estoy bien»', obj:'contento', resume:'cierre_hub'},
-    {ico:'🤷', cls:'bad', label:'«Ya me lo pienso»', obj:'lo_pienso', resume:'cierre_hub'}
-  ]
-},
-
-pitch_retorno:{
-  step:5, fase:'6 · Pitch',
-  titulo:'Pitch del RETORNO — quien vuelve, vuelve a dormir tranquilo',
-  script:[
-    {say:[
-      {t:'«[NOMBRE_CLIENTE], usted ya nos conoce de antes. Eso juega a favor.»', n:'FAMILIARIDAD · MERA EXPOSICIÓN · NOMBRE'},
-      {t:'«Y le hablo claro: quien vuelve, vuelve por una cosa.»', n:'ZEIGARNIK'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Por dormir tranquilo. Por saber que al otro lado hay alguien.»', n:'ALIVIO'},
-      {t:'«Hace tres meses volvió un [SECTOR] de por aquí.»', n:'STORYTELLING · MISMO SECTOR'},
-      {t:'«Me soltó una frase que se me quedó: “no sabes lo que tienes hasta que lo pierdes”.»', n:'PÉRDIDA VIVIDA · PEAK · cita literal = verdad oral'},
-      {t:'«Ahora además está el Departamento PYMES aquí en Valencia. Gestor personal. Emergencia veinticuatro horas.»', n:'EXCLUSIVO · NOVEDAD'},
-      {t:'«Imagíneselo: la factura controlada… y un teléfono que siempre coge alguien.»', n:'FUTURE PACING · ALIVIO'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Retomamos con una foto de la factura… o nos vemos esta semana y listo?»', n:'ELECCIÓN A/B · “y listo” = cierre ágil español'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Le voy a hablar con franqueza…»',
-      '«A ver si le convenzo con un dato…»'
-    ],
-    notas:[
-      'Citar literal («me soltó una frase que se me quedó») da veracidad: nadie se inventa una cita tan de bar.',
-      '«Y listo» al final es cierre coloquial español: corta con ligereza después de la elección.',
-      '«De antes» marca que hay historia: usted no es un desconocido, es un viejo conocido.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Nada de remover por qué se fue. El pasado duele y no vende; el alivio de hoy, sí.',
-    'Si saca una mala experiencia: «tiene usted razón, eso no debió pasar» y gire al gestor personal de ahora.',
-    'Mera exposición: repita Iberdrola y su nombre con naturalidad. Lo conocido da seguridad.'
-  ],
-  micro:'Reactivar su decisión pasada como prueba de que la de hoy es segura.',
-  opciones:[
-    {ico:'📄', cls:'ok', label:'Acepta mandar la factura', next:'cierre_facturas'},
-    {ico:'🗓', cls:'ok', label:'Acepta verse en persona', next:'cierre_cita'},
-    {ico:'🕵️', cls:'bad', label:'Mala experiencia pasada / «no me fío»', obj:'desconfianza', resume:'cierre_hub'},
-    {ico:'💸', cls:'bad', label:'«Me fui por el precio, oiga»', obj:'mas_caro', resume:'cierre_hub'}
-  ]
-},
-
-cierre_hub:{
-  step:7, fase:'8 · Cierre',
-  titulo:'Cierre — el pico emocional y la elección (nunca el sí/no)',
-  script:[
-    {ctx:'Dos reglas de hierro: 1) el cierre siempre es A/B (esto o lo otro), nunca de sí o no. 2) Peak-End: lo último que oye es lo que se lleva. Pique la emoción buena y cierre limpio, sin paja.'},
-    {ctx:'Éxito = factura en camino · cita cerrada · alta activada · visita técnica apuntada. Cualquiera de las cuatro gana la llamada. Que repita el acuerdo en voz alta y mándele el resumen por WhatsApp en menos de 5 minutos.'}
-  ],
-  notas:[
-    'Cliente caliente (pregunta plazos, pide números) → alta o cita esta misma semana.',
-    'Cliente tibio (interesado pero liado) → factura por WhatsApp + llamada en 24–48 h.',
-    'Cliente técnico (placas, cuadros, 6.1TD) → visita del ingeniero.',
-    'Si el cliente calla después de usted: calle usted también. El silencio cierra.'
-  ],
-  micro:'UN compromiso concreto: día, hora, canal y confirmación en voz alta.',
-  opciones:[
-    {ico:'🗓', cls:'ok', label:'Cierre A: Cita presencial', next:'cierre_cita'},
-    {ico:'📄', cls:'ok', label:'Cierre B: La foto de la factura', next:'cierre_facturas'},
-    {ico:'✍️', cls:'ok', label:'Cierre C: Activación directa', next:'cierre_alta'},
-    {ico:'🔧', cls:'ok', label:'Cierre D: Visita del técnico', next:'cierre_tecnico'},
-    {ico:'🚪', cls:'warn', label:'No hay cierre posible', sub:'Salida elegante con imagen final', next:'retirada'}
-  ]
-},
-
-cierre_cita:{
-  step:7, fase:'8 · Cierre A',
-  titulo:'Cierre A — Quedar en persona (escena + elección doble)',
-  script:[
-    {say:[
-      {t:'«Póngase en la escena: su factura encima de la mesa.»', n:'ESCENARIO SENSORIAL'},
-      {t:'«Un cuarto de hora… y sale sabiendo cuánto dinero suyo hay dormido.»', n:'PICO EMOCIONAL · “un cuarto de hora” (España)'},
-      {t:'«Y sin compromiso ninguno: si no hay nada, se lo digo y nos damos la mano.»', n:'CORTISOL ↓ · HONESTIDAD'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Le viene mejor mañana a primera hora en su negocio… o por la tarde en la oficina del Puerto?»', n:'ELECCIÓN DOBLE (hora × lugar)'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Pues quedamos así, [NOMBRE_CLIENTE]. Dígamelo usted también: quedamos así.»', n:'COMPROMISO EN VOZ ALTA · “quedamos así” = EL cierre español'},
-      {t:'«Ahora mismo le mando el WhatsApp con el día y la hora, para que lo tenga por escrito.»', n:'RESUMEN <5 MIN · “ahora mismo”'}
-    ]},
-    {ctx:'Lleve a la cita: el estudio previo si lo hay, la documentación por si acelera, y el detalle de bienvenida (merchandising): entrar regalando multiplica la reciprocidad.'}
-  ],
-  nat:{
-    alt:[
-      '«¿Qué día le cuadra mejor: martes o miércoles?»',
-      '«Paso a verle yo, que así conozco la casa.»'
-    ],
-    notas:[
-      '«Pues quedamos así» es EL cierre de acuerdos en España. «¿Confirmamos?» suena a call center.',
-      '«Ahora mismo» = inmediatamente. Nunca «en un rato» (latinismo).',
-      '«Un cuarto de hora» más natural que «quince minutos» en conversación.',
-      '«¿Le cuadra?» es la pregunta de agenda española por antonomasia.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Proponga usted día y hora: llevar el calendario da seguridad.',
-    'El WhatsApp de confirmación quita los plantones a la mitad. No lo negocie.',
-    'Peak-End: despídase con la imagen del alivio, no con trámites.'
-  ],
-  micro:'Cita con día, hora y lugar, repetida por el cliente y escrita en WhatsApp.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Cita cerrada y confirmada', sub:'A seguimiento', next:'seguimiento'},
-    {ico:'📄', cls:'warn', label:'Antes quiere mandar la factura', next:'cierre_facturas'},
-    {ico:'🚪', cls:'warn', label:'No termina de concretar', next:'retirada'}
-  ]
-},
-
-cierre_facturas:{
-  step:7, fase:'8 · Cierre B',
-  titulo:'Cierre B — La foto (mañana a esta hora, en euros)',
-  script:[
-    {say:[
-      {t:'«Imagíneselo: mañana, a esta misma hora.»', n:'FUTURE PACING'},
-      {t:'«Abre el móvil… y ve en euros lo que le cuesta no mirarlo.»', n:'PICO EMOCIONAL · PÉRDIDA ACTUAL'},
-      {t:'«Es una foto. Medio minuto suyo. El resto lo hago yo todo.»', n:'MÍNIMO ESFUERZO · RECIPROCIDAD · “medio minuto” suena a menos que “treinta segundos”'},
-      {t:'«Le escribo yo primero, así tiene mi número guardado.»', n:'DAR ANTES DE PEDIR'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Por WhatsApp o por correo? Lo que le sea más cómodo.»', n:'ELECCIÓN A/B DE CANAL'},
-      {t:'«En cuanto la tenga, le confirmo. Y mañana… números.»', n:'RESPUESTA RÁPIDA · ZEIGARNIK — queda algo pendiente: su estudio'}
-    ]},
-    {ctx:'Pida la factura ENTERA («que se vea toda, de arriba abajo»): así le llegan CUPS, CIF, titular, potencias y consumos sin pedir nada más. Y fije la llamada: «¿Le llamo mañana sobre las once o sobre las cinco?»'}
-  ],
-  nat:{
-    alt:[
-      '«Hágame el favor y sáquele una foto ahora, que son veinte segundos.»',
-      '«Si la tiene a mano, mejor que mejor.»'
-    ],
-    notas:[
-      '«Medio minuto» minimiza más que «treinta segundos»: mismo tiempo, menos peso.',
-      '«Lo que le sea más cómodo» devuelve el control sin abrir el no.',
-      '«Mi número» es como se dice en España; «mi contacto» suena a folleto.',
-      '«En cuanto la tenga» promete rapidez real: cúmplalo, es su primera prueba de servicio.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'WhatsApp primero: la foto llega en un minuto; el correo, a veces, nunca.',
-    'Si dice «luego la mando»: «Perfecto, le escribo ahora y me contesta cuando pueda, ¿hoy o mañana?» — elección, nunca espera abierta.',
-    'Recibida la factura: confirme al momento.'
-  ],
-  micro:'Factura en camino + próxima llamada con día y franja.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Factura prometida / recibida', next:'seguimiento'},
-    {ico:'🗓', cls:'warn', label:'Mejor lo vemos en persona', next:'cierre_cita'},
-    {ico:'🚪', cls:'warn', label:'No se compromete', next:'retirada'}
-  ]
-},
-
-cierre_alta:{
-  step:7, fase:'8 · Cierre C',
-  titulo:'Cierre C — Activación directa (la primera factura distinta)',
-  script:[
-    {say:[
-      {t:'«Y aquí viene lo bueno: sin permanencia, sin cortes y sin que usted tenga que mover un dedo.»', n:'CORTISOL ↓ · REGLA DEL 3 · “aquí viene lo bueno” — los tres miedos fuera ANTES de que los nombre'},
-      {t:'«No va a notar nada de nada… hasta la primera factura.»', n:'ANTICIPACIÓN · PEAK · “nada de nada”'},
-      {t:'«Imagínese abrirla y verla más baja que la de siempre.»', n:'FUTURE PACING · ALIVIO · PICO EMOCIONAL'},
-      {t:'«Nosotros lo movemos todo desde aquí. Usted, a disfrutar.»', n:'MÍNIMO ESFUERZO · CONTROL'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Me dice el CIF y empezamos… o me manda la factura y lo saco yo de ahí?»', n:'ELECCIÓN A/B'}
-    ]},
-    {ctx:'Documentación: factura completa (CUPS, potencias, consumos) · CIF · titular · cuenta bancaria. Provincia de Valencia: la factura le llega de Iberdrola. Fuera de Valencia: suministro en nombre de Iberdrola con facturación de B&M Asesores Energéticos. Lo de la permanencia es verdad y es su mejor argumento: dígalo con orgullo.'}
-  ],
-  nat:{
-    alt:[
-      '«¿Empezamos ya? Solo es decirme un par de datos.»',
-      '«Si le cuadra, lo dejamos arrancado hoy mismo.»'
-    ],
-    notas:[
-      '«Aquí viene lo bueno» genera expectativa oral muy española: el cliente levanta la oreja.',
-      '«Nada de nada» es refuerzo típico; mejor que «absolutamente nada» (formal raro).',
-      '«Usted, a disfrutar» cierra con ligereza: la venta buena acaba sonriendo.',
-      'Evite «procederemos a gestionar el cambio de titularidad»: eso suena a call center, no a persona.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Los tres miedos (corte, permanencia, papeleo) se quitan ANTES de que salgan: así no llegan a ser objeción.',
-    'No active nada sin datos verificados. Si falta algo: Cierre B y a seguir.',
-    'Peak-End: termine con la imagen de la primera factura baja, y confirme el siguiente contacto.'
-  ],
-  micro:'Alta en marcha o documentación en camino con fecha.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Alta en marcha', next:'seguimiento'},
-    {ico:'📄', cls:'warn', label:'Falta documentación → la foto primero', next:'cierre_facturas'},
-    {ico:'📅', cls:'bad', label:'«La permanencia me acaba en unos meses»', obj:'permanencia', resume:'cierre_hub'},
-    {ico:'🚪', cls:'warn', label:'Se echa para atrás', next:'retirada'}
-  ]
-},
-
-cierre_tecnico:{
-  step:7, fase:'8 · Cierre D',
-  titulo:'Cierre D — Visita del técnico: su tejado trabajando para usted',
-  script:[
-    {say:[
-      {t:'«Mire, su caso va más allá de la tarifa. Y eso, fíjese, es buena noticia.»', n:'REENCUADRE · ZEIGARNIK'},
-      {t:'«Imagine su tejado sacando euros mientras usted trabaja. Sol hecho caja.»', n:'FUTURE PACING · ORGULLO · ESCENARIO'},
-      {t:'«O un cuadro eléctrico que no le vuelve a dar un susto un sábado.»', n:'ALIVIO · ESCENARIO'},
-      {t:'«Nuestro técnico se acerca, lo mira… y le cuenta la verdad. Gratis total.»', n:'RECIPROCIDAD · GRATIS · “se acerca” = visita (natural)'},
-      {t:'«Se lleva un informe: qué conviene hacer, qué cuesta y qué le devuelve.»', n:'JUSTIFICACIÓN DIFERIDA'},
-      {mark:'[TONO ↑]'},
-      {t:'«¿Esta semana o la que viene? ¿Por la mañana o por la tarde?»', n:'ELECCIÓN DOBLE × 2 · “la que viene” (España)'}
-    ]},
-    {ctx:'Ideal para 6.1TD, naves, talleres, industria y tejado propio. Anote: dirección, mejor franja y qué quiere mirar (placas ± baterías, cuadros, condensadores, cargadores, reformas, mantenimiento). La visita técnica también abre la tarifa: es una puerta, no un rodeo.'}
-  ],
-  nat:{
-    alt:[
-      '«Le paso al ingeniero y que lo vea en persona, que vale oro.»',
-      '«Sin comprar nada, oiga: solo mirar y decirle la verdad.»'
-    ],
-    notas:[
-      '«La semana que viene» es la forma española; «la próxima semana» también vale pero es más escrita.',
-      '«Se acerca» = hace una visita. Más natural que «le realizaremos una inspección técnica».',
-      '«Tejado» (España) en vez de «cubierta» si habla con comercios; en industria ambas valen.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Venda la VISITA, no el proyecto: es gratis y pequeña; el proyecto se decide después.',
-    'El ingeniero es su prueba de autoridad: nómbrelo («nuestro ingeniero de zona»).',
-    'Peak-End: cierre con la imagen («su tejado dándole euros»), no con el papeleo.'
-  ],
-  micro:'Visita apuntada con fecha, franja y alcance.',
-  opciones:[
-    {ico:'✅', cls:'ok', label:'Visita apuntada', next:'seguimiento'},
-    {ico:'📄', cls:'warn', label:'Antes quiere el estudio de la factura', next:'cierre_facturas'},
-    {ico:'🚪', cls:'warn', label:'No concreta', next:'retirada'}
-  ]
-},
-
-seguimiento:{
-  step:8, fase:'9 · Seguimiento',
-  titulo:'Seguimiento — la intriga que trabaja para usted (Peak-End en cada toque)',
-  script:[
-    {ctx:'El estudio pendiente es su aliado (Zeigarnik): el cliente quiere cerrar lo que quedó abierto. Cada contacto lleva algo nuevo: jamás un «¿lo pensó?» vacío.'},
-    {say:[
-      {t:'WhatsApp (día 0, en menos de 5 min): «Buenas, [NOMBRE_CLIENTE]. Soy [NOMBRE_COMERCIAL], del Dpto. PYMES de Iberdrola. Su estudio ya está en marcha 🔎 Mándeme una foto de la última factura y mañana ve, en euros, el dinero que tiene dormido. Sin compromiso ninguno. En cuanto la reciba le confirmo.»', n:'NOMBRE · ZEIGARNIK · GRATIS · PÉRDIDA · MÍNIMO ESFUERZO'},
-      {t:'Email (día 0) — Asunto: «[NOMBRE_CLIENTE], en su factura hay algo — su estudio PYMES de Iberdrola». Cuerpo: 4 líneas: lo que quedamos + el dato de las potencias + su teléfono directo + la próxima llamada. Ni un folleto adjunto.', n:'NOMBRE EN ASUNTO · ZEIGARNIK · PERSONAL'},
-      {t:'SMS (refuerzo): «Iberdrola PYMES Valencia · [NOMBRE_COMERCIAL]: le he mandado la propuesta por [CANAL_SEGUIMIENTO]. Cuando la mire, lo hablamos en 2 minutos. Saludos.»', n:'AUTORIDAD · MÍNIMO ESFUERZO · “lo hablamos”'},
-      {t:'Cadencia: 1er toque a las 24–48 h (con una novedad) · 2º a la semana (un caso de SU sector) · 3º a los 15 días · luego puerta abierta mensual.', n:'RITMO · cada toque cierra con elección, nunca con «¿le sigue interesando?»'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Cuando saque un hueco, lo vemos. Sin prisa.»',
-      '«Le escribo el jueves y retomamos, ¿le parece?»'
-    ],
-    notas:[
-      '«Buenas» es el saludo estándar de WhatsApp en España. «Buen día» suena raro; «Estimado cliente», peor.',
-      '«Lo hablamos» (con dativo) es el español oral auténtico para «hablaremos de ello».',
-      '«Saludos» cierra bien un SMS: ni seco ni cursi.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Cada toque lleva UN regalo: un dato, un caso de su sector, el recordatorio de su cita. Reciprocidad continua.',
-    'Apunte canal, fecha y próxima acción en la ficha: lo que no se apunta, se pierde.',
-    'Cuando el estudio esté listo, la llamada de seguimiento ES la llamada de cierre: lleve el pico emocional preparado.'
-  ],
-  micro:'Cadencia apuntada y primera acción hecha antes de colgar.',
-  opciones:[
-    {ico:'🏁', cls:'ok', label:'Llamada terminada — anotar resultado', next:'inicio'},
-    {ico:'🔁', cls:'warn', label:'Nueva objeción en el seguimiento', next:'inicio', keepObj:true}
-  ]
-},
-
-retirada:{
-  step:8, fase:'9 · Final limpio',
-  titulo:'Salida elegante — perder la batalla, sembrar la imagen (Peak-End)',
-  script:[
-    {say:[
-      {t:'«[NOMBRE_CLIENTE], muchísimas gracias por su tiempo, de verdad.»', n:'RESPETO · NOMBRE · fórmula telefónica auténtica'},
-      {t:'«Quédese solo con una imagen:»', n:'PEAK-END · PREPARA LA ESCENA FINAL'},
-      {t:'«el mes que la factura se dispara sin avisar…»', n:'ESCENARIO · PÉRDIDA FUTURA'},
-      {t:'«o el sábado que se va la luz a las diez de la noche.»', n:'ESCENARIO · MIEDO MEDIDO'},
-      {mark:'[PAUSA 2s]'},
-      {t:'«Ese día se acuerda: en Valencia tiene a alguien que le coge el teléfono. Veinticuatro horas.»', n:'ALIVIO · FINAL LIMPIO'},
-      {t:'«Le dejo mi WhatsApp para cuando usted quiera. Sin compromiso ninguno.»', n:'CONTROL AL CLIENTE · PUERTA ABIERTA'},
-      {t:'«Un placer, [NOMBRE_CLIENTE]. Que le vaya muy bien.»', n:'MERA EXPOSICIÓN · NOMBRE · despedida española de negocios'}
-    ]}
-  ],
-  nat:{
-    alt:[
-      '«Aquí me tiene para lo que le haga falta.»',
-      '«Cuando quiera retomarlo, me tiene a un teléfono de distancia.»'
-    ],
-    notas:[
-      '«Que le vaya bien» / «que le vaya muy bien» es LA despedida española. «Que tenga un excelente día» sonaría a doblaje.',
-      '«Muchísimas gracias por su tiempo» cierra con altura y sin arrastrarse.',
-      '«A un teléfono de distancia» transmite cercanía sin invadir: muy valorado en el trato con PYMEs.'
-    ],
-    zona:'España (general).'
-  },
-  notas:[
-    'Salga con la misma energía con la que entró: lo último es lo que se recuerda (Peak-End).',
-    'Si pide que no le llamen: cumpla al instante y anótelo. La elegancia también es cumplimiento.',
-    'Un «no» de hoy con buena imagen es un estudio aceptado en seis meses. Apunte la puerta abierta mensual.'
-  ],
-  micro:'Imagen sembrada + contacto entregado + llamada anotada con la dignidad intacta.',
-  opciones:[
-    {ico:'📅', cls:'ok', label:'Apuntar contacto futuro y terminar', next:'inicio'},
-    {ico:'✉️', cls:'warn', label:'Dejar plantilla de seguimiento', next:'seguimiento'}
-  ]
-}
-};
+@@EDITORIAL:NODES@@
 
 /* ── 4 · OBJECIONES — VALIDAR → DESACTIVAR → REENCUADRAR → AVANZAR ───── */
-const OBJECTIONS = {
-
-ya_tengo:{
-  nombre:'«Ya tengo comercializadora»',
-  validacion:[
-    {t:'«Claro que la tiene, faltaría más. Todas las empresas serias la tienen.»', n:'VALIDACIÓN · “faltaría más”'}
-  ],
-  desactiva:[
-    {t:'«Y tranquilo, que no le voy a pedir que toque nada. Ni hoy ni mañana.»', n:'CORTISOL ↓ · CONTROL'}
-  ],
-  reencuadre:[
-    {t:'«Mire usted, justo por eso le llamo. Tener compañía no es un freno: es el punto de partida.»', n:'REENCUADRE'},
-    {t:'«La pregunta es otra: ¿cuánto le cuesta al mes no mirarla?»', n:'PÉRDIDA ACTUAL'}
-  ],
-  avance:[
-    {t:'«Dígame una cosa: la última factura, ¿pasó de cuatrocientos euros o anduvo por ahí?»', n:'ABIERTA CON ANCLA · “anduvo por ahí”'}
-  ],
-  dialogo:[
-    ['cliente','Es que ya tengo compañía.'],
-    ['comercial','Claro, faltaría más, es lo normal. Y tranquilo, que no tocamos nada. Solo una curiosidad: ¿cuánto le cuesta al mes no mirarla? La última factura, ¿pasó de los cuatrocientos?'],
-    ['cliente','Pues… anduvo por los cuatrocientos cincuenta.'],
-    ['comercial','Pues mire, con una foto mañana ve su número en euros. Gratis total. ¿Por WhatsApp o por correo?']
-  ],
-  round2:[
-    {t:'«Le dejo dos cosas de regalo: el estudio, que es gratis, y el detalle que les estamos haciendo a las empresas de la zona.»', n:'RECIPROCIDAD ×2'},
-    {t:'«Tres [SECTOR] de por aquí, a menos de cinco kilómetros, ya lo tienen.»', n:'PRUEBA SOCIAL ESPECÍFICA'},
-    {t:'«¿Cómo lo hacemos: me manda la foto… o paso yo a verle?»', n:'ELECCIÓN A/B · “paso a verle”'}
-  ],
-  nat:{
-    alt:['«Lo normal, oiga. Lo raro sería no tener.»','«Si no la tuviera, me preocuparía yo por usted.»'],
-    notas:['«Faltaría más» valida sin servilismo: es la marca española de aceptación total.','«Paso a verle» es el ofrecimiento español directo; mejor que «podríamos concertar una visita».','«Anduvo por ahí» es matizador de calle: ayuda a que el cliente redondee sin miedo.'],
-    zona:'España (general).'
-  }
-},
-
-permanencia:{
-  nombre:'«Estoy en contrato / tengo permanencia»',
-  validacion:[
-    {t:'«Me alegro de que lo tenga controlado, eso habla muy bien de usted.»', n:'VALIDACIÓN · ORGULLO'}
-  ],
-  desactiva:[
-    {t:'«Y tranquilo: hoy no tocamos nada. Ni este mes tampoco.»', n:'CORTISOL ↓ · TIEMPO'}
-  ],
-  reencuadre:[
-    {t:'«Mire, en la factura viene la fecha exacta en que termina. A veces hay sorpresas de las buenas.»', n:'ZEIGARNIK · “de las buenas”'},
-    {t:'«Y oiga, mientras llega ese día, cada mes se le va lo mismo de la caja. Esperar también cuesta.»', n:'PÉRDIDA ACTUAL'}
-  ],
-  avance:[
-    {t:'«¿Lo miramos ahora juntos… o me manda una foto y se lo dejo por escrito?»', n:'ELECCIÓN A/B · “por escrito”'}
-  ],
-  dialogo:[
-    ['cliente','No puedo, tengo permanencia hasta el año que viene.'],
-    ['comercial','Me alegro de que lo tenga controlado, eso habla bien de usted. Y tranquilo, que hoy no tocamos nada. Pero fíjese: la fecha exacta está en su factura, y mientras llega, cada mes se le va lo mismo. ¿Lo vemos ahora juntos o me manda una foto y se lo dejo por escrito?']
-  ],
-  round2:[
-    {t:'«El estudio es gratis y lo preparamos hoy. Y el día que le salga gratis… arranca solo.»', n:'GRATIS · AUTOMÁTICO · CORTISOL ↓'},
-    {t:'«¿Se lo dejo listo con la factura… o lo vemos un ratito en persona?»', n:'ELECCIÓN A/B · DIMINUTIVO “un ratito”'}
-  ],
-  nat:{
-    alt:['«Eso, con la factura en la mano, se ve en un minuto.»','«Mientras tanto, usted no firma nada. Faltaría más.»'],
-    notas:['«De las buenas» (sorpresas de las buenas) es matiz coloquial español cariñoso.','«Un ratito» es diminutivo social: acorta la percepción del compromiso.','«Por escrito» tranquiliza al ordenado: deja constancia sin presión.'],
-    zona:'España (general).'
-  }
-},
-
-no_interesa:{
-  nombre:'«No me interesa»',
-  validacion:[
-    {t:'«Le entiendo perfectamente, [NOMBRE_CLIENTE], faltaría más.»', n:'VALIDACIÓN · NOMBRE'}
-  ],
-  desactiva:[
-    {t:'«Y no le pido interés, no se preocupe. Le pido medio minuto.»', n:'CORTISOL ↓ · ESCASEZ · “medio minuto”'}
-  ],
-  reencuadre:[
-    {t:'«Es que el interés no se tiene, oiga. Se descubre.»', n:'REENCUADRE · FRASE ANCLA'},
-    {t:'«Las empresas de [SECTOR] que he llamado esta semana tampoco tenían… hasta que vieron su número.»', n:'PRUEBA SOCIAL · ZEIGARNIK · PRETÉRITO PERFECTO'}
-  ],
-  avance:[
-    {t:'«Dígame: ¿este año la factura le ha subido poco… o le ha subido bastante?»', n:'ELECCIÓN DOBLE · PÉRDIDA · PRETÉRITO PERFECTO'}
-  ],
-  dialogo:[
-    ['cliente','No me interesa.'],
-    ['comercial','Le entiendo perfectamente, faltaría más. Y no le pido interés: le pido medio minuto. Las empresas de su sector que he llamado esta semana tampoco tenían… hasta que vieron su número. Dígame, ¿este año le ha subido poco o bastante?'],
-    ['cliente','Bastante, la verdad.'],
-    ['comercial','Pues ahí tiene su número. Una foto y mañana lo tiene, gratis. ¿WhatsApp o correo?']
-  ],
-  round2:[
-    {t:'«Le dejo mi WhatsApp y un regalo: el estudio gratis, listo para cuando usted diga.»', n:'CONTROL AL CLIENTE · RECIPROCIDAD'},
-    {t:'«¿Se lo mando hoy… o le llamo dentro de un mes, sin compromiso?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Ya, ya me hago cargo.»','«Claro, cómo no.»'],
-    notas:['«Faltaría más» tras «le entiendo» es la doble validación española clásica.','«Medio minuto» pesa menos que «treinta segundos». Úselo siempre en su lugar.','«Se descubre» como respuesta corta y rotunda: en España las frases de dos palabras convencen.'],
-    zona:'España (general).'
-  }
-},
-
-mas_caro:{
-  nombre:'«Es más caro / Iberdrola es cara»',
-  validacion:[
-    {t:'«Gracias por decírmelo tan claro. Prefiero la verdad a la cortesía, oiga.»', n:'VALIDACIÓN · RESPETO'}
-  ],
-  desactiva:[
-    {t:'«Y no le voy a discutir, no. Los números discuten solos.»', n:'CORTISOL ↓ · “no” pospuesto enfático [TONO ↓]'}
-  ],
-  reencuadre:[
-    {t:'«Fíjese lo que vemos cada semana: empresas con la energía barata… y la potencia carísima, dormida.»', n:'REENCUADRE · PRUEBA SOCIAL'},
-    {t:'«Por esta zona, de media, se escapa entre un diez y un veinte por ciento cada mes. Mes sí, mes también.»', n:'ANCLA % · PÉRDIDA ACTUAL · “se escapa”'},
-    {t:'«Y un precio a ciegas no se lo doy, porque sería engañarle. Su verdad la tiene su factura, no yo.»', n:'HONESTIDAD — el no-precio ES el argumento'}
-  ],
-  avance:[
-    {t:'«¿Qué miramos primero: las potencias… o el precio de la energía?»', n:'ELECCIÓN A/B'}
-  ],
-  dialogo:[
-    ['cliente','Iberdrola es cara, eso lo sabe todo el mundo.'],
-    ['comercial','Gracias por decírmelo claro. Y no le discuto, oiga: los números discuten solos. Cada semana vemos empresas con la energía barata y la potencia carísima, dormida: entre un diez y un veinte por ciento que se les escapa cada mes. Yo un precio a ciegas no se lo doy; se lo doy con su factura delante. ¿Miramos primero potencias o energía?']
-  ],
-  round2:[
-    {t:'«Y sume una cosa a la cuenta: gestor personal, auditoría de cada factura y emergencia veinticuatro horas.»', n:'VALOR AÑADIDO · EXCLUSIVO'},
-    {t:'«¿Lo comparamos gratis con su factura… o se acerca a la oficina y lo vemos con un café?»', n:'ELECCIÓN A/B · RECIPROCIDAD · “se acerca”'}
-  ],
-  nat:{
-    alt:['«Puede que le sorprenda lo que hay dentro de esa factura…»','«Mire, hablar de caro o barato sin verla es echarlo a suertes.»'],
-    notas:['El «no» pospuesto («no le voy a discutir, no») es marca española de énfasis verbal.','«Se escapa» pinta la pérdida sin acusar a nadie.','«A ciegas» suena a gente seria: no prometer sin ver es, aquí, el mejor argumento.'],
-    zona:'España (general).'
-  }
-},
-
-tiempo:{
-  nombre:'«No tengo tiempo»',
-  validacion:[
-    {t:'«Claro, cómo no. Usted está trabajando, ya me hago cargo.»', n:'VALIDACIÓN · “ya me hago cargo”'}
-  ],
-  desactiva:[
-    {t:'«Y no le quito tiempo: le quito trabajo.»', n:'CORTISOL ↓ · REENCUADRE DEL TIEMPO'},
-    {t:'«Es una foto. Medio minuto. El resto lo hago yo.»', n:'MÍNIMO ESFUERZO'}
-  ],
-  reencuadre:[
-    {t:'«Usted atiende su negocio y yo, mientras, le encuentro el dinero.»', n:'RECIPROCIDAD · FUTURE PACING'},
-    {t:'«Ni se entera.»', n:'CORTISOL ↓ · brevedad que vende'}
-  ],
-  avance:[
-    {t:'«¿Por WhatsApp o por correo? Como le venga mejor.»', n:'ELECCIÓN A/B DE CANAL'}
-  ],
-  dialogo:[
-    ['cliente','No tengo tiempo.'],
-    ['comercial','Ya me hago cargo, cómo no. Mire, no le quito tiempo: le quito trabajo. Una foto, medio minuto, y mientras usted atiende su negocio yo le encuentro el dinero. Ni se entera. ¿Por WhatsApp o por correo?']
-  ],
-  round2:[
-    {t:'«Y si ni la foto cabe hoy, me adapto a su reloj, faltaría más.»', n:'CONTROL AL CLIENTE'},
-    {t:'«¿Qué le molesta menos: primera hora de la mañana… o última de la tarde?»', n:'ELECCIÓN A/B · HUMOR LIGERO'}
-  ],
-  nat:{
-    alt:['«Perdone que le moleste. Dos cosas y le dejo.»','«Le piso los talones solo 30 segundos, que sé que está liado.»'],
-    notas:['«Ya me hago cargo» es LA respuesta empática española: equivale a «entiendo su situación» pero hablada.','«Como le venga mejor» entrega la elección sin abrir el no.','Interrumpir con educación está permitido: «perdone que le interrumpa un segundo…».'],
-    zona:'España (general).'
-  }
-},
-
-despues:{
-  nombre:'«Llámame más tarde / otro día»',
-  validacion:[
-    {t:'«Perfecto, su tiempo manda. Faltaría más.»', n:'VALIDACIÓN · CONTROL AL CLIENTE'}
-  ],
-  desactiva:[
-    {t:'«Y así la próxima llamada son dos minutos, no diez.»', n:'CORTISOL ↓ · ESCASEZ'}
-  ],
-  reencuadre:[
-    {t:'«Le dejo mi WhatsApp ahora mismo. Si me adelanta la foto, le llamo ya con el estudio hecho.»', n:'RECIPROCIDAD · ZEIGARNIK'},
-    {t:'«Imagínelo: descuelga el teléfono… y ya están los números.»', n:'FUTURE PACING · ALIVIO · “descuelga”'}
-  ],
-  avance:[
-    {t:'«¿Qué le cuadra mejor: mañana a primera hora, sobre las nueve y media, o por la tarde, tipo cinco?»', n:'ELECCIÓN A/B · “¿le cuadra?” · “tipo cinco” — día y hora SIEMPRE concretos'}
-  ],
-  dialogo:[
-    ['cliente','Llámame la semana que viene.'],
-    ['comercial','Su tiempo manda, faltaría más. Le dejo mi WhatsApp ahora mismo: si me adelanta la foto de la factura, le llamo con el estudio hecho y le quito dos minutos, no diez. ¿Le cuadra el lunes a las nueve y media o el martes tipo cinco?']
-  ],
-  round2:[
-    {t:'«Si la semana se le lía, no pasa nada: los números le esperan en el WhatsApp.»', n:'CORTISOL ↓ · ZEIGARNIK ESCRITO · “se le lía”'},
-    {t:'«¿Le escribo el lunes… o el martes?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Sin problema, lo dejamos para cuando usted diga. Solo fíjeme un día.»','«Apuntado. Y le adelanto una cosa por WhatsApp para ir abriendo boca.»'],
-    notas:['«¿Le cuadra?» es la pregunta de agenda española por excelencia.','«Tipo cinco» = sobre las cinco (coloquial, España).','«Se le lía» = se le complica: muy usado en la calle.','«Para ir abriendo boca» = para ir preparando el terreno.'],
-    zona:'España (general).'
-  }
-},
-
-no_decisor:{
-  nombre:'«No soy el encargado»',
-  validacion:[
-    {t:'«Gracias por decírmelo, de verdad. Así no le hago perder el tiempo.»', n:'VALIDACIÓN · RESPETO'}
-  ],
-  desactiva:[
-    {t:'«Y a usted no le compromete a nada, quédese tranquilo.»', n:'CORTISOL ↓'}
-  ],
-  reencuadre:[
-    {t:'«Usted se conoce esta casa mejor que nadie, eso está claro.»', n:'ORGULLO — el filtro se convierte en experto'},
-    {t:'«A quien decide le va a venir bien saberlo antes de que acabe el mes. Que cada mes cuenta.»', n:'PÉRDIDA TIEMPO · ALIADO INTERNO'}
-  ],
-  avance:[
-    {t:'«¿Quién lleva el tema de la luz… y a qué hora le pillo más tranquilo?»', n:'ABIERTA DOBLE · “le pillo” (fórmula telefónica)'},
-    {t:'«¿Y me apunta su nombre, para decir que llamo de su parte?»', n:'ALIADO · PERTENENCIA'}
-  ],
-  dialogo:[
-    ['cliente','Aquí el que decide es el jefe, y ahora mismo no está.'],
-    ['comercial','Gracias por decírmelo, así no le hago perder el tiempo. Usted se conoce esta casa mejor que nadie: a quien decide le vendrá bien saberlo antes de fin de mes. ¿Cómo se llama y a qué hora le pillo más tranquilo? …Apuntado. ¿Y me dice su nombre, para decir que llamo de su parte?']
-  ],
-  round2:[
-    {t:'«Si prefiere, le dejo el resumen por correo para que se lo haga llegar… y así queda usted como un rey.»', n:'ALIADO · ORGULLO · “quedar como un rey”'},
-    {t:'«¿Se lo mando al correo de la empresa… o se lo dejo a usted y se lo enseña?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«¿Me pone con él/ella cuando tenga un segundo?»','«¿Quién suele llevar estos temas por aquí?»'],
-    notas:['«Quedar como un rey» es idiomático español puro: quedar muy bien.','«Le pillo más tranquilo» es fórmula telefónica auténtica de agenda.','Nunca presione al filtro: hoy le atiende, mañana le abre la puerta.'],
-    zona:'España (general).'
-  }
-},
-
-email:{
-  nombre:'«Mándame un email»',
-  validacion:[
-    {t:'«Por supuesto, hoy mismo lo tiene.»', n:'VALIDACIÓN · COMPROMISO'}
-  ],
-  desactiva:[
-    {t:'«Y qué va, nada de folletos: solo su caso.»', n:'CORTISOL ↓ · PERSONAL · “qué va”'}
-  ],
-  reencuadre:[
-    {t:'«Para que no se pierda entre tanta bandeja, se lo personalizo con su sector.»', n:'PERSONALIZACIÓN'},
-    {t:'«Las empresas de [SECTOR] de [CIUDAD] están encontrando dinero dormido cada mes, fíjese.»', n:'PRUEBA SOCIAL ESPECÍFICA · PÉRDIDA · ZEIGARNIK'}
-  ],
-  avance:[
-    {t:'«Su factura del mes, ¿suele pasar de quinientos euros… o anda por debajo?»', n:'ELECCIÓN · “anda por debajo”'},
-    {t:'«Hoy lo tiene en el correo y mañana le llamo un par de minutos: ¿a las diez o a las cinco?»', n:'ELECCIÓN A/B — correo sin llamada fijada = correo muerto'}
-  ],
-  dialogo:[
-    ['cliente','Mándeme un correo y ya lo miro.'],
-    ['comercial','Por supuesto, hoy mismo. Y nada de folletos: solo su caso. Para personalizarlo: ¿su factura suele pasar de quinientos euros o anda por debajo? …Perfecto. Le preparo algo con empresas de su sector. Lo tiene hoy y mañana le llamo un par de minutos: ¿a las diez o a las cinco?']
-  ],
-  round2:[
-    {t:'«Si el correo se pierde entre papeles, no pasa nada: yo le busco el hilo.»', n:'HUMOR · PERSISTENCIA ELEGANTE · “buscar el hilo”'},
-    {t:'«¿Le escribo mejor el jueves… o el lunes que viene, con más calma?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Sin problema ninguno. Le mando algo cortito y al grano.»','«Se lo dejo en cuatro líneas, que sé que el correo se atraganta.»'],
-    notas:['«Qué va» es la negación suave española para desactivar ideas («nada de folletos, qué va»).','«Buscar el hilo» = retomar la conversación. Muy natural.','«Cortito» (diminutivo) promete correo breve: aumenta la lectura real.'],
-    zona:'España (general).'
-  }
-},
-
-lo_pienso:{
-  nombre:'«Ya me lo pienso»',
-  validacion:[
-    {t:'«Claro que se lo piensa. Las cosas buenas se piensan.»', n:'VALIDACIÓN · ORGULLO'}
-  ],
-  desactiva:[
-    {t:'«Y yo no decido por usted, ni falta que hace.»', n:'CORTISOL ↓ · CONTROL · “ni falta que hace”'}
-  ],
-  reencuadre:[
-    {t:'«Pero pensar sin datos no es pensar, oiga. Es adivinar.»', n:'REENCUADRE · FRASE ANCLA'},
-    {t:'«Déjeme darle los números, que son gratis, y piensa con la calculadora y no con la duda.»', n:'RECIPROCIDAD · SISTEMA 2 AL SERVICIO'},
-    {t:'«Porque mientras lo piensa, cada mes se le va lo mismo. Eso no se piensa. Se paga.»', n:'PÉRDIDA ACTUAL · RITMO CORTANTE'}
-  ],
-  avance:[
-    {t:'«¿Le preparo el estudio con la factura… o le mando antes el resumen por WhatsApp?»', n:'ELECCIÓN A/B'}
-  ],
-  dialogo:[
-    ['cliente','Ya me lo pensaré.'],
-    ['comercial','Claro, las cosas buenas se piensan, y yo no decido por usted, ni falta que hace. Pero pensar sin datos es adivinar. Le doy sus números gratis y piensa con calculadora. Porque mientras lo piensa, cada mes se le va lo mismo. ¿Le preparo el estudio con la factura o le mando el resumen por WhatsApp?']
-  ],
-  round2:[
-    {t:'«Le dejo el estudio hecho igualmente, que los números no caducan.»', n:'RECIPROCIDAD · ZEIGARNIK'},
-    {t:'«Lo comentamos la semana que viene: ¿lunes… o martes?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Hombre, cómo no se lo va a pensar. Es su dinero.»','«Ni se le ocurra decidir a ciegas, primero los números.»'],
-    notas:['«Ni falta que hace» es marca española rotunda para «no es necesario».','«Los números no caducan» quita prisa sin quitar tensión útil.','«Hombre» úsese solo como matiz propio de énfasis, nunca para corregir al cliente.'],
-    zona:'España (general).'
-  }
-},
-
-no_cambiar:{
-  nombre:'«No quiero cambiar de compañía»',
-  validacion:[
-    {t:'«Perfecto. Su empresa, sus reglas. Ahí no entro.»', n:'VALIDACIÓN · CONTROL · “ahí no entro”'}
-  ],
-  desactiva:[
-    {t:'«Y no se toca nada, oiga. Ni una coma.»', n:'CORTISOL ↓ · “ni una coma”'}
-  ],
-  reencuadre:[
-    {t:'«No le pido que se mueva. Le pido que mire.»', n:'CONTRASTE · MICRO-DECISIÓN'},
-    {t:'«Mirar es gratis. No mirar, oiga, se paga cada mes.»', n:'GRATIS · PÉRDIDA ACTUAL'},
-    {t:'«Y con el número delante decide mejor… aunque sea para quedarse igual.»', n:'CONTROL — permiso para no moverse'}
-  ],
-  avance:[
-    {t:'«Pregunta honesta: ¿sabe hoy lo que paga por cada kilovatio… o ni idea?»', n:'ABIERTA · HUMOR — las dos respuestas justifican el estudio'}
-  ],
-  dialogo:[
-    ['cliente','No quiero cambiar de compañía.'],
-    ['comercial','Perfecto: su empresa, sus reglas, y no se toca ni una coma. No le pido que se mueva, le pido que mire. Mirar es gratis; no mirar se paga cada mes. Dígame con la mano en el corazón: ¿sabe lo que paga por cada kilovatio… o ni idea?'],
-    ['cliente','Pues… ni idea, la verdad.'],
-    ['comercial','Pues ahí empieza el dinero dormido. Una foto y mañana lo sabe. ¿WhatsApp o correo?']
-  ],
-  round2:[
-    {t:'«Y de regalo, la revisión de potencias, que esa se hace sin tocar nada de lo suyo.»', n:'RECIPROCIDAD · CORTISOL ↓'},
-    {t:'«¿Empezamos por ahí… o prefiere el estudio entero?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Ni se le pase por la cabeza ahora mismo. Solo mire el dato.»','«Usted no se mueve de sitio hasta ver los números. Así de claro.»'],
-    notas:['«Con la mano en el corazón» pide honestidad sin acusar: muy español.','«Ni una coma» minimiza al máximo la amenaza.','«Ahí no entro» respeta su territorio: paradójicamente invita a que él lo abra.'],
-    zona:'España (general).'
-  }
-},
-
-contento:{
-  nombre:'«Estoy contento con mi compañía actual»',
-  validacion:[
-    {t:'«Me alegro un montón, la verdad. Eso es lo primero.»', n:'VALIDACIÓN SINCERA'}
-  ],
-  desactiva:[
-    {t:'«Y que le dure mucho. Nadie viene a estropeárselo.»', n:'CORTISOL ↓ · “que le dure”'}
-  ],
-  reencuadre:[
-    {t:'«Le cuento un secreto del oficio: los más contentos… eran los que más pagaban. Fíjese qué cosa.»', n:'ZEIGARNIK · CONTRASTE · “fíjese qué cosa”'},
-    {t:'«Estar contento y pagar de más se llevan muy bien. Hasta que alguien lo mira.»', n:'PÉRDIDA OCULTA'},
-    {t:'«Un restaurante de por aquí dijo exactamente eso. Miramos: trescientos cuarenta euros dormidos al mes. Hoy sigue contento… pero con trescientos cuarenta más en la caja.»', n:'STORYTELLING · MISMA ZONA · PEAK'}
-  ],
-  avance:[
-    {t:'«¿Le hago la misma prueba gratis… o le cuento antes cómo va lo de la emergencia 24 horas?»', n:'ELECCIÓN A/B · GRATIS · “lo de…”'}
-  ],
-  dialogo:[
-    ['cliente','Yo estoy muy contento con la mía.'],
-    ['comercial','Me alegro, y que le dure. Le cuento un secreto del oficio: los más contentos eran los que más pagaban. Un restaurante de por aquí dijo lo mismo; miramos y tenía trescientos cuarenta al mes dormidos. Hoy sigue contento, pero con ese dinero en la caja. ¿Le hago la misma prueba gratis o le cuento primero lo de la emergencia veinticuatro horas?']
-  ],
-  round2:[
-    {t:'«Le dejo una última imagen: sábado por la noche, avería, el obrador parado. La última vez, ¿en cuánto le atendieron?»', n:'ESCENARIO · MIEDO MEDIDO · ABIERTA'},
-    {t:'«Con nosotros: veinticuatro horas y técnico de la casa. ¿Lo comprobamos gratis… o se acerca a Sagunto y se lo enseño?»', n:'ELECCIÓN A/B · “de la casa”'}
-  ],
-  nat:{
-    alt:['«Ojalá dure mil años, oiga.»','«Si es de verdad, que no le toque nadie. Solo verifíquelo.»'],
-    notas:['«Fíjese qué cosa» es asombro compartido, muy español y nada agresivo.','«Lo de la emergencia» = fórmula coloquial para referirse a un tema sin elaborarlo.','«De la casa» = del propio equipo (restauración y empresa española lo usan mucho).'],
-    zona:'España (general).'
-  }
-},
-
-desconfianza:{
-  nombre:'«No me fío / ¿esto es fiable?»',
-  validacion:[
-    {t:'«Hace usted muy bien en no fiarse. Y oiga, yo haría lo mismo.»', n:'VALIDACIÓN TOTAL'}
-  ],
-  desactiva:[
-    {t:'«No le pido que se fíe de mí. Le pido que me compruebe.»', n:'CORTISOL ↓ · GIRO — la desconfianza se combate con verificación'}
-  ],
-  reencuadre:[
-    {t:'«Una: dos oficinas oficiales, en Sagunto y en el Puerto. Puerta abierta y café, cuando quiera.»', n:'PRUEBA FÍSICA VERIFICABLE'},
-    {t:'«Dos: por teléfono no le voy a pedir ni un dato del banco ni una firma. Una foto de la factura y punto.»', n:'SEGURIDAD · REGLA DEL 3 · “y punto”'},
-    {t:'«Tres: si el estudio no le convence, aquí no ha pasado nada.»', n:'SALIDA FÁCIL · “aquí no ha pasado nada”'}
-  ],
-  avance:[
-    {t:'«¿Qué le cuadra más: venir usted a la oficina… o que vayamos nosotros a su negocio?»', n:'ELECCIÓN A/B · “le cuadra”'}
-  ],
-  dialogo:[
-    ['cliente','Es que ya no me fío de estas llamadas…'],
-    ['comercial','Hace usted muy bien. Por eso no le pido que se fíe: le pido que me compruebe. Una: oficinas oficiales en Sagunto y el Puerto, puerta abierta y café. Dos: por teléfono ni datos del banco ni firmas, una foto y punto. Tres: si el estudio no le convence, aquí no ha pasado nada. ¿Le cuadra más venir aquí o que pasemos por su negocio?']
-  ],
-  round2:[
-    {t:'«Trabajamos con comercios y talleres de la zona; si quiere, habla antes con alguno. Palabra de vecino.»', n:'PRUEBA SOCIAL ESPECÍFICA · REFERENCIA VIVA'},
-    {t:'«¿Le paso el contacto de un cliente de su sector… o empezamos por el café de la oficina?»', n:'ELECCIÓN A/B'}
-  ],
-  nat:{
-    alt:['«Desconfíe todo lo que quiera… y luego compruébeme.»','«Yo tampoco daría datos por teléfono. Ni uno.»'],
-    notas:['«Aquí no ha pasado nada» es la salida limpia española: cero presión, máxima elegancia.','«Y punto» zanja sin aspereza.','«Cuando quiera» invita sin agobiar: la puerta abierta de verdad.'],
-    zona:'España (general).'
-  }
-},
-
-momento:{
-  nombre:'«Ahora no es buen momento» (temporada, costes…)',
-  validacion:[
-    {t:'«Ya me hago cargo. Los tiempos mandan, no queda otra.»', n:'VALIDACIÓN · “no queda otra”'}
-  ],
-  desactiva:[
-    {t:'«Y no le pido una decisión. Le pido un dato.»', n:'CORTISOL ↓ · MICRO-DECISIÓN'}
-  ],
-  reencuadre:[
-    {t:'«Justo cuando aprieta el mes… es cuando más duele regalar dinero.»', n:'PÉRDIDA EN CONTEXTO'},
-    {t:'«Recortar en luz no despide a nadie, no baja calidad… solo tapona una fuga.»', n:'REENCUADRE · “tapona una fuga”'}
-  ],
-  avance:[
-    {t:'«¿Me manda la factura hoy… o mañana, cuando respire?»', n:'ELECCIÓN A/B SUAVE · “cuando respire”'}
-  ],
-  dialogo:[
-    ['cliente','Ahora no es momento, andamos justos de todo.'],
-    ['comercial','Ya me hago cargo, los tiempos mandan. Y justo cuando aprieta es cuando más duele regalar dinero cada mes. Recortar en luz no despide a nadie: solo tapona una fuga. No le pido una decisión, le pido un dato: ¿me manda la factura hoy o mañana, cuando respire?']
-  ],
-  round2:[
-    {t:'«Si es cosa de temporada, dígame: ¿cuándo afloja el ritmo en su sector? Lo dejamos apuntado para esa semana… con el estudio ya hecho.»', n:'FUTURE PACING · “afloja”'},
-    {t:'«¿En agosto… o en septiembre?»', n:'ELECCIÓN A/B — adáptelo a su calendario real'}
-  ],
-  nat:{
-    alt:['«Lo entiendo, estos meses son una locura.»','«Ni pensarlo ahora, solo apúntemelo para más adelante.»'],
-    notas:['«No queda otra» asume la realidad compartida sin dramatizar.','«Cuando respire» empatía con su agobio, muy natural.','«Lo dejamos apuntado» cierra sin formalidad: agenda hecha sin susto.'],
-    zona:'España (general).'
-  }
-},
-
-ya_llamaron:{
-  nombre:'«Ya me llamaron / ya me lo ofrecieron»',
-  validacion:[
-    {t:'«Pues mejor, así me ahorro la presentación.»', n:'VALIDACIÓN · HUMOR · “me ahorro”'}
-  ],
-  desactiva:[
-    {t:'«Y tranquilidad, que yo no repito guiones. Yo trabajo con números.»', n:'CORTISOL ↓ · DIFERENCIACIÓN'}
-  ],
-  reencuadre:[
-    {t:'«Una cosa es que le llamen, y otra que le hagan SU estudio con SU factura, fíjese.»', n:'CONTRASTE'},
-    {t:'«Dígame: ¿le llegó un número en euros… o palabras bonitas?»', n:'ZEIGARNIK · ABIERTA — casi siempre fueron palabras'}
-  ],
-  avance:[
-    {t:'«Si no tiene su número, mañana lo tiene: ¿me manda la factura… o quedamos diez minutitos?»', n:'ELECCIÓN A/B · DIMINUTIVO “minutitos”'}
-  ],
-  dialogo:[
-    ['cliente','Ya me llamaron de Iberdrola hace un mes.'],
-    ['comercial','Pues mejor, me ahorro la presentación. Y tranquilidad, que yo no repito guiones: trabajo con números. Una cosa es que le llamen y otra que le hagan su estudio con su factura. ¿Le llegó un número en euros o palabras bonitas? …Ya. Pues mañana lo tiene: ¿me manda la foto o quedamos diez minutitos?']
-  ],
-  round2:[
-    {t:'«Si ya le hicieron estudio y no tiró para adelante, casi seguro falló el seguimiento. Yo llamo cuando digo que llamo.»', n:'DIFERENCIACIÓN · “tirar para adelante”'},
-    {t:'«Compruébelo: ¿le llamo el jueves a las diez… o el viernes a las doce?»', n:'ELECCIÓN A/B · DEMOSTRACIÓN INMEDIATA'}
-  ],
-  nat:{
-    alt:['«Ah, pues somos compañeros de teléfono. Yo soy el de los números.»','«No le vendo lo que ya le contaron. Le enseño lo suyo.»'],
-    notas:['«Minutitos» es el diminutivo social español en su máxima expresión.','«No tiró para adelante» = no salió adelante. Muy de la calle.','«Llamo cuando digo que llamo» es promesa demostrable al momento: el mejor antídoto contra el escepticismo.'],
-    zona:'España (general).'
-  }
-},
-
-datos:{
-  nombre:'«¿De dónde habéis sacado mis datos?» (compliance)',
-  validacion:[
-    {t:'«Pregunta más que justa. Le contesto con la verdad entera.»', n:'VALIDACIÓN · HONESTIDAD'}
-  ],
-  desactiva:[
-    {t:'«Y si me dice que no más llamadas, se acabó. Al instante.»', n:'CONTROL TOTAL AL CLIENTE · CORTISOL ↓'}
-  ],
-  reencuadre:[
-    {t:'«Llamamos a empresas de la zona, en horario legal y mirando antes la Lista Robinson.»', n:'TRANSPARENCIA TOTAL'},
-    {t:'«Ni trucos ni bases de datos raras. Así de claro.»', n:'SIMPLICIDAD · CONFIANZA'}
-  ],
-  avance:[
-    {t:'«Y ahora usted manda: ¿le cuento en medio minuto por qué merece la pena… o lo apunto y le dejo tranquilo?»', n:'ELECCIÓN HONESTA — dar la salida devuelve la calma'}
-  ],
-  dialogo:[
-    ['cliente','¿Y de dónde habéis sacado mi teléfono?'],
-    ['comercial','Pregunta más que justa: llamamos a empresas de la zona desde el Dpto. PYMES de Iberdrola, en horario legal y consultando antes la Lista Robinson. Si prefiere no recibir más llamadas, lo apunto al instante y asunto zanjado. Dicho esto: ¿le cuento en medio minuto por qué le puede interesar… o lo apunto y le dejo tranquilo?']
-  ],
-  round2:[
-    {t:'«Anotado: no vuelve a oírme.»', n:'CUMPLIMIENTO INMEDIATO — si pide la baja, se respeta sin réplica y se registra'},
-    {t:'«Que tenga buen día, de verdad.»', n:'FINAL LIMPIO · PEAK-END'}
-  ],
-  nat:{
-    alt:['«Se lo explico en dos líneas, que la transparencia es gratis.»','«Si le molesta que le llamemos, se apunta y hoy mismo.»'],
-    notas:['«Asunto zanjado» cierra temas con limpieza española.','«Más que justa» intensifica la validación sin retórica.','«Al instante» = ahora mismo: estándar en España para promesas rápidas.'],
-    zona:'España (general).'
-  }
-}
-};
+@@EDITORIAL:OBJECTIONS@@
 
 /* ── 5 · CIERRE Y SEGUIMIENTO (referencia) ───────────────────────────── */
-const CIERRE_SECCIONES = [
-  {
-    titulo:'🗓 Cierre A — Quedar en persona',
-    neuro:'PICO EMOCIONAL · ELECCIÓN DOBLE · COMPROMISO EN VOZ ALTA · RESUMEN <5 MIN',
-    natNote:'«Pues quedamos así» + «ahora mismo» + «un cuarto de hora»: el trío del cierre español.',
-    frases:[
-      '«Póngase en la escena: su factura encima de la mesa. Un cuarto de hora… y sale sabiendo cuánto dinero suyo hay dormido.»',
-      '«¿Le viene mejor mañana a primera hora en su negocio… o por la tarde en la oficina oficial de Sagunto?»',
-      '«Pues quedamos así, [NOMBRE_CLIENTE]. Dígamelo usted también: quedamos así. En cinco minutitos tiene mi WhatsApp con todo apuntado.»'
-    ],
-    doc:'Llevar: estudio previo · documentación por si acelera · detalle de bienvenida (entrar regalando)'
-  },
-  {
-    titulo:'📄 Cierre B — La foto de la factura',
-    neuro:'FUTURE PACING · MÍNIMO ESFUERZO · DAR ANTES DE PEDIR · ELECCIÓN DE CANAL',
-    natNote:'«Medio minuto» minimiza más que «treinta segundos». «Le escribo yo primero» = usted da antes de pedir.',
-    frases:[
-      '«Imagíneselo: mañana a esta hora abre el móvil… y ve en euros lo que le cuesta no mirarlo.»',
-      '«Es una foto. Medio minuto. Le escribo yo primero.»',
-      '«¿Por WhatsApp o por correo? …Y mañana le llamo con el resultado: ¿sobre las once o sobre las cinco?»'
-    ],
-    doc:'Factura ENTERA («que se vea toda, de arriba abajo»): CUPS · CIF · TITULAR · POTENCIAS · CONSUMOS'
-  },
-  {
-    titulo:'✍️ Cierre C — Activación directa',
-    neuro:'CORTISOL ↓ (3 miedos desactivados antes) · PEAK: primera factura · ELECCIÓN A/B',
-    natNote:'«Aquí viene lo bueno» + «nada de nada» + «usted, a disfrutar»: ligereza española de cierre.',
-    frases:[
-      '«Y aquí viene lo bueno: sin permanencia, sin cortes y sin que usted haga nada.»',
-      '«No va a notar nada de nada… hasta la primera factura. Imagínese abrirla y verla más baja que la de siempre.»',
-      '«¿Me dice el CIF y empezamos… o me manda la factura y lo saco yo de ahí?»'
-    ],
-    doc:'Documentación: factura completa · CUPS · CIF · TITULAR · IBAN · Valencia: factura Iberdrola · Fuera: facturación B&M'
-  },
-  {
-    titulo:'🔧 Cierre D — Visita del técnico',
-    neuro:'REENCUADRE · ESCENARIO DE ORGULLO · GRATIS · ELECCIÓN DOBLE ×2',
-    natNote:'«Se acerca» = hace una visita (natural). «La semana que viene», nunca «la próxima semana entera». ',
-    frases:[
-      '«Mire, su caso va más allá de la tarifa: imagine su tejado sacando euros mientras usted trabaja. Sol hecho caja.»',
-      '«Nuestro técnico se acerca, lo mira y le cuenta la verdad. Gratis total. Se lleva un informe con qué conviene y qué le devuelve.»',
-      '«¿Esta semana o la que viene? ¿Por la mañana o por la tarde?»'
-    ],
-    doc:'Anote: dirección · franja · alcance (placas ± baterías / cuadros / condensadores / cargadores / reformas / mantenimiento)'
-  }
-];
+@@EDITORIAL:CIERRE_SECCIONES@@
 
 const SEGUIMIENTO_PLAN = [
   ['WhatsApp (día 0, <5 min)','«Buenas, [NOMBRE_CLIENTE]. Soy [NOMBRE_COMERCIAL], del Dpto. PYMES de Iberdrola. Su estudio ya está en marcha 🔎 Mándeme una foto de la última factura y mañana ve, en euros, el dinero que tiene dormido. Sin compromiso ninguno. En cuanto la reciba le confirmo.» — «Buenas» es el saludo natural de WhatsApp en España.'],
@@ -2872,93 +1333,7 @@ const SEGUIMIENTO_PLAN = [
 ];
 
 /* ── 6 · ROLEPLAY ────────────────────────────────────────────────────── */
-const SCENARIOS = [
-  {
-    nombre:'🍽 El Ocupado',
-    desc:'Encargado de restaurante a la una y diez, en pleno servicio. Corta rápido. El feedback cita las leyes neuro y las claves idiomáticas.',
-    pasos:[
-      {
-        cliente:'«¿Sí, dígame? ¿Quién es? Que estoy en medio del servicio…»',
-        opciones:[
-          {texto:'«Le llamo de Iberdrola porque tenemos una oferta de luz muy interesante para empresas, ¿me podría regalar un minuto?»',
-           fb:'b', feedback:'❌ Triple tropiezo: «oferta» activa la alarma de venta, «¿me podría regalar un minuto?» es latinismo de manual (en España: «¿me concede un minuto?» o mejor, ni pedirlo) y la pregunta de sí/no invita al NO. Ley 7 rota y naturalidad rota.'},
-          {texto:'«Le cojo en un mal momento, perdone. Soy [NOMBRE_COMERCIAL], del Dpto. PYMES de Iberdrola. Una pregunta y le dejo: ¿su restaurante ha pagado este mes más de luz que antes del verano… o mucho más?»',
-           fb:'g', feedback:'✅ Empatía con su momento («le cojo en un mal momento», pura España), autoridad sin «oferta», pretérito perfecto («ha pagado») y ELECCIÓN DOBLE DE PÉRDIDA: responda lo que responda, reconoce el dolor y la conversación sigue viva.', next:1}
-        ]
-      },
-      {
-        cliente:'«Vale, a ver… ¿usted qué quiere?»',
-        opciones:[
-          {texto:'«Tenemos tarifa fija, indexada, por tramos, gestor personal, auditoría, optimización de potencias, emergencia 24h, placas…»',
-           fb:'n', feedback:'⚠️ El catálogo activa el Sistema 2 y mata al Sistema 1. Con alguien ocupado: UNA emoción y UNA petición de medio minuto. Pruebe la otra.', next:2},
-          {texto:'«Que deje de regalar dinero, ni más ni menos. Ocho de cada diez restaurantes pagan potencia dormida cada mes. Con una foto de su factura lo veo yo, gratis. ¿Por WhatsApp o por correo?»',
-           fb:'g', feedback:'✅ «Ni más ni menos» baja la petición a tierra; pérdida actual + prueba social de su sector + gratis + mínimo esfuerzo + elección de canal. Seis mecanismos en veinte palabras. Así suena un comercial de verdad.', next:2}
-        ]
-      },
-      {
-        cliente:'«Es que yo ya tengo compañía y la verdad, estoy contento.»',
-        opciones:[
-          {texto:'«Ya, pero seguro que le están cobrando de más, todas hacen lo mismo…»',
-           fb:'b', feedback:'❌ Doble falta: prometer sin ver la factura («seguro que…») y hablar mal por inercia. El cliente defiende sus decisiones pasadas: no las abandona. Valide, desactive, reencuadre.'},
-          {texto:'«Me alegro un montón, oiga, y que le dure. Le cuento un secreto del oficio: los más contentos eran los que más pagaban. Un restaurante de por aquí: trescientos cuarenta euros dormidos al mes. ¿Le hago la misma prueba gratis… o le cuento lo de la emergencia 24 horas?»',
-           fb:'g', feedback:'✅ Protocolo perfecto: VALIDAR («me alegro un montón», «que le dure») → DESACTIVAR → REENCUADRAR con historia de un igual (número concreto, «de por aquí») → AVANCE por elección. Las pegas idiomáticas («oiga», «lo de la…») suenan a calle, no a guion.', next:3}
-        ]
-      },
-      {
-        cliente:'«Uf… mándeme un correo y ya lo miro.»',
-        opciones:[
-          {texto:'«Vale, se lo mando. ¡Gracias!»',
-           fb:'n', feedback:'⚠️ Correo genérico sin continuidad = correo enterrado. Un correo solo se acepta personalizado Y con próxima llamada fijada por elección.', next:4},
-          {texto:'«Por supuesto, hoy mismo y sin folletos: solo su caso. Para personalizarlo: ¿su factura suele pasar de quinientos euros o anda por debajo? …Perfecto. Lo tiene hoy y mañana le llamo un par de minutos: ¿a la una como ahora o mejor a las cinco, con más calma?»',
-           fb:'g', feedback:'✅ El correo se convierte en arma: personalización con elección (yes-set) + llamada fijada con alternativa adaptada a SU ritmo («con más calma»). «Anda por debajo» y «un par de minutos»: español de la calle que no molesta.', next:4}
-        ]
-      },
-      {
-        cliente:'FIN DEL ESCENARIO',
-        opciones:[],
-        fin:'🏁 Con el ocupado, ganar no es vender hoy: es salir con UN compromiso pequeño, confirmado y con fecha. Leyes dominantes: escasez (su tiempo), mínimo esfuerzo (una foto), elección y Peak-End. Y hablando su idioma: «medio minuto», «a ojo», «quedamos así».'
-      }
-    ]
-  },
-  {
-    nombre:'🕵️ El Desconfiado',
-    desc:'Gerente de taller quemado por llamadas de energía. Dificultad: alta. Aquí manda la Ley 6 (amenaza) y la transparencia total.',
-    pasos:[
-      {
-        cliente:'«¿Iberdrola? Mire, ya me llamaron una vez con el mismo cuento y casi me la cuelan. Ahora no me fío ni de mi sombra.»',
-        opciones:[
-          {texto:'«No, no, nosotros no somos así, se lo aseguro, somos totalmente de fiar.»',
-           fb:'b', feedback:'❌ «Somos de fiar, créame» es una promesa, y las promesas son justo lo que le quemó. La desconfianza se combate con VERIFICACIÓN (pruebas físicas), nunca con juramentos. Ley 6: primero baje la amenaza.'},
-          {texto:'«Hace usted muy bien en no fiarse, y oiga, yo haría lo mismo. Por eso no le pido que se fíe: le pido que me compruebe. Primera prueba: oficinas oficiales en Sagunto y el Puerto — se acerca hoy si quiere, hay café. Segunda: por teléfono ni un dato del banco ni una firma. ¿Qué le cuadra más: acercarse usted… o que vayamos nosotros al taller?»',
-           fb:'g', feedback:'✅ Validación total → giro maestro (pide verificación, no fe) → prueba física real → regla de seguridad → cierre por elección con «le cuadra». Nada que creer: todo que comprobar. Además le da la razón de entrada: al desconfiado le desarma que le den la razón.', next:1}
-        ]
-      },
-      {
-        cliente:'«Es que encima creo que firmé permanencia hasta el año que viene…»',
-        opciones:[
-          {texto:'«La permanencia se puede quitar sin problema, de eso nos ocupamos nosotros.»',
-           fb:'b', feedback:'❌ PROHIBIDO prometer quitar permanencias: falso y fuera de cumplimiento. Un desconfiado que pilla UNA exageración descarta TODO lo demás. La verdad también vende, oiga.'},
-          {texto:'«Me alegro de que lo tenga controlado, eso habla bien de usted. Y hoy no se toca nada, quédese tranquilo. Fíjese: la fecha exacta viene en su factura — a veces hay sorpresas de las buenas. Y mientras llega ese día, cada mes se le va lo mismo de la caja. ¿Lo miramos ahora juntos… o me manda una foto y se lo dejo por escrito?»',
-           fb:'g', feedback:'✅ Validar → desactivar («hoy no se toca nada») → Zeigarnik («sorpresas de las buenas», sin prometerlas) → pérdida real de esperar → elección de modalidad («por escrito» tranquiliza al desconfiado). Honesto y en movimiento.', next:2}
-        ]
-      },
-      {
-        cliente:'«Mire… ya me lo pensaré.»',
-        opciones:[
-          {texto:'«Vale, piénselo y ya hablamos.»',
-           fb:'n', feedback:'⚠️ «Piense en el aire» es la muerte silenciosa de la venta: sin datos, la duda siempre le gana al interés. Déle algo físico contra qué pensar.', next:3},
-          {texto:'«Claro, las cosas buenas se piensan, y yo no decido por usted, ni falta que hace. Pero pensar sin datos es adivinar. Le preparo el estudio gratis con una foto de la factura… y piensa con calculadora, que la duda ya se tiene sola. Mientras lo piensa, cada mes se le va lo mismo. ¿Le escribo yo primero al WhatsApp o me escribe usted?»',
-           fb:'g', feedback:'✅ «Ni falta que hace» (pura España) + reencuadre («adivinar») + reciprocidad + pérdida actual + cierre por elección de canal. Y la frase «la duda ya se tiene sola» le quita la carga de decidir hoy… para decidir mejor mañana.', next:3}
-        ]
-      },
-      {
-        cliente:'FIN DEL ESCENARIO',
-        opciones:[],
-        fin:'🏁 Con el desconfiado manda la Ley 6: cada frase baja la amenaza ANTES de pedir nada. Pruebas físicas (oficinas de verdad), cero datos sensibles por teléfono, salida fácil siempre a la vista. Y recuerde: el desconfiado convencido acaba siendo el cliente más fiel… y su mejor prueba social para el taller de enfrente.'
-      }
-    ]
-  }
-];
+@@EDITORIAL:SCENARIOS@@
 
 /* ── 7 · LEYES NEURO + CHECKLIST NEURO (Anexo) ───────────────────────── */
 const LEYES = [
@@ -2975,111 +1350,14 @@ const LEYES = [
   ['11 · Peak-End','El cerebro guarda el pico y el final. Dispare una escena de alivio al cerrar y despídase limpio, con su nombre.'],
   ['12 · Mera exposición','Lo conocido da seguridad: nombre del cliente ≥3 veces, Iberdrola/Dpto. PYMES repetido con naturalidad.']
 ];
-const CHECKLIST_NEURO = [
-  '¿La primera frase abre identidad o emoción — nunca producto?',
-  '¿Hay al menos un ancla de pérdida («cada mes se le va dinero»)?',
-  '¿Hay un escenario mental concreto (sábado, 20:30, la cámara…)?',
-  '¿Hay 2-3 micro-síes antes de cada petición?',
-  '¿Cada cierre es por elección A/B — jamás sí/no?',
-  '¿Toda objeción va por VALIDAR → DESACTIVAR → REENCUADRAR → AVANZAR?',
-  '¿Cada bloque termina con pregunta abierta (Zeigarnik)?',
-  '¿El nombre del cliente suena al menos 3 veces?',
-  '¿Hay una historia con un protagonista igual que el cliente?',
-  '¿El cierre tiene pico emocional + final limpio (Peak-End)?'
-];
+@@EDITORIAL:CHECKLIST_NEURO@@
 
 /* ── 8 · GLOSARIO ESPAÑOL NATIVO + PROHIBICIONES + FILTRO FINAL ──────── */
-const GLOSARIO = [
-  {cat:'📞 Fórmulas telefónicas auténticas', items:[
-    {e:'«¿Le cojo en un mal momento?»', u:'Apertura empática: reconoce la molestia antes de que la diga él. Más suave que «¿tiene un momento?».', alt:'«¿Le pillo en buen momento?» (más neutro) · «Perdone que le moleste» (más formal)'},
-    {e:'«No le robo más de un minuto»', u:'Promesa de brevedad con humor. El verbo «robar» marca registro de calle sin faltar.', alt:'«Un segundito y le dejo» · «Dos cosas rápidas y ya está»'},
-    {e:'«¿Me pone con…?»', u:'Pedir paso con un filtro. Directo y educado a la vez.', alt:'«¿Podría pasarme con…?» (más formal) · «¿Está por ahí…?» (más coloquial)'},
-    {e:'«Le dejo, que sé que está usted liado»', u:'Cierre cortés cuando el cliente va justo de tiempo.', alt:'«Le suelto ya» · «No le entretengo más»'},
-    {e:'«Que le vaya bien»', u:'La despedida telefónica estándar de España.', alt:'«Que vaya muy bien» · «Que tenga buen día» (jamás «excelente día»)'},
-    {e:'«Pues quedamos así»', u:'EL cierre de acuerdos en España. Limpio, sin pedir confirmación explícita.', alt:'«Pues cerrado» · «Pues apuntado, ¿le parece?»'},
-    {e:'«Ahora mismo le mando…»', u:'Promesa inmediata estándar. «Ahora mismo» = en este momento.', alt:'«En cinco minutitos lo tiene» · «Le escribo enseguida»'}
-  ]},
-  {cat:'💚 Validación y empatía', items:[
-    {e:'«Le entiendo perfectamente, faltaría más»', u:'La doble validación española clásica. «Faltaría más» niega que haya opción de no entenderle.', alt:'«Como no iba a entenderle» · «Ya me hago cargo»'},
-    {e:'«Ya me hago cargo»', u:'Empatía pura: me pongo en su situación sin frase hecha de manual.', alt:'«Me lo imagino» · «Le entiendo, vaya si le entiendo»'},
-    {e:'«Claro, cómo no»', u:'Aceptación total en dos palabras.', alt:'«Por descontado» · «Hombre, por supuesto» (énfasis propio, nunca para corregir)'},
-    {e:'«Sin problema ninguno»', u:'Doble refuerzo típico español: niega con énfasis sin sonar ensayado.', alt:'«Ningún problema» · «No hay ningún problema»'}
-  ]},
-  {cat:'🧵 Muletillas y conectores con función (con mesura: 1-2 por bloque)', items:[
-    {e:'«Mire…»', u:'Abre y centra la atención. El imperativo social español por excelencia.', alt:'«Oiga…» (igual de bueno) · «Verá…» (más explicativo)'},
-    {e:'«Le digo una cosa…»', u:'Crea confidencia: anuncia verdad sin adornos.', alt:'«Le voy a ser sincero…» · «Se lo digo de corazón…»'},
-    {e:'«Fíjese…»', u:'Marca de asombro que invita a mirar el dato.', alt:'«Fíjese qué cosa…» · «Fíjese usted…»'},
-    {e:'«Y aquí viene lo bueno…»', u:'Expectativa oral antes del beneficio.', alt:'«Y ahora, lo mejor…» · «Y escuche esto…»'},
-    {e:'«A ver…»', u:'Compra medio segundo pensando en voz alta. Humaniza.', alt:'«Vamos a ver…» · «Pues mire…»'},
-    {e:'«Oiga»', u:'Guinda vocal de cercanía al final de frase («…nadie les avisa, oiga»).', alt:'«¿eh?» (solo si el cliente ya tutéa y con moderación)'}
-  ]},
-  {cat:'🎛 Reformuladores de control', items:[
-    {e:'«¿Me sigue?»', u:'Comprueba que el hilo no se pierde sin condescender.', alt:'«¿Me explico?» · «¿Lo ve?»'},
-    {e:'«¿Le cuadra?»', u:'La pregunta de agenda española por antonomasia.', alt:'«¿Le viene bien?» · «¿Le encaja?»'},
-    {e:'«¿Le parece?»', u:'Cierre suave de propuesta. Úselo una vez, no tres.', alt:'«¿Vamos bien?» · «¿Le va?»'}
-  ]},
-  {cat:'🤏 Matizadores y diminutivos sociales', items:[
-    {e:'«Más o menos / a ojo»', u:'Quitan presión al número: el cliente redondea sin miedo.', alt:'«Poco más o menos» · «Así por encima»'},
-    {e:'«Medio minuto»', u:'Minimiza la petición más que «treinta segundos». Mismo tiempo, menos peso.', alt:'«Un momentito» · «Un segundito»'},
-    {e:'«Tipo cinco»', u:'Sobre las cinco. Coloquial agenda España.', alt:'«Sobre las cinco» · «A eso de las cinco»'},
-    {e:'«Un ratito / unos minutitos»', u:'Diminutivo con función social: suaviza sin infantilizar si se usa una vez.', alt:'«Un par de minutos» · «Diez minutitos»'},
-    {e:'«Anduvo por ahí / anda por debajo»', u:'El cliente estima sin compromiso de exactitud.', alt:'«Rondaba» · «Se movía por esa zona»'}
-  ]},
-  {cat:'🔥 La pérdida en español de la calle (medido: una vez por llamada)', items:[
-    {e:'«Se le va un pico cada mes»', u:'Pinta la pérdida sin técnica. Coloquial, España.', alt:'«Se le escapa un pico» · «Se le está yendo dinero…»'},
-    {e:'«Está regalando dinero»', u:'La pérdida como acción voluntaria involuntaria: duele bien.', alt:'«Le está saliendo gratis a la compañía»'},
-    {e:'«Un pastón»', u:'Cantidad grande de dinero. Úselo UNA vez: marca registro sin vulgarizar.', alt:'«Un dineral» · «Pastizal» (aún más coloquial, mejor no)'},
-    {e:'«Le cuesta un ojo de la cara no mirarlo»', u:'Hiperbólico español clásico. Con humor ligero.', alt:'«Le sale carísimo» · «Le sangra la caja» (coloquial, medido)'}
-  ]},
-  {cat:'🏁 Cierres naturales', items:[
-    {e:'«Pues quedamos así»', u:'Cierre de acuerdo estándar. Sin interrogante.', alt:'«Pues apañado» (más coloquial) · «Pues cerrado, ¿le parece?»'},
-    {e:'«Venga, pues cualquier cosa me dice»', u:'Cierre cálido que deja canal abierto.', alt:'«Vale, cualquier cosa me avisa» · «Cualquier duda, me tiene aquí»'},
-    {e:'«Un placer, [NOMBRE]. Que le vaya muy bien»', u:'Despedida de negocios española: cordial sin servilismo.', alt:'«Encantado, [NOMBRE]. Que vaya bien» · «Un placer. Hablamos pronto»'}
-  ]},
-  {cat:'🏭 Léxico del dueño de PYME española', items:[
-    {e:'La nave · el local · el taller · el almacén', u:'Así se refiere él a su sitio de trabajo. Hable SU idioma.', alt:'«Oficina» · «obrador» · «consulta» (por sector)'},
-    {e:'La luz · el gas · el recibo', u:'Cómo se dicen las facturas en la calle. «El suministro eléctrico» no existe fuera del folleto.', alt:'«La factura de la luz» · «el término de energía» (si entra en técnica)'},
-    {e:'Las potencias · los peajes', u:'Los temas técnicos por su nombre de calle.', alt:'«La potencia que tiene puesta» · «lo que paga de potencia»'},
-    {e:'«Me está matando la luz» · «vengo pagando un pastón»', u:'Frases del CLIENTE: escúchelas y devuélvaselas. Son su dolor con sus palabras.', alt:'«Esto no hay quien lo entienda» · «no hay derecho» (escuchar y validar)'},
-    {e:'La plantilla · los chavales', u:'Los empleados, en su idioma. «Chavales» solo si él lo usa primero.', alt:'«El equipo» · «la gente»'}
-  ]},
-  {cat:'⏱ Tiempos verbales marca España', items:[
-    {e:'Pretérito perfecto: «¿le ha subido?»', u:'La marca gramatical de España en conversación. «¿Le subió?» suena a latino al momento.', alt:'«¿Le han mirado alguna vez…?» · «Le he llamado porque…» · «¿Ha visto que…?»'},
-    {e:'Imperativo de usted bien puesto', u:'«Mire», «Oiga», «Dígame», «Cuénteme», «Espéreme un segundo».', alt:'Nunca «mires», «cuéntame» en primera llamada (eso ya es tuteo)'},
-    {e:'Usted SIEMPRE en primera llamada', u:'El tuteo llega solo si el cliente lo abre dos veces. Jamás mezclar usted y tú en la misma frase.', alt:'Si él tutea dos veces: «¿Nos tuteamos, si le parece?»'}
-  ]}
-];
+@@EDITORIAL:GLOSARIO@@
 
-const PROHIBIDAS = [
-  {x:'«¿Me podría regalar un minuto?»', y:'«¿Me concede un minuto?» (o ni pedirlo)', why:'Latinismo de manual. En España «regalar un minuto» suena a traducción.'},
-  {x:'«Ahorita le atiendo»', y:'«Ahora mismo le atiendo» · «Enseguida estoy con usted»', why:'Latinismo evidente. «Ahorita» no existe en la península.'},
-  {x:'«Platicar»', y:'«Hablar» · «comentar» · «charlar» (coloquial)', why:'Latinismo. Nadie en España «platica» por teléfono.'},
-  {x:'«Celular» / «computadora» / «carro»', y:'«Móvil» · «ordenador» · «coche»', why:'Marcadores latinoamericanos directos.'},
-  {x:'«¿En qué puedo asistirle?»', y:'«¿En qué le puedo ayudar?»', why:'Doblaje puro. En España nadie «asiste» a un cliente.'},
-  {x:'«Tenga un excelente día»', y:'«Que le vaya bien» · «Que tenga buen día»', why:'Doblaje de call center. El «excelente día» no existe en la calle.'},
-  {x:'«Su satisfacción es nuestra prioridad»', y:'(Eliminar: decirlo con hechos, no con eslóganes)', why:'Frase de folleto que no dice nada y desgasta la confianza.'},
-  {x:'«Estoy aquí para servirle»', y:'«Aquí me tiene para lo que necesite»', why:'Doblaje servil. La alternativa española es cálida sin arrastrarse.'},
-  {x:'«Hacer una diferencia»', y:'«Marcar la diferencia»', why:'Calco del inglés. En España se «marca» la diferencia.'},
-  {x:'«Empoderar»', y:'(Eliminar del discurso)', why:'Traducción de manual de marketing. No la diría nadie en un taller.'},
-  {x:'«Recién» (por «acabo de…»)', y:'«Acabo de verlo» · «Lo he visto ahora mismo»', why:'Latinismo. En España «recién» solo en «recién hecho» (pan, café).'},
-  {x:'«En un rato le llamo»', y:'«Ahora le llamo» · «Luego le llamo» · «Le llamo en un momento»', why:'«En un rato» es latinismo de espera.'},
-  {x:'«Ustedes» por «vosotros» (a varios conocidos)', y:'Ustedes = formal · Vosotros = informal. No mezclar.', why:'En España ambos existen y marcan registro. A varios jefes, «ustedes»; si hay confianza, «vosotros».'},
-  {x:'«¿Vio usted la factura?»', y:'«¿Ha visto usted la factura?»', why:'Indefinido tipo latino en contexto reciente. En España, pretérito perfecto.'},
-  {x:'«Ofrecemos una amplia gama de servicios»', y:'«Hacemos de todo un poco en electricidad: de la factura al cuadro»', why:'Folletos y robótica. Hable en concreto, no en catálogo.'}
-];
+@@EDITORIAL:PROHIBIDAS@@
 
-const FILTRO_IDIOMA = [
-  '¿Suena a comercial español de verdad al teléfono?',
-  '¿Alguna frase suena a traducción o doblaje?',
-  '¿Se ha colado algún latinoamericanismo?',
-  '¿Hay alguna frase de manual o de folleto?',
-  '¿El «usted» va coherente en toda la frase, sin mezclas?',
-  '¿Los cierres suenan a España («venga», «pues», «quedamos así»)?',
-  '¿Hay muletillas naturales (mire, oiga, fíjese) sin abusar?',
-  '¿Fuera «excelente día», «en qué puedo asistirle», «estoy para servirle»?',
-  '¿El léxico es el de un dueño de PYME española?',
-  '¿«Vosotros/ustedes» bien usados según registro?'
-];
+@@EDITORIAL:FILTRO_IDIOMA@@
 
 /* ════════════════════════════════════════════════════════════════════
    MOTOR
@@ -3385,7 +1663,7 @@ function guiRenderGlosarioTab(){
     <div class="checklist"><h4>Antes de dar por buena cualquier frase nueva del guion</h4>${FILTRO_IDIOMA.map(c=>`☐ ${c}<br>`).join('')}</div>`;
 }
 
-const KPI_FIELDS=[['k_llam','Llamadas realizadas'],['k_cont','Contactos con decisor'],['k_citas','Estudios / citas'],['k_vent','Ventas / altas']];
+@@EDITORIAL:KPI_FIELDS@@
 function guiRenderKpiTab(){
   let saved={}; try{ saved=JSON.parse(localStorage.getItem('guion_kpis')||'{}'); }catch(e){}
   document.getElementById('tab-kpi').innerHTML = `
@@ -3555,7 +1833,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.9.1', GUIAFECHA='16-09-2026';
+var VERSION='2.9.3', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=''; /* v1.5.1 determinista: pymes */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3865,6 +2143,315 @@ I18N.pt.obj.ya_tengo={nombre:'« Já tenho comercializadora »',
   {t:'« A pergunta é outra: quanto lhe custa por mês não olhar para ela? »', n:'PERDA ATUAL'}],
  avance:[{t:'« Diga-me uma coisa: a última fatura, passou de quatrocentos euros ou andou por aí? »', n:'ABERTA COM ÂNCORA · “andou por aí”'}]};
 
+
+/* ── Ola 2 · objeciones PYMES completas FR/PT (v2.9.2) · nat/glosa = ola 4 ── */
+I18N.fr.obj.permanencia={nombre:'« Je suis engagé / sous contrat »',
+ validacion:[{t:'« Heureux que vous maîtrisiez ça, ça montre que vous êtes quelqu’un de sérieux. »', n:'VALIDATION · FIERTÉ'}],
+ desactiva:[{t:'« Et soyez tranquille : aujourd’hui on ne touche à rien. Ni ce mois-ci d’ailleurs. »', n:'CORTISOL ↓ · TEMPS'}],
+ reencuadre:[{t:'« Regardez, la date exacte de fin figure sur votre facture. Des fois, il y a des bonnes surprises. »', n:'ZEIGARNIK · “des bonnes”'},
+  {t:'« Et en attendant, chaque mois la même somme sort de la caisse. Attendre a aussi un coût. »', n:'PERTE ACTUELLE'}],
+ avance:[{t:'« On regarde ça ensemble tout de suite… ou vous m’envoyez une photo et je vous le couche par écrit ? »', n:'CHOIX A/B · “par écrit”'}],
+ dialogo:[['cliente','Impossible, je suis engagé jusqu’à l’année prochaine.'],
+  ['comercial','Heureux que vous maîtrisiez ça. Et tranquille : aujourd’hui on ne touche à rien. Mais regardez : la date exacte est sur votre facture, et en attendant, chaque mois la même somme s’en va. On le regarde ensemble ou vous m’envoyez une photo et je vous le mets par écrit ?']],
+ round2:[{t:'« L’étude est gratuite et on la prépare aujourd’hui. Et le jour où elle devient rentable… ça démarre tout seul. »', n:'GRATUIT · AUTOMATIQUE · CORTISOL ↓'},
+  {t:'« Je vous le prépare avec la facture… ou on se voit un petit moment ? »', n:'CHOIX A/B · “un petit moment”'}]};
+I18N.pt.obj.permanencia={nombre:'« Estou vinculado / tenho fidelização »',
+ validacion:[{t:'« Ainda bem que tem isso controlado, diz muito a seu favor. »', n:'VALIDAÇÃO · ORGULHO'}],
+ desactiva:[{t:'« E descanse: hoje não mexemos em nada. Nem este mês também não. »', n:'CORTISOL ↓ · TEMPO'}],
+ reencuadre:[{t:'« Olhe, na fatura vem a data exata em que termina. Às vezes há surpresas das boas. »', n:'ZEIGARNIK · “das boas”'},
+  {t:'« E ouça, enquanto esse dia não chega, todos os meses sai o mesmo da caixa. Esperar também custa. »', n:'PERDA ATUAL'}],
+ avance:[{t:'« Vemos isso agora juntos… ou manda-me uma foto e eu deixo-lho por escrito? »', n:'ESCOLHA A/B · “por escrito”'}],
+ dialogo:[['cliente','Não posso, tenho fidelização até ao próximo ano.'],
+  ['comercial','Ainda bem que tem isso controlado, diz muito a seu favor. E descanse, que hoje não mexemos em nada. Mas olhe: a data exata está na sua fatura, e enquanto chega, todos os meses sai o mesmo. Vemos agora juntos ou manda-me uma foto e deixo-lhe por escrito?']],
+ round2:[{t:'« O estudo é grátis e preparamo-lo hoje. E no dia em que lhe ficar grátis… arranca sozinho. »', n:'GRÁTIS · AUTOMÁTICO · CORTISOL ↓'},
+  {t:'« Deixo-lho pronto com a fatura… ou vemo-lo um bocadinho, pessoalmente? »', n:'ESCOLHA A/B · DIMINUTIVO “bocadinho”'}]};
+I18N.fr.obj.no_interesa={nombre:'« Ça ne m’intéresse pas »',
+ validacion:[{t:'« Je vous comprends parfaitement, [NOMBRE_CLIENTE], c’est tout à fait normal. »', n:'VALIDATION · NOM'}],
+ desactiva:[{t:'« Et je ne vous demande pas de l’intérêt, pas d’inquiétude. Je vous demande une demi-minute. »', n:'CORTISOL ↓ · RARETÉ · “demi-minute”'}],
+ reencuadre:[{t:'« L’intérêt, ça ne se possède pas, écoutez. Ça se découvre. »', n:'RE-CADRAGE · PHRASE ANCRE'},
+  {t:'« Les entreprises de [SECTOR] que j’ai appelées cette semaine n’en avaient pas non plus… jusqu’à ce qu’elles voient leur chiffre. »', n:'PREUVE SOCIALE · ZEIGARNIK'}],
+ avance:[{t:'« Dites-moi : cette année, votre facture vous a augmenté peu… ou beaucoup ? »', n:'CHOIX DOUBLE · PERTE'}],
+ dialogo:[['cliente','Ça ne m’intéresse pas.'],
+  ['comercial','Je vous comprends parfaitement, c’est normal. Et je ne vous demande pas de l’intérêt : je vous demande une demi-minute. Les entreprises de votre secteur que j’ai appelées cette semaine n’en avaient pas non plus… jusqu’à ce qu’elles voient leur chiffre. Dites-moi, cette année elle vous a augmenté peu ou beaucoup ?'],
+  ['cliente','Beaucoup, à vrai dire.'],
+  ['comercial','Eh bien voilà votre chiffre. Une photo et demain vous l’avez, gratuitement. WhatsApp ou e-mail ?']],
+ round2:[{t:'« Je vous laisse mon WhatsApp et un cadeau : l’étude gratuite, prête quand vous voulez. »', n:'CONTRÔLE CLIENT · RÉCIPROCITÉ'},
+  {t:'« Je vous l’envoie aujourd’hui… ou je vous rappelle dans un mois, sans engagement ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_interesa={nombre:'« Não me interessa »',
+ validacion:[{t:'« Compreendo-o perfeitamente, [NOMBRE_CLIENTE], faltava mais. »', n:'VALIDAÇÃO · NOME'}],
+ desactiva:[{t:'« E não lhe peço interesse, não se preocupe. Peço-lhe meio minuto. »', n:'CORTISOL ↓ · ESCASSEZ · “meio minuto”'}],
+ reencuadre:[{t:'« É que o interesse não se tem, ouça. Descobre-se. »', n:'REENQUADRAMENTO · FRASE ÂNCORA'},
+  {t:'« As empresas de [SECTOR] a quem liguei esta semana também não tinham… até verem o seu número. »', n:'PROVA SOCIAL · ZEIGARNIK'}],
+ avance:[{t:'« Diga-me: este ano a fatura subiu-lhe pouco… ou subiu-lhe bastante? »', n:'ESCOLHA DUPLA · PERDA'}],
+ dialogo:[['cliente','Não me interessa.'],
+  ['comercial','Compreendo-o perfeitamente, faltava mais. E não lhe peço interesse: peço-lhe meio minuto. As empresas do seu setor a quem liguei esta semana também não tinham… até verem o seu número. Diga-me, este ano subiu-lhe pouco ou bastante?'],
+  ['cliente','Bastante, a verdade é essa.'],
+  ['comercial','Pois aí tem o seu número. Uma foto e amanhã tem-no, grátis. WhatsApp ou e-mail?']],
+ round2:[{t:'« Deixo-lhe o meu WhatsApp e um presente: o estudo grátis, pronto para quando quiser. »', n:'CONTROLO AO CLIENTE · RECIPROCIDADE'},
+  {t:'« Mando-lho hoje… ou ligo-lhe daqui a um mês, sem compromisso? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.mas_caro={nombre:'« C’est plus cher / Iberdrola est chère »',
+ validacion:[{t:'« Merci de me le dire aussi franchement. Je préfère la vérité à la politesse, écoutez. »', n:'VALIDATION · RESPECT'}],
+ desactiva:[{t:'« Et je ne vais pas vous contredire, non. Les chiffres se défendent tout seuls. »', n:'CORTISOL ↓ · “non” emphatique [TON ↓]'}],
+ reencuadre:[{t:'« Regardez ce qu’on voit chaque semaine : des entreprises avec l’énergie pas chère… et la puissance très chère, en sommeil. »', n:'RE-CADRAGE · PREUVE SOCIALE'},
+  {t:'« Par ici, en moyenne, il s’en va entre dix et vingt pour cent chaque mois. Mois après mois. »', n:'ANCRE % · PERTE ACTUELLE · “il s’en va”'},
+  {t:'« Et un prix à l’aveugle, je ne vous le donne pas, ce serait vous tromper. Votre vérité est dans votre facture, pas chez moi. »', n:'HONNÊTETÉ — le non-prix EST l’argument'}],
+ avance:[{t:'« On regarde quoi d’abord : les puissances… ou le prix de l’énergie ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','Iberdrola est chère, tout le monde le sait.'],
+  ['comercial','Merci de me le dire clairement. Et je ne vous contredis pas, écoutez : les chiffres se défendent seuls. Chaque semaine on voit des entreprises avec l’énergie pas chère et la puissance très chère, en sommeil : entre dix et vingt pour cent qui s’en vont chaque mois. Un prix à l’aveugle, je ne vous le donne pas ; je vous le donne avec votre facture devant nous. On regarde d’abord puissances ou énergie ?']],
+ round2:[{t:'« Et ajoutez ceci au compte : un gestionnaire personnel, l’audit de chaque facture et l’urgence vingt-quatre heures. »', n:'VALEUR AJOUTÉE · EXCLUSIF'},
+  {t:'« On le compare gratuitement avec votre facture… ou vous passez au bureau et on le regarde devant un café ? »', n:'CHOIX A/B · RÉCIPROCITÉ'}]};
+I18N.pt.obj.mas_caro={nombre:'« É mais caro / a Iberdrola é cara »',
+ validacion:[{t:'« Obrigado por mo dizer tão claro. Prefiro a verdade à cortesia, ouça. »', n:'VALIDAÇÃO · RESPEITO'}],
+ desactiva:[{t:'« E não vou discutir consigo, não. Os números discutem sozinhos. »', n:'CORTISOL ↓ · “não” enfático [TOM ↓]'}],
+ reencuadre:[{t:'« Repare no que vemos todas as semanas: empresas com a energia barata… e a potência caríssima, a dormir. »', n:'REENQUADRAMENTO · PROVA SOCIAL'},
+  {t:'« Por esta zona, em média, foge entre dez e vinte por cento todos os meses. Mês sim, mês também. »', n:'ÂNCORA % · PERDA ATUAL · “foge”'},
+  {t:'« E um preço às cegas não lho dou, porque seria enganá-lo. A sua verdade está na sua fatura, não comigo. »', n:'HONESTIDADE — o não-preço É o argumento'}],
+ avance:[{t:'« O que vemos primeiro: as potências… ou o preço da energia? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','A Iberdrola é cara, toda a gente sabe isso.'],
+  ['comercial','Obrigado por mo dizer claramente. E não discuto consigo, ouça: os números discutem sozinhos. Todas as semanas vemos empresas com a energia barata e a potência caríssima, a dormir: entre dez e vinte por cento que lhes foge todos os meses. Um preço às cegas não lho dou; dou-lho com a sua fatura à frente. Vemos primeiro potências ou energia?']],
+ round2:[{t:'« E junte uma coisa à conta: gestor pessoal, auditoria de cada fatura e emergência vinte e quatro horas. »', n:'VALOR ACRESCENTADO · EXCLUSIVO'},
+  {t:'« Comparamos grátis com a sua fatura… ou passa pelo escritório e vemo-lo com um café? »', n:'ESCOLHA A/B · RECIPROCIDADE'}]};
+I18N.fr.obj.tiempo={nombre:'« Je n’ai pas le temps »',
+ validacion:[{t:'« Bien sûr, je vous en prie. Vous êtes en train de travailler, je comprends. »', n:'VALIDATION · “je comprends”'}],
+ desactiva:[{t:'« Et je ne vous prends pas du temps : je vous enlève du travail. »', n:'CORTISOL ↓ · RE-CADRAGE DU TEMPS'},
+  {t:'« C’est une photo. Une demi-minute. Le reste, c’est moi qui le fais. »', n:'EFFORT MINIMUM'}],
+ reencuadre:[{t:'« Vous gérez votre affaire et moi, pendant ce temps, je vous trouve l’argent. »', n:'RÉCIPROCITÉ · FUTURE PACING'},
+  {t:'« Vous ne vous en rendrez même pas compte. »', n:'CORTISOL ↓ · une brièveté qui vend'}],
+ avance:[{t:'« Par WhatsApp ou par e-mail ? Comme vous préférez. »', n:'CHOIX A/B DE CANAL'}],
+ dialogo:[['cliente','Je n’ai pas le temps.'],
+  ['comercial','Je comprends, je vous en prie. Écoutez, je ne vous prends pas du temps : je vous enlève du travail. Une photo, une demi-minute, et pendant que vous gérez votre affaire, moi je vous trouve l’argent. Vous ne vous en rendrez même pas compte. Par WhatsApp ou par e-mail ?']],
+ round2:[{t:'« Et si même la photo ne rentre pas aujourd’hui, je m’adapte à votre horloge, bien sûr. »', n:'CONTRÔLE CLIENT'},
+  {t:'« Qu’est-ce qui vous gêne le moins : première heure du matin… ou fin d’après-midi ? »', n:'CHOIX A/B · HUMOUR LÉGER'}]};
+I18N.pt.obj.tiempo={nombre:'« Não tenho tempo »',
+ validacion:[{t:'« Claro, pois não. O senhor está a trabalhar, já percebo. »', n:'VALIDAÇÃO · “já percebo”'}],
+ desactiva:[{t:'« E não lhe tiro tempo: tiro-lhe trabalho. »', n:'CORTISOL ↓ · REENQUADRAMENTO DO TEMPO'},
+  {t:'« É uma foto. Meio minuto. O resto faço eu. »', n:'ESFORÇO MÍNIMO'}],
+ reencuadre:[{t:'« O senhor atende o seu negócio e eu, entretanto, encontro-lhe o dinheiro. »', n:'RECIPROCIDADE · FUTURE PACING'},
+  {t:'« Nem dá por isso. »', n:'CORTISOL ↓ · brevidade que vende'}],
+ avance:[{t:'« Por WhatsApp ou por e-mail? Como lhe der mais jeito. »', n:'ESCOLHA A/B DE CANAL'}],
+ dialogo:[['cliente','Não tenho tempo.'],
+  ['comercial','Já percebo, pois não. Olhe, não lhe tiro tempo: tiro-lhe trabalho. Uma foto, meio minuto, e enquanto o senhor atende o seu negócio eu encontro-lhe o dinheiro. Nem dá por isso. Por WhatsApp ou por e-mail?']],
+ round2:[{t:'« E se nem a foto dá hoje, adapto-me ao seu relógio, faltava mais. »', n:'CONTROLO AO CLIENTE'},
+  {t:'« O que o incomoda menos: a primeira hora da manhã… ou a última da tarde? »', n:'ESCOLHA A/B · HUMOR LEVE'}]};
+I18N.fr.obj.despues={nombre:'« Rappelez-moi plus tard / un autre jour »',
+ validacion:[{t:'« Parfait, c’est votre temps qui commande. Bien sûr. »', n:'VALIDATION · CONTRÔLE CLIENT'}],
+ desactiva:[{t:'« Et comme ça le prochain appel dure deux minutes, pas dix. »', n:'CORTISOL ↓ · RARETÉ'}],
+ reencuadre:[{t:'« Je vous laisse mon WhatsApp tout de suite. Si vous m’envoyez la photo en avance, je vous rappelle avec l’étude déjà prête. »', n:'RÉCIPROCITÉ · ZEIGARNIK'},
+  {t:'« Imaginez : vous décrochez le téléphone… et les chiffres sont déjà là. »', n:'FUTURE PACING · SOULAGEMENT'}],
+ avance:[{t:'« Qu’est-ce qui vous arrange le mieux : demain de bonne heure, vers neuf heures et demie, ou l’après-midi, genre cinq heures ? »', n:'CHOIX A/B · “vous arrange” · jour et heure TOUJOURS concrets'}],
+ dialogo:[['cliente','Rappelez-moi la semaine prochaine.'],
+  ['comercial','Votre temps commande, bien sûr. Je vous laisse mon WhatsApp tout de suite : si vous m’envoyez la photo de la facture en avance, je vous rappelle avec l’étude prête et je vous prends deux minutes, pas dix. Ça vous va lundi à neuf heures et demie, ou mardi vers cinq heures ?']],
+ round2:[{t:'« Si la semaine devient compliquée, ce n’est pas grave : les chiffres vous attendent sur WhatsApp. »', n:'CORTISOL ↓ · ZEIGARNIK ÉCRIT'},
+  {t:'« Je vous écris lundi… ou mardi ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.despues={nombre:'« Ligue-me mais tarde / outro dia »',
+ validacion:[{t:'« Perfeito, o seu tempo manda. Faltava mais. »', n:'VALIDAÇÃO · CONTROLO AO CLIENTE'}],
+ desactiva:[{t:'« E assim a próxima chamada são dois minutos, não dez. »', n:'CORTISOL ↓ · ESCASSEZ'}],
+ reencuadre:[{t:'« Deixo-lhe o meu WhatsApp já. Se me adiantar a foto, ligo-lhe já com o estudo feito. »', n:'RECIPROCIDADE · ZEIGARNIK'},
+  {t:'« Imagine: levanta o telefone… e os números já lá estão. »', n:'FUTURE PACING · ALÍVIO'}],
+ avance:[{t:'« O que lhe fica melhor: amanhã de manhã cedo, por volta das nove e meia, ou à tarde, tipo cinco? »', n:'ESCOLHA A/B · “fica” · dia e hora SEMPRE concretos'}],
+ dialogo:[['cliente','Ligue-me para a semana.'],
+  ['comercial','O seu tempo manda, faltava mais. Deixo-lhe já o meu WhatsApp: se me adiantar a foto da fatura, ligo-lhe com o estudo feito e tiro-lhe dois minutos, não dez. Fica-lhe bem segunda às nove e meia ou terça, tipo cinco?']],
+ round2:[{t:'« Se a semana se lhe complicar, não faz mal: os números esperam por si no WhatsApp. »', n:'CORTISOL ↓ · ZEIGARNIK ESCRITO'},
+  {t:'« Escrevo-lhe segunda… ou terça? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.no_decisor={nombre:'« Je ne suis pas le responsable »',
+ validacion:[{t:'« Merci de me le dire, vraiment. Comme ça je ne vous fais pas perdre de temps. »', n:'VALIDATION · RESPECT'}],
+ desactiva:[{t:'« Et ça ne vous engage à rien, soyez tranquille. »', n:'CORTISOL ↓'}],
+ reencuadre:[{t:'« Vous connaissez cette maison mieux que personne, c’est évident. »', n:'FIERTÉ — le filtre devient expert'},
+  {t:'« Pour celui qui décide, ce sera utile de le savoir avant la fin du mois. Parce que chaque mois compte. »', n:'PERTE TEMPS · ALLIÉ INTERNE'}],
+ avance:[{t:'« Qui s’occupe de l’électricité ici… et à quelle heure je le trouve le plus disponible ? »', n:'OUVERTE DOUBLE · formule téléphonique'},
+  {t:'« Et vous me notez votre nom, pour que je dise que j’appelle de votre part ? »', n:'ALLIÉ · APPARTENANCE'}],
+ dialogo:[['cliente','Ici, c’est le patron qui décide, et à l’instant il n’est pas là.'],
+  ['comercial','Merci de me le dire, comme ça je ne vous fais pas perdre de temps. Vous connaissez cette maison mieux que personne : pour celui qui décide, ça viendra bien de le savoir avant la fin du mois. Comment il s’appelle et à quelle heure je le trouve le plus disponible ? …C’est noté. Et vous me donnez votre nom, pour dire que j’appelle de votre part ?']],
+ round2:[{t:'« Si vous préférez, je vous laisse le résumé par e-mail pour que vous le lui transmettiez… et comme ça c’est vous le héros. »', n:'ALLIÉ · FIERTÉ'},
+  {t:'« Je l’envoie au mail de l’entreprise… ou je vous le laisse et vous lui montrez ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_decisor={nombre:'« Não sou o responsável »',
+ validacion:[{t:'« Obrigado por mo dizer, a sério. Assim não lhe faço perder tempo. »', n:'VALIDAÇÃO · RESPEITO'}],
+ desactiva:[{t:'« E a si não o compromete a nada, fique descansado. »', n:'CORTISOL ↓'}],
+ reencuadre:[{t:'« O senhor conhece esta casa melhor que ninguém, isso é claro. »', n:'ORGULHO — o filtro passa a especialista'},
+  {t:'« A quem decide vai dar-lhe jeito saber isto antes de acabar o mês. Que cada mês conta. »', n:'PERDA TEMPO · ALIADO INTERNO'}],
+ avance:[{t:'« Quem trata do tema da luz aqui… e a que horas o apanho mais sossegado? »', n:'ABERTA DUPLA · fórmula telefónica'},
+  {t:'« E aponta-me o seu nome, para dizer que ligo da sua parte? »', n:'ALIADO · PERTENÇA'}],
+ dialogo:[['cliente','Aqui quem decide é o patrão, e agora mesmo não está.'],
+  ['comercial','Obrigado por mo dizer, assim não lhe faço perder tempo. O senhor conhece esta casa melhor que ninguém: a quem decide vai ser-lhe útil saber isto antes de fim de mês. Como se chama e a que horas o apanho mais sossegado? …Anotado. E diz-me o seu nome, para dizer que ligo da sua parte?']],
+ round2:[{t:'« Se preferir, deixo-lhe o resumo por e-mail para lhe fazer chegar… e assim fica você como um rei. »', n:'ALIADO · ORGULHO'},
+  {t:'« Mando para o e-mail da empresa… ou deixo consigo e mostra-lhe? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.email={nombre:'« Envoyez-moi un e-mail »',
+ validacion:[{t:'« Avec plaisir, vous l’avez aujourd’hui même. »', n:'VALIDATION · ENGAGEMENT'}],
+ desactiva:[{t:'« Et non, pas de brochures : seulement votre cas. »', n:'CORTISOL ↓ · PERSONNEL'}],
+ reencuadre:[{t:'« Pour qu’il ne se perde pas parmi tant de boîtes mail, je le personnalise avec votre secteur. »', n:'PERSONNALISATION'},
+  {t:'« Les entreprises de [SECTOR] de [CIUDAD] trouvent de l’argent en sommeil chaque mois, regardez. »', n:'PREUVE SOCIALE SPÉCIFIQUE · PERTE · ZEIGARNIK'}],
+ avance:[{t:'« Votre facture du mois, elle dépasse souvent les cinq cents euros… ou elle est en dessous ? »', n:'CHOIX · “en dessous”'},
+  {t:'« Vous l’avez aujourd’hui dans votre boîte et demain je vous appelle deux minutes : à dix heures ou à cinq ? »', n:'CHOIX A/B — e-mail sans appel fixé = e-mail mort'}],
+ dialogo:[['cliente','Envoyez-moi un mail et je le regarderai.'],
+  ['comercial','Avec plaisir, aujourd’hui même. Et pas de brochures : seulement votre cas. Pour le personnaliser : votre facture dépasse souvent les cinq cents euros ou elle est en dessous ? …Parfait. Je vous prépare quelque chose avec des entreprises de votre secteur. Vous l’avez aujourd’hui et demain je vous appelle deux minutes : à dix heures ou à cinq ?']],
+ round2:[{t:'« Si le mail se perd entre les papiers, ce n’est pas grave : je vous retrouve le fil. »', n:'HUMOUR · PERSISTANCE ÉLÉGANTE'},
+  {t:'« Je vous écris plutôt jeudi… ou lundi prochain, plus tranquillement ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.email={nombre:'« Mande-me um e-mail »',
+ validacion:[{t:'« Com certeza, hoje mesmo o tem. »', n:'VALIDAÇÃO · COMPROMISSO'}],
+ desactiva:[{t:'« E quê, nada de folhetos: só o seu caso. »', n:'CORTISOL ↓ · PESSOAL'}],
+ reencuadre:[{t:'« Para não se perder no meio de tanta caixa de entrada, personalizo-o com o seu setor. »', n:'PERSONALIZAÇÃO'},
+  {t:'« As empresas de [SECTOR] de [CIUDAD] estão a encontrar dinheiro adormecido todos os meses, veja lá. »', n:'PROVA SOCIAL ESPECÍFICA · PERDA · ZEIGARNIK'}],
+ avance:[{t:'« A sua fatura do mês passa normalmente de quinhentos euros… ou anda por baixo? »', n:'ESCOLHA · “anda por baixo”'},
+  {t:'« Hoje o tem no correio e amanhã ligo-lhe uns dois minutos: às dez ou às cinco? »', n:'ESCOLHA A/B — e-mail sem chamada marcada = e-mail morto'}],
+ dialogo:[['cliente','Mande-me um e-mail e depois vejo.'],
+  ['comercial','Com certeza, hoje mesmo. E nada de folhetos: só o seu caso. Para personalizá-lo: a sua fatura costuma passar de quinhentos euros ou anda por baixo? …Perfeito. Preparo-lhe algo com empresas do seu setor. Hoje o tem e amanhã ligo-lhe uns dois minutos: às dez ou às cinco?']],
+ round2:[{t:'« Se o e-mail se perder entre papéis, não faz mal: eu reencontro-lhe o fio. »', n:'HUMOR · PERSISTÊNCIA ELEGANTE'},
+  {t:'« Escrevo-lhe melhor quinta… ou na segunda-feira, com mais calma? »', n:'ESCOLHA A/B'}]};
+
+
+I18N.fr.obj.lo_pienso={nombre:'« Je vais y réfléchir »',
+ validacion:[{t:'« Bien sûr que vous y réfléchissez. Les bonnes choses se réfléchissent. »', n:'VALIDATION · FIERTÉ'}],
+ desactiva:[{t:'« Et ce n’est pas moi qui décide à votre place, loin s’en faut. »', n:'CORTISOL ↓ · CONTRÔLE'}],
+ reencuadre:[{t:'« Mais réfléchir sans données, ce n’est pas réfléchir, écoutez. C’est deviner. »', n:'RE-CADRAGE · PHRASE ANCRE'},
+  {t:'« Laissez-moi vous donner les chiffres, ils sont gratuits, et vous réfléchirez avec la calculatrice, pas avec le doute. »', n:'RÉCIPROCITÉ · SYSTÈME 2 AU SERVICE'},
+  {t:'« Parce que pendant que vous réfléchissez, chaque mois la même somme s’en va. Ça, ça ne se réfléchit pas. Ça se paie. »', n:'PERTE ACTUELLE · RYTHME'}],
+ avance:[{t:'« Je vous prépare l’étude avec la facture… ou je vous envoie d’abord le résumé par WhatsApp ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','J’y réfléchirai.'],
+  ['comercial','Bien sûr, les bonnes choses se réfléchissent, et ce n’est pas moi qui décide à votre place, loin s’en faut. Mais réfléchir sans données, c’est deviner. Je vous donne vos chiffres gratuitement et vous réfléchissez avec la calculatrice. Parce que pendant que vous y réfléchissez, chaque mois la même somme s’en va. Je vous prépare l’étude avec la facture ou je vous envoie le résumé par WhatsApp ?']],
+ round2:[{t:'« Je vous laisse l’étude prête de toute façon, les chiffres n’expirent pas. »', n:'RÉCIPROCITÉ · ZEIGARNIK'},
+  {t:'« On en reparle la semaine prochaine : lundi… ou mardi ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.lo_pienso={nombre:'« Vou pensar nisso »',
+ validacion:[{t:'« Claro que pensa. As coisas boas pensam-se. »', n:'VALIDAÇÃO · ORGULHO'}],
+ desactiva:[{t:'« E eu não decido por si, nem era preciso. »', n:'CORTISOL ↓ · CONTROLO'}],
+ reencuadre:[{t:'« Mas pensar sem dados não é pensar, ouça. É adivinhar. »', n:'REENQUADRAMENTO · FRASE ÂNCORA'},
+  {t:'« Deixe-me dar-lhe os números, que são grátis, e pensa com a calculadora e não com a dúvida. »', n:'RECIPROCIDADE · SISTEMA 2 AO SERVIÇO'},
+  {t:'« Porque enquanto pensa, todos os meses sai o mesmo. Isso não se pensa. Paga-se. »', n:'PERDA ATUAL · RITMO'}],
+ avance:[{t:'« Preparo-lhe o estudo com a fatura… ou mando-lhe antes o resumo por WhatsApp? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','Já hei de pensar nisso.'],
+  ['comercial','Claro, as coisas boas pensam-se, e eu não decido por si, nem era preciso. Mas pensar sem dados é adivinhar. Dou-lhe os seus números de graça e pensa com a calculadora. Porque enquanto pensa, todos os meses sai o mesmo. Preparo-lhe o estudo com a fatura ou mando-lhe o resumo por WhatsApp?']],
+ round2:[{t:'« Deixo-lhe o estudo feito na mesma, que os números não caducam. »', n:'RECIPROCIDADE · ZEIGARNIK'},
+  {t:'« Falamos para a semana: segunda… ou terça? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.no_cambiar={nombre:'« Je ne veux pas changer de fournisseur »',
+ validacion:[{t:'« Parfait. Votre entreprise, vos règles. Je n’entre pas là-dedans. »', n:'VALIDATION · CONTRÔLE'}],
+ desactiva:[{t:'« Et on ne touche à rien, écoutez. Pas même une virgule. »', n:'CORTISOL ↓ · “pas une virgule”'}],
+ reencuadre:[{t:'« Je ne vous demande pas de bouger. Je vous demande de regarder. »', n:'CONTRASTE · MICRO-DÉCISION'},
+  {t:'« Regarder est gratuit. Ne pas regarder, écoutez, se paie chaque mois. »', n:'GRATUIT · PERTE ACTUELLE'},
+  {t:'« Et avec le chiffre devant vous, vous décidez mieux… même si c’est pour rester comme ça. »', n:'CONTRÔLE — permission de ne pas bouger'}],
+ avance:[{t:'« Question honnête : vous savez aujourd’hui ce que vous payez le kilowatt… ou aucune idée ? »', n:'OUVERTE · HUMOUR — les deux réponses justifient l’étude'}],
+ dialogo:[['cliente','Je ne veux pas changer de fournisseur.'],
+  ['comercial','Parfait : votre entreprise, vos règles, et on ne touche pas à une virgule. Je ne vous demande pas de bouger, je vous demande de regarder. Regarder est gratuit ; ne pas regarder se paie chaque mois. Dites-moi, la main sur le cœur : vous savez ce que vous payez le kilowatt… ou aucune idée ?'],
+  ['cliente','Eh bien… aucune idée, honnêtement.'],
+  ['comercial','C’est là que commence l’argent en sommeil. Une photo et demain vous le savez. WhatsApp ou e-mail ?']],
+ round2:[{t:'« Et en cadeau, la révision des puissances, celle-là se fait sans toucher rien de chez vous. »', n:'RÉCIPROCITÉ · CORTISOL ↓'},
+  {t:'« On commence par là… ou vous préférez l’étude complète ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.no_cambiar={nombre:'« Não quero mudar de companhia »',
+ validacion:[{t:'« Perfeito. A sua empresa, as suas regras. Aí não entro. »', n:'VALIDAÇÃO · CONTROLO'}],
+ desactiva:[{t:'« E não se mexe em nada, ouça. Nem uma vírgula. »', n:'CORTISOL ↓ · “nem uma vírgula”'}],
+ reencuadre:[{t:'« Não lhe peço que se mexa. Peço-lhe que olhe. »', n:'CONTRASTE · MICRO-DECISÃO'},
+  {t:'« Olhar é grátis. Não olhar, ouça, paga-se todos os meses. »', n:'GRÁTIS · PERDA ATUAL'},
+  {t:'« E com o número à frente decide melhor… nem que seja para ficar igual. »', n:'CONTROLO — licença para não mexer'}],
+ avance:[{t:'« Pergunta honesta: sabe hoje o que paga por cada quilowatt… ou não faz ideia? »', n:'ABERTA · HUMOR — as duas respostas justificam o estudo'}],
+ dialogo:[['cliente','Não quero mudar de companhia.'],
+  ['comercial','Perfeito: a sua empresa, as suas regras, e não se mexe nem numa vírgula. Não lhe peço que se mexa, peço-lhe que olhe. Olhar é grátis; não olhar paga-se todos os meses. Diga-me com a mão no coração: sabe o que paga por cada quilowatt… ou não faz ideia?'],
+  ['cliente','Pois… não faço ideia, a verdade é essa.'],
+  ['comercial','Pois é aí que começa o dinheiro adormecido. Uma foto e amanhã sabe. WhatsApp ou e-mail?']],
+ round2:[{t:'« E de oferta, a revisão de potências, que essa faz-se sem tocar em nada seu. »', n:'RECIPROCIDADE · CORTISOL ↓'},
+  {t:'« Começamos por aí… ou prefere o estudo inteiro? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.contento={nombre:'« Je suis content de mon fournisseur actuel »',
+ validacion:[{t:'« Je m’en réjouis, vraiment. C’est l’essentiel. »', n:'VALIDATION SINCÈRE'}],
+ desactiva:[{t:'« Et que ça vous dure longtemps. Personne ne vient vous gâcher ça. »', n:'CORTISOL ↓ · “que ça dure”'}],
+ reencuadre:[{t:'« Je vous livre un secret du métier : les plus contents… étaient ceux qui payaient le plus. Figurez-vous. »', n:'ZEIGARNIK · CONTRASTE'},
+  {t:'« Être content et payer trop cher vont très bien ensemble. Jusqu’à ce que quelqu’un regarde. »', n:'PERTE CACHÉE'},
+  {t:'« Un restaurant d’ici a dit exactement ça. On a regardé : trois cent quarante euros en sommeil par mois. Aujourd’hui il est toujours content… mais avec trois cent quarante de plus en caisse. »', n:'STORYTELLING · MÊME ZONE · PIC'}],
+ avance:[{t:'« Je vous fais le même test gratuit… ou je vous raconte d’abord comment marche l’urgence 24 heures ? »', n:'CHOIX A/B · GRATUIT'}],
+ dialogo:[['cliente','Moi je suis très content du mien.'],
+  ['comercial','Je m’en réjouis, et que ça dure. Je vous livre un secret du métier : les plus contents étaient ceux qui payaient le plus. Un restaurant d’ici a dit pareil ; on a regardé et il avait trois cent quarante par mois en sommeil. Aujourd’hui il est toujours content, mais avec cet argent en caisse. Je vous fais le même test gratuit ou je vous raconte d’abord l’urgence vingt-quatre heures ?']],
+ round2:[{t:'« Je vous laisse une dernière image : samedi soir, panne, le fournil à l’arrêt. La dernière fois, en combien de temps on vous a dépanné ? »', n:'SCÉNARIO · PEUR MESURÉE'},
+  {t:'« Avec nous : vingt-quatre heures et technicien maison. On le vérifie gratuitement… ou vous passez et je vous montre ? »', n:'CHOIX A/B · “maison”'}]};
+I18N.pt.obj.contento={nombre:'« Estou contente com a minha companhia atual »',
+ validacion:[{t:'« Alegro-me imenso, a verdade é essa. Isso é o primeiro. »', n:'VALIDAÇÃO SINCERA'}],
+ desactiva:[{t:'« E que lhe dure muito. Ninguém vem estragar-lhe isso. »', n:'CORTISOL ↓ · “que lhe dure”'}],
+ reencuadre:[{t:'« Conto-lhe um segredo do ofício: os mais contentes… eram os que mais pagavam. Veja lá que coisa. »', n:'ZEIGARNIK · CONTRASTE'},
+  {t:'« Estar contente e pagar a mais dão-se muito bem. Até alguém olhar. »', n:'PERDA OCULTA'},
+  {t:'« Um restaurante aqui da zona disse exatamente isso. Vimos: trezentos e quarenta euros adormecidos por mês. Hoje continua contente… mas com mais trezentos e quarenta na caixa. »', n:'STORYTELLING · MESMA ZONA · PICO'}],
+ avance:[{t:'« Faço-lhe a mesma prova grátis… ou conto-lhe antes como funciona o da emergência 24 horas? »', n:'ESCOLHA A/B · GRÁTIS'}],
+ dialogo:[['cliente','Eu estou muito contente com a minha.'],
+  ['comercial','Alegro-me, e que lhe dure. Conto-lhe um segredo do ofício: os mais contentes eram os que mais pagavam. Um restaurante aqui da zona disse o mesmo; vimos e tinha trezentos e quarenta por mês adormecidos. Hoje continua contente, mas com esse dinheiro na caixa. Faço-lhe a mesma prova grátis ou conto-lhe primeiro a emergência vinte e quatro horas?']],
+ round2:[{t:'« Deixo-lhe uma última imagem: sábado à noite, avaria, o fabrico parado. Da última vez, em quanto tempo o atenderam? »', n:'CENÁRIO · MEDO MEDIDO'},
+  {t:'« Connosco: vinte e quatro horas e técnico da casa. Verificamos grátis… ou passa cá e mostro-lhe? »', n:'ESCOLHA A/B · “da casa”'}]};
+I18N.fr.obj.desconfianza={nombre:'« Je ne me fie pas / c’est fiable ? »',
+ validacion:[{t:'« Vous avez très raison de ne pas vous fier. Écoutez, je ferais pareil. »', n:'VALIDATION TOTALE'}],
+ desactiva:[{t:'« Je ne vous demande pas de me croire. Je vous demande de me vérifier. »', n:'CORTISOL ↓ · VIRAGE — la méfiance se combat par la vérification'}],
+ reencuadre:[{t:'« Un : des bureaux officiels, porte ouverte et café, quand vous voulez. »', n:'PREUVE PHYSIQUE VÉRIFIABLE'},
+  {t:'« Deux : par téléphone je ne vous demanderai ni donnée bancaire ni signature. Une photo de la facture et c’est tout. »', n:'SÉCURITÉ · RÈGLE DU 3 · “et c’est tout”'},
+  {t:'« Trois : si l’étude ne vous convainc pas, il ne s’est rien passé. »', n:'SORTIE FACILE'}],
+ avance:[{t:'« Qu’est-ce qui vous convient le mieux : venir au bureau… ou qu’on passe chez vous ? »', n:'CHOIX A/B'}],
+ dialogo:[['cliente','C’est que je ne me fie plus à ces appels…'],
+  ['comercial','Vous avez très raison. C’est pour ça que je ne vous demande pas de me croire : je vous demande de me vérifier. Un : des bureaux officiels, porte ouverte et café. Deux : par téléphone ni données bancaires ni signatures, une photo et c’est tout. Trois : si l’étude ne vous convainc pas, il ne s’est rien passé. Vous préférez venir ou qu’on passe chez vous ?']],
+ round2:[{t:'« On travaille avec des commerces et des ateliers de la zone ; si vous voulez, vous parlez d’abord à l’un d’eux. Parole de voisin. »', n:'PREUVE SOCIALE SPÉCIFIQUE · RÉFÉRENCE VIVANTE'},
+  {t:'« Je vous passe le contact d’un client de votre secteur… ou on commence par le café au bureau ? »', n:'CHOIX A/B'}]};
+I18N.pt.obj.desconfianza={nombre:'« Não me fio / isto é fiável? »',
+ validacion:[{t:'« Faz muito bem em não se fiar. E ouça, eu faria o mesmo. »', n:'VALIDAÇÃO TOTAL'}],
+ desactiva:[{t:'« Não lhe peço que se fie de mim. Peço-lhe que me comprove. »', n:'CORTISOL ↓ · VOLTA — a desconfiança combate-se com verificação'}],
+ reencuadre:[{t:'« Primeiro: escritórios oficiais, porta aberta e café, quando quiser. »', n:'PROVA FÍSICA VERIFICÁVEL'},
+  {t:'« Segundo: por telefone não lhe vou pedir nem dado do banco nem assinatura. Uma foto da fatura e pronto. »', n:'SEGURANÇA · REGRA DO 3 · “e pronto”'},
+  {t:'« Terceiro: se o estudo não o convencer, aqui não se passou nada. »', n:'SAÍDA FÁCIL'}],
+ avance:[{t:'« O que lhe assenta melhor: vir o senhor ao escritório… ou irmos nós ao seu negócio? »', n:'ESCOLHA A/B'}],
+ dialogo:[['cliente','É que já não me fio nestes telefonemas…'],
+  ['comercial','Faz muito bem. Por isso não lhe peço que se fie: peço-lhe que me comprove. Primeiro: escritórios oficiais, porta aberta e café. Segundo: por telefone nem dados do banco nem assinaturas, uma foto e pronto. Terceiro: se o estudo não o convencer, aqui não se passou nada. Fica-lhe melhor vir cá ou passarmos pelo seu negócio?']],
+ round2:[{t:'« Trabalhamos com comércios e oficinas da zona; se quiser, fala antes com algum. Palavra de vizinho. »', n:'PROVA SOCIAL ESPECÍFICA · REFERÊNCIA VIVA'},
+  {t:'« Passo-lhe o contacto de um cliente do seu setor… ou começamos pelo café no escritório? »', n:'ESCOLHA A/B'}]};
+I18N.fr.obj.momento={nombre:'« Ce n’est pas le bon moment » (saison, coûts…)',
+ validacion:[{t:'« Je comprends. Ce sont les calendriers qui commandent, on n’y peut rien. »', n:'VALIDATION'}],
+ desactiva:[{t:'« Et je ne vous demande pas une décision. Je vous demande une donnée. »', n:'CORTISOL ↓ · MICRO-DÉCISION'}],
+ reencuadre:[{t:'« Justement quand le mois tire… c’est là que donner de l’argent fait le plus mal. »', n:'PERTE EN CONTEXTE'},
+  {t:'« Réduire sur l’électricité ne licencie personne, ne baisse pas la qualité… ça bouche juste une fuite. »', n:'RE-CADRAGE · “bouche une fuite”'}],
+ avance:[{t:'« Vous m’envoyez la facture aujourd’hui… ou demain, quand vous soufflerez ? »', n:'CHOIX A/B DOUX · “quand vous soufflerez”'}],
+ dialogo:[['cliente','Ce n’est pas le moment, on est justes de partout.'],
+  ['comercial','Je comprends, ce sont les calendriers qui commandent. Et justement quand ça tire, c’est là que donner de l’argent chaque mois fait le plus mal. Réduire sur l’électricité ne licencie personne : ça bouche juste une fuite. Je ne vous demande pas une décision, je vous demande une donnée : vous m’envoyez la facture aujourd’hui ou demain, quand vous soufflerez ?']],
+ round2:[{t:'« Si c’est une question de saison, dites-moi : quand le rythme ralentit dans votre secteur ? On le note pour cette semaine-là… avec l’étude déjà prête. »', n:'FUTURE PACING'},
+  {t:'« En août… ou en septembre ? »', n:'CHOIX A/B — adaptez à leur vrai calendrier'}]};
+I18N.pt.obj.momento={nombre:'« Agora não é bom momento » (época, custos…)',
+ validacion:[{t:'« Já percebo. Os tempos é que mandam, não há outra coisa. »', n:'VALIDAÇÃO'}],
+ desactiva:[{t:'« E não lhe peço uma decisão. Peço-lhe um dado. »', n:'CORTISOL ↓ · MICRO-DECISÃO'}],
+ reencuadre:[{t:'« Justo quando o mês aperta… é quando mais dói dar dinheiro. »', n:'PERDA EM CONTEXTO'},
+  {t:'« Cortar na luz não despede ninguém, não baixa qualidade… só tapa uma fuga. »', n:'REENQUADRAMENTO · “tapa uma fuga”'}],
+ avance:[{t:'« Manda-me a fatura hoje… ou amanhã, quando respirar? »', n:'ESCOLHA A/B SUAVE · “quando respirar”'}],
+ dialogo:[['cliente','Agora não é momento, andamos apertados de tudo.'],
+  ['comercial','Já percebo, os tempos é que mandam. E justo quando aperta é quando mais dói dar dinheiro todos os meses. Cortar na luz não despede ninguém: só tapa uma fuga. Não lhe peço uma decisão, peço-lhe um dado: manda-me a fatura hoje ou amanhã, quando respirar?']],
+ round2:[{t:'« Se é coisa de época, diga-me: quando é que abranda o ritmo no seu setor? Deixamos apontado para essa semana… com o estudo já feito. »', n:'FUTURE PACING'},
+  {t:'« Em agosto… ou em setembro? »', n:'ESCOLHA A/B — adapte ao calendário real'}]};
+I18N.fr.obj.ya_llamaron={nombre:'« On m’a déjà appelé / déjà proposé »',
+ validacion:[{t:'« Tant mieux, ça m’évite la présentation. »', n:'VALIDATION · HUMOUR'}],
+ desactiva:[{t:'« Et tranquillité, moi je ne répète pas de scripts. Je travaille avec des chiffres. »', n:'CORTISOL ↓ · DIFFÉRENCIATION'}],
+ reencuadre:[{t:'« Une chose est qu’on vous appelle, une autre qu’on vous fasse VOTRE étude avec VOTRE facture, regardez. »', n:'CONTRASTE'},
+  {t:'« Dites-moi : vous avez reçu un chiffre en euros… ou de belles paroles ? »', n:'ZEIGARNIK · OUVERTE — c’était presque toujours des paroles'}],
+ avance:[{t:'« Si vous n’avez pas votre chiffre, demain vous l’avez : vous m’envoyez la facture… ou on se voit dix petites minutes ? »', n:'CHOIX A/B · “petites minutes”'}],
+ dialogo:[['cliente','On m’a déjà appelé d’Iberdrola il y a un mois.'],
+  ['comercial','Tant mieux, ça m’épargne la présentation. Et tranquillité, moi je ne répète pas de scripts : je travaille avec des chiffres. Une chose est qu’on vous appelle, une autre qu’on vous fasse votre étude avec votre facture. Vous avez reçu un chiffre en euros ou de belles paroles ? …Voilà. Demain vous l’avez : vous m’envoyez la photo ou on se voit dix petites minutes ?']],
+ round2:[{t:'« Si on vous a déjà fait une étude et que ça n’a pas avancé, c’est presque sûrement le suivi qui a manqué. Moi j’appelle quand je dis que j’appelle. »', n:'DIFFÉRENCIATION'},
+  {t:'« Vérifiez-le : je vous appelle jeudi à dix heures… ou vendredi à midi ? »', n:'CHOIX A/B · DÉMONSTRATION IMMÉDIATE'}]};
+I18N.pt.obj.ya_llamaron={nombre:'« Já me ligaram / já mo ofereceram »',
+ validacion:[{t:'« Ainda melhor, poupo-me a apresentação. »', n:'VALIDAÇÃO · HUMOR'}],
+ desactiva:[{t:'« E descanse, que eu não repito guiões. Eu trabalho com números. »', n:'CORTISOL ↓ · DIFERENCIAÇÃO'}],
+ reencuadre:[{t:'« Uma coisa é ligarem-lhe, outra é fazerem-lhe O SEU estudo com A SUA fatura, veja lá. »', n:'CONTRASTE'},
+  {t:'« Diga-me: chegou-lhe um número em euros… ou palavras bonitas? »', n:'ZEIGARNIK · ABERTA — quase sempre foram palavras'}],
+ avance:[{t:'« Se não tem o seu número, amanhã tem: manda-me a fatura… ou vimo-nos dez minutinhos? »', n:'ESCOLHA A/B · DIMINUTIVO “minutinhos”'}],
+ dialogo:[['cliente','Já me ligaram da Iberdrola há um mês.'],
+  ['comercial','Ainda melhor, poupo-me a apresentação. E descanse, que eu não repito guiões: trabalho com números. Uma coisa é ligarem-lhe e outra é fazerem-lhe o seu estudo com a sua fatura. Chegou-lhe um número em euros ou palavras bonitas? …Pois é. Amanhã tem: manda-me a foto ou vimo-nos dez minutinhos?']],
+ round2:[{t:'« Se já lhe fizeram estudo e não foi para a frente, quase de certeza falhou o seguimento. Eu ligo quando digo que ligo. »', n:'DIFERENCIAÇÃO'},
+  {t:'« Comprove-o: ligo-lhe quinta às dez… ou sexta às doze? »', n:'ESCOLHA A/B · DEMONSTRAÇÃO IMEDIATA'}]};
+I18N.fr.obj.datos={nombre:'« D’où avez-vous mes données ? » (conformité)',
+ validacion:[{t:'« Question plus que juste. Je vous réponds avec la vérité entière. »', n:'VALIDATION · HONNÊTETÉ'}],
+ desactiva:[{t:'« Et si vous me dites plus d’appels, c’est fini. Immédiatement. »', n:'CONTRÔLE TOTAL CLIENT · CORTISOL ↓'}],
+ reencuadre:[{t:'« Nous appelons des entreprises de la zone, aux horaires légaux et après vérification de la liste d’opposition. »', n:'TRANSPARENCE TOTALE'},
+  {t:'« Ni combines ni bases bizarres. C’est clair comme ça. »', n:'SIMPLICITÉ · CONFIANCE'}],
+ avance:[{t:'« Et maintenant c’est vous qui commandez : je vous explique en une demi-minute pourquoi ça vaut le coup… ou je vous note et je vous laisse tranquille ? »', n:'CHOIX HONNÊTE — offrir la sortie rend le calme'}],
+ dialogo:[['cliente','Et d’où avez-vous eu mon téléphone ?'],
+  ['comercial','Question plus que juste : nous appelons des entreprises de la zone depuis le service PME d’Iberdrola, aux horaires légaux et après consultation de la liste d’opposition. Si vous préférez ne plus recevoir d’appels, je vous note immédiatement et affaire classée. Ceci dit : je vous explique en une demi-minute pourquoi ça peut vous intéresser… ou je vous note et je vous laisse tranquille ?']],
+ round2:[{t:'« Noté : vous ne m’entendrez plus. »', n:'CONFORMITÉ IMMÉDIATE — si refus, respecté et enregistré'},
+  {t:'« Bonne journée, vraiment. »', n:'FIN PROPRE · PEAK-END'}]};
+I18N.pt.obj.datos={nombre:'« De onde tiraram os meus dados? » (compliance)',
+ validacion:[{t:'« Pergunta mais que justa. Respondo-lhe com a verdade toda. »', n:'VALIDAÇÃO · HONESTIDADE'}],
+ desactiva:[{t:'« E se me disser que não quer mais chamadas, acabou. No momento. »', n:'CONTROLO TOTAL AO CLIENTE · CORTISOL ↓'}],
+ reencuadre:[{t:'« Ligamos a empresas da zona, em horário legal e vendo antes a lista de oposição. »', n:'TRANSPARÊNCIA TOTAL'},
+  {t:'« Nem truques nem bases de dados esquisitas. Assim de claro. »', n:'SIMPLICIDADE · CONFIANÇA'}],
+ avance:[{t:'« E agora o senhor manda: conto-lhe em meio minuto porque vale a pena… ou aponto-o e deixo-o descansado? »', n:'ESCOLHA HONESTA — dar a saída devolve a calma'}],
+ dialogo:[['cliente','E de onde é que arranjaram o meu telefone?'],
+  ['comercial','Pergunta mais que justa: ligamos a empresas da zona desde o Departamento PME da Iberdrola, em horário legal e consultando antes a lista de oposição. Se preferir não receber mais chamadas, aponto-o no momento e assunto arrumado. Dito isto: conto-lhe em meio minuto porque lhe pode interessar… ou aponto-o e deixo-o descansado?']],
+ round2:[{t:'« Anotado: não volta a ouvir-me. »', n:'CUMPRIMENTO IMEDIATO — se pedir a baixa, respeita-se e regista-se'},
+  {t:'« Bom dia para si, a sério. »', n:'FINAL LIMPO · PEAK-END'}]};
+
 /* ── motor ── */
 window.cfaLangGet=function(){ try{ return sessionStorage.getItem('cfa_lang')||'es'; }catch(e){ return 'es'; } };
 var __cfaOrig=null;
@@ -3876,7 +2463,7 @@ window.cfaApply=function(L){
     Object.keys(NODES).forEach(function(id){ var ov=P.nodes&&P.nodes[id]||{}, orig=o.nodes[id]||{};
       ['titulo','micro','notas','opciones','script','fase','step'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) NODES[id][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     Object.keys(OBJECTIONS).forEach(function(k){ var ov=P.obj&&P.obj[k]||{}, orig=o.obj[k]||{};
-      ['nombre','validacion','desactiva','reencuadre','avance','dialogo'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
+      ['nombre','validacion','desactiva','reencuadre','avance','dialogo','round2'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     window.cfaLang=L; try{ sessionStorage.setItem('cfa_lang',L); }catch(e){}
     cfaChrome(L); try{ guiRenderTree(NODES[guiNodoActual]); }catch(e){}
     var chip=document.getElementById('cfaChip'); if(chip) chip.textContent='🌐 '+(L==='es'?'ES':(L==='fr'?'FR':'PT'));
@@ -3935,12 +2522,17 @@ function cfaCobertura(L){
   nav.appendChild(b);
 })();
 /* selector 1ª vez por sesión al entrar al guion (los enganches se montan tras cargar `cadena`) */
-function cfaEnganchar(){
-  if(window.__cfaHook) return; window.__cfaHook=true;
-  try{ cadena('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { window.cfaApply(window.cfaLangGet()); } }catch(e){ cfaApply('es'); } }); }catch(e){}
-  try{ cadena('guiIrA',function(){ try{ cfaChrome(window.cfaLang||'es'); }catch(e){} }); }catch(e){}
+function cfaEnganchar(n){
+  n=n||0;
+  if(window.__cfaHook) return;
+  /* enganche robusto por wraps (probado en producción) + reintentos por si tarda en cargar */
+  if(typeof wraps!=='function'||typeof window.tutAbrirGuion!=='function'){ if(n<60) setTimeout(function(){cfaEnganchar(n+1)},250); return; }
+  window.__cfaHook=true;
+  try{ wraps('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { setTimeout(function(){cfaApply(window.cfaLangGet())},50); } }catch(e){ setTimeout(function(){cfaApply('es')},50); } }); }catch(e){}
+  try{ if(typeof window.guiIrA==='function') wraps('guiIrA',function(){ try{ setTimeout(function(){cfaChrome(window.cfaLang||'es')},50); }catch(e){} }); }catch(e){}
 }
-if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',cfaEnganchar); } else { setTimeout(cfaEnganchar,0); }
+cfaEnganchar(0);
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',function(){cfaEnganchar(0)}); }
 
 /* ═══ v2.6 «Plantilla» · seguimiento personalizado + nota CRM en Foco ═══ */
 function segTexto(){

@@ -1,0 +1,14 @@
+const CASOS = [
+ {titulo:'Caso 1 · El restaurante en pleno servicio',
+  escena:'Restaurante en la playa, lunes 13:05. Coge el encargado: «¿Sí, dígame? Estoy con la barra llena…»',
+  o:['«No se preocupe, le cuento rapidito nuestra oferta de luz, son solo unos minutos»','«Le cojo en un mal momento, perdone. Una pregunta y le dejo: ¿este mes han pagado más de luz que antes del verano… o mucho más?»','«Le llamo otro día mejor, adiós»'],ok:1,
+  sol:'La única respuesta que respeta su tiempo Y abre conversación: empatía («le cojo en un mal momento», suena a España), escasez («una pregunta») y elección doble de pérdida — responda lo que responda, el dolor queda admitido. La primera cierra la puerta con “oferta”; la tercera regala el contacto.'},
+ {titulo:'Caso 2 · El taller con permanencia y desconfianza',
+  escena:'Taller de camiones. El dueño: «Ya me colaron una vez de otra compañía, y además creo que firmé permanencia hasta el año que viene».',
+  o:['«No se preocupe, la permanencia la quitamos nosotros y aquí nadie le va a colar nada, palabra»','«Hace bien en revisarlo. Hoy no se toca nada: la fecha exacta está en su factura y, mientras llega, cada mes se le va lo mismo. ¿Lo miramos ahora juntos con la factura delante… o me manda una foto y se lo dejo escrito? Y si quiere comprobar quién soy: oficinas en Sagunto y el Puerto, puerta abierta»','«Pues cuando le acabe la permanencia ya le llamo otro día»'],ok:1,
+  sol:'Dos verdades endurecidas: ① no se promete quitar permanencias (prohibido), se consulta la fecha real; ② la desconfianza se combate con verificación física (oficinas de verdad), no con juramentos. Después, pérdida del tiempo de espera y elección de modalidad. La tercera opción regala doce meses de fuga.'},
+ {titulo:'Caso 3 · La clínica contenta que pide precio',
+  escena:'Directora de clínica dental, educada: «Yo estoy encantada con mi compañía, la verdad. Pero dígame, ¿en cuánto les saldría a nosotros?»',
+  o:['Darle un precio orientativo al momento para no perderla','«Me alegro mucho, y que le dure. Un precio a ciegas no se lo doy porque sería engañarla: mire, un restaurante de por aquí decía lo mismo y tenía 340 € dormidos al mes. ¿Le hago el estudio gratis con una foto de la factura… o prefiere conocer primero la emergencia 24 horas?»','«Entonces no le puedo decir nada, buenas tardes»'],ok:1,
+  sol:'Pide precio: señal de interés, no de cierre. La respuesta correcta valida su satisfacción, convierte el NO-precio en prueba de honestidad, usa storytelling de un igual (mismo dolor, misma zona) y cierra por elección sin sí/no. Dar precio sin factura rompe la regla compliance y además quema la única palanca que tiene: el estudio.'}
+];

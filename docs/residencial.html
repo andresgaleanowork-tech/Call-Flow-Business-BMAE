@@ -3415,7 +3415,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.9.1', GUIAFECHA='16-09-2026';
+var VERSION='2.9.3', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF='_res'; /* v1.5.1 determinista: residencial */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3736,7 +3736,7 @@ window.cfaApply=function(L){
     Object.keys(NODES).forEach(function(id){ var ov=P.nodes&&P.nodes[id]||{}, orig=o.nodes[id]||{};
       ['titulo','micro','notas','opciones','script','fase','step'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) NODES[id][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     Object.keys(OBJECTIONS).forEach(function(k){ var ov=P.obj&&P.obj[k]||{}, orig=o.obj[k]||{};
-      ['nombre','validacion','desactiva','reencuadre','avance','dialogo'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
+      ['nombre','validacion','desactiva','reencuadre','avance','dialogo','round2'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     window.cfaLang=L; try{ sessionStorage.setItem('cfa_lang',L); }catch(e){}
     cfaChrome(L); try{ guiRenderTree(NODES[guiNodoActual]); }catch(e){}
     var chip=document.getElementById('cfaChip'); if(chip) chip.textContent='🌐 '+(L==='es'?'ES':(L==='fr'?'FR':'PT'));
@@ -3795,12 +3795,17 @@ function cfaCobertura(L){
   nav.appendChild(b);
 })();
 /* selector 1ª vez por sesión al entrar al guion (los enganches se montan tras cargar `cadena`) */
-function cfaEnganchar(){
-  if(window.__cfaHook) return; window.__cfaHook=true;
-  try{ cadena('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { window.cfaApply(window.cfaLangGet()); } }catch(e){ cfaApply('es'); } }); }catch(e){}
-  try{ cadena('guiIrA',function(){ try{ cfaChrome(window.cfaLang||'es'); }catch(e){} }); }catch(e){}
+function cfaEnganchar(n){
+  n=n||0;
+  if(window.__cfaHook) return;
+  /* enganche robusto por wraps (probado en producción) + reintentos por si tarda en cargar */
+  if(typeof wraps!=='function'||typeof window.tutAbrirGuion!=='function'){ if(n<60) setTimeout(function(){cfaEnganchar(n+1)},250); return; }
+  window.__cfaHook=true;
+  try{ wraps('tutAbrirGuion',function(){ try{ if(!sessionStorage.getItem('cfa_sel_ok')){ sessionStorage.setItem('cfa_sel_ok','1'); setTimeout(window.cfaSelector,150); } else { setTimeout(function(){cfaApply(window.cfaLangGet())},50); } }catch(e){ setTimeout(function(){cfaApply('es')},50); } }); }catch(e){}
+  try{ if(typeof window.guiIrA==='function') wraps('guiIrA',function(){ try{ setTimeout(function(){cfaChrome(window.cfaLang||'es')},50); }catch(e){} }); }catch(e){}
 }
-if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',cfaEnganchar); } else { setTimeout(cfaEnganchar,0); }
+cfaEnganchar(0);
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',function(){cfaEnganchar(0)}); }
 
 /* ═══ v2.6 «Plantilla» · seguimiento personalizado + nota CRM en Foco ═══ */
 function segTexto(){

@@ -227,3 +227,13 @@ Segunda pasada al área de la nota rápida tras el reporte del equipo «los boto
 - 🧹 **Limpieza profunda**: 145 → ~105 ficheros y 85 MB → ~8 MB. Eliminados: `go.tgz` (73 MB), copias regenerables de `assets/` en android/lanzador, EXE sin firmar, `.idsig`, log de firma anterior, `docs/emails/`, `docs/pruebas/` y dotfiles fugaces.
 - 🏷️ **Adiós «diagsystem»**: nuevos `callflow-icon-192/512.png` (icono PWA, zona segura maskable) y `callflow-social-preview.png` 1200×630 (og:image), compuestos con los logos reales Iberdrola + B&M. Actualizados `manifest.webmanifest`, precache de `sw.js` (`cfb-v291`) y `og:image` de ambos guiones.
 - Sin cambios funcionales de la app. Tests: 225 + 58 + 13 ✔ · version.json 2.9.1.
+
+## v2.9.2 «Babel · ola 2» — las 15 objeciones en francés y portugués · 2026-09-29
+- 🌐 **Ola 2 completada**: los 15 manejos de objeción PYMES traducidos en caliente (FR vouvoiement · PT europeo «o senhor»): nombre + validación + desactivación + reencuadre + avance + **diálogo completo** + **round 2**. Incluye matiz conforme: FR «liste d’opposition» (tipo Bloctel), horario legal en ambos.
+- 🔧 Motor: `cfaApply` mezcla ahora también `round2` (antes se quedaba en español al cambiar de idioma).
+- 📊 Cobertura en el selector 🌐: FR/PT 7 % → **~32 %** (objeciones 15/15; árbol y glosario siguen en pertinente ola 3/4).
+- Tests: 242 QA (W9 ahora mide banda de ola 2 + presencia de las 15 claves FR/PT + mezcla de `round2`) · 58 residencial · 13 visual ✔. sw `cfb-v292`.
+
+## v2.9.3 «Babel · hotfix selector» · 2026-09-29
+- 🐛 **El selector 🌐 no aparecía al entrar al guion** (reporte directo del usuario): el enganche usaba el helper `cadena()`, no disponible de forma fiable en ese momento → se tragaba la excepción y no se ponía la trampa. Reescrito con `wraps()` (el helper probado en producción) + bucle de reintento (250 ms × 60) hasta que `tutAbrirGuion` existe. Verificado en jsdom: al entrar al guion aparece el diálogo 🇪🇸/🇫🇷/🇵🇹 con cobertura FR 34 % · PT 34 %, y reentrar en la misma sesión aplica el idioma guardado.
+- sw `cfb-v293` (fuerza refresco del PWA).
