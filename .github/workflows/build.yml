@@ -1,0 +1,79 @@
+# ═══ Call Flow Business · FÁBRICA (v2.3) ═══
+# push a main → tests (203+58) → EXE + APK + SHAs como Artifacts descargables.
+# Si existen los secretos CFB_CERT_B64 / CFB_CERT_PASS → el EXE sale FIRMADO con el certificado real (OV/EV).
+name: build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  fabrica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # ───────── 1 · batería QA (incluye el golden hash editorial D2) ─────────
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Batería QA (203+58, 0 errores JS)
+        run: |
+          cd apps/web
+          npm ci --silent || npm i --silent
+          npm test
+
+      # ───────── 2 · EXE Windows (Go, sin dependencias) ─────────
+      - uses: actions/setup-go@v5
+        with: { go-version: 1.23.x }
+      - name: Compilar EXE
+        run: |
+          cp apps/web/index.html apps/web/admin.html apps/web/tutorial.html apps/web/pymes.html apps/web/residencial.html apps/windows/lanzador/assets/
+          cd apps/windows/lanzador
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "-H windowsgui -s -w" -o ../Call-Flow-Business.exe .
+          cd .. && sha256sum Call-Flow-Business.exe > SHA256.txt
+
+      # ───────── 3 · Firma EXE (solo si el certificado real ya está en secretos) ─────────
+      - name: Firmar EXE (si hay certificado en secrets)
+        env:
+          CFB_CERT_B64: ${{ secrets.CFB_CERT_B64 }}
+          CFB_CERT_PASS: ${{ secrets.CFB_CERT_PASS }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq osslsigncode
+          cd apps/windows
+          if [ -n "$CFB_CERT_B64" ]; then
+            echo "$CFB_CERT_B64" | base64 -d > /tmp/cfb-cert.pfx
+            osslsigncode sign -pkcs12 /tmp/cfb-cert.pfx -pass "$CFB_CERT_PASS" -n "Call Flow Business" \
+              -i "https://github.com/${{ github.repository_owner }}" -t http://timestamp.digicert.com \
+              -in Call-Flow-Business.exe -out "Call Flow Business (firmado).exe"
+            osslsigncode verify -in "Call Flow Business (firmado).exe"
+            rm -f /tmp/cfb-cert.pfx
+          else
+            echo "Sin secretos CFB_CERT_B64/CFB_CERT_PASS → copia el EXE sin firmar como 'firmado' para los Artifacts"
+            cp Call-Flow-Business.exe "Call Flow Business (firmado).exe"
+          fi
+          sha256sum "Call Flow Business (firmado).exe" >> SHA256.txt
+
+      # ───────── 4 · APK Android (Java 21 + SDK preinstalado del runner) ─────────
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - name: Compilar APK
+        run: |
+          sudo apt-get install -y -qq unzip zip
+          SDK="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"   # v2.3.1: el contexto env.* NO ve las vars del runner (bug CAZA#1)
+          test -d "$SDK/build-tools/34.0.0" || (printf 'y\ny\n' | "$SDK/cmdline-tools/latest/bin/sdkmanager" "build-tools;34.0.0" >/dev/null)
+          test -d "$SDK/platforms/android-35" || (printf 'y\ny\ny\n' | "$SDK/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" >/dev/null)
+          ANDROID_SDK_ROOT="$SDK" JDK_HOME="$JAVA_HOME" bash apps/android/proyecto/build.sh
+          sha256sum apps/android/Call-Flow-Business.apk > apps/android/SHA256.txt
+
+      # ───────── 5 · Artifacts: el reparto del viernes en un zip ─────────
+      - uses: actions/upload-artifact@v4
+        with:
+          name: call-flow-business-${{ github.sha }}
+          retention-days: 30
+          path: |
+            apps/windows/Call-Flow-Business.exe
+            "apps/windows/Call Flow Business (firmado).exe"
+            apps/windows/SHA256.txt
+            apps/android/Call-Flow-Business.apk
+            apps/android/SHA256.txt
+          if-no-files-found: error

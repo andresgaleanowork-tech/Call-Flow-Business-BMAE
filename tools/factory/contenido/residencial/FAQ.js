@@ -1,0 +1,17 @@
+const FAQ = [
+ ['¿Necesita internet la herramienta?','No. Funciona offline al completo; solo las tipografías viajan por red (y si fallan, usa fuentes del sistema). Guárdela en el escritorio o marque la URL: da igual.'],
+ ['¿Qué navegador uso?','Chrome o Edge en su versión actual. Firefox también funciona. En tablet va, pero en llamada se conduce mejor con el ratón y dos pestañas grandes.'],
+ ['¿Se guardan los datos del cliente en algún sitio?','Solo en su navegador (localStorage), jamás en un servidor. Por eso el botón 🧹 Limpiar datos al acabar cada llamada: borra todo y enseña el icono de confirmación.'],
+ ['¿Qué pasa si me equivoco de opción en el árbol?','Nada: «⬅ Volver» le devuelve un paso. El guion no se rompe por una pulsación; solo se rompe improvisando fuera de él.'],
+ ['¿Puedo editar los textos yo mismo?','Sí, todo el contenido vive en el <script> final del HTML. Pero edite siempre sobre una copia y pase cualquier frase nueva por el filtro idiomático de la pestaña 🇪🇸 Glosario. El responsable coordina la versión oficial del equipo.'],
+ ['¿Qué digo si me piden una tarifa concreta o un precio?','Que no da precios a ciegas porque sería mentirle: cada casa es un número. El guion vende el ESTUDIO gratuito con su factura; el precio sale del papel, nunca de su boca sin ver.'],
+ ['¿Y si el cliente dice que esto es un timo?','No se lo discuta: valide («hace bien en desconfiar»), pida verificación (el 900 oficial, la oficina, escrito antes que firma) y ofrezca la factura con datos tapados. Luna herida: solo con pistas.'],
+ ['¿Funciona con clientes de PVPC/regulada?','Sí. El guion diferencia mercado libre y regulada en detección y nunca ataca la tarifa actual: solo propone mirarla. No se presiona a quien está en el bono social: se informa y se respeta.'],
+ ['¿Y con quien tiene placas solares?','Es cliente técnico, no un no: excedentes, compensación, batería virtual, rendimiento. La objeción «solar» lleva el protocolo entero, y el Cierre D (visita del técnico), su puerta.'],
+ ['¿Cuánto dura el estudio de la factura?','El cliente lo tiene mañana con su número; usted lo mira en diez minutos cuando llega la foto. Compromiso del guion: «hoy foto, mañana número».'],
+ ['¿Puedo llamar a nombre de Iberdrola si estoy en B&M?','El argumentario lo autoriza B&M Asesores Energéticos como canal colaborador: se presenta como «Departamento RESIDENCIAL de Iberdrola», como marca el guion, y con los datos y oficinas verificables por el cliente.'],
+ ['¿Qué hago si no sabe cuánto paga?','«Ni idea, eso lo lleva el banco» es de las respuestas más comunes: el guion la recoge y le manda al Cierre B (foto), que es precisamente para eso.'],
+ ['¿Puedo usarlo para seguimientos desde el CRM?','Sí: el nodo de seguimiento trae las plantillas y la cadencia; apunte resultado y próxima acción en la ficha del cliente cada toque.'],
+ ['¿Cada cuánto se actualiza el guion?','FAQ y KPIs: mensual. Módulos, quiz y casos: trimestral. Y cada vez que se edite el guion, se revisa el módulo afectado el mismo día.'],
+ ['¿Hay versión para empresas (PYMES)?','Sí: es el hermano mayor de esta herramienta, con el mismo motor y guion propio orientado a negocios. Si usted trabaja ambos segmentos, pida acceso también a esa. Los progresos son independientes.']
+];
