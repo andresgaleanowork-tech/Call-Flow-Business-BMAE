@@ -1,4 +1,2 @@
-Call Flow Business (firmado).exe · 2.9.6 · firmado (osslsigncode) · ola 4 completa
-SHA-256: 81a175d402c0ccd7286d4fd82022d71a34a1c7ac7b7a035dd9a9eabfc298bb5d
-tamaño: 3430040 B
-fecha: 2026-09-30
+SHA-256 · v3.1.0 «Actividad» — 2026-09-30
+d60e331223582183c79ce7d89129630d260fc93b79c5a64a323ce391d99833b5  Call Flow Business (firmado).exe (3534048 B)

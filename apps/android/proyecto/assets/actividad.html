@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro de actividad · Call Flow Business</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<style>
+:root{--verde:#00A650;--verde-oscuro:#007A3B;--naranja:#E8890C;--azul:#2563EB;--rojo:#D92D20;
+ --negro:#0A0A0A;--negro-suave:#2A2A2A;--gris-oscuro:#4A4A4A;--gris-medio:#6B6B6B;--gris-linea:#E5E5E5;
+ --gris-fondo:#FAFAF9;--blanco:#FFF;--verde-fondo:#EAF7F0;--radio:10px;--sombra:0 4px 16px rgba(0,0,0,.06);
+ --font-display:'Inter Tight','Inter',-apple-system,sans-serif;--font-body:'Inter',-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--gris-fondo);color:var(--negro);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 90px}
+header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--gris-linea)}
+.top-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:12px 20px}
+.top h1{font-family:var(--font-display);font-size:1.15rem;font-weight:600;flex:1}
+.top h1 small{font-weight:400;color:var(--gris-medio);font-size:.78rem;display:block}
+a.volver{font-size:.85rem;color:var(--gris-oscuro);text-decoration:none;padding:8px 12px;border:1px solid var(--gris-linea);border-radius:999px;background:var(--blanco)}
+a.volver:hover{border-color:var(--verde);color:var(--verde-oscuro)}
+/* barra de periodo */
+.periodo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:22px 0 18px}
+.seg{display:flex;border:1px solid var(--gris-linea);border-radius:999px;overflow:hidden;background:var(--blanco)}
+.seg button{border:0;background:none;padding:8px 16px;font-size:.85rem;cursor:pointer;color:var(--gris-oscuro)}
+.seg button.on{background:var(--negro);color:#fff}
+.pnav{display:flex;align-items:center;gap:6px}
+.pnav button{border:1px solid var(--gris-linea);background:var(--blanco);border-radius:999px;width:36px;height:36px;font-size:1rem;cursor:pointer}
+.plabel{font-family:var(--font-display);font-weight:600;min-width:150px;text-align:center;text-transform:capitalize}
+button.accion{margin-left:auto;border:1px solid var(--gris-linea);background:var(--blanco);border-radius:999px;padding:9px 16px;font-size:.85rem;cursor:pointer;color:var(--negro-suave)}
+button.accion:hover{border-color:var(--verde)}
+button.accion.verde{background:var(--verde);border-color:var(--verde);color:#fff;font-weight:600}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);padding:14px 16px}
+.kpi .n{font-family:var(--font-display);font-size:1.9rem;font-weight:600;line-height:1.1}
+.kpi .l{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gris-medio);margin-top:4px}
+.kpi.bien{border-color:#B8E6CE;background:var(--verde-fondo)}
+.kpi.alert{border-color:#F4CDBE;background:#FDF3EF}
+.kpi small{display:block;font-size:.72rem;color:var(--gris-medio);margin-top:4px}
+/* paneles */
+.panel{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);padding:18px;margin-bottom:18px}
+.panel h2{font-family:var(--font-display);font-size:1rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel h2 .nota{font-size:.72rem;font-weight:400;color:var(--gris-medio)}
+.cols{display:grid;gap:18px;margin-bottom:18px}
+.c2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)} .c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:860px){.c2,.c3{grid-template-columns:1fr}}
+/* tabla ranking */
+trnk{display:flex;flex-direction:column;gap:7px}
+.rk{display:flex;align-items:center;gap:10px;font-size:.86rem}
+.rk .nm{min-width:150px;color:var(--negro-suave)}
+.rk .bar{flex:1;height:14px;background:var(--gris-fondo);border-radius:999px;overflow:hidden}
+.rk .bar i{display:block;height:100%;background:var(--verde);border-radius:999px}
+.rk .c{width:34px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+/* embudo */
+.fu{display:flex;flex-direction:column;gap:7px}
+.fu-row{display:flex;align-items:center;gap:8px;font-size:.82rem}
+.fu-row .chip{min-width:118px;padding:5px 10px;border-radius:999px;color:#fff;font-weight:600;font-size:.76rem;text-align:center}
+.fu-row .b{flex:1;height:12px;background:var(--gris-fondo);border-radius:999px;overflow:hidden}
+.fu-row .b i{display:block;height:100%;border-radius:999px;opacity:.75}
+.fu-row .n{width:26px;text-align:right;font-weight:600}
+/* registro */
+.rf{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.rf select,.rf input{border:1px solid var(--gris-linea);border-radius:8px;padding:8px 10px;font-size:.86rem;background:var(--blanco);font-family:inherit}
+.fila{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--gris-linea);font-size:.86rem;flex-wrap:wrap}
+.fila:last-child{border-bottom:0}
+.fila .fh{min-width:104px;color:var(--gris-medio);font-variant-numeric:tabular-nums;font-size:.8rem}
+.fila .em{font-size:1.05rem}
+.fila .de{flex:1;min-width:160px}
+.fila .ci{color:var(--gris-medio);font-size:.8rem}
+.fila select{border:1px solid var(--gris-linea);border-radius:999px;padding:5px 10px;font-size:.78rem;background:var(--blanco);font-family:inherit}
+.fila .bor{border:0;background:none;cursor:pointer;color:var(--gris-claro);font-size:1rem}
+.fila .bor:hover{color:var(--rojo)}
+.auto{font-size:.66rem;background:var(--gris-fondo);border:1px solid var(--gris-linea);border-radius:999px;padding:2px 8px;color:var(--gris-medio)}
+.vacio{padding:34px 10px;text-align:center;color:var(--gris-medio);font-size:.9rem}
+/* alta manual */
+#frm{display:none;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;background:var(--gris-fondo);border:1px dashed var(--gris-linea);border-radius:var(--radio);padding:14px;margin-bottom:14px}
+#frm.abierto{display:grid}
+#frm label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gris-medio);display:flex;flex-direction:column;gap:4px}
+#frm select,#frm input{border:1px solid var(--gris-linea);border-radius:8px;padding:8px;font-size:.86rem;font-family:inherit;background:#fff}
+#frm .ancho{grid-column:1/-1}
+footer{color:var(--gris-claro);font-size:.75rem;text-align:center;padding:26px 0 0}
+.legend{font-size:.72rem;color:var(--gris-medio);display:flex;gap:14px;margin-top:6px}
+.legend b.dot{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--verde);margin-right:4px;vertical-align:-1px}
+.legend line, .legend b.ln{display:inline-block;width:16px;height:0;border-top:2px dashed var(--naranja);margin-right:4px;vertical-align:3px}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <span aria-hidden="true" style="font-size:1.4rem">📊</span>
+  <h1>Registro de actividad<small>Se anota solo al terminar cada gestión · datos en este dispositivo (burbuja por comercial)</small></h1>
+  <a class="volver" href="index.html">← Inicio</a>
+</div></header>
+
+<div class="wrap">
+  <div class="periodo">
+    <div class="seg" role="tablist">
+      <button id="sDia" type="button" onclick="pModo('dia')">Hoy</button>
+      <button id="sSem" type="button" onclick="pModo('semana')">Semana</button>
+      <button id="sMes" type="button" class="on" onclick="pModo('mes')">Mes</button>
+    </div>
+    <div class="pnav">
+      <button type="button" onclick="pNav(-1)" aria-label="Periodo anterior">◀</button>
+      <div class="plabel" id="pLabel"></div>
+      <button type="button" onclick="pNav(1)" aria-label="Periodo siguiente">▶</button>
+    </div>
+    <button class="accion verde" type="button" onclick="toggleForm()">＋ Gestión manual</button>
+    <button class="accion" type="button" onclick="csvMes()">⭳ CSV del mes</button>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="cols c2">
+    <div class="panel">
+      <h2>Gestiones por día <span class="nota">vs. objetivo diario</span></h2>
+      <div id="chart"></div>
+      <div class="legend"><span><b class="dot"></b>gestiones</span><span><b class="ln"></b>objetivo diario (editable en tarjeta)</span></div>
+    </div>
+    <div class="panel">
+      <h2>Embudo CRM <span class="nota">en vivo desde 👥 Clientes</span></h2>
+      <div class="fu" id="embudo"></div>
+      <div style="margin-top:10px;font-size:.8rem;color:var(--gris-medio)" id="pipekpi"></div>
+    </div>
+  </div>
+
+  <div class="cols c3">
+    <div class="panel"><h2>Por tipo de gestión</h2><div class="trnk trnk" id="rkTipo"></div></div>
+    <div class="panel"><h2>Por resultado</h2><div class="trnk" id="rkRes"></div></div>
+    <div class="panel"><h2>Top localidades <span class="nota">actividad + CRM</span></h2><div class="trnk" id="rkLoc"></div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Registro <span class="nota">últimas gestiones del periodo · el resultado se puede corregir en línea</span></h2>
+    <div id="frm">
+      <label>Tipo
+        <select id="fTipo">
+          <option value="llamada">📞 Llamada</option><option value="email">✉ Email</option>
+          <option value="seguimiento">🔁 Seguimiento</option><option value="reenvio">📤 Reenvío factura</option>
+          <option value="visita">📅 Coordinación visita</option><option value="crm">🗂 Actualización CRM</option>
+          <option value="otro">➕ Otro</option>
+        </select></label>
+      <label>Resultado<select id="fRes"><option value="">— sin marcar</option></select></label>
+      <label>Ciudad<input id="fCiudad" maxlength="40" placeholder="Sagunto…"></label>
+      <label>Fecha<input id="fFecha" type="date"></label>
+      <label>Hora<input id="fHora" type="time"></label>
+      <label class="ancho">Detalle<input id="fDetalle" maxlength="120" placeholder="p. ej. reenviada factura de junio"></label>
+      <label class="ancho"><button class="accion verde" type="button" style="margin:0" onclick="altaManual()">Añadir al registro</button></label>
+    </div>
+    <div class="rf">
+      <select id="filtro" aria-label="Filtrar por tipo"><option value="">Todos los tipos</option></select>
+      <span style="flex:1"></span>
+      <span class="auto" id="contador"></span>
+    </div>
+    <div id="lista"></div>
+  </div>
+
+  <footer>Call Flow Business · v3.1.0 «Actividad» · registro local por comercial (bm_actividad) — se comparte con la burbuja de sync del equipo</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var Q='querySelector', D=document;
+function ls(k,d){ try{ var v=JSON.parse(localStorage.getItem(k)); return (v==null)?d:v; }catch(e){ return d; } }
+function sv(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function iso(d){ function p2(x){return (x<10?'0':'')+x;} return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()); }
+// burbuja por comercial
+var slug='comun'; try{ var pf=ls('cfb_perfil',null); slug=(pf&&pf.slug)||'comun'; }catch(e){}
+var KEY='bm_actividad_'+slug;
+function todasClaves(){ var ks=['bm_actividad','bm_actividad_comun',KEY].filter(function(k,i,a){ return a.indexOf(k)===i; }); return ks; }
+function leer(){ var visto={}, out=[];
+  todasClaves().forEach(function(k){ (ls(k,[])||[]).forEach(function(e){ if(e&&typeof e.ts==='number'&&!visto[e.ts]){ visto[e.ts]=1; e._k=k; out.push(e); } }); });
+  out.sort(function(a,b){ return a.ts-b.ts; }); return out; }
+function guardarEntrada(e){ var k=e._k||KEY, a=(ls(k,[])||[]), hecho=false;
+  for(var i=0;i<a.length;i++){ if(a[i].ts===e.ts){ a[i]=e; delete a[i]._k; hecho=true; break; } }
+  if(!hecho){ var copia={}; for(var x in e){ if(x!=='_k') copia[x]=e[x]; } a.push(copia); }
+  if(a.length>3000) a=a.slice(a.length-3000); sv(k,a); }
+function borrar(e){ var k=e._k||KEY; sv(k, (ls(k,[])||[]).filter(function(x){ return x.ts!==e.ts; })); }
+
+var TIPOS=[['llamada','📞 Llamada'],['email','✉ Email'],['seguimiento','🔁 Seguimiento'],['reenvio','📤 Reenvío factura'],
+ ['visita','📅 Coordinación visita'],['crm','🗂 Actualización CRM'],['practica','🎓 Práctica'],['otro','➕ Otro']];
+var RES=['Contacto efectivo','Solicita factura','Factura recibida','Factura reenviada','Cita coordinada',
+ 'No contesta','No disponible','No interesado/a','Permanencia','Pendiente de seguimiento'];
+var tName=function(t){ for(var i=0;i<TIPOS.length;i++) if(TIPOS[i][0]===t) return TIPOS[i][1]; return '➕ '+(t||'otro'); };
+
+// CRM en vivo (compartido por ambos guiones)
+var CRM=ls('cli_registros',{})||{};
+var ESTADOS=[['nuevo','🆕 Nuevo','#64748B'],['contactado','📞 Contactado','#2563EB'],['interesado','🤔 Interesado','#7C3AED'],
+ ['factura','📄 Factura solicitada','#E8890C'],['cita','📅 Cita','#0E9F6E'],['visita','🚶 Visita','#0E7490'],
+ ['ganado','🏆 Ganado','#00A650'],['perdido','✗ Perdido','#D92D20']];
+
+// estado de vista
+var modo='mes', ref=new Date(), filtro='';
+function rango(){
+  var a=new Date(ref.getFullYear(),ref.getMonth(),ref.getDate()), b=new Date(a);
+  if(modo==='dia'){ b.setDate(b.getDate()+1); }
+  else if(modo==='semana'){ var d=(a.getDay()+6)%7; a.setDate(a.getDate()-d); b=new Date(a); b.setDate(b.getDate()+7); }
+  else { a=new Date(a.getFullYear(),a.getMonth(),1); b=new Date(a.getFullYear(),a.getMonth()+1,1); }
+  return [a,b];
+}
+function enPeriodo(e){ var r=rango(); return e.ts>=r[0].getTime() && e.ts<r[1].getTime(); }
+function pModo(m){ modo=m; render(); }  window.pModo=pModo;
+function pNav(d){ var r=new Date(ref); if(modo==='dia') r.setDate(r.getDate()+d); else if(modo==='semana') r.setDate(r.getDate()+7*d); else r.setMonth(r.getMonth()+d); ref=r; render(); } window.pNav=pNav;
+var MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+var DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+function labelPeriodo(){ var r=rango();
+  if(modo==='dia') return DIAS[r[0].getDay()]+' '+r[0].getDate()+' '+MESES[r[0].getMonth()];
+  if(modo==='semana') return r[0].getDate()+' '+MESES[r[0].getMonth()].slice(0,3)+' — '+(new Date(r[1].getTime()-864e5)).getDate()+' '+MESES[new Date(r[1].getTime()-864e5).getMonth()].slice(0,3);
+  return MESES[r[0].getMonth()]+' '+r[0].getFullYear(); }
+
+function render(){
+  D[Q]('#pLabel').textContent=labelPeriodo();
+  ['sDia','sSem','sMes'].forEach(function(id,i){ D[Q]('#'+id).classList.toggle('on',['dia','semana','mes'][i]===modo); });
+  var meta=ls('bm_act_meta',{g:80}); if(!(meta.g>0)) meta.g=80;
+  var act=leer().filter(enPeriodo);
+  var campo=act.filter(function(e){ return e.tipo!=='practica'; });
+  var pract=act.filter(function(e){ return e.tipo==='practica'; });
+  // KPIs
+  var ce=campo.filter(function(e){ return e.resultado==='Contacto efectivo'; }).length;
+  var efic=campo.length? Math.round(100*ce/campo.length):0;
+  var mins=campo.reduce(function(s,e){ return s+(e.min||0); },0);
+  var factRec=campo.filter(function(e){ return e.resultado==='Factura recibida'; }).length;
+  var factSol=campo.filter(function(e){ return e.resultado==='Solicita factura'; }).length;
+  var fichas=Object.keys(CRM).length;
+  var diasTrabajados=(function(){ var s={}; campo.forEach(function(e){ s[e.f]=1; }); return Object.keys(s).length; })();
+  var porDia=diasTrabajados? Math.round(campo.length/diasTrabajados):0;
+  var hoy=iso(new Date()), hoyN=leer().filter(function(e){ return e.f===hoy && e.tipo!=='practica'; }).length;
+  var diff=hoyN-meta.g;
+  var kpis=[
+    {n:'<input id="metaIn" type="number" min="1" value="'+meta.g+'" style="width:64px;font:inherit;border:1px solid var(--gris-linea);border-radius:8px;padding:2px 6px">',l:'objetivo diario',s:'hoy: '+hoyN+(diff>=0?' ✔':' · faltan '+(-diff))},
+    {n:campo.length,l:'gestiones en el periodo',s:porDia+'/día trabajado'},
+    {n:efic+'%',l:'contacto efectivo',s:ce+' de '+campo.length, c:(efic>=30?'bien':'')},
+    {n:factSol+' → '+factRec,l:'facturas solicitadas → recibidas',c:(factRec>0?'bien':'')},
+    {n:fichas,l:'empresas en el CRM',s:'embudo abajo →'},
+    {n:mins,l:'minutos en el teléfono'},
+    {n:pract.length,l:'sesiones de práctica',s:'roleplay · quiz · casos'}
+  ];
+  D[Q]('#kpis').innerHTML=kpis.map(function(k){ return '<div class="kpi '+(k.c||'')+'"><div class="n">'+k.n+'</div><div class="l">'+k.l+'</div>'+(k.s?'<small>'+k.s+'</small>':'')+'</div>'; }).join('');
+  var mi=D[Q]('#metaIn');
+  if(mi) mi.onchange=function(){ var v=Math.max(1,Math.round(Number(mi.value)||80)); sv('bm_act_meta',{g:v}); render(); };
+  // gráfico barras por día
+  var por={}; act.forEach(function(e){ por[e.f]=(por[e.f]||0)+1; });
+  var dias=[], r=rango(), cur=new Date(r[0]);
+  while(cur.getTime()<r[1].getTime()){ if(cur.getDay()!==0) dias.push(iso(cur)); cur.setDate(cur.getDate()+1); }
+  var max=Math.max(meta.g,1); dias.forEach(function(f){ if((por[f]||0)>max) max=por[f]; });
+  var W=Math.max(320,dias.length*34), H=170, base=H-24, step=W/Math.max(1,dias.length);
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Barras de gestiones por día">';
+  var yObj=base-(meta.g/max)*(base-10);
+  svg+='<line x1="0" y1="'+yObj+'" x2="'+W+'" y2="'+yObj+'" stroke="#E8890C" stroke-dasharray="5 4" stroke-width="2"/>';
+  dias.forEach(function(f,i){
+    var v=por[f]||0, h=v? Math.max(4,(v/max)*(base-10)):2;
+    var x=i*step+step*0.18, y=base-h;
+    svg+='<g><title>'+f+': '+v+' gestiones</title>'+
+      '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(step*0.64).toFixed(1)+'" height="'+h.toFixed(1)+'" rx="4" fill="'+(v>=meta.g?'#00A650':(v?'#7FD1A8':'#E5E5E5'))+'"/>'+
+      '<text x="'+(x+step*0.32).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10" fill="#999">'+f.slice(8,10)+'</text>'+
+      (v?'<text x="'+(x+step*0.32).toFixed(1)+'" y="'+(y-4).toFixed(1)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#2A2A2A">'+v+'</text>':'')+'</g>';
+  });
+  svg+='</svg>';
+  D[Q]('#chart').innerHTML=svg;
+  // embudo CRM
+  var crmConteo=ESTADOS.map(function(){ return 0; }), e;
+  var nombres=Object.keys(CRM), pipe=0;
+  nombres.forEach(function(n){
+    var f=CRM[n]||{}; var est=ESTADOS.some(function(s){return s[0]===f.estado;})? f.estado : 'nuevo';
+    crmConteo[ESTADOS.findIndex(function(s){return s[0]===est;})]++;
+    if(['interesado','factura','cita','visita'].indexOf(est)>=0){ var num=parseFloat(String(f.factura||'').replace(',','.')); if(num>0) pipe+=num; }
+  });
+  var maxE=Math.max.apply(null,crmConteo.concat([1]));
+  D[Q]('#embudo').innerHTML=ESTADOS.map(function(s,i){
+    return '<div class="fu-row"><span class="chip" style="background:'+s[2]+'">'+s[1]+'</span>'+
+      '<span class="b"><i style="width:'+Math.round(100*crmConteo[i]/maxE)+'%;background:'+s[2]+'"></i></span>'+
+      '<span class="n">'+crmConteo[i]+'</span></div>';
+  }).join('');
+  D[Q]('#pipekpi').innerHTML='💶 Pipeline en curso: <b>'+(pipe?pipe.toLocaleString('es-ES',{maximumFractionDigits:0})+' €/mes':'—')+'</b> (factura estimada de interesado → visita)';
+  // rankings
+  function rank(contar, contenedor, totalRef){
+    var arr=Object.keys(contar).map(function(k){ return [k,contar[k]]; }).sort(function(a,b){ return b[1]-a[1]; });
+    var m=arr.length? arr[0][1]:1;
+    D[Q](contenedor).innerHTML=arr.length? arr.map(function(x){
+      return '<div class="rk"><span class="nm">'+x[0]+'</span><span class="bar"><i style="width:'+Math.round(100*x[1]/m)+'%"></i></span><span class="c">'+x[1]+'</span></div>';
+    }).join('') : '<div class="vacio">Sin datos en el periodo</div>';
+  }
+  var cTip={}, cRes={}, cLoc={};
+  campo.forEach(function(e){ var t=tName(e.tipo); cTip[t]=(cTip[t]||0)+1; if(e.resultado) cRes[e.resultado]=(cRes[e.resultado]||0)+1; if(e.ciudad) cLoc[e.ciudad]=(cLoc[e.ciudad]||0)+1; });
+  nombres.forEach(function(n){ var c=(CRM[n]||{}).ciudad; if(c) cLoc[c]=(cLoc[c]||0)+1; });
+  rank(cTip,'#rkTipo'); rank(cRes,'#rkRes'); rank(cLoc,'#rkLoc');
+  // registro
+  var list=act.filter(function(e){ return !filtro||e.tipo===filtro; }).slice().reverse();
+  D[Q]('#contador').textContent=list.length+' gestiones'+(filtro?' (filtro)':'');
+  D[Q]('#lista').innerHTML=list.length? list.map(function(e){
+    var resOpts='<option value="">—</option>'+RES.map(function(r){ return '<option'+(e.resultado===r?' selected':'')+'>'+r+'</option>'; }).join('');
+    return '<div class="fila"><span class="fh">'+e.f.slice(8,10)+'/'+e.f.slice(5,7)+' '+e.h+'</span>'+
+      '<span class="em">'+esc(tName(e.tipo).split(' ')[0])+'</span>'+
+      '<span class="de">'+esc(e.detalle||tName(e.tipo))+' '+(e.min?('· '+e.min+' min'):'')+(e.org&&e.org!=='manual'?' <span class="auto">auto·'+e.org+'</span>':' <span class="auto">manual</span>')+'</span>'+
+      (e.ciudad?'<span class="ci">📍'+esc(e.ciudad)+'</span>':'')+
+      (e.tipo!=='practica'? '<select data-ts="'+e.ts+'" onchange="actRes(this)">'+resOpts+'</select>':'')+
+      '<button class="bor" type="button" data-ts="'+e.ts+'" onclick="actDel(this)" aria-label="Borrar">✗</button></div>';
+  }).join('') : '<div class="vacio">Todavía no hay gestiones anotadas en este periodo.<br>Cierra una llamada con ⏱, termina una práctica o usa «＋ Gestión manual».</div>';
+  window._act=leer();
+}
+
+window.actRes=function(sel){ var ts=Number(sel.dataset.ts); (window._act||[]).forEach(function(e){ if(e.ts===ts){ e.resultado=sel.value; guardarEntrada(e); } }); render(); };
+window.actDel=function(b){ var ts=Number(b.dataset.ts); if(!confirm('¿Borrar esta gestión del registro?')) return; (window._act||[]).forEach(function(e){ if(e.ts===ts) borrar(e); }); render(); };
+window.toggleForm=function(){ var f=D[Q]('#frm'); f.classList.toggle('abierto'); if(f.classList.contains('abierto')){ var hoy=new Date(); D[Q]('#fFecha').value=iso(hoy); D[Q]('#fHora').value=(hoy.getHours()<10?'0':'')+hoy.getHours()+':'+(hoy.getMinutes()<10?'0':'')+hoy.getMinutes(); } };
+window.altaManual=function(){
+  var f=D[Q]('#fFecha').value, h=D[Q]('#fHora').value;
+  if(!f){ alert('Ponle fecha a la gestión'); return; }
+  var d=new Date(f+'T'+(h||'09:00'));
+  var e={ts:d.getTime(), f:f, h:h||'09:00', tipo:D[Q]('#fTipo').value, resultado:D[Q]('#fRes').value,
+    detalle:String(D[Q]('#fDetalle').value||'').replace(/<>&"/g,'').slice(0,120), ciudad:String(D[Q]('#fCiudad').value||'').replace(/<>&"/g,'').slice(0,40),
+    sector:'', min:0, org:'manual'};
+  guardarEntrada(e);
+  D[Q]('#fDetalle').value='';
+  render();
+};
+function csvC(v){ v=String(v==null?'':v); if(/[",;\n]/.test(v)) v='"'+v.replace(/"/g,'""')+'"'; return v; }
+window.csvMes=function(){
+  var r=rango(); var mesF=mesRef();
+  var act=leer().filter(function(e){ return e.f.slice(0,7)===mesF; });
+  var rows=[['fecha','hora','tipo','resultado','detalle','ciudad','min','origen']];
+  act.forEach(function(e){ rows.push([e.f,e.h,tName(e.tipo),e.resultado||'',e.detalle||'',e.ciudad||'',e.min||'',e.org||'']); });
+  var csv='﻿'+rows.map(function(r2){ return r2.map(csvC).join(';'); }).join('\r\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}), a=D.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='actividad-'+mesF+'.csv'; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },4000);
+};
+function mesRef(){ if(modo==='mes') return iso(rango()[0]).slice(0,7); return iso(ref).slice(0,7); }
+
+// selects estáticos
+D[Q]('#filtro').innerHTML='<option value="">Todos los tipos</option>'+TIPOS.map(function(t){ return '<option value="'+t[0]+'">'+t[1]+'</option>'; }).join('');
+D[Q]('#filtro').onchange=function(){ filtro=this.value; render(); };
+D[Q]('#fRes').innerHTML='<option value="">— sin marcar</option>'+RES.map(function(r){ return '<option>'+r+'</option>'; }).join('');
+render();
+})();
+</script>
+</body>
+</html>

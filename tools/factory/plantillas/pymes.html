@@ -353,6 +353,32 @@ select.jump:hover,.tree-btn:hover{border-color:#B9B9B4;background:var(--beige)}
 .btn-reset{border-color:var(--gris-linea);color:var(--rojo-apagado)}
 .btn-reset:hover{background:var(--rojo-fondo);border-color:var(--rojo-apagado)}
 
+
+/* ═══ v3.0.0 «CRM» · grupos de barra + área Clientes ═══ */
+.cfa-grp-sep{width:1px;align-self:stretch;background:var(--gris-linea);margin:0 4px;flex:0 0 auto}
+.cfa-grp-lab{font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gris-medio);align-self:center;margin-right:2px;white-space:nowrap}
+#cfaAjWrap{position:relative}
+#cfaAjMenu{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--gris-linea);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.18);padding:6px;min-width:210px;z-index:50000}
+#cfaAjMenu.cfa-on{display:block}
+#cfaAjMenu button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;font:500 13px Inter,sans-serif;cursor:pointer;color:var(--negro)}
+#cfaAjMenu button:hover{background:#F2F0FA}
+body.cfb-txtgreat{font-size:112%}
+.crm-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.crm-kpi{background:#fff;border:1px solid #E4E1F5;border-radius:10px;padding:6px 12px;font-size:12.5px}
+.crm-hoy{border:1px solid #F3C267;background:#FFF7E8;border-radius:10px;padding:8px 10px;margin-bottom:8px}
+.crm-chip{display:inline-block;border:1px solid #ddd;background:#fff;border-radius:99px;padding:3px 10px;font-size:12px;cursor:pointer;margin:2px 3px 2px 0}
+.crm-chip.on{border-color:#007A3B;background:#EAF7EE;font-weight:600}
+.crm-badge{display:inline-block;border-radius:99px;color:#fff;font-size:11px;padding:2px 8px;white-space:nowrap}
+.crm-fila{display:flex;gap:8px;align-items:center;border:1px solid #eee;border-radius:10px;padding:7px 9px;margin-top:6px;background:#fff;cursor:pointer}
+.crm-fila:hover{border-color:#ADA6D9}
+.crm-f .crm-n{font-weight:600;font-size:.9rem}
+.crm-f .crm-m{color:#777;font-size:.72rem}
+.crm-inp{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #ddd;border-radius:8px;margin:4px 0;font:500 13px Inter,sans-serif}
+.crm-btn{display:inline-flex;align-items:center;gap:4px;background:#4C3EBF;color:#fff;border:0;border-radius:8px;padding:6px 10px;font:600 12.5px Inter,sans-serif;cursor:pointer;margin:4px 4px 0 0}
+.crm-btn.sec{background:#fff;color:#4C3EBF;border:1px solid #4C3EBF}
+.crm-btn.rojo{background:#fff;color:#B91C1C;border:1px solid #E5B6B6}
+.crm-mini{font-size:.72rem;color:#6B6B6B}
+
 /* ── PANEL DERECHO / PESTAÑAS ──────────────────────────────────────── */
 #panel-der{display:flex;flex-direction:column}
 .tabs{display:flex;gap:2px;border-bottom:1px solid var(--gris-linea);padding:14px 18px 0;overflow-x:auto;background:var(--blanco)}
@@ -807,11 +833,22 @@ window.addEventListener('hashchange',()=>{
   <div class="header-actions">
     <button type="button" class="btn btn-blanco" id="btnCapaGlobal" onclick="guiCapaGlobal()">🔬 Capa neuro: OFF</button>
     <button type="button" class="btn btn-blanco" id="btnFoco" onclick="guiToggleFoco()">🎯 Foco</button><button type="button" class="btn btn-blanco" id="btnTimer" onclick="cfbLlamadaToggle()" title="Cronometra la llamada real: pulse al iniciar y al colgar (se registra sola con su duración)">⏱ Llamada</button>
+    <button type="button" class="btn btn-blanco" id="btnClientes" onclick="guiActivarTab('tab-clientes')" title="Área Clientes: fichas, embudo y próximas acciones (solo en este dispositivo)">👥 Clientes</button>
     <button type="button" class="btn btn-blanco" onclick="guiOpenModal()">📋 Datos de la llamada</button>
+    <span class="cfa-grp-sep" aria-hidden="true"></span>
     <button type="button" class="btn btn-ghost" onclick="guiActivarTab('tab-roleplay')">🎭 Roleplay</button>
-    <button type="button" class="btn btn-ghost" onclick="guiResetLlamada()">↺ Reiniciar</button>
+    <span class="cfa-grp-sep" aria-hidden="true"></span>
+    <span id="cfaAjWrap">
+      <button type="button" class="btn btn-ghost" id="btnAjtG" onclick="cfaAjToggle()" title="Ajustes de la vista y la sesión">⚙ Ajustes</button>
+      <span id="cfaAjMenu" role="menu">
+        <button type="button" data-k="↺ Reiniciar llamada" onclick="cfaAjHide();guiResetLlamada()">↺ Reiniciar llamada</button>
+        <button type="button" data-k="🔡 Texto grande" onclick="cfaTxtGreat(this)">🔡 Texto grande</button>
+        <button type="button" data-k="📊 Registro de actividad" onclick="cfbActividadAbrir()">📊 Registro de actividad</button>
+<button type="button" data-k="🗑 Vaciar clientes" onclick="cfaAjHide();cliReset()">🗑 Vaciar clientes</button>
+        <button type="button" data-k="© Créditos" onclick="cfaAjHide();appCreditosAbrir()">© Créditos</button>
+      </span>
+    </span>
     <button type="button" class="btn btn-ghost" id="cfbBtnHub" onclick="cfbHubAbrir()" aria-label="Mi Cuenta, ficha y utilidades" title="Mi Cuenta · estadísticas · sesión · ficha de llamada">👤 Mi Cuenta</button>
-    <button type="button" class="btn btn-ghost" onclick="appCreditosAbrir()" aria-label="Créditos y aviso legal" title="Créditos y aviso legal">© Créditos</button>
   </div>
 </header>
 
@@ -869,6 +906,7 @@ try{ if(JSON.parse(localStorage.getItem('bm_compliance_off')||'null')==='1'){ va
       <button type="button" class="tab" data-tab="tab-glosario" onclick="guiActivarTab('tab-glosario')">🇪🇸 Glosario</button>
       <button type="button" class="tab" data-tab="tab-kpi" onclick="guiActivarTab('tab-kpi')">📈 KPIs</button>
       <button type="button" class="tab" data-tab="tab-roleplay" onclick="guiActivarTab('tab-roleplay')">🎭 Roleplay</button>
+      <button type="button" class="tab" data-tab="tab-clientes" onclick="guiActivarTab('tab-clientes')">👥 Clientes</button>
     </nav>
     <div class="tab-body">
       <div class="tab-pane active" id="tab-guion"></div>
@@ -878,6 +916,7 @@ try{ if(JSON.parse(localStorage.getItem('bm_compliance_off')||'null')==='1'){ va
       <div class="tab-pane" id="tab-glosario"></div>
       <div class="tab-pane" id="tab-kpi"></div>
       <div class="tab-pane" id="tab-roleplay"></div>
+      <div class="tab-pane" id="tab-clientes"></div>
     </div>
   </section>
 </main>
@@ -1835,7 +1874,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.9.6', GUIAFECHA='16-09-2026';
+var VERSION='3.1.0', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF=''; /* v1.5.1 determinista: pymes */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -1976,7 +2015,233 @@ window.cliCopia=function(nombre){
 };
 window.cliReset=function(){ if(confirm('⚠ ¿VACIAR todas las fichas de clientes de ESTE dispositivo?')){ cliGuardarTodo({}); toast('🗑 Registro de clientes vaciado'); window.cliVerTodo(); } };
 /* superficie pública mínima (tests + reutilización futura) */
-window.cfbRacha=racha; window.cfbMisInsignias=misInsignias; window.cliAnadir=cliAnadir; window.cliBorrar=cliBorrar; window.cliBorrarNota=cliBorrarNota;
+window.cfbRacha=racha; window.cfbMisInsignias=misInsignias;
+/* ═══ v3.0.0 «CRM» · área Clientes: fichas con embudo, próximas acciones, preparar llamada ═══
+   Reutiliza cli_registros (RGPD: JAMÁS sale del dispositivo). Registros v3: +tel/sector/ciudad/
+   comercializadora/factura/dolor/estado/prox{f,h,accion}. Compat: las fichas viejas solo-notas siguen. */
+var CRM_ESTADOS=[['nuevo','🆕 Nuevo','#64748B'],['contactado','📞 Contactado','#2563EB'],['interesado','🔥 Interesado','#D97706'],
+ ['factura','📄 Factura recibida','#0F766E'],['cita','🗓 Cita','#4C3EBF'],['visita','🔧 Visita técnica','#7C3AED'],
+ ['ganado','✅ Ganado','#007A3B'],['perdido','✖ Perdido','#B91C1C']];
+var CRM_NODO={nuevo:'apertura',contactado:'apertura',interesado:'deteccion',factura:'cierre_facturas',cita:'cierre_cita',visita:'cierre_tecnico',ganado:'seguimiento',perdido:'retirada'};
+var CRM_DOLOR={'':'—','precio':'💶 Precio','servicio':'⚡ Servicio','miedo':'😟 Miedo a averías','contento':'😊 Sin dolor'};
+function crmDef(e){ for(var i=0;i<CRM_ESTADOS.length;i++) if(CRM_ESTADOS[i][0]===e) return CRM_ESTADOS[i]; return CRM_ESTADOS[0]; }
+function crmNorm(f){
+  f=f&&typeof f==='object'?f:{};
+  if(f.v!==3){ f.v=3; }
+  ['tel','sector','ciudad','comercializadora','factura','dolor'].forEach(function(k){ if(typeof f[k]!=='string') f[k]=''; });
+  if(!crmDefId(f.estado)) f.estado='nuevo';
+  if(!f.prox||typeof f.prox!=='object') f.prox={f:'',h:'',accion:''};
+  if(!Array.isArray(f.notas)) f.notas=[];
+  return f;
+}
+function crmDefId(e){ for(var i=0;i<CRM_ESTADOS.length;i++) if(CRM_ESTADOS[i][0]===e) return true; return false; }
+function cliUp(nombre,campos){
+  nombre=cliNorm(nombre); if(!nombre) return null;
+  var o=cliLeer();
+  if(!o[nombre]){
+    var claves=Object.keys(o);
+    if(claves.length>=80){ /* mismo tapón que cliAnadir: cae la ficha con la nota más vieja */
+      claves.sort(function(a,b){ var fa=(o[a].notas&&o[a].notas.length? o[a].notas[o[a].notas.length-1].f:o[a].creado)||''; var fb=(o[b].notas&&o[b].notas.length? o[b].notas[o[b].notas.length-1].f:o[b].creado)||''; return fa<fb?-1:1; });
+      delete o[claves[0]];
+    }
+  }
+  var f=crmNorm(o[nombre]||{creado:hoyLocal(),notas:[]});
+  ['tel','sector','ciudad','comercializadora','factura','dolor'].forEach(function(k){
+    if(campos&&campos[k]!==undefined) f[k]=String(campos[k]==null?'':campos[k]).replace(/[<>&\"]/g,'').slice(0,80);
+  });
+  if(campos&&campos.estado&&crmDefId(campos.estado)) f.estado=campos.estado;
+  if(campos&&campos.prox&&typeof campos.prox==='object'){ f.prox={f:String(campos.prox.f||'').slice(0,10),h:String(campos.prox.h||'').slice(0,5),accion:String(campos.prox.accion||'').replace(/[<>&\"]/g,'').slice(0,80)}; }
+  o[nombre]=f; cliGuardarTodo(o); return f;
+}
+window.cliSetEstado=function(nombre,est){ if(cliUp(nombre,{estado:est})){ var d=crmDef(est); cliAnadir(nombre,'Estado → '+d[1]); try{ if(window.actAdd) actAdd('crm',{detalle:'Estado → '+d[1],resultado:est,ciudad:(cliLeer()[nombre]||{}).ciudad}); }catch(e2){} try{ toast(d[1]); }catch(e){} window.crmRenderTab(); } };
+window.cliSetProx=function(nombre){ var f=document.getElementById('crmPf'),h=document.getElementById('crmPh'),a=document.getElementById('crmPa');
+  var r=cliUp(nombre,{prox:{f:f?f.value:'',h:h?h.value:'',accion:a?a.value:''}});
+  if(r&&r.prox.f) cliAnadir(nombre,'📅 Próxima acción: '+r.prox.f+(r.prox.h?(' '+r.prox.h):'')+(r.prox.accion?(' — '+r.prox.accion):''));
+  window.crmRenderTab(); };
+function crmAbierto(e){ return e!=='ganado'&&e!=='perdido'; }
+window.crmHoyTodo=function(){
+  var o=cliLeer(),hoy=hoyLocal(),res=[];
+  Object.keys(o).forEach(function(n){ var f=crmNorm(o[n]); if(crmAbierto(f.estado)&&f.prox&&f.prox.f&&f.prox.f<=hoy) res.push({n:n,f:f}); });
+  res.sort(function(a,b){ var fa=a.f.prox.f+(a.f.prox.h||''), fb=b.f.prox.f+(b.f.prox.h||''); return fa<fb?-1:1; });
+  return res;
+};
+/* Preparar la llamada: rellena las variables del guion y salta al nodo idóneo del estado */
+window.cliPrepLlamada=function(nombre){
+  var o=cliLeer(), f=crmNorm(o[nombre]||{}); if(!f.creado){ return; }
+  try{ var v=LSg('guion_vars'+SUF,{})||{};
+    if(nombre) v.NOMBRE_CLIENTE=nombre;
+    if(f.sector) v.SECTOR=f.sector;
+    if(f.ciudad) v.CIUDAD=f.ciudad;
+    if(f.comercializadora) v.COMERCIALIZADORA_ACTUAL=f.comercializadora;
+    LSs('guion_vars'+SUF,v);
+  }catch(e){}
+  var nodo=CRM_NODO[f.estado]||'inicio';
+  try{ if(typeof NODES!=='undefined'&&NODES[nodo]) guiIrA(nodo); }catch(e){ try{ guiIrA('inicio'); }catch(e2){} }
+  try{ if(!document.body.classList.contains('modo-guion')&&window.tutAbrirGuion) tutAbrirGuion(); }catch(e){}
+  try{ toast('📞 '+nombre+' listo: guion preparado en «'+nodo.split('_')[0]+'»'); }catch(e){}
+  try{ if(window.guiPintarModal) guiPintarModal(); }catch(e){}
+};
+if(!window.cliUp){ window.cliUp=cliUp; window.crmNorm=crmNorm; window.cliLeer=cliLeer; }
+function tel_de(f){ return (f&&f.tel)?f.tel.replace(/[^0-9+]/g,''):''; }
+window.cliPrepLlamadaSafe=function(nombre){ try{ window.cliPrepLlamada(nombre); }catch(e){} };
+/* ═══ v3.1.0 · Registro de actividad automático (lo consume actividad.html) ═══
+   Una línea por gestión: {ts,f,h,tipo,resultado,detalle,ciudad,sector,min,org}.
+   Clave bm_actividad con burbuja por comercial (cfbPref) → viaja por sync bm_.
+   Nombres y teléfonos de clientes NUNCA entran aquí: permanecen en cli_registros (local). */
+function actKeyLS(){ try{ if(window.cfbPref) return cfbPref('actividad'); }catch(e){} return 'bm_actividad'; }
+function actLimpia(s,n){ return String(s==null?'':s).replace(/[<>&\"]/g,'').slice(0,n||80); }
+window.actLeer=function(){ try{ var a=LSg(actKeyLS(),[]); return Array.isArray(a)?a:[]; }catch(e){ return []; } };
+window.actGuardar=function(a){ try{ LSs(actKeyLS(),a); }catch(e){} };
+window.actAdd=function(tipo,op){
+  try{
+    op=op||{};
+    var ahora=new Date(), ah=ahora.getHours(), am=ahora.getMinutes();
+    var e={ts:ahora.getTime(), f:hoyLocal(), h:(ah<10?'0':'')+ah+':'+(am<10?'0':'')+am,
+      tipo:actLimpia(tipo,24), resultado:actLimpia(op.resultado,40), detalle:actLimpia(op.detalle,120),
+      ciudad:actLimpia(op.ciudad,40), sector:actLimpia(op.sector,40),
+      min:Math.max(0,Math.round(Number(op.min)||0)), org:(SUF==='_res'?'res':'pymes')};
+    var a=window.actLeer(); a.push(e);
+    if(a.length>3000) a=a.slice(a.length-3000);   /* tapón FIFO: 3000 gestiones */
+    window.actGuardar(a); return e;
+  }catch(err){ return null; }
+};
+window.actResultado=function(ts,resultado){ var a=window.actLeer(); for(var i=0;i<a.length;i++){ if(a[i].ts===ts){ a[i].resultado=actLimpia(resultado,40); window.actGuardar(a); return true; } } return false; };
+window.actBorrar=function(ts){ window.actGuardar(window.actLeer().filter(function(e){ return e.ts!==ts; })); };
+window.cfbActividadAbrir=function(){ try{ window.open('actividad.html','_blank'); }catch(e){ try{ location.href='actividad.html'; }catch(e2){} } };
+/* ganchos automáticos: práctica (roleplay al salir, quiz al corregir, caso por respuesta) */
+function actEngancha(){
+  if(typeof cadena!=='function'){ setTimeout(actEngancha,150); return; }
+  cadena('guiRpExit',function(){ if(window.actAdd) actAdd('practica',{detalle:'roleplay'}); });
+  cadena('tutCorregir',function(){ try{ var ok=0; for(var i=0;i<QUIZ.length;i++) if(answered[i]===QUIZ[i].ok) ok++; actAdd('practica',{detalle:'quiz '+ok+'/'+QUIZ.length}); }catch(e){} });
+  cadena('tutAnswerCaso',function(){ if(window.actAdd) actAdd('practica',{detalle:'caso práctico'}); });
+}
+actEngancha();
+
+/* Render de la pestaña 👥 Clientes */
+var CRM_FILTRO={estado:'',q:''};
+window.crmFiltro=function(k,v){ CRM_FILTRO[k]=v; window.crmRenderTab(); };
+window.crmRenderTab=function(){
+  var el=document.getElementById('tab-clientes'); if(!el) return;
+  var o=cliLeer(), nombres=Object.keys(o), total=nombres.length, hoy=window.crmHoyTodo();
+  var T=function(s){ try{ return cfaT(window.cfaLang||'es',s); }catch(e){ return s; } };
+  var chips=[''].concat(CRM_ESTADOS.map(function(e){return e[0];})).map(function(id){
+    var on=CRM_FILTRO.estado===id?' on':'';
+    var label=id?crmDef(id)[1]:T('Todos');
+    return '<span class="crm-chip'+on+'" onclick="crmFiltro(\'estado\',\''+id+'\')">'+label+'</span>';
+  }).join('');
+  var mhoy = hoy.length?('<div class="crm-hoy"><b>⏰ '+T('Hoy toca')+' ('+hoy.length+')</b><div>'+hoy.map(function(it){
+    var f=it.f, d=crmDef(f.estado);
+    return '<div class="crm-fila" style="border-color:#F3C267" onclick="crmAbrir(decodeURIComponent(\''+encURI(it.n)+'\'))"><span class="crm-badge" style="background:'+d[2]+'">'+d[1]+'</span>'
+      +'<span class="crm-f"><span class="crm-n">'+xh(it.n)+'</span><div class="crm-m">'+xh((f.prox.h?f.prox.h+' · ':'')+f.prox.accion)+(tel_de(f)?' · ☎'+tel_de(f):'')+'</div></span></div>';
+  }).join('')+'</div></div>'):'';
+  var lista = nombres.filter(function(n){
+    var f=crmNorm(o[n]);
+    if(CRM_FILTRO.estado&&f.estado!==CRM_FILTRO.estado) return false;
+    if(CRM_FILTRO.q){ var q=CRM_FILTRO.q.toLowerCase(); if((n+' '+f.tel+' '+f.sector+' '+f.ciudad).toLowerCase().indexOf(q)<0) return false; }
+    return true;
+  }).sort(function(a,b){ var fa=crmNorm(o[a]), fb=crmNorm(o[b]); var pa=fa.prox.f||'9999', pb=fb.prox.f||'9999'; return pa<pb?-1:(pa>pb?1:(a<b?-1:1)); });
+  el.innerHTML='<div class="reglas"><h4>👥 '+T('Área Clientes')+'</h4>'+T('Mini-CRM de llamadas: fichas con estado, próxima acción y «📞 preparar llamada» (precarga las variables y abre el guion en el punto justo). Datos SOLO en este dispositivo.')+'</div>'
+   +'<div class="crm-stats"><span class="crm-kpi">📇 <b>'+total+'</b> '+T('fichas')+'</span><span class="crm-kpi">⏰ <b>'+hoy.length+'</b> '+T('hoy/pendientes')+'</span></div>'
+   +mhoy
+   +'<div style="background:#fff;border:1px solid #E4E1F5;border-radius:10px;padding:10px 12px;margin-bottom:8px">'
+   +'<b style="font-size:13px">'+T('Alta rápida')+'</b>'
+   +'<input id="crmNomN" class="crm-inp" placeholder="'+T('Nombre o empresa (p. ej. Bar La Mareta)')+'" aria-label="'+T('Nombre del cliente')+'">'
+   +'<input id="crmTelN" class="crm-inp" placeholder="'+T('☎ Teléfono (opcional)')+'" aria-label="'+T('Teléfono')+'">'
+   +'<button type="button" class="crm-btn" onclick="crmAlta()">＋ '+T('Añadir cliente')+'</button>'
+   +'<button type="button" class="crm-btn sec" onclick="crmCsv()">⬇ '+T('Exportar CSV')+'</button></div>'
+   +'<div>'+chips+' <input id="crmQ" class="crm-inp" style="display:inline-block;width:min(220px,60%)" placeholder="🔍 '+T('Buscar nombre, teléfono, sector…')+'" oninput="crmFiltro(\'q\',this.value)" value="'+xh(CRM_FILTRO.q)+'"></div>'
+   +'<div id="crmLista">'
+   +(lista.length?lista.map(function(n){ return crmFila(n,crmNorm(o[n])); }).join(''):'<div class="cfb-nota" style="padding:10px 2px">'+T('Sin fichas que mostrar — añada la primera o guarde una 📝 nota rápida tras la próxima llamada.')+'</div>')
+   +'</div>';
+};
+function encURI(s){ return encodeURIComponent(s).replace(/'/g,'%27'); }
+function crmFila(nombre,f){
+  var d=crmDef(f.estado), e=encURI(nombre), notas=(f.notas||[]).length;
+  var prox=f.prox&&f.prox.f?('📅 '+f.prox.f+(f.prox.h?' '+f.prox.h:'')+(f.prox.accion?' · '+f.prox.accion:'')):'';
+  var meta=[f.tel?('☎'+f.tel):'',f.sector,f.ciudad,f.factura?(f.factura+' €'):'',CRM_DOLOR[f.dolor]&&f.dolor?CRM_DOLOR[f.dolor]:''].filter(Boolean).join(' · ');
+  return '<details class="crm-fila" style="display:block" id="crmD_'+e.replace(/%/g,'_')+'">'
+   +'<summary style="cursor:pointer;display:flex;gap:8px;align-items:center;list-style:none">'
+   +'<span class="crm-badge" style="background:'+d[2]+'">'+d[1]+'</span>'
+   +'<span class="crm-f"><span class="crm-n">'+xh(nombre)+'</span><div class="crm-m">'+xh(meta)+(prox?(' · '+xh(prox)):'')+'</div></span>'
+   +'<span class="crm-mini">'+notas+'✎</span></summary>'
+   +'<div style="border-top:1px dashed #eee;margin-top:6px;padding-top:6px">'
+   +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px">'
+   +'<input class="crm-inp" id="crmT_'+e+'" placeholder="☎ Teléfono" value="'+xh(f.tel)+'">'
+   +'<input class="crm-inp" id="crmS_'+e+'" placeholder="Sector" value="'+xh(f.sector)+'">'
+   +'<input class="crm-inp" id="crmC_'+e+'" placeholder="Ciudad" value="'+xh(f.ciudad)+'">'
+   +'<input class="crm-inp" id="crmCo_'+e+'" placeholder="Compañía actual" value="'+xh(f.comercializadora)+'">'
+   +'<input class="crm-inp" id="crmFa_'+e+'" placeholder="Factura mensual (€)" value="'+xh(f.factura)+'">'
+   +'<select class="crm-inp" id="crmDo_'+e+'">'+Object.keys(CRM_DOLOR).map(function(k){ return '<option value="'+k+'"'+(f.dolor===k?' selected':'')+'>Dolor: '+CRM_DOLOR[k]+'</option>'; }).join('')+'</select>'
+   +'</div>'
+   +'<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px">'
+   +'<span class="crm-mini">Estado:</span><select class="crm-inp" style="width:auto;display:inline-block" id="crmE_'+e+'">'+CRM_ESTADOS.map(function(x){ return '<option value="'+x[0]+'"'+(f.estado===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select>'
+   +'<span class="crm-mini">Próx.:</span><input type="date" class="crm-inp" style="width:auto;display:inline-block" id="crmPf" value="'+xh(f.prox.f)+'"><input type="time" class="crm-inp" style="width:auto;display:inline-block" id="crmPh" value="'+xh(f.prox.h)+'"><input class="crm-inp" style="width:150px;display:inline-block" id="crmPa" placeholder="¿Qué toca? (revisar factura…)" value="'+xh(f.prox.accion)+'">'
+   +'</div>'
+   +'<div>'
+   +'<button type="button" class="crm-btn" onclick="crmGuardar(decodeURIComponent(\''+e+'\'))">💾 Guardar</button>'
+   +'<button type="button" class="crm-btn" style="background:#007A3B" onclick="cliPrepLlamadaSafe(decodeURIComponent(\''+e+'\'))">📞 Preparar llamada</button>'
+   +'<button type="button" class="crm-btn sec" onclick="crmNota(decodeURIComponent(\''+e+'\'))">✎ Nota</button>'
+   +'<button type="button" class="crm-btn sec" onclick="cliCopia(decodeURIComponent(\''+e+'\'))">📋 Historial</button>'
+   +'<button type="button" class="crm-btn rojo" onclick="cliBorraFicha(decodeURIComponent(\''+e+'\'))">🗑</button>'
+   +'</div>'
+   +'<div id="crmN_'+e+'" style="margin-top:4px"></div>'
+   +'</div></details>';
+}
+window.crmAbrir=function(nombre){ var d=document.getElementById('crmD_'+encURI(nombre).replace(/%/g,'_')); if(d){ d.open=true; try{ d.scrollIntoView({block:'nearest'}); }catch(e){} } };
+window.crmAlta=function(){
+  var n=document.getElementById('crmNomN'), t=document.getElementById('crmTelN');
+  var nombre=n?n.value.trim():'', tel=t?t.value.replace(/[^0-9+ ]/g,'').trim():'';
+  if(!nombre){ try{ toast('✘ Nombre/empresa, por favor'); }catch(e){} return; }
+  cliUp(nombre,{tel:tel});
+  if(!cliLeer()[cliNorm(nombre)].notas.length) cliAnadir(nombre,'Ficha creada');
+  if(n) n.value=''; if(t) t.value='';
+  try{ toast('👥 Ficha de «'+nombre+'» creada'); }catch(e){}
+  window.crmRenderTab(); window.crmAbrir(nombre);
+};
+window.crmGuardar=function(nombre){
+  var e=encURI(nombre);
+  cliUp(nombre,{ tel:(g('crmT_'+e)||{value:''}).value, sector:(g('crmS_'+e)||{value:''}).value, ciudad:(g('crmC_'+e)||{value:''}).value,
+    comercializadora:(g('crmCo_'+e)||{value:''}).value, factura:(g('crmFa_'+e)||{value:''}).value.replace(/[^0-9.,]/g,''), dolor:(g('crmDo_'+e)||{value:''}).value });
+  var est=(g('crmE_'+e)||{value:'nuevo'}).value;
+  if(cliLeer()[cliNorm(nombre)].estado!==est) window.cliSetEstado(nombre,est);
+  window.cliSetProx(nombre);
+  try{ toast('💾 Ficha guardada'); }catch(e){}
+  window.crmRenderTab(); window.crmAbrir(nombre);
+};
+function g(id){ return document.getElementById(id); }
+window.crmNota=function(nombre){
+  var e=encURI(nombre), caja=g('crmN_'+e);
+  if(caja&&!caja.innerHTML){
+    caja.innerHTML='<input class="crm-inp" id="crmNt_'+e+'" placeholder="Nota rápida (quedó en mandar factura…)"><button type="button" class="crm-btn" onclick="crmNotaOK(decodeURIComponent(\''+e+'\'))">✎ '+_cfaf_t(cfaLangE(),'✎ Guardar nota')+'</button>';
+  }else if(caja){ caja.innerHTML=''; }
+};
+function cfaLangE(){ try{ return window.cfaLang||'es'; }catch(e){ return 'es'; } }
+function _cfaf_t(l,s){ try{ return cfaT(l,s); }catch(e){ return s; } }
+window.crmNotaOK=function(nombre){
+  var e=encURI(nombre), inp=g('crmNt_'+e);
+  var txt=inp?inp.value.trim():'';
+  if(!txt){ try{ toast('✘ Escriba la nota'); }catch(e){} return; }
+  cliAnadir(nombre,txt);
+  window.crmRenderTab(); window.crmAbrir(nombre);
+};
+window.crmCsv=function(){
+  var o=cliLeer(), filas=[['nombre','telefono','sector','ciudad','comercializadora','factura_eur','dolor','estado','prox_fecha','prox_hora','prox_accion','notas','creado']];
+  Object.keys(o).sort().forEach(function(n){ var f=crmNorm(o[n]);
+    filas.push([n,f.tel,f.sector,f.ciudad,f.comercializadora,f.factura,f.dolor,f.estado,f.prox.f,f.prox.h,f.prox.accion,String((f.notas||[]).length),f.creado||''].map(function(c){ return '"' + String(c==null?'':c).replace(/"/g,'""') + '"'; }).join(','));
+  });
+  try{ var blob=new Blob(['\ufeff'+filas.join('\n')],{type:'text/csv;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='clientes-'+hoyLocal()+'.csv';
+    document.body.appendChild(a); a.click(); setTimeout(function(){ try{ URL.revokeObjectURL(a.href); a.remove(); }catch(e){} },600);
+  }catch(e){}
+};
+/* ⚙ menú ajustes + texto grande */
+window.cfaAjToggle=function(){ var m=document.getElementById('cfaAjMenu'); if(m) m.classList.toggle('cfa-on'); };
+window.cfaAjHide=function(){ var m=document.getElementById('cfaAjMenu'); if(m) m.classList.remove('cfa-on'); };
+window.cfaTxtGreat=function(b){ var on=!document.body.classList.contains('cfb-txtgreat'); document.body.classList.toggle('cfb-txtgreat',on); try{ LSs('cfb_prefs',{txtgreat:on?1:0}); }catch(e){} if(b) b.textContent='🔡 Texto grande'+(on?' ✔':''); };
+try{ var _p=LSg('cfb_prefs',{}); if(_p&&_p.txtgreat) document.body.classList.add('cfb-txtgreat'); }catch(e){}
+try{ document.addEventListener('click',function(ev){ var w=document.getElementById('cfaAjWrap'); if(w&&!w.contains(ev.target)) window.cfaAjHide(); }); }catch(e){}
+try{ if(typeof wraps==='function') wraps('guiActivarTab',function(id){ if(id==='tab-clientes') setTimeout(window.crmRenderTab,30); }); }catch(e){}
+ window.cliAnadir=cliAnadir; window.cliBorrar=cliBorrar; window.cliBorrarNota=cliBorrarNota;
 /* ═══ v2.7 «Diploma» · examen final cronometrado + certificado ═══ */
 function dipUmbral(){ return (typeof CONFIG!=='undefined'&&CONFIG.notaAprobado)?CONFIG.notaAprobado:8; }
 function dipGet(){ return LSg('bm_diploma'+SUF,{})||{}; }
@@ -2114,6 +2379,28 @@ var U={
  '🇪🇸 Glosario español nativo — cómo habla un comercial español de verdad':['🇫🇷 Glossaire français natif — comment parle un vrai commercial français','🇵🇹 Glossário português nativo — como fala um comercial português a sério','🇬🇧 Native British glossary — how a real UK salesperson talks'],
  'Alternativas:':['Variantes :','Alternativas:','Alternatives:'],
  '⛔ Prohibiciones absolutas (fuera → dentro → por qué)':['⛔ Interdictions absolues (dehors → dedans → pourquoi)','⛔ Proibições absolutas (fora → dentro → porquê)','⛔ Absolute bans (out → in → why)'],
+ '👥 Clientes':['👥 Clients','👥 Clientes','👥 Clients'],
+ '⚙ Ajustes':['⚙ Réglages','⚙ Definições','⚙ Settings'],
+ '↺ Reiniciar llamada':['↺ Recommencer l’appel','↺ Reiniciar chamada','↺ Restart the call'],
+ '🔡 Texto grande':['🔡 Texte grand','🔡 Texto grande','🔡 Large text'],
+ '🗑 Vaciar clientes':['🗑 Vider les clients','🗑 Esvaziar clientes','🗑 Clear clients'],
+ '© Créditos':['© Crédits','© Créditos','© Credits'],
+ 'Todos':['Tous','Todos','All'],
+ 'Hoy toca':['Au programme aujourd’hui','Para hoje','Due today'],
+ 'Área Clientes':['Zone Clients','Área de Clientes','Client area'],
+ 'Mini-CRM de llamadas: fichas con estado, próxima acción y «📞 preparar llamada» (precarga las variables y abre el guion en el punto justo). Datos SOLO en este dispositivo.':['Mini-CRM d’appels : fiches avec statut, prochaine action et « 📞 préparer l’appel » (pré-remplit les variables et ouvre le script au bon point). Données UNIQUEMENT sur cet appareil.','Mini-CRM de chamadas: fichas com estado, próxima ação e « 📞 preparar chamada » (pré-carrega as variáveis e abre o guião no ponto exato). Dados SÓ neste dispositivo.','Call mini-CRM: cards with status, next action and “📞 prepare the call” (prefills the variables and opens the script at exactly the right point). Data on THIS device only.'],
+ 'fichas':['fiches','fichas','cards'],
+ 'hoy/pendientes':['aujourd’hui/en attente','hoje/pendentes','today/pending'],
+ 'Alta rápida':['Ajout rapide','Registo rápido','Quick add'],
+ 'Nombre o empresa (p. ej. Bar La Mareta)':['Nom ou entreprise (p. ex. Bar La Mareta)','Nome ou empresa (p. ex. Bar La Mareta)','Name or business (e.g. Bar La Mareta)'],
+ '☎ Teléfono (opcional)':['☎ Téléphone (optionnel)','☎ Telefone (opcional)','☎ Phone (optional)'],
+ 'Teléfono':['Téléphone','Telefone','Phone'],
+ 'Añadir cliente':['Ajouter le client','Adicionar cliente','Add client'],
+ 'Exportar CSV':['Exporter CSV','Exportar CSV','Export CSV'],
+ 'Buscar nombre, teléfono, sector…':['Chercher nom, téléphone, secteur…','Procurar nome, telefone, setor…','Search name, phone, sector…'],
+ 'Sin fichas que mostrar — añada la primera o guarde una 📝 nota rápida tras la próxima llamada.':['Aucune fiche à afficher — ajoutez la première ou gardez une 📝 note rapide après le prochain appel.','Sem fichas para mostrar — adicione a primeira ou guarde uma 📝 nota rápida após a próxima chamada.','No cards to show — add the first one or save a 📝 quick note after the next call.'],
+ '✎ Guardar nota':['✎ Enregistrer la note','✎ Guardar nota','✎ Save note'],
+ '📊 Registro de actividad':['📊 Journal d’activité','📊 Registo de atividade','📊 Activity log'],
  'Elige idioma de esta sesión':['Choisissez la langue de cette session','Escolha o idioma desta sessão','Choose this session’s language'],
  'El guion de llamada se mostrará en este idioma. Puedes cambiarlo cuando quieras.':['Le script d’appel s’affichera dans cette langue. Vous pouvez la changer à tout moment.','O guião da chamada será mostrado neste idioma. Pode mudá-lo quando quiser.','The call script will show in this language. Change it anytime.'],
  'Aplicando…':['Application…','A aplicar…']};
@@ -4148,6 +4435,11 @@ function cfaChrome(L){
       var sp=b.querySelector('span:last-child'); if(sp&&sp.firstChild&&sp.firstChild.nodeType===3){ sp.firstChild.textContent=cfaT(L,sp.firstChild.textContent); } });
     var sel=tb.querySelector('select.jump'); if(sel&&sel.options.length) sel.options[0].textContent=cfaT(L,'— Abrir manejo de objeción… —'); }catch(e){}
   try{ var f=document.getElementById('btnFoco'); if(f){ var on=document.body.classList.contains('focus'); f.textContent=cfaT(L,on?'🎯 Foco: ON':'🎯 Foco'); } }catch(e){}
+  try{ var c3=document.getElementById('btnClientes'); if(c3) c3.textContent=cfaT(L,'👥 Clientes'); }catch(e){}
+  try{ var aj=document.getElementById('btnAjtG'); if(aj) aj.textContent=cfaT(L,'⚙ Ajustes'); }catch(e){}
+  try{ var tc2=document.querySelector('button[data-tab="tab-clientes"]'); if(tc2) tc2.textContent=cfaT(L,'👥 Clientes'); }catch(e){}
+  try{ document.querySelectorAll('#cfaAjMenu [data-k]').forEach(function(it){ it.textContent=cfaT(L,it.dataset.k); }); }catch(e){}
+
   try{ var q=document.getElementById('cfbQuickNote'); if(q){
     var t=q.querySelector('.qn-tit'); if(t) t.textContent=cfaT(L,'📝 Nota rápida de la llamada');
     var n=q.querySelector('#qnNombre'); if(n) n.placeholder=cfaT(L,'Cliente (p. ej. Bar La Mareta)');
@@ -4234,9 +4526,11 @@ window.qnGuardar=function(){
   var tel=(document.getElementById('qnTel')||{value:''}).value.replace(/[^0-9+]/g,'');
   if(tel) texto='☎'+tel+' · '+texto;
   if(!cliAnadir(nombre,texto)){ try{ toast('✘ No se pudo guardar la nota'); }catch(e){} return; }
+  try{ if(tel) cliUp(nombre,{tel:tel}); }catch(e){ } /* v3.0.0: el teléfono enriquece la ficha CRM */
   t.value='';
   try{ n.focus(); }catch(e){}              /* llamada en curso: seguir apuntando del mismo cliente */
   try{ if(window.cliVerTodo) window.cliVerTodo(); }catch(e){}   /* Mis clientes se refresca al instante */
+  try{ if(window.actAdd){ var aa=window.actLeer(); if(!aa.length||aa[aa.length-1].tipo!=='llamada'||(Date.now()-aa[aa.length-1].ts)>600000) actAdd('llamada',{detalle:'gestión anotada desde la nota rápida'}); } }catch(e){} /* v3.1.0 */
   try{ toast('✎ Nota guardada en Mis clientes'); }catch(e){}
 };
 window.qnOcultar=function(){
@@ -4545,6 +4839,7 @@ window.cfbLlamadaToggle=function(){
   var segs=Math.max(1,Math.round((Date.now()-(t.start||Date.now()))/1000));
   try{ localStorage.removeItem(k); }catch(e){}
   diaBump('llamadas'); diaBump('segs',segs); pintarTimer();
+  try{ if(window.actAdd) actAdd('llamada',{detalle:fmtSeg(segs)+' de llamada',min:Math.round(segs/60)}); }catch(e){} /* v3.1.0 auto-registro */
   try{ toast('📞 Llamada registrada · '+fmtSeg(segs)+' · hoy llevas '+sumaDesde(hoyClave(),'llamadas')); }catch(e){}
 };
 setInterval(pintarTimer,1000);

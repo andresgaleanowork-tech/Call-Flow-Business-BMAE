@@ -171,6 +171,14 @@ T('v1.2 heredado: hotfix url→u presente', !res_.includes("req('GET',url,undefi
 T('v1.2 heredado: sync fuera del hub (la clave se gestiona en el panel admin — v2.4)', !res_.includes('Activar sync (pegar clave)')&&!res_.includes('Guardado en la nube (auto)'));
 T('v1.2: burbuja por comercial funciona en residencial', (function(){ try{ w.eval("localStorage.setItem('cfb_perfil',JSON.stringify({nombre:'Ana',slug:'ana'}))"); return w.eval("cfbPref('stats')")==='bm_stats_ana'; }catch(e){ return false; } })());
 
+T('W11-R1: mini-CRM también en residencial', res_.includes('crmRenderTab')&&res_.includes('CRM_ESTADOS')&&res_.includes('cliPrepLlamada'));
+T('W11-R2: barra agrupada con Clientes + ⚙ Ajustes', res_.includes('id=\"btnClientes\"')&&res_.includes('id=\"btnAjtG\"')&&res_.includes('cfa-grp-sep'));
+T('W11-R3: pestaña 👥 Clientes', res_.includes('data-tab=\"tab-clientes\"')&&res_.includes('id=\"tab-clientes\"'));
+
+T('W12-R1: registro de actividad también en residencial', res_.includes('window.actAdd=function')&&res_.includes('bm_actividad'));
+T('W12-R2: auto en residencial (⏱ llamada + estado CRM + roleplay)', res_.includes("actAdd('llamada',{detalle:fmtSeg(segs)")&&res_.includes("actAdd('crm',{detalle:'Estado → ")&&res_.includes('guiRpExit'));
+T('W12-R3: acceso ⚙ a actividad.html', res_.includes('cfbActividadAbrir')&&res_.includes('📊 Registro de actividad'));
+
 console.log('────────────────────────');
 console.log(errores.length? 'errores JS: '+errores.join(' | ') : 'errores JS: (ninguno)');
 console.log(ko===0 && errores.length===0 ? `✅ HUMO RESIDENCIAL: TODO VERDE (${ok} comprobaciones)` : `❌ ${ko} fallos`);

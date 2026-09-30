@@ -10,7 +10,7 @@ export PATH="${JDK_HOME:-$HOME/.local/jdk-21}/bin:$PATH"
 JAVAC="${JDK_HOME:-$HOME/.local/jdk-21}/bin/javac"
 
 echo "── 1· copiar web → assets"
-cp ../../web/index.html ../../web/admin.html ../../web/tutorial.html ../../web/pymes.html ../../web/residencial.html assets/
+cp ../../web/index.html ../../web/admin.html ../../web/tutorial.html ../../web/actividad.html ../../web/pymes.html ../../web/residencial.html assets/
 cp ../../web/logo-iberdrola.png ../../web/logo-bm.png assets/
 
 echo "── 2· aapt2 link (recursos + manifest + assets)"

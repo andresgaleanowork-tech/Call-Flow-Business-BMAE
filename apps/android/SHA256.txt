@@ -1,4 +1,2 @@
-Call-Flow-Business.apk · v34 (2.9.6) · ola 4: nat+glosarios de mercado ES/FR/PT/EN
-SHA-256: bf5e91b5a3eb2cee5ef743fae168342671526c0ddad7dd4c2117b00d4695b77b
-tamaño: 893863 B
-fecha: 2026-09-30
+SHA-256 · v3.1.0 «Actividad» (versionCode 36) — 2026-09-30
+5dc88c507eae62ac34540e2b5fffe7d75afed56afdc28f097b782b765a055ff8  Call-Flow-Business.apk (918506 B)

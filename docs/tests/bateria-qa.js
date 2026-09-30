@@ -296,7 +296,7 @@ step(/LSs\('cfb_localts',\(new Date\(\)\).toISOString\(\)\)/.test(src),'AUD-C: c
 step(/_restaurando/.test(src)&&/_restaurando=true/.test(src),'AUD-D: restauración no rebota push (sin commit eco)');
 step(/var r=p\.apply\(this,arguments\); try\{ extra\.apply/.test(src),'AUD-E: hooks después del render (números pintan al abrir)');
 step(/CFB_VERSION=\(typeof VERSION!=='undefined'\)/.test(src),'AUD-F: versión del snapshot viva');
-step(/network-first/.test(swSrc)&&/cfb-v296/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
+step(/network-first/.test(swSrc)&&/cfb-v310/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
 step(/cfbGatePill/.test(src)&&/bm_gatepill_off/.test(src),'AUD-I: pastilla «identifícate desde el menú» en guiones');
 step(!/bm_tut_prog_res'\+SUF/.test(srcR)&&!/bm_tut_omitido_res'\+SUF/.test(srcR),'AUD-J: sin dobles sufijos _res_res en residencial');
 step((function(){
@@ -632,6 +632,68 @@ step((function(){
     step(/<div id="cfbQuickNote"[^>]*style="display:none;position:fixed/.test(src),'Q9: la nota lleva su estilo crítico inline (tarjeta flotante aunque fallen las hojas)');
     step(/window\.qnSync=function/.test(src)&&/q\.style\.display=on\?'block':'none'/.test(src)&&/qnSync\(\);\s*$/m.test(src.slice(src.indexOf('window.qnOcultar'),src.indexOf('window.qnOcultar')+300)),'Q10: qnSync gobierna display de la nota (Foco ∧ ¬oculta) con sincronización en cada clic');
   }
+// ── W11 · v3.0.0 mini-CRM + barra agrupada ──
+{
+  step(src.includes("tab-clientes")&&src.includes("crmRenderTab"), 'W11-1 pestaña 👥 Clientes + render');
+  step(src.includes("id=\"btnClientes\"")&&src.includes("id=\"btnAjtG\""), 'W11-2 botones Clientes + ⚙ Ajustes');
+  step((src.match(/cfa-grp-sep/g)||[]).length>=2, 'W11-3 separadores de grupos en la barra');
+  step(src.includes("↺ Reiniciar llamada")&&src.includes("🔡 Texto grande")&&src.includes("🗑 Vaciar clientes"), 'W11-4 menú ⚙ con acciones reales');
+  step(src.includes("CRM_ESTADOS")&&src.includes("crmHoyTodo")&&src.includes("cliPrepLlamada"), 'W11-5 capa datos CRM (estados, hoy, preparar llamada)');
+  step(src.includes("guion_vars'+SUF"), 'W11-6 preparar llamada precarga guion_vars');
+  ['nuevo','contactado','interesado','factura','cita','visita','ganado','perdido'].forEach(e=>step(src.includes("'"+e+"'"), 'W11-7 estado '+e));
+  step(src.includes("clientes-'")&&src.includes("text/csv"), 'W11-8 export CSV');
+  step(src.includes("cliUp(nombre,{tel:tel})"), 'W11-9 nota rápida enriquece la ficha CRM');
+  // funcional jsdom: alta ficha, próxima acción hoy, preparar llamada
+  try{
+    const ev=s=>w.eval(s);
+    w2=w;
+    w2.eval("localStorage.clear()");
+    w2.eval("cliUp('Bar La Mareta',{tel:'600111222',sector:'Hostelería',ciudad:'Sagunto',comercializadora:'Oculta SA'})");
+    var hoyIso=(function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
+    w2.eval("cliUp('Bar La Mareta',{estado:'cita',prox:{f:'"+hoyIso+"',h:'09:30',accion:'Revisar factura'}})");
+    step(w2.eval("crmHoyTodo().length")>=1, 'W11-10 «Hoy toca» encuentra la cita de hoy');
+    w2.eval("cliPrepLlamadaSafe('Bar La Mareta')");
+    var vars=JSON.parse(w2.eval("localStorage.getItem('guion_vars')||'{}'")||'{}').NOMBRE_CLIENTE;
+    step(vars==='Bar La Mareta', 'W11-11 preparar llamada precarga NOMBRE_CLIENTE');
+    step(w2.eval("Object.keys(cliLeer()).length")===1, 'W11-12 ficha persistida local (cli_)');
+    w2.eval("localStorage.removeItem('cli_registros')");
+  }catch(e){ step(false,'W11-10 funcional CRM: '+e.message); }
+}
+
+// ── W12 · v3.1.0 registro de actividad + dashboard ──
+{
+  const srcA=fs.readFileSync(require('path').join(__dirname,'..','actividad.html'),'utf8');
+  step(srcA.includes('Registro de actividad')&&srcA.includes('Gestiones por día')&&srcA.includes('Embudo CRM'), 'W12-1 actividad.html: dashboard (KPIs, gráfica, embudo)');
+  step(srcA.includes('Contacto efectivo')&&srcA.includes('Factura recibida')&&srcA.includes('Coordinación visita'), 'W12-2 resultados/tipos de la hoja back-office');
+  step(srcA.includes('bm_actividad')&&srcA.includes('cli_registros')&&srcA.includes('cfb_perfil'), 'W12-3 lee bm_actividad (burbuja) + CRM en vivo');
+  step(srcA.includes("a.download='actividad-'+mesF+'.csv'"), 'W12-4 export CSV del mes');
+  step(src.includes('window.actAdd=function')&&src.includes('window.actLeer=function')&&src.includes('bm_actividad'), 'W12-5 núcleo actAdd/actLeer en la plantilla');
+  step(src.includes("actAdd('llamada',{detalle:fmtSeg(segs)+' de llamada'"), 'W12-6 auto: fin de ⏱ llamada cronometrada');
+  step(src.includes("cadena('guiRpExit',function(){ if(window.actAdd)")&&src.includes("cadena('tutCorregir'")&&src.includes("cadena('tutAnswerCaso'"), 'W12-7 auto: roleplay + quiz + caso');
+  step(src.includes("actAdd('crm',{detalle:'Estado → '"), 'W12-8 auto: cambio de estado CRM');
+  step(src.includes("gestión anotada desde la nota rápida")&&src.includes("600000"), 'W12-9 auto: nota rápida con dedupe 10 min');
+  step(src.includes("cfbActividadAbrir")&&src.includes("📊 Registro de actividad"), 'W12-10 acceso desde menú ⚙');
+  step(fs.readFileSync(require('path').join(__dirname,'..','index.html'),'utf8').includes('href="actividad.html"'), 'W12-11 tarjeta en index.html');
+  try{
+    w2=w;
+    var K=w2.eval("cfbPref('actividad')");
+    w2.eval("localStorage.removeItem('"+K+"')");
+    w2.eval("window.actAdd('llamada',{detalle:'prueba X <b>', ciudad:'Sagunto'})");
+    var arr=w2.eval("actLeer()");
+    step(arr.length===1 && arr[0].tipo==='llamada' && arr[0].ciudad==='Sagunto' && arr[0].detalle.indexOf('<')===-1, 'W12-12 actAdd sanea y persiste');
+    w2.eval("actResultado("+arr[0].ts+",'Contacto efectivo')");
+    step(w2.eval("actLeer()[0].resultado")==='Contacto efectivo', 'W12-13 resultado editable');
+    w2.eval("cliAnadir('Cliente Act','hola'); cliSetEstado('Cliente Act','cita')");
+    step(w2.eval("actLeer().some(function(e){return e.tipo==='crm'&&e.resultado==='cita'})")===true, 'W12-14 estado CRM anota gestión automática');
+    w2.eval("(function(){var a=[];for(var i=0;i<3005;i++)a.push({ts:1700000000000+i,f:'2026-01-01',h:'09:00',tipo:'otro',detalle:'x'+i});localStorage.setItem('"+K+"',JSON.stringify(a));})()");
+    w2.eval("actAdd('otro',{detalle:'el que rebosa'})");
+    step(w2.eval("actLeer().length")<=3000 && w2.eval("actLeer().some(function(e){return e.detalle==='el que rebosa'})")===true, 'W12-15 tapón FIFO 3000 (cae el más viejo)');
+    w2.eval("localStorage.removeItem('"+K+"'); localStorage.removeItem('cli_registros')");
+  }catch(e){ step(false,'W12-12 funcional actividad: '+e.message); }
+  const shB=fs.readFileSync(require('path').join(__dirname,'..','..','..','apps','android','proyecto','build.sh'),'utf8');
+  step(shB.includes('actividad.html'), 'W12-16 APK empaqueta actividad.html');
+}
+
   console.log(R.join('\n'));
   console.log('errores JS:',errs.length?errs.slice(0,3).join(' | '):'(ninguno)');
   const f=R.filter(x=>x.startsWith('✘')).length;
