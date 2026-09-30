@@ -2,7 +2,7 @@
    Documentos (HTML): network-first → siempre la versión nueva cuando hay red,
    con caché como respaldo offline. Resto (assets): caché con actualización en
    segundo plano. */
-const CACHE = 'cfb-v293'; /* v2.8.0 «10 mejoras» */
+const CACHE = 'cfb-v296'; /* v2.8.0 «10 mejoras» */
 const ARCHIVOS = ['./','index.html','admin.html','pymes.html','residencial.html','tutorial.html','instalar.html',
   'manifest.webmanifest','callflow-icon-192.png','callflow-icon-512.png','callflow-social-preview.png','logo-iberdrola.png','logo-bm.png'];
 self.addEventListener('install',e=>{ e.waitUntil(

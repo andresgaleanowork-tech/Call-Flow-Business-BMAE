@@ -7,8 +7,10 @@ El onboarding (tutorial, quiz, diploma, casos, FAQ) **sigue en español** hasta 
 |-----|-----------|-------------|--------|
 | 1 | Motor de idiomas + selector por sesión + chip 🌐 + cromo UI (28 cadenas FR/PT) + semilla: `NODES.inicio` y `OBJECTIONS.ya_tengo` FR+PT | ~3 KB/idioma | ✅ v2.9.0 |
 | 2 | **Objeciones completas** FR+PT (las 15 manejos, incl. `round2`) | ~40 KB ×2 | ✅ v2.9.2 |
-| 3 | **Árbol de decisión completo** FR+PT (nodos paso a paso) | ~44,5 KB ×2 | pendiente |
-| 4 | Glosario + casos de escucha adaptados a cada mercado | ~7,5 KB ×2 + trabajo editorial | pendiente |
+| 3 | **Árbol de decisión completo** FR+PT (18/18 nodos: título, micro, guion palabra a palabra, notas y etiquetas de opciones; marks `[PAUSA]`/`[TONO]` sin traducir a propósito) | ~44 KB ×2 | ✅ v2.9.4 |
+| 4 | **Voz de mercado (nat{}) + glosarios**: 93 bloques `nat` (15 obj + 18 nodos, alt/notas/zona por mercado: vouvoiement FR · «o senhor» PT · cordial-formal UK) + **glosario completo por mercado** (9 categorías × 4 idiomas) con pestaña dinámica y botón/panel 🌐 traducidos. Casos de escucha siguen en ES (alcance onboarding). | ~46 KB ×3 | ✅ v2.9.6 |
+| 3b | Ola transversal EN: selector 4 botones + cromo UI 25+2 cadenas + cobertura + chip 🌐 EN | ~14 KB | ✅ v2.9.4 |
+| 3c | EN contenido: **15/15 objeciones** (validación→round2) + **18/18 nodos** del árbol (mismo patrón de overlays; sufijo de cobertura dinámico y traducido) | ~60 KB | ✅ v2.9.5 |
 
 ## Cómo se mide
 `cfaCobertura(lang)` = 70%·nodos traducidos/total + 30%·objeciones traducidas/total.

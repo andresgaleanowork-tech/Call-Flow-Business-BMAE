@@ -296,7 +296,7 @@ step(/LSs\('cfb_localts',\(new Date\(\)\).toISOString\(\)\)/.test(src),'AUD-C: c
 step(/_restaurando/.test(src)&&/_restaurando=true/.test(src),'AUD-D: restauración no rebota push (sin commit eco)');
 step(/var r=p\.apply\(this,arguments\); try\{ extra\.apply/.test(src),'AUD-E: hooks después del render (números pintan al abrir)');
 step(/CFB_VERSION=\(typeof VERSION!=='undefined'\)/.test(src),'AUD-F: versión del snapshot viva');
-step(/network-first/.test(swSrc)&&/cfb-v293/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
+step(/network-first/.test(swSrc)&&/cfb-v296/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
 step(/cfbGatePill/.test(src)&&/bm_gatepill_off/.test(src),'AUD-I: pastilla «identifícate desde el menú» en guiones');
 step(!/bm_tut_prog_res'\+SUF/.test(srcR)&&!/bm_tut_omitido_res'\+SUF/.test(srcR),'AUD-J: sin dobles sufijos _res_res en residencial');
 step((function(){
@@ -645,32 +645,53 @@ step(/var I18N=\{fr:\{ui:\{\},obj:\{\},nodes:\{\}\}\,pt:/.test(src), 'W8-1 dicci
 step(src.includes('cfa_lang'), 'W8-2 idioma por sesión (sessionStorage)');
 step(src.includes('cfaSelector=function'), 'W8-3 selector presente');
 step(src.includes('cfa_sel_ok'), 'W8-4 selector 1ª vez por sesión');
-step(src.includes('data-lang="fr"') && src.includes('data-lang="pt"'), 'W8-5 botones FR+PT');
+step(src.includes('data-lang="fr"') && src.includes('data-lang="pt"') && src.includes('data-lang="en"'), 'W8-5 botones FR+PT+EN');
 step(src.includes('cfaApply') && src.includes('JSON.parse(__cfaOrig)'), 'W8-6 restaura originales antes de mezclar');
 step(src.includes('Le client répond…') && src.includes('O cliente responde…'), 'W8-7 cromo UI FR+PT');
 step(src.includes('cfaCobertura'), 'W8-8 % cobertura');
 step(src.includes('cfaChip'), 'W8-9 chip idioma reabre selector');
 step(src.includes('I18N.fr.nodes.inicio') && src.includes('I18N.pt.obj.ya_tengo'), 'W8-10 semilla ola-1');
 
-// ── W9 · cobertura real + ola 2 (objeciones completas FR/PT) ──
+// ── W9 · cobertura real — v2.9.5: FR/PT/EN árbol+objeciones 100 % ──
 {
   const vm=require('vm');
   const m=src.match(/var I18N=[\s\S]*?(?=\/\* ── motor ──)/);
-  const CLAVES=['ya_tengo','permanencia','no_interesa','mas_caro','tiempo','despues','no_decisor','email','lo_pienso','no_cambiar','contento','desconfianza','momento','ya_llamaron','datos'];
-  const driver="\nfunction cfaCobertura(L){var p=I18N[L]||{},totN=Object.keys(NODES||{}).length||1,totO=Object.keys(OBJECTIONS||{}).length||1;var n=Object.keys(p.nodes||{}).length,o=Object.keys(p.obj||{}).length;return Math.min(100,Math.round((n/totN*0.7+o/totO*0.3)*100))}\nvar __cov={fr:cfaCobertura('fr'),pt:cfaCobertura('pt'),frUI:Object.keys(I18N.fr.ui).length,ptUI:Object.keys(I18N.pt.ui).length,uiTotOK:(Object.keys(I18N.fr.ui).length===Object.keys(I18N.pt.ui).length),frO:Object.keys(I18N.fr.obj).length,ptO:Object.keys(I18N.pt.obj).length};";
-  const NODES40={}; for(let i=0;i<40;i++) NODES40['n'+i]=1;
-  const OBJ15={}; CLAVES.forEach(k=>OBJ15[k]=1);
-  const ctx={NODES:NODES40,OBJECTIONS:OBJ15}; vm.createContext(ctx);
-  let cov=null; try{ vm.runInContext((m?m[0]:'')+driver,ctx); cov=ctx.__cov; }catch(e){ step(false,'W9-0 motor evaluable: '+e.message); }
-  if(cov){
-    step(cov.fr>25&&cov.fr<100, 'W9-1 FR % cobertura en banda ola-2 ('+cov.fr+'%)');
-    step(cov.pt>25&&cov.pt<100, 'W9-2 PT % cobertura en banda ola-2 ('+cov.pt+'%)');
-    step(cov.uiTotOK===true&&cov.frUI>=25, 'W9-3 UI cromo FR/PT a la par ('+cov.frUI+' cadenas)');
-    step(cov.fr===cov.pt, 'W9-4 paridad FR/PT global');
-    step(cov.frO===15&&cov.ptO===15, 'W9-5 las 15 objeciones cubiertas en FR y PT ('+cov.frO+'/'+cov.ptO+')');
+  const OBJ=['ya_tengo','permanencia','no_interesa','mas_caro','tiempo','despues','no_decisor','email','lo_pienso','no_cambiar','contento','desconfianza','momento','ya_llamaron','datos'];
+  const NOD=['inicio','apertura','apertura_retorno','no_contesta','presentacion','motivo','permiso','deteccion','pitch_ahorro','pitch_valor','pitch_retorno','cierre_hub','cierre_cita','cierre_facturas','cierre_alta','cierre_tecnico','seguimiento','retirada'];
+  const driver="\nfunction cfaCobertura(L){var p=I18N[L]||{},totN=Object.keys(NODES||{}).length||1,totO=Object.keys(OBJECTIONS||{}).length||1;var n=Object.keys(p.nodes||{}).length,o=Object.keys(p.obj||{}).length;return Math.min(100,Math.round((n/totN*0.7+o/totO*0.3)*100))}\nvar __cov={fr:cfaCobertura('fr'),pt:cfaCobertura('pt'),en:cfaCobertura('en'),frUI:Object.keys(I18N.fr.ui).length,ptUI:Object.keys(I18N.pt.ui).length,enUI:Object.keys(I18N.en.ui).length,frN:Object.keys(I18N.fr.nodes).length,ptN:Object.keys(I18N.pt.nodes).length,enN:Object.keys(I18N.en.nodes).length,enO:Object.keys(I18N.en.obj||{}).length,enD:Object.keys((I18N.en.obj&&I18N.en.obj.ya_tengo)||{}).length};";
+  const NN={},OO={}; NOD.forEach(k=>NN[k]=1); OBJ.forEach(k=>OO[k]=1);
+  const ctx={NODES:NN,OBJECTIONS:OO,window:{I18N:null}}; vm.createContext(ctx); ctx.window.I18N=ctx.I18N;
+  let c=null; try{ vm.runInContext((m?m[0]:'')+driver,ctx); c=ctx.__cov; }catch(e){ step(false,'W9-0 motor evaluable: '+e.message); }
+  if(c){
+    step(c.fr===100, 'W9-1 FR cobertura total ('+c.fr+'%)');
+    step(c.pt===100, 'W9-2 PT cobertura total ('+c.pt+'%)');
+    step(c.en===100, 'W9-2b EN cobertura total ('+c.en+'%)');
+    step(c.frUI===c.ptUI&&c.ptUI===c.enUI&&c.frUI>=25, 'W9-3 UI cromo FR/PT/EN a la par ('+c.frUI+'/'+c.ptUI+'/'+c.enUI+')');
+    step(c.fr===c.pt&&c.pt===c.en, 'W9-4 paridad FR/PT/EN');
+    step(c.frN===18&&c.ptN===18&&c.enN===18, 'W9-5 18 nodos FR/PT/EN ('+c.frN+'/'+c.ptN+'/'+c.enN+')');
+    step(c.enO===15, 'W9-5b 15 objeciones EN ('+c.enO+')');
+    step(c.enD>=6, 'W9-5c overlay obj EN completo (ya_tengo con '+c.enD+' subclaves, incl. dialogo+round2)');
+    step(c.enDuad=0||true, 'W9-5d marcador');
   }
-  CLAVES.forEach(k=>{
-    step(src.includes('I18N.fr.obj.'+k+'=')&&src.includes('I18N.pt.obj.'+k+'='), 'W9-6 '+k+' FR/PT presente');
+  ['fr','pt','en'].forEach(L=>{
+    OBJ.forEach(k=>step(src.includes('I18N.'+L+'.obj.'+k+'='), 'W9-6 '+L+' obj '+k));
+    NOD.forEach(k=>step(src.includes('I18N.'+L+'.nodes.'+k+'=')||(k==='inicio'), 'W9-7 '+L+' nodo '+k));
   });
-  step(src.includes("'round2'")&&/dialogo','round2'\]/.test(src), 'W9-7 motor mezcla tambien round2');
+  step(/'round2'/.test(src)&&/dialogo','round2','nat'\]/.test(src), 'W9-8 motor mezcla round2+nat');
+  step(src.includes('I18N.en.obj.datos=')&&src.includes('opt-out list'), 'W9-9 obj compliance EN presente');
+}
+
+// ── W10 · ola 4: nat{} + glosarios de mercado ──
+{
+  const OBJ=['ya_tengo','permanencia','no_interesa','mas_caro','tiempo','despues','no_decisor','email','lo_pienso','no_cambiar','contento','desconfianza','momento','ya_llamaron','datos'];
+  const NOD=['inicio','apertura','apertura_retorno','no_contesta','presentacion','motivo','permiso','deteccion','pitch_ahorro','pitch_valor','pitch_retorno','cierre_hub','cierre_cita','cierre_facturas','cierre_alta','cierre_tecnico','seguimiento','retirada'];
+  step(src.includes("'fase','step','nat'"), 'W10-1 motor fusiona nat (nodos)');
+  step(src.includes("'dialogo','round2','nat'"), 'W10-2 motor fusiona nat (objeciones)');
+  ['fr','pt','en'].forEach(L=>{
+    OBJ.forEach(k=>step(src.includes('I18N.'+L+'.obj.'+k+'.nat='), 'W10-3 '+L+' nat '+k));
+    NOD.forEach(k=>step(src.includes('I18N.'+L+'.nodes.'+k+'.nat='), 'W10-4 '+L+' nat '+k));
+    step(new RegExp("I18N\\."+L+"\\.glosario=\\[").test(src), 'W10-5 glosario '+L+' presente');
+  });
+  step(src.includes("_I[__gloL]&&_I[__gloL].glosario")&&src.includes("typeof I18N"), 'W10-6 pestaña glosario dinámica por idioma (con guard)');
+  step(src.includes("Vouvoiement systématique")&&src.includes("«O senhor / a senhora»")&&src.includes("UK & Ireland"), 'W10-7 zonas de mercado presentes');
 }

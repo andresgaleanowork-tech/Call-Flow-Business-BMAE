@@ -234,6 +234,27 @@ Segunda pasada al área de la nota rápida tras el reporte del equipo «los boto
 - 📊 Cobertura en el selector 🌐: FR/PT 7 % → **~32 %** (objeciones 15/15; árbol y glosario siguen en pertinente ola 3/4).
 - Tests: 242 QA (W9 ahora mide banda de ola 2 + presencia de las 15 claves FR/PT + mezcla de `round2`) · 58 residencial · 13 visual ✔. sw `cfb-v292`.
 
+## v2.9.6 «Babel · ola 4» — la voz de cada mercado (nat{}) + glosarios FR/PT/EN · 2026-09-30
+- **🗣 93 bloques `nat{}` traducidos y activos** — las 15 objeciones y los 18 nodos llevan ahora, por idioma, su voz natural de mercado: frases alternativas (alt), notas culturales (por qué suena a Francia/Portugal/Reino Unido) y zona de registro (vouvoiement francés · «o senhor / a senhora» portugués · cordial-formal británico). El botón/panel 🇪🇸 pasa a 🌐 y se traduce (« Voir le naturel » / « Ver naturalidade » / « See market voice »).
+- **📚 Glosario nativo por mercado** — 9 categorías × idioma (fórmulas telefónicas, validación, conectores, reformuladores, matizadores, la pérdida de la calle, cierres naturales, léxico del dueño de PME, gramática hablada) todos reescritos para cada mercado (nada de traducción literal: « Então fica combinado » PT, « On fait comme ça, alors » FR, “So we’re settled, then” EN). La pestaña GLOSARIO se renderiza por idioma (encabezado, categorías, la etiqueta «Alternativas» y el título de prohibiciones, traducidos; la tabla de prohibiciones queda en ES, es guía interna del guion español).
+- 🔧 Motor: el overlay fusiona ahora `nat` (nodos y objeciones), `I18N` y `cfaT` se exponen en `window` para las pestañas (con guardas `typeof` para jsdom), y cambiar de idioma repinta la pestaña del glosario si está abierta.
+- Tests: **437 + 58 + 13 ✔** (nueva batería W10: 3×15 nat obj + 3×18 nat nodos + glosarios + wiring). jsdom verificado: nat PT en nodos y objeciones, pestaña glosario completa en portugués, nat EN al vuelo.
+- sw `cfb-v296`. Queda en ES por alcance: onboarding, casos de escucha y tabla interna de prohibiciones.
+
+## v2.9.5 «Babel · 100 % EN» — inglés completo en la superficie de llamada · 2026-09-29
+- **🌐 Olas 3b+3c cerradas: EN al 100 %** — las **15 objeciones** (nombre, validación, desactivación, reencuadre, avance, **diálogo completo** y **round 2**) y los **18 nodos** del árbol de decisión traducidos al inglés británico neutro comercial («sleeping money», «plug a leak», «no strings attached»), con la misma mecánica (`next/obj/resume/cls/keepObj` intactos) y marcas `[PAUSA]`/`[TONO]` sin traducir.
+- Cobertura en el selector: **FR 100 % · PT 100 % · EN 100 %**.
+- El sufijo «(oleadas en curso)» ahora es **dinámico y multidioma**: desaparece cuando los tres idiomas están al 100 %; las dos cadenas de la línea de cobertura pasan al diccionario UI traducido (27 cadenas/idioma).
+- Tests: aserciones por idioma × clave (3×15 obj + 3×18 nodos), paridad FR/PT/EN, overlay obj EN completo (dialogo+round2) → **331 + 58 + 13 ✔**. jsdom verificado: árbol y objeciones EN aplicados en caliente, chip 🌐 EN, cobertura trilingüe 100/100/100.
+- sw `cfb-v295`. Queda fuera como siempre: `nat{}` (ola 4) y onboarding/tutorial/quiz (ES).
+
+## v2.9.4 «Babel · EN + ola 3» — 4º idioma (inglés) y árbol PYMES FR/PT al 100 % · 2026-09-29
+- **🌐 🇬🇧 Cuarto idioma EN** (petición explícita del usuario sobre la mesa): selector 🇪🇸/🇫🇷/🇵🇹/🇬🇧, cromo UI traducido a inglés (25 cadenas), chip `🌐 EN`, cobertura trilingüe `FR · PT · EN` en el selector y semilla `I18N.en.nodes.inicio`. EN arranca al **4 %** (cromo + semilla); sus objeciones/árbol van en las olas 3b/3c del plan.
+- **📖 Ola 3 cerrada: árbol de decisión PYMES FR/PT al 100 %** — los 18 nodos (`inicio … retirada`) traducidos: título, micro-frase, **guion (el diálogo completo palabra a palabra)**, notas de táctica y etiquetas/sub de opciones. `next/obj/resume/cls/ico` intactos (mecánica idéntica), y las marcas de dirección `[PAUSA 2s]`/`[TONO ↑/↓]` se mantienen sin traducir a propósito (se leen en voz alta por ti).
+- Cobertura en el selector: **FR 100 % · PT 100 % · EN 4 %**.
+- 📊 Tests: mocks con claves reales (18 nodos + 15 objeciones), W9-1/2 a 100 %, nuevas W9-5/6/7/8/9 (paridad, conteo de nodos, presencia por clave, mezcla `round2`, semilla EN) → **261 + 58 + 13 ✔**. sw `cfb-v294`.
+- Sin cambios: `nat{}` de nodos sigue ES (ola 4), onboarding/tutorial/quiz en ES, referencias `fidelización` y matriz de mercado sin tocar.
+
 ## v2.9.3 «Babel · hotfix selector» · 2026-09-29
 - 🐛 **El selector 🌐 no aparecía al entrar al guion** (reporte directo del usuario): el enganche usaba el helper `cadena()`, no disponible de forma fiable en ese momento → se tragaba la excepción y no se ponía la trampa. Reescrito con `wraps()` (el helper probado en producción) + bucle de reintento (250 ms × 60) hasta que `tutAbrirGuion` existe. Verificado en jsdom: al entrar al guion aparece el diálogo 🇪🇸/🇫🇷/🇵🇹 con cobertura FR 34 % · PT 34 %, y reentrar en la misma sesión aplica el idioma guardado.
 - sw `cfb-v293` (fuerza refresco del PWA).

@@ -3415,7 +3415,7 @@ guiIrA('inicio'); guiHistorial=[]; guiActualizarVolver();
    Claves localStorage del equipo: bm_cfb* (progreso) / bm_stats* / bm_badges / bm_a11y.  */
 (function(){
 "use strict";
-var VERSION='2.9.3', GUIAFECHA='16-09-2026';
+var VERSION='2.9.6', GUIAFECHA='16-09-2026';
 window.CFB_VERSION=VERSION;
 var SUF='_res'; /* v1.5.1 determinista: residencial */
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
@@ -3653,40 +3653,43 @@ window.cfbExamen=function(soloQis){
 /* ═══════════════════ v2.9.0 «Babel» · idioma por sesión (ES/FR/PT) ═══════════════════
    Motor: overlays I18N.L.nodes/I18N.L.obj + cromo UI. applyLang clona- restaura y mezcla.
    Oleadas de contenido: 1 (UI+semilla) ✔ · 2 objeciones · 3 árbol · 4 glosario/casos.   */
-var I18N={fr:{ui:{},obj:{},nodes:{}},pt:{ui:{},obj:{},nodes:{}},es:{ui:{},obj:{},nodes:{}}};
+var I18N={fr:{ui:{},obj:{},nodes:{}},pt:{ui:{},obj:{},nodes:{}},en:{ui:{},obj:{},nodes:{}},es:{ui:{},obj:{},nodes:{}}};
+window.I18N=I18N;
 
 /* ── cromo UI (100% FR/PT) ── */
 (function(){
 var U={
- 'El cliente responde…':['Le client répond…','O cliente responde…'],
- '¿Objeción directa?':['Objection directe ?','Objeção direta?'],
- '— Abrir manejo de objeción… —':['— Ouvrir la gestion d’objection… —','— Abrir gestão de objeção… —'],
- 'Atajos':['Raccourcis','Atalhos'],
- '🤝 Ir al cierre':['🤝 Aller à la conclusion','🤝 Ir ao fecho'],
- '🧠 Anexo neuro':['🧠 Annexe neuro','🧠 Anexo neuro'],
- '🇪🇸 Glosario':['🇫🇷 Glossaire','🇵🇹 Glossário'],
- '← Volver':['← Retour','← Voltar'],
- '↺ Reiniciar':['↺ Recommencer','↺ Reiniciar'],
+ 'El cliente responde…':['Le client répond…','O cliente responde…','The client answers…'],
+ '¿Objeción directa?':['Objection directe ?','Objeção direta?','Direct objection?'],
+ '— Abrir manejo de objeción… —':['— Ouvrir la gestion d’objection… —','— Abrir gestão de objeção… —','— Open objection handling… —'],
+ 'Atajos':['Raccourcis','Atalhos','Shortcuts'],
+ '🤝 Ir al cierre':['🤝 Aller à la conclusion','🤝 Ir ao fecho','🤝 Go to closing'],
+ '🧠 Anexo neuro':['🧠 Annexe neuro','🧠 Anexo neuro','🧠 Neuro annex'],
+ '🇪🇸 Glosario':['🇫🇷 Glossaire','🇵🇹 Glossário','🇬🇧 Glossary'],
+ '← Volver':['← Retour','← Voltar','← Back'],
+ '↺ Reiniciar':['↺ Recommencer','↺ Reiniciar','↺ Restart'],
  '🎯 Foco':['🎯 Focus','🎯 Foco'],
- '🎯 Foco: ON':['🎯 Focus : ON','🎯 Foco: ON'],
- '✎ Guardar en Mis clientes':['✎ Enregistrer dans Mes clients','✎ Guardar em Os meus clientes'],
- 'Ocultar':['Masquer','Ocultar'],
- '📝 Nota rápida de la llamada':['📝 Note rapide de l’appel','📝 Nota rápida da chamada'],
- 'Cliente (p. ej. Bar La Mareta)':['Client (p. ex. Bar La Mareta)','Cliente (p. ex. Bar La Mareta)'],
- '☎ Teléfono (opc.)':['☎ Téléphone (fac.)','☎ Telefone (opc.)'],
- 'Lo acordado, lo pendiente…':['Le convenu, le en suspens…','O combinado, o pendente…'],
- '📞 Llamar':['📞 Appeler','📞 Ligar'],
- 'Pulse la respuesta del cliente para avanzar':['Appuyez sur la réponse du client pour avancer','Toque na resposta do cliente para avançar'],
- 'Árbol de decisión':['Arbre de décision','Árvore de decisão'],
- '¿Cliente cede? ⏵ vuelve al flujo':['Le client cède ? ⏵ retour au flux','O cliente cede? ⏵ volta ao fluxo'],
+ '🎯 Foco: ON':['🎯 Focus : ON','🎯 Foco: ON','🎯 Focus: ON'],
+ '✎ Guardar en Mis clientes':['✎ Enregistrer dans Mes clients','✎ Guardar em Os meus clientes','✎ Save to My clients'],
+ 'Ocultar':['Masquer','Ocultar','Hide'],
+ '📝 Nota rápida de la llamada':['📝 Note rapide de l’appel','📝 Nota rápida da chamada','📝 Quick call note'],
+ 'Cliente (p. ej. Bar La Mareta)':['Client (p. ex. Bar La Mareta)','Cliente (p. ex. Bar La Mareta)','Client (e.g. Bar La Mareta)'],
+ '☎ Teléfono (opc.)':['☎ Téléphone (fac.)','☎ Telefone (opc.)','☎ Phone (opt.)'],
+ 'Lo acordado, lo pendiente…':['Le convenu, le en suspens…','O combinado, o pendente…','What was agreed, what’s pending…'],
+ '📞 Llamar':['📞 Appeler','📞 Ligar','📞 Call'],
+ 'Pulse la respuesta del cliente para avanzar':['Appuyez sur la réponse du client pour avancer','Toque na resposta do cliente para avançar','Tap the client’s answer to move on'],
+ 'Árbol de decisión':['Arbre de décision','Árvore de decisão','Decision tree'],
+ '¿Cliente cede? ⏵ vuelve al flujo':['Le client cède ? ⏵ retour au flux','O cliente cede? ⏵ volta ao fluxo','Client relents? ⏵ back to flow'],
  '7 · Objeción':['7 · Objection','7 · Objeção'],
- 'Cliente cede y seguimos':['Le client cède, on continue','O cliente cede e seguimos'],
- 'Volver al flujo donde íbamos':['Revenir au flux où nous étions','Voltar ao fluxo onde íamos'],
- 'Idioma':['Langue','Idioma'],
- 'Elige idioma de esta sesión':['Choisissez la langue de cette session','Escolha o idioma desta sessão'],
- 'El guion de llamada se mostrará en este idioma. Puedes cambiarlo cuando quieras.':['Le script d’appel s’affichera dans cette langue. Vous pouvez la changer à tout moment.','O guião da chamada será mostrado neste idioma. Pode mudá-lo quando quiser.'],
+ 'Cliente cede y seguimos':['Le client cède, on continue','O cliente cede e seguimos','Client relents, we go on'],
+ 'Volver al flujo donde íbamos':['Revenir au flux où nous étions','Voltar ao fluxo onde íamos','Back to the flow where we were'],
+ 'Idioma':['Langue','Idioma','Language'],
+ 'Cobertura traducida':['Couverture traduite','Cobertura traduzida','Translated coverage'],
+ ' (oleadas en curso)':[' (vagues en cours)',' (vagas em curso)',' (waves in progress)'],
+ 'Elige idioma de esta sesión':['Choisissez la langue de cette session','Escolha o idioma desta sessão','Choose this session’s language'],
+ 'El guion de llamada se mostrará en este idioma. Puedes cambiarlo cuando quieras.':['Le script d’appel s’affichera dans cette langue. Vous pouvez la changer à tout moment.','O guião da chamada será mostrado neste idioma. Pode mudá-lo quando quiser.','The call script will show in this language. Change it anytime.'],
  'Aplicando…':['Application…','A aplicar…']};
-Object.keys(U).forEach(function(k){ I18N.fr.ui[k]=U[k][0]; I18N.pt.ui[k]=U[k][1]; });
+Object.keys(U).forEach(function(k){ I18N.fr.ui[k]=U[k][0]; I18N.pt.ui[k]=U[k][1]; I18N.en.ui[k]=U[k][2]; });
 })();
 
 /* ── Oleada 1 · semilla NODES (inicio/apertura) + OBJECTIONS (ya_tengo) FR/PT ── */
@@ -3725,6 +3728,19 @@ I18N.pt.obj.ya_tengo={nombre:'« Já tenho comercializadora »',
   {t:'« A pergunta é outra: quanto lhe custa por mês não olhar para ela? »', n:'PERDA ATUAL'}],
  avance:[{t:'« Diga-me uma coisa: a última fatura, passou de quatrocentos euros ou andou por aí? »', n:'ABERTA COM ÂNCORA · “andou por aí”'}]};
 
+
+I18N.en.nodes.inicio={titulo:'Before dialling — breathe and set the tone (45 seconds)',
+ micro:'Start with the right head: emotion first, data after.',
+ opciones:[
+  {ico:'📞', cls:'ok', label:'Cold call', sub:'First contact with the company', next:'apertura'},
+  {ico:'📥', cls:'ok', label:'Inbound lead', sub:'Already showed interest', next:'apertura'},
+  {ico:'🔁', cls:'ok', label:'Former client / follow-up', sub:'There was contact before', next:'apertura_retorno'},
+  {ico:'📭', cls:'warn', label:'No answer / voicemail', sub:'Leave them curious', next:'no_contesta'}],
+ script:[{ctx:'MOTHER RULE: the client does not hear tariffs, they hear their fear and their relief. The first 30 seconds of each block are EMOTION (System 1). Numbers come later, to justify what the gut already decided.'},
+  {ctx:'Card: lead [TIPO_LEAD] · sector [SECTOR] · city [CIUDAD]. Iberdrola client: everything is there. IBERCRM lead: tariff and company missing — discovered in detection. IBERU: previous consumptions. Opt-out list checked. Right hours. Smile on, it can be heard. You are not calling to ask: you call to GIVE a diagnosis.'},
+  {ctx:'And talk like the street: formal “you” the whole call, short sentences, and the client’s name at least three times. After each emotional question: silence. Let them fill it.'}],
+ notas:['Standing or well seated: the voice changes and it shows.','Call target: sign-up, invoice received or appointment. One of the three and the call is won.','You do not “sell”: you find sleeping money and give peace of mind back.']};
+
 /* ── motor ── */
 window.cfaLangGet=function(){ try{ return sessionStorage.getItem('cfa_lang')||'es'; }catch(e){ return 'es'; } };
 var __cfaOrig=null;
@@ -3734,15 +3750,16 @@ window.cfaApply=function(L){
   cfaSnapshot(); if(!__cfaOrig) return;
   try{ var o=JSON.parse(__cfaOrig), P=(L!=='es')?(I18N[L]||{}):{};
     Object.keys(NODES).forEach(function(id){ var ov=P.nodes&&P.nodes[id]||{}, orig=o.nodes[id]||{};
-      ['titulo','micro','notas','opciones','script','fase','step'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) NODES[id][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
+      ['titulo','micro','notas','opciones','script','fase','step','nat'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) NODES[id][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     Object.keys(OBJECTIONS).forEach(function(k){ var ov=P.obj&&P.obj[k]||{}, orig=o.obj[k]||{};
-      ['nombre','validacion','desactiva','reencuadre','avance','dialogo','round2'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
+      ['nombre','validacion','desactiva','reencuadre','avance','dialogo','round2','nat'].forEach(function(f){ if(orig[f]!==undefined||ov[f]!==undefined) OBJECTIONS[k][f]=(ov[f]!==undefined)?ov[f]:orig[f]; }); });
     window.cfaLang=L; try{ sessionStorage.setItem('cfa_lang',L); }catch(e){}
     cfaChrome(L); try{ guiRenderTree(NODES[guiNodoActual]); }catch(e){}
-    var chip=document.getElementById('cfaChip'); if(chip) chip.textContent='🌐 '+(L==='es'?'ES':(L==='fr'?'FR':'PT'));
+    var chip=document.getElementById('cfaChip'); if(chip) chip.textContent='🌐 '+L.toUpperCase();
   }catch(e){}
 };
 function cfaT(L,s){ var d=(I18N[L]&&I18N[L].ui)||{}; return (L!=='es'&&d[s])||s; }
+window.cfaT=cfaT;
 function cfaChrome(L){
   try{ var tb=document.getElementById('treeBody'); if(!tb) return;
     tb.querySelectorAll('.tree-label').forEach(function(el){ el.textContent=cfaT(L,el.textContent); });
@@ -3775,10 +3792,12 @@ window.cfaSelector=function(){
    +'<button type="button" data-lang="es" style="flex:1;padding:12px 6px;border:2px solid '+(L0==='es'?'#007A3B':'#ddd')+';border-radius:10px;background:#fff;font-size:15px;cursor:pointer">🇪🇸<br><b>ES</b></button>'
    +'<button type="button" data-lang="fr" style="flex:1;padding:12px 6px;border:2px solid '+(L0==='fr'?'#007A3B':'#ddd')+';border-radius:10px;background:#fff;font-size:15px;cursor:pointer">🇫🇷<br><b>FR</b></button>'
    +'<button type="button" data-lang="pt" style="flex:1;padding:12px 6px;border:2px solid '+(L0==='pt'?'#007A3B':'#ddd')+';border-radius:10px;background:#fff;font-size:15px;cursor:pointer">🇵🇹<br><b>PT</b></button>'
+   +'<button type="button" data-lang="en" style="flex:1;padding:12px 6px;border:2px solid '+(L0==='en'?'#007A3B':'#ddd')+';border-radius:10px;background:#fff;font-size:15px;cursor:pointer">🇬🇧<br><b>EN</b></button>'
    +'</div><div id="cfaCov" style="margin-top:10px;font-size:11px;color:#999"></div></div>';
   document.body.appendChild(ov);
-  var cov=ov.querySelector('#cfaCov'), vidas={es:100,fr:cfaCobertura('fr'),pt:cfaCobertura('pt')};
-  cov.textContent='Cobertura de contenidos traducidos · FR '+vidas.fr+'% · PT '+vidas.pt+'% (oleadas en curso)';
+  var cov=ov.querySelector('#cfaCov'), vidas={fr:cfaCobertura('fr'),pt:cfaCobertura('pt'),en:cfaCobertura('en')};
+  var suf=(vidas.fr===100&&vidas.pt===100&&vidas.en===100)?'':cfaT(L0,' (oleadas en curso)');
+  cov.textContent=cfaT(L0,'Cobertura traducida')+' · FR '+vidas.fr+'% · PT '+vidas.pt+'% · EN '+vidas.en+'%'+suf;
   ov.querySelectorAll('button[data-lang]').forEach(function(b){ b.onclick=function(){ ov.remove(); window.cfaApply(b.getAttribute('data-lang')); }; });
 };
 function cfaCobertura(L){
