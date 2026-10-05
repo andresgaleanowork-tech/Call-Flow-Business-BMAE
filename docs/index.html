@@ -220,19 +220,27 @@ if(location.protocol.indexOf('http')===0&&'serviceWorker' in navigator){
 
 
 <script id="cfbGate13">
-/* ═══ v1.4 · Puerta ID solo-con-ID · clave embebida · registro por email · panel admin ═══ */
+/* ═══ v1.4→v3.7 · Puerta del equipo · SIN clave embebida (punto 3: reparto externo seguro) ═══
+   La clave ya NO viaja dentro de los binarios: cada dispositivo guarda la suya en
+   localStorage (cfb_sync_token) al primer uso. Con un APK/EXE «público» no se abre nada.
+   Vacuna de rotación v2: borra el token heredado de los builds ≤1.x-3.6.x (la clave
+   vieja se considera quemada tras rotar). */
 (function(){
 'use strict';
-/* clave del equipo · v1 · embebida a propósito (riesgo limitado: solo repo privado de datos) */
-var CFB_EMB_VER=1, CFB_EMB=(function(){var p=['github_pat','11CGHOWYY0wk','GBobtVDQeT_4hQinqPlb','Ws5h6HQsZuX3J7akWAOYpfR6','GHjoO7iWnHEKWLAPTXqDhPysar'];return p[0]+'_'+p[1]+p[2]+p[3]+p[4];})();
+var CFB_EMB_VER=2;
 var OWNER='andresgaleanowork-tech', REPO='CFB-datos-equipo', RAMA='main';
 var MAIL='canalpymes@bmae.es';
 function LSg(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
 function LSs(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 function perfil(){ return LSg('cfb_perfil',{}); }
-/* vacuna de clave: la embebida renovada sustituye a la guardada (rotación central) */
-(function(){ try{ if(CFB_EMB&&LSg('cfb_clave_ver',0)<CFB_EMB_VER){ LSs('cfb_sync_token',CFB_EMB); LSs('cfb_clave_ver',CFB_EMB_VER); } }catch(e){} })();
-function token(){ return LSg('cfb_sync_token','')||CFB_EMB||''; }
+/* vacuna v2: cualquier token guardado por los builds con clave embebida (cfb_clave_ver<2)
+   se descarta — la clave nueva la mete el dispositivo una sola vez. */
+(function(){ try{
+  var v=LSg('cfb_clave_ver',0);
+  if(v<2){ localStorage.removeItem('cfb_sync_token'); }
+  LSs('cfb_clave_ver',2);
+}catch(e){} })();
+function token(){ return LSg('cfb_sync_token',''); }
 function norm(x){ return String(x==null?'':x).trim().toLowerCase(); }
 function slugId(id){ var s='i'+norm(id).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); return s.length>1?s:''; }
 function urlContenido(ruta){ return 'https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+ruta; }
@@ -250,7 +258,7 @@ function equipoGet(cb){
   req('GET', urlContenido('equipo.json')+'?ref='+RAMA, undefined, function(st,j){
     if(st===200&&j&&j.content){
       try{ var obj=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
-        obj._sha=j.sha; LSs('cfb_equipo',{ts:Date.now(),autorizados:obj.autorizados||[],metaRoleplay:obj.metaRoleplay||0});
+        obj._sha=j.sha; LSs('cfb_equipo',{ts:Date.now(),autorizados:obj.autorizados||[],metaRoleplay:obj.metaRoleplay||0,metaActividad:obj.metaActividad||0});
         cb(obj,'red'); return; }catch(e){}
     }
     if(st===404){ cb({_404:true},'red'); return; }
@@ -261,7 +269,7 @@ function equipoGet(cb){
 function equipoPut(eq,msg,cb){
   equipoGet(function(fresco){
     var sha=(fresco&&!fresco._404&&fresco._sha)||undefined;
-    var cuerpo={message:msg, content:b64({autorizados:eq.autorizados, metaRoleplay:(equipoCache(1e15)||{}).metaRoleplay||eq.metaRoleplay||0}), branch:RAMA};
+    var cuerpo={message:msg, content:b64({autorizados:eq.autorizados, metaRoleplay:(equipoCache(1e15)||{}).metaRoleplay||eq.metaRoleplay||0, metaActividad:(equipoCache(1e15)||{}).metaActividad||eq.metaActividad||0}), branch:RAMA};
     if(sha) cuerpo.sha=sha;
     req('PUT', urlContenido('equipo.json'), cuerpo, function(st){
       if(st===200||st===201){ LSs('cfb_equipo',{ts:Date.now(),autorizados:eq.autorizados}); cb(true); }
@@ -355,6 +363,146 @@ function primerArranque(id){
     });
   });
 }
+/* 🗝 v3.8.0 «Clave central cifrada + contraseña de equipo» — la clave real vive CIFRADA
+   en la web pública (clave-equipo.json · AES-GCM-256 + PBKDF2 SHA-256 250k). El comercial
+   solo mete su ID + la contraseña del equipo UNA vez; la clave la gestiona el admin y, al
+   rotarla, los dispositivos se renuevan solos con la contraseña guardada (cfb_eq_pass).
+   Fallback intacto: cualquiera puede pegar la clave larga a mano (v3.7). */
+var CFB_EQ_URL=window.CFB_EQ_URL||'https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/clave-equipo.json';
+var eqState={blob:null,modo:'carga'};
+function eqBlob(cb){
+  try{
+    if(window._eqTest&&window._eqTest.blob!==undefined){ cb(window._eqTest.blob); return; }
+    if((location.hostname||'')==='local.test'){ cb(null); return; }            /* tests: sin red salvo hook */
+    if(typeof fetch!=='function'){ cb(null); return; }
+    fetch(CFB_EQ_URL,{cache:'no-store'}).then(function(r){
+      if(r.status!==200){ cb(null); return; }
+      r.json().then(function(j){ cb(j&&j.alg&&j.data?j:null); },function(){ cb(null); });
+    },function(){ cb(null); });
+  }catch(e){ cb(null); }
+}
+function abEq(b){ var s=atob(b),u=new Uint8Array(s.length); for(var i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }
+function eqDescifra(blob,pass,cb){
+  try{
+    if(!blob||!blob.kdf||typeof crypto==='undefined'||!crypto.subtle){ cb(null); return; }
+    crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']).then(function(ik){
+      return crypto.subtle.deriveKey({name:'PBKDF2',salt:abEq(blob.kdf.salt),iterations:blob.kdf.iter||250000,hash:'SHA-256'},ik,{name:'AES-GCM',length:256},false,['decrypt']);
+    }).then(function(k){
+      return crypto.subtle.decrypt({name:'AES-GCM',iv:abEq(blob.iv)},k,abEq(blob.data));
+    }).then(function(buf){
+      var t=new TextDecoder().decode(buf).trim(); cb(t||null);
+    },function(){ cb(null); });   /* DOMException = contraseña incorrecta */
+  }catch(e){ cb(null); }
+}
+/* rotación silenciosa: sin token pero con contraseña guardada → intenta renovarla sola */
+function eqRotar(cb){
+  var pass=LSg('cfb_eq_pass','');
+  if(!pass){ cb(false); return; }
+  eqBlob(function(b){
+    if(!b){ cb(false); return; }
+    eqDescifra(b,pass,function(t){
+      if(!t){ localStorage.removeItem('cfb_eq_pass'); cb(false); return; }
+      LSs('cfb_sync_token',t);
+      req('GET',urlContenido('').replace('/contents/',''),undefined,function(st){
+        if(st===200){ cb(true); }
+        else { localStorage.removeItem('cfb_sync_token'); if(st!==0) localStorage.removeItem('cfb_eq_pass'); cb(false); }
+      });
+    });
+  });
+}
+window.eqRotar=eqRotar;
+/* v3.9.0 «Enlace de acceso» — el comercial NO escribe ni la contraseña:
+   el admin manda por el canal interno  …/index.html#eq=<contraseña>
+   (la va en el FRAGMENTO: nunca toca el servidor ni queda en logs).
+   Al abrirlo, la app descifra y entra sola; el comercial solo pone su ID. */
+function eqPassDeUrl(){
+  try{
+    var h=location.hash||'',m=/#eq=([^&]+)/.exec(h);
+    if(m) return decodeURIComponent(m[1]);
+    var q=location.search||'',m2=/[?&]eq=([^&]+)/.exec(q);
+    if(m2) return decodeURIComponent(m2[1]);
+  }catch(e){}
+  return null;
+}
+function eqLimpiarUrl(){
+  try{
+    var q=(location.search||'').replace(/[?&]eq=[^&]*/g,'').replace(/\?$/,'');
+    history.replaceState(null,'',location.pathname+q+(location.hash||'').replace(/#eq=[^&]*/,''));
+  }catch(e){}
+}
+window.cfbClaveEqManual=function(){ estadoClave('manual'); };
+window.cfbClaveEqVolver=function(){ estadoClave(eqState.blob?'equipo':'manual'); };
+function estadoClave(modo){
+  document.documentElement.classList.add('cfbCerrado');
+  var g=gate(); if(g) g.removeAttribute('hidden');
+  if(modo==='manual'||modo==='equipo'){ pintaClave(modo); return; }
+  pintaClave('carga');
+  eqBlob(function(b){ eqState.blob=b; pintaClave(b?'equipo':'manual'); });
+}
+function pintaClave(modo){
+  eqState.modo=modo;
+  if(modo==='carga'){
+    html(tarjeta('🔑 Clave del equipo','Un segundo — preparando la entrada del equipo…','<div id="cfbGateError" class="cfbGateError"></div>'));
+    return;
+  }
+  if(modo==='equipo'){
+    html(tarjeta('🔑 Contraseña del equipo',
+      'Pon la <b>contraseña del equipo</b> (te la dio tu administrador) y entras siempre directo — la clave larga de la nube la gestiona él y se renueva sola.',
+      '<form onsubmit="return cfbClaveEqOk(this)"><input id="cfbClaveEq" type="password" class="cfbGateInput" autocomplete="off" placeholder="contraseña del equipo" required>'
+      +'<button class="cfb-btn cfbMain" type="submit">Entrar →</button></form>'
+      +'<div style="margin-top:12px;font-size:.8rem"><a href="#" onclick="cfbClaveEqManual();return false">tengo la clave larga (admin / PC de sobremesa)</a></div>'
+      +'<div id="cfbGateError" class="cfbGateError"></div>'));
+    setTimeout(function(){ var i=document.getElementById('cfbClaveEq'); if(i) i.focus(); },60);
+    return;
+  }
+  html(tarjeta('🔑 Clave del equipo',
+    'Pégala aquí <b>una sola vez</b> y ya entra siempre directo. Te la da tu administrador/a por el canal interno. Sin clave no hay conexión con la nube.',
+    '<form onsubmit="return cfbClaveOk(this)"><input id="cfbClave" class="cfbGateInput" autocomplete="off" placeholder="github_pat_…" required>'
+    +'<button class="cfb-btn cfbMain" type="submit">Comprobar y entrar →</button></form>'
+    +(eqState.blob?'<div style="margin-top:12px;font-size:.8rem"><a href="#" onclick="cfbClaveEqVolver();return false">← volver a la contraseña del equipo</a></div>':'')
+    +'<div id="cfbGateError" class="cfbGateError"></div>'));
+  setTimeout(function(){ var i=document.getElementById('cfbClave'); if(i) i.focus(); },60);
+}
+window.cfbClaveEqOk=function(f){
+  var pass=(f&&f.querySelector('#cfbClaveEq').value||'');
+  if(pass.length<6){ error('Esa contraseña parece demasiado corta.'); return false; }
+  if(!eqState.blob){ estadoClave('manual'); return false; }
+  error('Descifrando la clave del equipo…');
+  eqDescifra(eqState.blob,pass,function(t){
+    if(!t){ error('✘ Contraseña incorrecta — pregunta la vigente a tu administrador/a.'); return; }
+    error('Clave descifrada. Comprobándola con la nube…');
+    LSs('cfb_sync_token',t);
+    req('GET',urlContenido('').replace('/contents/',''),undefined,function(st){
+      if(st===200){
+        LSs('cfb_eq_pass',pass);
+        var p=perfil();
+        if(p&&p.slug&&p.autorizado===true){ entrada(); equipoGet(function(eq){ if(eq&&!eq._404) saludo(); }); }
+        else estadoIdentidad();
+      } else {
+        localStorage.removeItem('cfb_sync_token');
+        error((st===0?'Sin red ahora mismo. ':'✘ La clave descifrada fue rechazada ('+st+'). ')+'Avisa a tu administrador/a: si la rotó, toca republicarla.');
+      }
+    });
+  });
+  return false;
+};
+window.cfbClaveOk=function(f){
+  var t=(f&&f.querySelector('#cfbClave').value||'').trim().replace(/\s+/g,'');
+  if(t.length<20){ error('Esa clave parece incompleta — pega la clave entera.'); return false; }
+  error('Comprobando la clave con la nube del equipo…');
+  LSs('cfb_sync_token',t);
+  req('GET', urlContenido('').replace('/contents/','') , undefined, function(st){
+    if(st===200){
+      var p=perfil();
+      if(p&&p.slug&&p.autorizado===true){ entrada(); equipoGet(function(eq){ if(eq&&!eq._404) saludo(); }); }
+      else estadoIdentidad();
+    } else {
+      localStorage.removeItem('cfb_sync_token');
+      error((st===0?'Sin red ahora mismo. ':'✘ Clave rechazada ('+st+'). ')+'Pide la buena a tu administrador/a.');
+    }
+  });
+  return false;
+};
 function completar(id,nombre,admin){
   var slug=slugId(id); if(!slug){ error('Ese ID no sirve (letras/números necesarios).'); estadoIdentidad(); return; }
   LSs('cfb_perfil',{id:id, nombre:nombre, slug:slug, admin:!!admin, autorizado:true, tsLogin:Date.now()});
@@ -365,11 +513,37 @@ window.cfbCambiarUsuario=function(){
   localStorage.removeItem('cfb_perfil'); location.reload();
 };
 window.cfbEstadoIdentidad=estadoIdentidad;
-/* arranque: con clave embebida el empleado va DIRECTO al ID */
+/* arranque v3.7→3.8: SIN clave → intenta renovación silenciosa con la contraseña guardada;
+   si no, la pide (contraseña del equipo si hay blob público, o clave larga). CON clave → ID. */
 (function(){
-  var p=perfil();
-  if(p&&p.slug&&(p.autorizado===true||p.local===true)){ entrada(); equipoGet(function(eq){ if(eq&&!eq._404) saludo(); }); }
-  else { estadoIdentidad(); }
+  function trasClave(){
+    var p=perfil();
+    if(p&&p.slug&&(p.autorizado===true||p.local===true)){ entrada(); equipoGet(function(eq){ if(eq&&!eq._404) saludo(); }); }
+    else { estadoIdentidad(); }
+  }
+  /* v3.9: enlace de acceso (#eq=…) — entra sin escribir nada */
+  var eqp=eqPassDeUrl();
+  if(eqp&&!token()){
+    eqBlob(function(b){
+      if(!b){ eqLimpiarUrl(); estadoClave(); return; }
+      eqDescifra(b,eqp,function(t){
+        if(!t){
+          eqLimpiarUrl(); estadoClave();
+          setTimeout(function(){ error('⚠ Ese enlace ya no sirve (el administrador cambió la contraseña o el enlace vino roto). Pide uno nuevo por el canal interno.'); },60);
+          return;
+        }
+        LSs('cfb_sync_token',t);
+        req('GET',urlContenido('').replace('/contents/',''),undefined,function(st){
+          if(st===200){ LSs('cfb_eq_pass',eqp); eqLimpiarUrl(); trasClave(); }
+          else { localStorage.removeItem('cfb_sync_token'); eqLimpiarUrl(); estadoClave(); }
+        });
+      });
+    });
+    return;
+  }
+  if(eqp){ eqLimpiarUrl(); }   /* ya tenía clave: solo limpiar la URL */
+  if(!token()){ eqRotar(function(ok){ if(ok){ trasClave(); } else estadoClave(); }); return; }
+  trasClave();
 })();
 })();
 </script>

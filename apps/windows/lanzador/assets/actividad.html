@@ -213,7 +213,8 @@ function labelPeriodo(){ var r=rango();
 function render(){
   D[Q]('#pLabel').textContent=labelPeriodo();
   ['sDia','sSem','sMes'].forEach(function(id,i){ D[Q]('#'+id).classList.toggle('on',['dia','semana','mes'][i]===modo); });
-  var meta=ls('bm_act_meta',{g:80}); if(!(meta.g>0)) meta.g=80;
+  function metaEquipoG(){ try{ var e=ls('cfb_equipo',null); return (e&&e.metaActividad>0)?e.metaActividad:null; }catch(err){ return null; } }
+  var meq=metaEquipoG(), mlloc=ls('bm_act_meta',null); var meta={g:(mlloc&&mlloc.g>0)?mlloc.g:(meq||80),equipo:meq};
   var act=leer().filter(enPeriodo);
   var campo=act.filter(function(e){ return e.tipo!=='practica'; });
   var pract=act.filter(function(e){ return e.tipo==='practica'; });
@@ -229,7 +230,7 @@ function render(){
   var hoy=iso(new Date()), hoyN=leer().filter(function(e){ return e.f===hoy && e.tipo!=='practica'; }).length;
   var diff=hoyN-meta.g;
   var kpis=[
-    {n:'<input id="metaIn" type="number" min="1" value="'+meta.g+'" style="width:64px;font:inherit;border:1px solid var(--gris-linea);border-radius:8px;padding:2px 6px">',l:'objetivo diario',s:'hoy: '+hoyN+(diff>=0?' ✔':' · faltan '+(-diff))},
+    {n:'<input id="metaIn" type="number" min="1" value="'+meta.g+'" style="width:64px;font:inherit;border:1px solid var(--gris-linea);border-radius:8px;padding:2px 6px">',l:'objetivo diario',s:'hoy: '+hoyN+(diff>=0?' ✔':' · faltan '+(-diff))+(meta.equipo?(' · meta equipo '+meta.equipo):' (personal)')},
     {n:campo.length,l:'gestiones en el periodo',s:porDia+'/día trabajado'},
     {n:efic+'%',l:'contacto efectivo',s:ce+' de '+campo.length, c:(efic>=30?'bien':'')},
     {n:factSol+' → '+factRec,l:'facturas solicitadas → recibidas',c:(factRec>0?'bien':'')},

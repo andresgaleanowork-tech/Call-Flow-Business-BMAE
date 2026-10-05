@@ -20,9 +20,10 @@ const ok=[],ko=[]; const T=(x,m)=>{(x?ok:ko).push(m)};
    T(a2.length===1,'nota rápida tras ⏱ NO duplica (dedupe 10 min)');
    if(errs.length) ko.push('errores JS plantilla: '+errs[0]);
    const hoy=new Date(),p2=x=>(x<10?'0':'')+x, iso=p=>p.getFullYear()+'-'+p2(p.getMonth()+1)+'-'+p2(p.getDate());
+      function diasAtras(n){ var d=new Date(hoy); d.setDate(Math.max(1,hoy.getDate()-n)); return d; }
    const seed={'bm_actividad_comun':a2.concat([
-     {ts:Date.now()-3*864e5,f:iso(new Date(Date.now()-3*864e5)),h:'10:00',tipo:'llamada',resultado:'Contacto efectivo',detalle:'x',ciudad:'Sagunto',min:6,org:'pymes'},
-     {ts:Date.now()-864e5,f:iso(new Date(Date.now()-864e5)),h:'11:00',tipo:'email',resultado:'Solicita factura',detalle:'y',ciudad:'Torrent',min:0,org:'manual'}]),
+     {ts:diasAtras(3).getTime()+3600000,f:iso(diasAtras(3)),h:'10:00',tipo:'llamada',resultado:'Contacto efectivo',detalle:'x',ciudad:'Sagunto',min:6,org:'pymes'},
+     {ts:diasAtras(1).getTime()+7200000,f:iso(diasAtras(1)),h:'11:00',tipo:'email',resultado:'Solicita factura',detalle:'y',ciudad:'Torrent',min:0,org:'manual'}]),
     'cli_registros':{'Bar Act':{creado:iso(hoy),notas:[],v:3,estado:'cita',ciudad:'Sagunto',factura:'120'},'Bar Dos':{creado:iso(hoy),notas:[],v:3,estado:'nuevo',ciudad:'Valencia',factura:'200'}}};
    const [dom2,errs2]=nw('actividad.html',seed); const w2=dom2.window;
    setTimeout(()=>{ try{
@@ -36,7 +37,7 @@ const ok=[],ko=[]; const T=(x,m)=>{(x?ok:ko).push(m)};
     T(lista.querySelectorAll('.fila').length===3,'registro lista 3 gestiones (mes)');
     T(!!lista.querySelector('select'),'resultado editable en línea');
     w2.eval("pModo('semana'); pModo('dia')");
-    T(w2.document.querySelector('#lista').querySelectorAll('.fila').length===1,'vista Hoy filtra');
+    T(w2.document.querySelector('#lista').querySelectorAll('.fila').length===(hoy.getDate()===1?3:1),'vista Hoy filtra');
     if(errs2.length) ko.push('errores JS página: '+errs2[0]);
     console.log('OK:',ok.length); ko.forEach(m=>console.log('✘',m));
     console.log(ko.length===0?'✅ E2E ACTIVIDAD VERDE ('+ok.length+' comprobaciones)':'❌ E2E ACTIVIDAD FALLOS');

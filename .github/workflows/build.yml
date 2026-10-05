@@ -1,5 +1,6 @@
 # ═══ Call Flow Business · FÁBRICA (v2.3) ═══
-# push a main → tests (203+58) → EXE + APK + SHAs como Artifacts descargables.
+# push a main → tests (203+58) → EXE (+ firma si hay secretos) + SHAs como Artifacts.
+# v3.7 (02-10-2026): APK retirado temporalmente — guía de reconstrucción en docs/android-historico.md
 # Si existen los secretos CFB_CERT_B64 / CFB_CERT_PASS → el EXE sale FIRMADO con el certificado real (OV/EV).
 name: build
 on:
@@ -53,19 +54,8 @@ jobs:
           fi
           sha256sum "Call Flow Business (firmado).exe" >> SHA256.txt
 
-      # ───────── 4 · APK Android (Java 21 + SDK preinstalado del runner) ─────────
-      - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: 21 }
-      - name: Compilar APK
-        run: |
-          sudo apt-get install -y -qq unzip zip
-          SDK="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"   # v2.3.1: el contexto env.* NO ve las vars del runner (bug CAZA#1)
-          test -d "$SDK/build-tools/34.0.0" || (printf 'y\ny\n' | "$SDK/cmdline-tools/latest/bin/sdkmanager" "build-tools;34.0.0" >/dev/null)
-          test -d "$SDK/platforms/android-35" || (printf 'y\ny\ny\n' | "$SDK/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" >/dev/null)
-          ANDROID_SDK_ROOT="$SDK" JDK_HOME="$JAVA_HOME" bash apps/android/proyecto/build.sh
-          sha256sum apps/android/Call-Flow-Business.apk > apps/android/SHA256.txt
 
-      # ───────── 5 · Artifacts: el reparto del viernes en un zip ─────────
+      # ───────── 4 · Artifacts: el reparto del viernes en un zip ─────────
       - uses: actions/upload-artifact@v4
         with:
           name: call-flow-business-${{ github.sha }}
@@ -74,6 +64,4 @@ jobs:
             apps/windows/Call-Flow-Business.exe
             "apps/windows/Call Flow Business (firmado).exe"
             apps/windows/SHA256.txt
-            apps/android/Call-Flow-Business.apk
-            apps/android/SHA256.txt
           if-no-files-found: error

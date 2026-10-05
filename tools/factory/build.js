@@ -18,7 +18,8 @@ function genera(htmlFile, guion) {
   const marcadores = [...out.matchAll(/@@EDITORIAL:([A-Z_]+)@@/g)].map(m => m[1]);
   if (!marcadores.length) throw new Error(`${htmlFile}: plantilla sin marcadores`);
   for (const b of marcadores) {
-    const caja = path.join(__dirname, 'contenido', guion, b + '.js');
+    let caja = path.join(__dirname, 'contenido', guion, b + '.js');
+    if (!fs.existsSync(caja)) caja = path.join(__dirname, 'contenido', 'comun', b + '.js'); // motor único compartido
     const txt = fs.readFileSync(caja, 'utf8'); // bytes exactos del bloque
     out = out.split('@@EDITORIAL:' + b + '@@').join(txt);
   }

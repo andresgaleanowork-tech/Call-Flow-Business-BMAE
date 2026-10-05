@@ -1,2 +1,1 @@
-SHA-256 · v3.1.0 «Actividad» — 2026-09-30
-d60e331223582183c79ce7d89129630d260fc93b79c5a64a323ce391d99833b5  Call Flow Business (firmado).exe (3534048 B)
+a0b6fa0bef9bc5f2fa8bc77448d142ef9b51d04f611abc069948e4db7a18a2f3  ../Call-Flow-Business.exe

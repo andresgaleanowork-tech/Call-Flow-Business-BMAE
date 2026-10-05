@@ -179,6 +179,16 @@ T('W12-R1: registro de actividad también en residencial', res_.includes('window
 T('W12-R2: auto en residencial (⏱ llamada + estado CRM + roleplay)', res_.includes("actAdd('llamada',{detalle:fmtSeg(segs)")&&res_.includes("actAdd('crm',{detalle:'Estado → ")&&res_.includes('guiRpExit'));
 T('W12-R3: acceso ⚙ a actividad.html', res_.includes('cfbActividadAbrir')&&res_.includes('📊 Registro de actividad'));
 
+T('W13-R1: resumen CRM agregado tambien en residencial', res_.includes('window.crmPublicaResumen=function'));
+T('W13-R2: resumen se publica al guardar fichas', res_.includes('crmPublicaResumen'));
+
+T('W14-R1: banco de potenciales también en residencial', res_.includes('window.proAlta=function')&&res_.includes('pro_banco_cache'));
+T('W14-R2: auto-conversión y sync compartido', res_.includes('proConvertir')&&res_.includes('prospeccion.json'));
+T('W14-R3: segmento Potenciales accesible', res_.includes('segmento «📋 Potenciales»'));
+
+T('W15-R1: sesión/ruta/nota también en residencial', res_.includes('proSesionToggle')&&res_.includes('proTelN')&&res_.includes('proNotaSave'));
+T('W15-R2: pill sync y chips citas/facturas', res_.includes('proSyncPill')&&res_.includes('NCITAS'));
+
 console.log('────────────────────────');
 console.log(errores.length? 'errores JS: '+errores.join(' | ') : 'errores JS: (ninguno)');
 console.log(ko===0 && errores.length===0 ? `✅ HUMO RESIDENCIAL: TODO VERDE (${ok} comprobaciones)` : `❌ ${ko} fallos`);

@@ -256,7 +256,26 @@ step((function(){ try{
 
 const srcA=fs.readFileSync(path.join(__dirname,'..','admin.html'),'utf8');
 step(!/github_pat_[A-Za-z0-9_]{40,}/.test(srcI)&&!/github_pat_[A-Za-z0-9_]{40,}/.test(srcA),'v1.4 SEGURIDAD: la clave nunca aparece entera en el fuente (troceada, anti-revocación)');
-step(/CFB_EMB_VER=1/.test(srcI)&&/cfb_clave_ver/.test(srcI),'v1.4: vacuna de clave por versión (rotación central)');
+step(/CFB_EMB_VER=2/.test(srcI)&&/cfb_clave_ver/.test(srcI)&&/localStorage\.removeItem\('cfb_sync_token'\)/.test(srcI),'v1.4→3.7: vacuna v2 — borra el token heredado de builds ≤3.6 (clave fuera del binario)');
+step(!/11CGHOWYY0wk/.test(srcI)&&!/GBobtVDQeT_4hQinqPlb/.test(srcI),'v3.7 SEGURIDAD: la clave vieja ya NO está ni troceada en index.html');
+/* ══ v3.8.0 «Clave central cifrada + contraseña de equipo» · estáticas ══ */
+var srcA2=fs.readFileSync(path.join(__dirname,'..','admin.html'),'utf8');
+step(/clave-equipo\.json/.test(srcI)&&/CFB_EQ_URL/.test(srcI),'v3.8-E1: index conoce el blob público cifrado (clave-equipo.json)');
+step(/function eqDescifra\(/.test(srcI)&&/PBKDF2/.test(srcI)&&/iter\|\|250000/.test(srcI)&&/AES-GCM/.test(srcI),'v3.8-E2: descifrador PBKDF2 SHA-256 ×250.000 + AES-GCM-256');
+step(/function eqRotar\(/.test(srcI)&&/cfb_eq_pass/.test(srcI)&&/window\.eqRotar=eqRotar/.test(srcI),'v3.8-E3: rotación silenciosa con contraseña guardada');
+step(/eqRotar\(function\(ok\)/.test(srcI)&&/if\(ok\)\{ trasClave\(\); \} else estadoClave/.test(srcI),'v3.8-E4: boot intenta renovación silenciosa antes de pedir nada');
+step(/cfbClaveEqManual/.test(srcI)&&/cfbClaveEqVolver/.test(srcI)&&/tengo la clave larga/.test(srcI),'v3.8-E5: tarjeta de dos modos (equipo ⇄ clave larga) con enlaces de ida y vuelta');
+step(/if\(st===200\)\{[\s\S]{0,60}LSs\('cfb_eq_pass',pass\)/.test(srcI),'v3.8-E6 SEGURIDAD: la contraseña solo se guarda tras la validación 200');
+step(/window\.eqPublicar=function/.test(srcA2||'')&&/AES-GCM-256/.test(srcA2||'')&&/iterations:250000/.test(srcA2||''),'v3.8-E7: admin cifra y publica (mismo esquema fuerte)');
+step(/WEB_REPO='Call-Flow-Business-BMAE'/.test(srcA2||'')&&/AMBOS/.test(srcA2||''),'v3.8-E8: publicación validada contra AMBOS repos (datos + web)');
+/* ══ v3.9.0 «Enlace de acceso» · estáticas ══ */
+step(/function eqPassDeUrl\(\)/.test(srcI)&&/#eq=/.test(srcI)&&/decodeURIComponent/.test(srcI),'v3.9-G1: la app lee la contraseña del enlace (#fragmento, sin servidor)');
+step(/function eqLimpiarUrl\(\)/.test(srcI)&&/replaceState/.test(srcI),'v3.9-G2: la contraseña se borra de la barra tras usarla');
+step(/eqp&&!token\(\)/.test(srcI)&&srcI.indexOf('eqLimpiarUrl(); estadoClave();')>-1,'v3.9-G3: boot del enlace antes que todo + enlace caducado cae a la tarjeta con aviso');
+step(/eqEnlaceCopiar/.test(srcA2)&&/encodeURIComponent\(pass\)/.test(srcA2)&&/nunca toca el servidor/.test(srcA2),'v3.9-G4: admin crea el enlace y el copy explica que el # no toca el servidor');
+
+
+step(/estadoClave/.test(srcI)&&/cfbClaveOk/.test(srcI)&&/🔑 Clave del equipo/.test(srcI),'v3.7: tarjeta «🔑 Clave del equipo» de primera entrada');
 step(/cfbMailAlta/.test(srcI)&&/Alta Call Flow Business/.test(srcI)&&/deseo darme de alta/i.test(srcI),'v1.4: registro por email prellenado a canalpymes@bmae.es');
 step(/mailto:canalpymes@bmae\.es\?subject=Soporte/.test(srcI)&&/Soporte y sugerencias/.test(srcI),'v1.4: soporte/sugerencias en el pie → mismo correo');
 step(/href="admin\.html"/.test(srcI)&&/Panel admin/.test(srcI),'v1.4: chip «🛠 Panel admin» para el admin');
@@ -274,8 +293,12 @@ wg.fetch=function(u,o){ var U=''+u;
   return Promise.resolve({status:404,json:()=>Promise.resolve({})});
 };
 step(wg.eval("document.documentElement.classList.contains('cfbCerrado')"),'v1.3: sin identificarse, menú tapado');
-step(wg.eval("JSON.parse(localStorage.getItem('cfb_sync_token')).indexOf('github_pat_')===0&&JSON.parse(localStorage.getItem('cfb_sync_token')).length>40"),'v1.4: clave embebida instalada al arrancar (empleado = solo ID)');
-step(wg.eval("!!document.getElementById('cfbId')&&!document.getElementById('cfbClave')"),'v1.4: pantalla única — pide el ID (sin pantalla de clave)');
+step(wg.eval("localStorage.getItem('cfb_sync_token')===null"),'v3.7: el dispositivo arranca SIN clave (nada embebido)');
+step(wg.eval("!!document.getElementById('cfbClave')&&!document.getElementById('cfbId')"),'v3.7: la puerta pide 🔑 clave antes que el ID');
+step(wg.eval("+localStorage.getItem('cfb_clave_ver')===2"),'v3.7: vacuna v2 marcada en el dispositivo');
+wg.eval("document.getElementById('cfbClave').value='github_pat_TESTabcdefghijklmnopqrstuvwxyz1234567890'; window.cfbClaveOk(document.querySelector('form'))");
+await new Promise(r=>setTimeout(r,600));
+step(wg.eval("localStorage.getItem('cfb_sync_token')!==null&&!!document.getElementById('cfbId')"),'v3.7: clave aceptada (fetch 200) → guardada → pedimos ID');
 wg.eval("document.getElementById('cfbId').value='t123'; cfbEntraId(document.querySelector('form'))");
 await new Promise(r=>setTimeout(r,800));
 var perf=wg.eval("localStorage.getItem('cfb_perfil')");
@@ -296,7 +319,7 @@ step(/LSs\('cfb_localts',\(new Date\(\)\).toISOString\(\)\)/.test(src),'AUD-C: c
 step(/_restaurando/.test(src)&&/_restaurando=true/.test(src),'AUD-D: restauración no rebota push (sin commit eco)');
 step(/var r=p\.apply\(this,arguments\); try\{ extra\.apply/.test(src),'AUD-E: hooks después del render (números pintan al abrir)');
 step(/CFB_VERSION=\(typeof VERSION!=='undefined'\)/.test(src),'AUD-F: versión del snapshot viva');
-step(/network-first/.test(swSrc)&&/cfb-v310/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
+step(/network-first/.test(swSrc)&&/cfb-v364/.test(swSrc)&&/admin\.html/.test(swSrc),'AUD-H: sw network-first + admin cacheado');
 step(/cfbGatePill/.test(src)&&/bm_gatepill_off/.test(src),'AUD-I: pastilla «identifícate desde el menú» en guiones');
 step(!/bm_tut_prog_res'\+SUF/.test(srcR)&&!/bm_tut_omitido_res'\+SUF/.test(srcR),'AUD-J: sin dobles sufijos _res_res en residencial');
 step((function(){
@@ -392,15 +415,17 @@ step((function(){
 
 // ══ v2.3 «Fábrica» · estáticas ══
 step((function(){ try{ var w2=fs.readFileSync(path.join(__dirname,'..','..','..','.github','workflows','build.yml'),'utf8');
-  return /npm test/.test(w2)&&/go build/.test(w2)&&/upload-artifact@v4/.test(w2)&&/CFB_CERT_B64/.test(w2)&&/apps\/android\/proyecto\/build\.sh/.test(w2);
-}catch(e){ return false; } })(),'v2.3-F1: CI Actions = tests + EXE + firma por secretos + APK + Artifacts');
+  return /npm test/.test(w2)&&/go build/.test(w2)&&/upload-artifact@v4/.test(w2)&&/CFB_CERT_B64/.test(w2)&&!/apps\/android/.test(w2);
+}catch(e){ return false; } })(),'v2.3-F1 (v3.7): CI Actions = tests + EXE + firma por secretos + Artifacts — SIN paso APK (retirada)');
 step(fs.existsSync(path.join(__dirname,'..','..','..','docs','v2.3-FABRICA.md')),'v2.3-F2: documentación de la fábrica escrita');
 step(/GITHUB\.(IO|COM)|github\.io\/Call-Flow-Business-BMAE\/version\.json/.test(src)&&/github\.io\/Call-Flow-Business-BMAE\/version\.json/.test(srcR)&&/!window\.CFB_UPDATE_URL\) return;/.test(src),'v2.3-F3 (v2.7): auto-aviso ACTIVADO apuntando a la web oficial y sigue mudo en file://');
 step(/bm_errores/.test(src)&&/bm_errores/.test(srcR)&&/slice\(-20\)/.test(src)&&/unhandledrejection/.test(src),"v2.3-F4: registro de errores (tope 20, errores y promesas) en ambos guiones");
 step(/cfbErroresCopia\(\)">📋 Registro de errores/.test(src)&&/cfbErroresVaciar\(\)">🧼 Vaciar registro/.test(srcR),'v2.3-F5: hub ofrece copiar y vaciar el registro');
 step(/REGISTRO DE ERRORES/.test(src)&&/REGISTRO DE ERRORES/.test(srcR),'v2.3-F6: la ficha de soporte lleva el registro pegado');
-step((function(){ try{ var a=fs.readFileSync(path.join(__dirname,'..','..','android','proyecto','src','com','bm','callflow','MainActivity.java'),'utf8');
-  return /shouldOverrideUrlLoading/.test(a)&&/ACTION_VIEW/.test(a)&&/mailto:/.test(a); }catch(e){ return false; } })(),'v2.3-F7: la APK abre web/mailto/tel en el sistema');
+step((function(){ try{
+  return !fs.existsSync(path.join(__dirname,'..','..','android'))
+      && fs.existsSync(path.join(__dirname,'..','..','..','docs','android-historico.md'));
+}catch(e){ return false; } })(),'v2.3-F7 (v3.7): apps/android retirado del repo y guía de reconstrucción en docs/android-historico.md');
 step(/window\.cfbErroresTxt=function\(\)/.test(src)&&/window\.errLog=|function errLog\(\)/.test(src),'v2.3-F8: superficie del registro (txt copiable + lectura interna)');
 // ══ v2.3.1 «Escoba» · estáticas (caza 16-09 · _documentos/CAZA-BUGS-2026-09-16.md) ══
 step(/function hoyLocal\(\)\{/.test(src)&&src.indexOf('var hoy=hoyLocal();')>-1&&src.indexOf('var hoy=(new Date()).toISOString().slice(0,10)')<0,'v2.3.1-E1: racha en hora local — bumpVid ya no guarda en UTC (bug CAZA#2)');
@@ -409,8 +434,8 @@ step(src.indexOf("encodeURIComponent(nombre).replace(/'/g,'%27')")>-1&&srcR.inde
 step(src.indexOf("setItem(\\'cfb_ver_visto\\',JSON.stringify(")>-1&&src.indexOf("LSg('cfb_ver_visto','')===ver")>-1,'v2.3.1-E4: ✕ del aviso guarda JSON legible por LSg (bug CAZA#4)');
 step(src.indexOf("replace(/[^\\w.\\-]/g,'')")>-1&&src.indexOf("/^https:\\/\\//.test(v.url||'')")>-1,'v2.3.1-E5: version.json saneado — charset blanco y url solo https (bug CAZA#5)');
 step((function(){ try{ var w3=fs.readFileSync(path.join(__dirname,'..','..','..','.github','workflows','build.yml'),'utf8');
-  return w3.indexOf('env.ANDROID_SDK_ROOT')<0&&w3.indexOf('${ANDROID_SDK_ROOT:-$ANDROID_HOME}')>-1;
-}catch(e){ return false; } })(),'v2.3.1-E6: CI resuelve el SDK del runner (bug CAZA#1)');
+  return w3.indexOf('ANDROID_SDK_ROOT')<0&&w3.indexOf('sdkmanager')<0;
+}catch(e){ return false; } })(),'v2.3.1-E6 (v3.7): CI ya no usa SDK de Android (bug CAZA#1 resuelto de raíz con la retirada)');
 // ══ v2.3.2 «Silencio» · avisos A1/A2 de la caza, cerrados ══
 step(/caches\.match\(e\.request\)\.then\(hit=>hit\|\|r\)/.test(swSrc)&&/network-first/.test(swSrc),'v2.3.2-E7: sw sirve la copia buena ante 404/500 (bug CAZA#A2)');
 step((function(){ try{
@@ -429,10 +454,9 @@ step((function(){ try{ var a=fs.readFileSync(path.join(__dirname,'..','admin.htm
   return /id="claveNueva"/.test(a)&&/window\.claveCambiar=function/.test(a)&&/restauró la clave anterior/.test(a);
 }catch(e){ return false; } })(),'v2.4-L6: admin puede CAMBIAR el token (comprueba → guarda → restaura si falla)');
 step((function(){ try{
-  var j=fs.readFileSync(path.join(__dirname,'..','..','android','proyecto','src','com','bm','callflow','MainActivity.java'),'utf8');
-  var mf=fs.readFileSync(path.join(__dirname,'..','..','android','proyecto','AndroidManifest.xml'),'utf8');
-  return !/CAMERA|CfbChrome|onPermissionRequest/.test(j)&&!/android\.permission\.CAMERA/.test(mf);
-}catch(e){ return false; } })(),'v2.4-L7: APK sin permiso de cámara (innecesario tras retirar el QR)');
+  var w2=fs.readFileSync(path.join(__dirname,'..','..','..','.github','workflows','build.yml'),'utf8');
+  return w2.indexOf('setup-java')<0 && w2.indexOf('sdkmanager')<0 && w2.indexOf('Call-Flow-Business.apk')<0;
+}catch(e){ return false; } })(),'v2.4-L7 (v3.7): CI limpio — sin Java/SDK/APK tras la retirada');
 // ══ v2.3 «Fábrica» · funcionales ══
 step((function(){
   try{
@@ -690,15 +714,169 @@ step((function(){
     step(w2.eval("actLeer().length")<=3000 && w2.eval("actLeer().some(function(e){return e.detalle==='el que rebosa'})")===true, 'W12-15 tapón FIFO 3000 (cae el más viejo)');
     w2.eval("localStorage.removeItem('"+K+"'); localStorage.removeItem('cli_registros')");
   }catch(e){ step(false,'W12-12 funcional actividad: '+e.message); }
-  const shB=fs.readFileSync(require('path').join(__dirname,'..','..','..','apps','android','proyecto','build.sh'),'utf8');
-  step(shB.includes('actividad.html'), 'W12-16 APK empaqueta actividad.html');
+  const shB=fs.readFileSync(require('path').join(__dirname,'..','instalar.html'),'utf8');
+  const rd=fs.readFileSync(require('path').join(__dirname,'..','..','..','README.md'),'utf8');
+  step(!/app oficial de Android \(APK\)/.test(shB)&&/android-historico/.test(rd), 'W12-16 (v3.7): instalar.html sin oferta de APK y README refleja la retirada');
 }
 
-  console.log(R.join('\n'));
+// ── W13 · v3.2.0 panel admin: gestiones + embudo + meta equipo ──
+{
+  const srcAdm=fs.readFileSync(require('path').join(__dirname,'..','admin.html'),'utf8');
+  const srcIdx=fs.readFileSync(require('path').join(__dirname,'..','index.html'),'utf8');
+  const srcAct=fs.readFileSync(require('path').join(__dirname,'..','actividad.html'),'utf8');
+  step(srcAdm.includes('Gestiones del equipo (registro automático)')&&srcAdm.includes('window.gestionesAdmin'), 'W13-1 admin: tabla gestiones automáticas');
+  step(srcAdm.includes('Embudo CRM del equipo')&&srcAdm.includes('bm_crm_resumen_'), 'W13-2 admin: embudo CRM del equipo');
+  step(srcAdm.includes('metaActGuardar')&&srcAdm.includes('metaActividad'), 'W13-3 admin: meta diaria de gestiones');
+  step(srcAdm.includes('metaActividad:EQUIPO.metaActividad||0'), 'W13-4 equipo.json lleva metaActividad');
+  step(srcIdx.includes('metaActividad:obj.metaActividad||0')&&srcIdx.includes('metaActividad||eq.metaActividad||0'), 'W13-5 index propaga metaActividad (cache + PUT)');
+  step(srcAct.includes('metaEquipoG')&&srcAct.includes('meta equipo'), 'W13-6 actividad.html: meta de equipo con override local');
+  step(src.includes('window.crmPublicaResumen=function')&&src.includes("cfbPref('crm_resumen')"), 'W13-7 plantilla publica resumen CRM anónimo');
+  step(/liGuardarTodo\(o\)\{[\s\S]{0,260}?crmPublicaResumen/.test(src), 'W13-8 resumen se publica en cada escritura CLI');
+  try{
+    w2=w;
+    w2.eval("localStorage.clear()");
+    w2.eval("cliAnadir('Bar Admin','x'); cliSetEstado('Bar Admin','cita'); cliUp('Bar Admin',{factura:'150'}); cliAnadir('Bar B','y'); cliUp('Bar B',{factura:'200',estado:'interesado'})");
+    var K=w2.eval("cfbPref('crm_resumen')");
+    var r=JSON.parse(w2.eval("localStorage.getItem(\""+K+"\")||'null'"));
+    step(r&&r.fichas===2&&r.e.cita===1&&r.e.interesado===1&&r.pipe===350, 'W13-9 resumen agregado correcto (fichas, estados, pipeline)');
+    step(!JSON.stringify(r).includes('Bar Admin')&&!JSON.stringify(r).includes('Bar B'), 'W13-10 resumen SIN nombres (agregado anónimo)');
+  }catch(e){ step(false,'W13-9 funcional resumen: '+e.message); }
+}
+
+// ── W14 · v3.3.0 «Prospección» (banco compartido de potenciales) ──
+{
+  step(src.includes('window.proAlta=function')&&src.includes('pro_banco_cache'), 'W14-1 motor prospección (alta + cache local)');
+  step(src.includes("prospeccion.json")&&src.includes('proMerge')&&src.includes('proSyncFlush'), 'W14-2 banco compartido vía Contents API con fusión por id');
+  step(src.includes("if(activos>=500)"), 'W14-3 tapón 500 potenciales activos');
+  step(src.includes("'No contesta'")&&src.includes("'Pide factura'")&&src.includes("'Cita concertada'")&&src.includes("'Descartado'"), 'W14-4 resultados rápidos');
+  step(src.includes("actAdd('llamada',{resultado:(res==='Pide factura'"), 'W14-5 resultado anota al registro de actividad');
+  step(src.includes("proConvertir(id,res==='Pide factura'?'factura'"), 'W14-6 auto-conversión en positivos');
+  step(src.includes("[potencial]")&&src.includes("cliAnadir(r.n,'[potencial] '"), 'W14-7 historial de intentos → notas del cliente');
+  step(src.includes("guiIrA('apertura')")&&src.includes('window.proPrepLlamada'), 'W14-8 📞 Llamar precarga variables y abre en apertura');
+  step(src.includes('proPurgar')&&src.includes('lim30'), 'W14-9 purga: descartado 90 d / convertido 30 d');
+  step(src.includes('segmento «📋 Potenciales»')&&src.includes('onclick="proVer('), 'W14-10 segmento dentro de 👥 Clientes');
+  try{
+    w2=w;
+    w2.eval("localStorage.clear()");
+    var id=w2.eval("window.proAlta({n:'Da. Rosa Florist', tel:'699', c:'Paterna', s:'Floristería'}).id");
+    w2.eval("window.proResultado('"+id+"','No contesta')");
+    var r=w2.eval('window.proLeer()[0]');
+    step(r.p.n===1&&r.p.e==='intento'&&r.p.pf.length===10, 'W14-11 no contesta: intento + reintento +2 d');
+    var act=JSON.parse(w2.eval("localStorage.getItem('bm_actividad_comun')||'[]'"));
+    step(act.length===1&&act[0].resultado==='No contesta'&&act[0].ciudad==='Paterna', 'W14-12 registro automático con ciudad/sector');
+    w2.eval("window.proResultado('"+id+"','Cita concertada')");
+    var fg=JSON.parse(w2.eval("localStorage.getItem('cli_registros')||'{}'"));
+    step(fg['Da. Rosa Florist']&&fg['Da. Rosa Florist'].estado==='cita', 'W14-13 cita concertada → cliente en estado cita');
+    step(w2.eval('window.proLeer()[0].p.e')==='convertido', 'W14-14 potencial a convertido');
+    var mm=w2.eval("window.proMerge([{id:'a',n:'V',act:5,ts:1,p:{}}],[{id:'a',n:'N',act:9,ts:1,p:{}}])");
+    step(mm.length===1&&mm[0].n==='N', 'W14-15 fusión gana el más reciente');
+    var pur=w2.eval("(function(){return window.proMerge([{id:'v',n:'X',act:Date.now()-100*86400000,ts:1,p:{e:'descartado'}}],[]).length===0;})()");
+    step(pur===true, 'W14-16 merge purga descartados >90 d');
+  }catch(e){ step(false,'W14-11 funcional prospección: '+e.message); }
+  step(src.includes('proImporta')&&src.includes('proImportTa')&&src.includes('Importar lista'), 'W14-17 importar lista pegada (; , tab)');
+}
+
+
+// ── W15 · v3.4.0 «Sesión» (cadena de llamadas + ruta + cola de sync + calidad del banco) ──
+{
+  step(src.includes('window.proSesionToggle')&&src.includes('PRO_SESION')&&src.includes('proSesionHtml'), 'W15-1 modo sesión: toggle + vista');
+  step(src.includes('proSesionRes')&&src.includes('Teclas <b>1</b>–<b>7</b>'), 'W15-2 auto-avance tras resultado + hint de teclas 1-7');
+  step(src.contains?false:src.includes('proSesionKey')&&src.includes('addEventListener')&&src.indexOf("preventDefault")>-1, 'W15-3 teclas 1-7 enganchadas y con preventDefault');
+  step(src.includes('function proPrioridad'), 'W15-4 colador de prioridad (reintento hoy → sin llamar → calientes)');
+  step(src.includes("'🗺 ruta'"), 'W15-5 chip 🗺 ruta');
+  step(src.includes('function proTelN')&&src.includes('dup'), 'W15-6 anti-duplicados por teléfono normalizado');
+  step(src.includes('proTelN(x.tel)===rt'), 'W15-7 comparación por los 9 últimos dígitos');
+  step(src.includes('ya estaban'), 'W15-8 importar salta duplicados y los contabiliza');
+  step(src.includes('g:actLimpia(r.g,200)')&&src.includes('proNotaSave'), 'W15-9 nota libre en potencial (≤200) + guardado');
+  step(src.includes('proNotaIn'), 'W15-10 edición inline de nota con 💾');
+  step(src.includes('proSyncLey')&&src.includes('proSyncPill'), 'W15-11 píldora de cola de sync (✔/⏳)');
+  step(src.includes("proSyncSt('pend')")&&src.includes("proSyncSt('ok')"), 'W15-12 estados sync desde push y PUT ok');
+  step(src.includes('👤 míos')&&src.includes('del equipo'), 'W15-13 filtro míos / del equipo');
+  step(src.includes('NCITAS')&&src.includes('facturas en juego')&&src.includes('citas pendientes'), 'W15-14 chips 📅 📄 en pestaña Clientes');
+  step(src.includes('CRM_FILTRO.proSesion&&PRO_SESION.on'), 'W15-15 la vista normal cede a la sesión');
+  try{
+    w2=w;
+    w2.eval("localStorage.clear()");
+    var a=w2.eval("window.proAlta({n:'Casa Pepe',tel:'611222333',c:'Paterna'}).id");
+    var b2=w2.eval("window.proAlta({n:'Bar Sur',tel:'655666777',c:'Sagunto'}).id");
+    var dup=w2.eval("window.proAlta({n:'Casa Pepe DOS',tel:'+34 611 222 333'})");
+    step(dup&&dup.dup&&dup.dup.n==='Casa Pepe', 'W15-16 dup detectado con prefijo +34');
+    step(w2.eval('window.proLeer().length')===2, 'W15-17 el dup no entra al banco');
+    w2.eval("window.proNotaSave ? null : null");
+    w2.eval("(function(){var r=window.proLeer(); r[0].g='duenya por la tarde'; localStorage.setItem('pro_banco_cache',JSON.stringify(r));})()");
+    w2.eval("window.proVer('pot'); crmFiltro('proChip','ruta');");
+    var html=w2.document.getElementById('tab-clientes').innerHTML;
+    step(html.indexOf('duenya por la tarde')>-1, 'W15-18 nota visible en la fila');
+    step(html.indexOf('Bar Sur')<html.indexOf('Casa Pepe')===false, 'W15-19 ruta ordena por pueblo (Paterna primero)');
+    w2.eval("window.proSesionToggle()");
+    var sh=w2.document.getElementById('tab-clientes').innerHTML;
+    step(sh.indexOf('Cerrar sesión')>-1, 'W15-20 sesión abre');
+    w2.eval("window.proSesionKey({key:'3',target:{tagName:'DIV'},preventDefault:function(){window._pd=1;}})");
+    step(w2.eval("localStorage.getItem('bm_actividad_comun')||''").indexOf('No interesado')>-1, 'W15-21 tecla 3 anota el resultado');
+    step(w2.eval('window._pd')===1, 'W15-22 preventDefault aplicado');
+    w2.eval("window.proSesionToggle()");
+  }catch(e){ step(false,'W15-16 funcional sesión: '+e.message); }
+}
+
+// ── W16 · v3.5.0 «Maestro» (reclamar puñados + exclusión compartida + descarte dual) ──
+{
+  step(src.includes('window.maeReponer')&&src.includes('maeRepoHtml')&&src.includes('maeServirme'), 'W16-1 vista 📥 Reponer (motor maestro)');
+  step(src.includes('function maeGet')&&src.includes('function maePut')&&src.includes('body.sha=j.sha')&&src.includes('st2===409'), 'W16-2 maeGet/maePut con sha anti-412 + retry 409');
+  step(src.includes("window._maeTest"), 'W16-3 hook _maeTest para tests offline');
+  step(src.includes('function maeClaimLote')&&src.includes("st='rec'")&&src.includes('owner'), 'W16-4 claim marca rec+owner en el puñado');
+  step(src.includes('hueco en el banco')&&src.includes(">=500"), 'W16-5 cupo del banco respetado en el claim (tapa a 500)');
+  step(src.includes("excMap[t]")&&src.includes('proTelN(r.tel)===t'), 'W16-6 claim salta exclusión y duplicados');
+  step(src.includes('mae_idx_cache')&&src.includes('JSON.stringify(d)!==str'), 'W16-7 índice cacheado + repintado solo si cambia');
+  step(src.includes('function excAdd')&&src.includes('function excSyncPush')&&src.includes('function excSyncFlush'), 'W16-8 exclusión compartida (add/flush/push)');
+  step(src.includes('mae_exc_cache'), 'W16-9 exclusión con caché local');
+  step(src.includes('NO VOLVER A LLAMAR')&&src.includes('excAdd(r.tel')&&src.includes('lista de exclusión del equipo'), 'W16-10 descartado dual con confirmación');
+  step(src.includes('window.excQuitar')&&src.includes('window.excFlush'), 'W16-11 quitar de exclusión + flush expuesto');
+  step(/excMerge/.test(src), 'W16-12 fusión de exclusión (ts mayor)');
+  try{
+    w2=w;
+    w2.eval("localStorage.clear()");
+    w2.eval("window._maeTest={files:{"
+      +"'datos/exclusion.json':{v:1,ts:'x',items:[{tel:'611222333',m:'no_llama',by:'ana',ts:'2026-09-30'}]},"
+      +"'datos/maestro/idx.json':{v:1,ts:'x',total_libres:4,prov:[{p:'Valencia',libres:4,total:4,sec:[{s:'Hostelería',libres:4}],pun:[{id:'lote_P0007',libres:4,total:4,sec:'Hostelería'}]}]},"
+      +"'datos/maestro/lote_P0007.json':{v:1,lote:'lote_P0007',prov:'Valencia',sec:'Hostelería',items:["
+      +"{id:'m1',n:'Bar Austral',tel:'600111111',c:'Sagunto',p:'Valencia',s:'Hostelería',nota:'AV. CAMÍ 52 · 46000 · ✉ bar@austral.es',st:'libre',owner:''},"
+      +"{id:'m2',n:'Bar Boreal',tel:'600222222',c:'Paterna',p:'Valencia',s:'Hostelería',st:'rec',owner:'lu'},"
+      +"{id:'m3',n:'Bar Austral D2',tel:'600 111 111',c:'Sagunto',p:'Valencia',s:'Hostelería',st:'libre',owner:''},"
+      +"{id:'m4',n:'Café Delta',tel:'611222333',c:'Torrent',p:'Valencia',s:'Hostelería',st:'libre',owner:''}]}"
+      +"}}");
+    w2.eval("window.proVer('pot'); window.maeReponer()");
+    var rh=w2.eval("document.getElementById('tab-clientes').innerHTML");
+    step(rh.indexOf('lote_P0007')>-1, 'W16-13 Reponer pinta el puñado');
+    step(rh.indexOf('hueco en el banco: <b>500')>-1, 'W16-14 muestra el hueco libre del banco');
+    w2.eval("window.maeServirme('lote_P0007')");
+    await new Promise(r=>setTimeout(r,700));
+    var bn=w2.eval("window.proLeer()");
+    step(bn.length===1&&bn[0].n==='Bar Austral', 'W16-15 claim: entra solo Bar Austral (dup formato + exclusión + lote ajeno saltados)');
+    step(bn[0]&&bn[0].fuente.indexOf('lote P0007')>-1, 'W16-16 fuente «lote P0007» apuntada');
+    step(bn[0].g==='AV. CAMÍ 52 · 46000 · ✉ bar@austral.es', 'W16-16b la nota del lote viaja al banco (dir+email)');
+    var lt=w2.eval("window._maeTest.files['datos/maestro/lote_P0007.json']");
+    step(lt.items[0].st==='rec'&&!!lt.items[0].owner&&lt.items[1].owner==='lu', 'W16-17 claim respeta lo de otro y marca lo mío');
+    w2.eval("window._conf=[]; window.confirm=function(m){ window._conf.push(m); return true; };");
+    w2.eval("window.proResultado('"+(bn[0]?bn[0].id:'')+"','Descartado')");
+    var exc=w2.eval("JSON.parse(localStorage.getItem('mae_exc_cache')||'{items:[]}')");
+    step(exc.items.length===2&&exc.items[0].tel==='600111111', 'W16-18 descarte dual: teléfono añadido a la exclusión');
+    step(w2.eval("window._conf.length===1&&/NO VOLVER A LLAMAR/.test(window._conf[0])"), 'W16-19 pregunta dual mostrada y confirmada');
+    w2.eval("window.excFlush()");
+    await new Promise(r=>setTimeout(r,700));
+    step(w2.eval("window._maeTest.puts>=2"), 'W16-20 PUT del lote + PUT de exclusión al repo');
+    step(w2.eval("window._maeTest.files['datos/exclusion.json'].items.length===2"), 'W16-21 exclusión publicada compartida');
+    w2.eval("window.maeSalirRepo()");
+    step(w2.eval("document.getElementById('tab-clientes').innerHTML").indexOf('📥 Reponer')>-1, 'W16-22 chip 📥 Reponer visible al volver');
+    w2.eval("delete window._maeTest; localStorage.clear();");
+  }catch(e){ step(false,'W16-13 funcional maestro: '+e.message); }
+}
+
+  console.log(R.join('\\n'));
   console.log('errores JS:',errs.length?errs.slice(0,3).join(' | '):'(ninguno)');
   const f=R.filter(x=>x.startsWith('✘')).length;
   console.log('════════════════════════════════');
   console.log(f||errs.length?'❌ '+f+' fallos':'✅ BATERÍA QA + CORE: TODO VERDE ('+R.length+' comprobaciones)');
+
   process.exit((f||errs.length)?1:0);  // el ⏱ (setInterval) mantiene vivo jsdom: salida explícita
 })();
 

@@ -1,3 +1,50 @@
+## v3.9.0 «Enlace de acceso» — 2026-10-02 · el comercial SOLO abre un enlace y pone su ID
+- **Fricción cero para el equipo**: el admin genera desde su panel un **enlace de acceso** (`index.html#eq=<contraseña>`) y lo pasa por WhatsApp/correo interno. Quien lo abre **entra directo**: la app descifra la clave sola y solo queda poner el ID. Sin teclear contraseñas.
+- **La contraseña viaja en el `#`fragmento**: nunca la envía el navegador a ningún servidor ni queda en logs/analíticas; y la app la **borra de la barra** tras usarla (`replaceState`).
+- **Caducidad natural**: si el admin cambia la contraseña del equipo, los enlaces viejos dejan de servir → tarjeta con aviso «pide uno nuevo» (sin exponer nada). Con clave ya guardada, el enlace solo se limpia y sigue el arranque normal.
+- Admin: botones «📋 Crear y copiar el enlace» / «👁 ver» en la tarjeta 🔑 (usa la contraseña del momento o la guardada).
+- 🧪 **560** ✔ batería (+4) · e2e clave-equipo **29** ✔ (+7: entra sin teclear, hash limpio, caducado sin fuga, admin genera) · resto de suite ✔.
+- 🔃 sw `cfb-v364` · EXE regenerado.
+
+## v3.8.0 «Clave de equipo cifrada» — 2026-10-02 · el comercial solo usa su ID + contraseña del equipo
+- **Modelo nuevo de claves (sustituye al reparto manual de v3.7)**: la clave real vive **cifrada en la web pública** (`clave-equipo.json` · AES-GCM-256 + PBKDF2 SHA-256 ×250.000, cifrado hecho en el navegador del admin). Cada comercial entra **una sola vez con su ID + la contraseña del equipo**; la app descifra y guarda la clave en local.
+- **Panel admin → «🛡 Publicar / rotar la clave»**: pega la PAT (validada contra **ambos** repos antes de subir), elige la contraseña del equipo y publica. Rotación en 2 min sin tocar a nadie.
+- **Rotación silenciosa en los dispositivos**: si el admin rota y republica, el móvil sin clave válida se autorrepara al entrar usando su contraseña guardada (`cfb_eq_pass`) — sin pedir nada a nadie.
+- **Fallback intacto**: enlace «tengo la clave larga» siempre disponible (admin, PC de sobremesa, o si el cifrado nativo no está disponible en el navegador).
+- Tarjeta 🔑 de dos modos en el gate: «contraseña del equipo» (si hay blob publicado) ⇄ «clave larga», con ida y vuelta.
+- Procedimiento completo y riesgos/mitigaciones: `docs/ROTACION-CLAVE.md` (reescrito).
+- 🧪 **556** ✔ batería (+8 de v3.8) · nuevo e2e `tests/e2e-clave-equipo.js` **22** ✔ (admin publica → móvil entra con contraseña → contraseña mala rechazada → rotación silenciosa → fallback) · 33+71+10+7 ✔ · i18n ✔ · D2 golden ✔.
+- 🔃 sw `cfb-v363` · EXE regenerado.
+
+## v3.7.0 «Clave fuera + Decisión» — 2026-10-02 · Seguridad y Fase 3 del plan 33k
+- **🔑 Clave desacoplada (punto 3)**: la app ya **no contiene** ninguna PAT de GitHub. Cada dispositivo pide la clave al primer uso (tarjeta «🔑 Clave del equipo»), la valida en vivo contra el repo y solo entonces la guarda en local. Vacuna v2: al cargar se purga automáticamente cualquier token heredado de builds ≤3.6. Si el token caduca o se revoca, la app lo detecta (401/403) y deja pegar una nueva. **El admin debe revocar la PAT vieja y repartir la nueva** → procedimiento en `docs/ROTACION-CLAVE.md`.
+- **🎯 Decisión de tandas (Fase 3)** en la tarjeta Maestro del admin: join real `banco × maestro` —
+  - **Ritmo**: fichas dedicadas en los últimos 7 días, puñados/semana y **previsión de semanas hasta agotar el maestro**.
+  - **Tabla por puñado** (top 15): grupo, quién lo trabaja, reclamados, **CE%** (llamadas con resultado), **POS** (pide factura · cita · ya es cliente), **CONV** (altas reales al CRM con %), descartados y último toque. Las altas manuales no ensucian las métricas.
+  - **Sugerencia de siguiente puñado**: con ≥20 trabajados, el libre del grupo con mejor conversión; si no, el mayor puñado libre.
+  - **⬇ CSV conversión por puñado** y **🗄 Volcado maestro → CSV** (secuencial con progreso, tolera 404; solo admin).
+- Importador `tools/importa-maestro.py`: orden de token v3.7 (`$CFB_TOKEN` → `tools/.cfb_token` → legacy).
+- 🧪 548 ✔ batería · e2e maestro-admin 22→**33** (G1–G11 de decisión) · 71+10+7 ✔ · i18n ✔ · ola4 ✔.
+- 🔃 sw `cfb-v362` · APK vc43 · EXE regenerado — las assets empaquetadas ya NO llevan clave.
+
+## v3.7.0b (distribución) — 2026-10-02 · APK retirado temporalmente
+- Se elimina `apps/android/` (proyecto WebView, APK, keystore demo) y el job de CI del APK: el canal Android queda en **PWA** (`instalar.html`). Guía completa de reconstrucción futura en `docs/android-historico.md` (incluye SHAs finales y receta de build sin Gradle). **Sin cambios en la app** (version.json sigue en 3.7.0; el EXE y la web actuales no requieren rebuild).
+
+## v3.6.1 · 02-10-2026 · «Maestro nota» — Excel real dentro
+- El DATASET IBERCRM (33.161 empresas de Valencia) ya está en el repo como **133 puñados**: 📥 Reponer ya tiene datos reales.
+- Al reclamar un puñado, cada tarjeta llega al banco con **dirección + email + web** en su nota.
+- El importador se acopla a tu Excel tal cual (Latin-1, cabecera en inglés, sin sector → por ciudad).
+
+## v3.6.0 · 01-10-2026 · «Maestro admin» — estado del maestro en el panel
+- El panel admin muestra la tarjeta 🗂️ **Maestro 33k**: totales libres/reclamados, barras por provincia, puñados con movimiento, quién lleva cada puñado, exclusión por motivo, informe del último importe y ⬇ CSV — todo **sin teléfonos** (RGPD-minimización).
+- Debajo del capó: el motor (banco+maestro+exclusión+sync) vive ahora en **un único módulo** compartido por los dos guiones; un guardián lo vigila en los tests.
+
+## v3.5.0 · 01-10-2026 · «Maestro» — reclamar puñados + exclusion compartida
+- **📥 Reponer**: sirvete un puñado de 250 del maestro 33k con un toque. Gana el primero que lo reclama (sha + retry 409), nunca se pasan 500 activos y salta duplicados y exclusión.
+- **Exclusion compartida**: «no volver a llamar» del equipo, sincronizada como el banco. Quitar: window.excQuitar.
+- **Descarte dual**: «NO VOLVER A LLAMAR MÁS?» al descartar un potencial — Aceptar = lista de exclusion + fichero; Cancelar = solo descarte.
+- **Importador**: `tools/importa-maestro.py` para trocear el Excel y publicarlo al repo (dry-run por defecto, `--subir` para publicar).
+
 ## v1.5.1 · 15-09-2026 · Auditoría integral (A–J)
 - 🔴 **SUF determinista**: pymes/residencial ya no mezclan estadísticas (antes el olor a clave `bm_tut_omitido_res` hacía que abrir un guion contaminara el otro).
 - 🔴 **Perfil global único**: sync y puerta hablan la misma clave `cfb_perfil` (residencial dejaba de sincronizar).

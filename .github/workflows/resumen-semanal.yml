@@ -1,0 +1,118 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# v3.4.0 · Resumen semanal del equipo Call Flow Business
+# Cada lunes 07:30 UTC (09:30 Madrid) lee del repo de datos:
+#   · equipo.json              → perfiles autorizados
+#   · datos/<perfil>.json      → burbujas (bm_actividad_<slug>, bm_crm_resumen)
+#   · datos/prospeccion.json   → banco compartido de potenciales
+# y abre un Issue «📊 Resumen semana …» con los agregados.
+# Cero secretos añadidos: usa GITHUB_TOKEN por defecto.
+# Disparo manual: Actions → «Resumen semanal» → Run workflow.
+# ─────────────────────────────────────────────────────────────────────────────
+name: Resumen semanal
+
+on:
+  schedule:
+    - cron: '30 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  resumen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: union
+          sparse-checkout: |
+            equipo.json
+            datos
+
+      - name: Calcula agregados de la semana pasada
+        id: agg
+        run: |
+          python3 - <<'EOF' > resumen.md
+          import json, os, datetime, re
+          hoy = datetime.date.today()
+          lunes = hoy - datetime.timedelta(days=7)
+          domingo = lunes + datetime.timedelta(days=6)
+          fin = domingo + datetime.timedelta(days=1)
+          print(f"## 📊 Call Flow Business · resumen {lunes} → {domingo}\n")
+
+          act_total = {}; act_por_tipo = {}; min_total = 0; ce = 0
+          estados = {}; pipe = 0.0
+          equipo = json.load(open('equipo.json')) if os.path.exists('equipo.json') else {'autorizados': []}
+          filas = []
+          for m in equipo.get('autorizados', []):
+              slug = (m.get('slug') or '').strip()
+              if not slug: continue
+              p = f'datos/{slug}.json'
+              if not os.path.exists(p): continue
+              try: dat = json.load(open(p))
+              except Exception: continue
+              kv = dat.get('kv', dat)
+              gest = kv.get(f'bm_actividad_{slug}', [])
+              sem = 0; mins = 0; ce_u = 0
+              for e in gest or []:
+                  f = e.get('f', '')
+                  if not (str(lunes) <= f < str(fin)): continue
+                  if e.get('tipo') == 'practica': continue
+                  sem += 1
+                  mins += e.get('min') or 0
+                  res = e.get('resultado', '')
+                  if res == 'Contacto efectivo': ce_u += 1
+              act_total[slug] = sem; min_total += mins; ce += ce_u
+              rres = kv.get(f'bm_crm_resumen_{slug}') or {}
+              for k, v in (rres.get('e') or {}).items(): estados[k] = estados.get(k, 0) + v
+              pipe += rres.get('pipe') or 0
+              filas.append((m.get('nombre') or slug, sem, ce_u, mins))
+          gest_total = sum(act_total.values())
+
+          pro = {'activos': 0, 'convertidos': 0, 'sin_llamar': 0, 'reintento': 0}
+          if os.path.exists('datos/prospeccion.json'):
+              try:
+                  b = json.load(open('datos/prospeccion.json'))
+                  hoy_s = str(hoy)
+                  for r in b.get('lista', []):
+                      e = (r.get('p') or {}).get('e', '')
+                      if e == 'convertido': pro['convertidos'] += 1
+                      else:
+                          pro['activos'] = pro.get('activos', 0) + 1
+                          if (r['p'].get('n', 0)) == 0: pro['sin_llamar'] += 1
+                          pf = r['p'].get('pf') or ''
+                          if pf and pf <= hoy_s and e == 'intento': pro['reintento'] += 1
+              except Exception: pass
+
+          print(f"### Semana del {lunes} al {domingo}")
+          print(f"- **{gest_total} gestiones** (contacto efectivo: {ce} · {ce*100//gest_total if gest_total else 0}%)")
+          print(f"- ⏱ **{min_total} minutos** cronometrados en llamada")
+          print(f"- 📋 Banco de potenciales: **{pro.get('activos',0)} activos** ({pro['sin_llamar']} sin llamar · {pro['reintento']} con reintento) · 🏆 {pro['convertidos']} convertidos acumulados")
+          if estados:
+              print(f"- 🧲 CRM (acumulado): " + " · ".join(f"{k}: {v}" for k, v in sorted(estados.items())))
+          print()
+          print("### Por comercial")
+          print("| Comercial | Gestiones | CE | Min |")
+          print("|---|---:|---:|---:|")
+          for nombre, sem, ce_u, mins in sorted(filas, key=lambda x: -x[1]):
+              print(f"| {nombre} | {sem} | {ce_u} | {mins} |")
+          print()
+          print("_Generado automáticamente por el workflow «Resumen semanal» (Call Flow Business v3.4.0+)._")
+          EOF
+
+      - name: Publica el Issue semanal
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('resumen.md', 'utf8');
+            const now = new Date();
+            const week = ((now.getTime() - new Date(now.getFullYear(),0,1).getTime()) / 6048e5 | 0) + 1;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 Resumen semana ${week} · Call Flow Business`,
+              body: body,
+              labels: ['resumen', 'auto']
+            });

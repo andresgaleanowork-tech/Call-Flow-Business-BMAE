@@ -127,6 +127,15 @@
     </div>
 
     <div class="card">
+      <h2>🎯 Objetivo de gestiones diario (equipo)</h2>
+      <p class="sub">Gestiones por día que la línea del gráfico de <code>actividad.html</code> marca a cada comercial (y el «faltan X»). Cada comercial puede personalizarla en su dispositivo; lo guardado aquí es para todo el equipo. Se propaga igual que la de roleplay (equipo.json).</p>
+      <div class="fila" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input id="metaAct" type="number" min="1" max="300" value="80" style="width:80px;padding:8px 10px;border:1px solid var(--gris-linea);border-radius:8px;font:inherit">
+        <button class="btn" onclick="metaActGuardar()">Guardar objetivo</button>
+        <span id="metaActMsg" class="nota" role="status"></span>
+      </div>
+    </div>
+    <div class="card">
       <h2>📊 Actividad de guardado</h2>
       <p class="sub">Ficheros vivos en la caja fuerte (<code>datos/</code>): cada uno es la burbuja sincronizada de una persona.</p>
       <ul class="act" id="actLista"><li>comprobando…</li></ul>
@@ -141,6 +150,30 @@
         <th>Comercial</th><th>📞 Hoy</th><th>📞 Semana</th><th>📞 Mes</th><th>🎭 Semana</th><th title="Roleplays completados (acumulado)">🎭 Rol</th><th title="Quiz: aciertos/preguntas (acumulado)">🎓 Quiz</th><th title="Duración media de las llamadas de la semana hechas con el cronómetro ⏱">⏱ Media</th><th title="Llamadas por día, últimos 28 días">📊 28 días</th><th>Visto</th>
       </tr></thead><tbody><tr><td style="color:var(--gris-medio)">cargando…</td></tr></tbody></table>
       <p class="nota">Cada dato viene de la burbuja sincronizada de su dueño (<code>datos/&lt;perfil&gt;.json</code> → <code>bm_dias</code>). Se actualiza conforme sincroniza cada dispositivo (~10 s tras cada cambio).</p>
+    </div>
+
+    <div class="card" id="cardGest">
+      <h2>📊 Gestiones del equipo (registro automático) <span id="gestEstado" class="badge-admin"></span></h2>
+      <button type="button" id="btnGestCsv" style="float:right;font-size:.8rem;border:1px solid var(--gris-linea);border-radius:999px;padding:4px 12px;background:#fff;cursor:pointer" onclick="window.gestionesCsv()">⬇ CSV gestiones</button>
+      <p class="sub">Leído del <b>registro de actividad</b> que cada dispositivo anota solo al terminar (⏱ llamadas, ⏱/nota, práctica, estados CRM): Hoy/Semana/Mes por gestión, CE&nbsp;% = contacto efectivo sobre gestiones, FACT = solicitadas → recibidas en el mes, Min = minutos cronometrados de la semana, Auto = % anotado sin tocar nada (vs. alta manual).</p>
+      <table id="gestTabla" style="margin-top:12px"><thead><tr>
+        <th>Comercial</th><th title="Gestiones hoy">Hoy</th><th title="Gestiones desde el lunes">Semana</th><th title="Gestiones del mes">Mes</th>
+        <th title="Contacto efectivo / gestiones del mes">CE&nbsp;%</th><th title="Facturas solicitadas → recibidas (mes)">FACT</th>
+        <th title="Minutos al teléfono (semana, cronómetro)">Min</th><th title="% registrado automáticamente">Auto</th><th title="Última gestión">Act.</th>
+      </tr></thead><tbody><tr><td style="color:var(--gris-medio)" colspan="9">se rellena al pulsar «↻ Actualizar» de la tabla de llamadas</td></tr></tbody></table>
+    </div>
+    <div class="card" id="cardPro">
+      <h2>📋 Prospección del equipo <span id="proEstado" class="badge-admin"></span></h2>
+      <button type="button" id="btnProCsv" style="float:right;font-size:.8rem;border:1px solid var(--gris-linea);border-radius:999px;padding:4px 12px;background:#fff;cursor:pointer" onclick="window.proBancoCsv()">⬇ CSV banco</button>
+      <p class="sub">Banco de potenciales compartido (v3.3.0): cada dispositivo empuja y recibe <code>datos/prospeccion.json</code> fusionado por id. Contadores de trabajo, sin notas de cliente.</p>
+      <div id="proRes" style="margin-top:8px;color:var(--gris-medio);font-size:.86rem">se rellena al pulsar «↻ Actualizar»</div>
+      <table id="proTabla" style="margin-top:12px"><thead><tr><th>Potencial</th><th>Pueblo</th><th>Sector</th><th>Estado</th><th>Intentos</th><th>Próx. reintento</th><th>Alta</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="card" id="cardEmb">
+      <h2>🧲 Embudo CRM del equipo <span id="embEstado" class="badge-admin"></span></h2>
+      <p class="sub">Contadores agregados que publica cada dispositivo (<code>bm_crm_resumen</code>): fichas por estado y pipeline €/mes estimado. <b>Cero datos de cliente</b>: los nombres, teléfonos y notas jamás salen del dispositivo.</p>
+      <div id="embRes" style="margin-top:8px"></div>
+      <table id="embTabla" style="margin-top:12px"><thead><tr><th>Comercial</th><th>Fichas</th><th title="Interesado → visita">En juego</th><th>Ganadas</th><th title="€/mes estimado en estados interesado…visita">Pipeline</th><th>Actualizado</th></tr></thead><tbody><tr><td style="color:var(--gris-medio)" colspan="6">se rellena al pulsar «↻ Actualizar»</td></tr></tbody></table>
     </div>
 
   </div>
@@ -181,7 +214,7 @@ function equipoGet(cb){
   });
 }
 function equipoPut(msg,cb){
-  var cuerpo={message:msg,content:b64({autorizados:EQUIPO.autorizados,metaRoleplay:EQUIPO.metaRoleplay||0}),branch:RAMA};
+  var cuerpo={message:msg,content:b64({autorizados:EQUIPO.autorizados,metaRoleplay:EQUIPO.metaRoleplay||0,metaActividad:EQUIPO.metaActividad||0}),branch:RAMA};
   if(EQUIPO._sha) cuerpo.sha=EQUIPO._sha;
   req('PUT','https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/equipo.json',cuerpo,function(st){
     cb(st===200||st===201);
@@ -250,6 +283,132 @@ window.metaGuardar=function(){
     else { m.style.color='#C62828'; m.textContent='✘ No se pudo guardar (red). Sin cambios.'; refrescar(); }
   });
 };
+window.metaActGuardar=function(){
+  var v=parseInt((document.getElementById('metaAct')||{}).value,10), m=document.getElementById('metaActMsg');
+  if(!(v>=1&&v<=300)){ m.style.color='#C62828'; m.textContent='El objetivo debe ser 1–300.'; return; }
+  EQUIPO.metaActividad=v; m.textContent='Guardando…';
+  equipoPut('equipo: meta actividad '+v,function(ok){
+    if(ok){ m.style.color='#007A3B'; m.textContent='✔ Objetivo guardado ('+v+'/día) — lo verá el equipo en su página de actividad.'; }
+    else { m.style.color='#C62828'; m.textContent='✘ No se pudo guardar (red). Sin cambios.'; refrescar(); }
+  });
+};
+/* ── v3.2.0 · gestiones automáticas + embudo CRM (desde las burbujas) ── */
+function burbujaAct(o){
+  var slug=(o.perfil&&o.perfil.slug)||'', hoy=hoyClave(), lun=lunesClave(), mes=mesClave();
+  var ent=[];
+  Object.keys(o.kv||{}).forEach(function(k){
+    if(k.indexOf('bm_actividad')===0){ (o.kv[k]||[]).forEach(function(e){ if(e&&typeof e.ts==='number'&&e.f) ent.push(e); }); }
+  });
+  var visto={}, uniq=ent.filter(function(e){ if(visto[e.ts]) return false; visto[e.ts]=1; return true; });
+  var h=0,se=0,me=0,ce=0,campoMes=0,fs=0,fr=0,min=0,auto=0,ult=null;
+  uniq.forEach(function(e){
+    var prac=e.tipo==='practica';
+    if(e.f>=hoy) h++;
+    if(e.f>=lun) se++;
+    if(e.f>=mes){ me++; if(!prac){ campoMes++; if(e.resultado==='Contacto efectivo') ce++; if(e.resultado==='Solicita factura') fs++; if(e.resultado==='Factura recibida') fr++; } }
+    if(e.f>=lun) min+=(e.min||0);
+    if(e.org&&e.org!=='manual') auto++;
+    if(!ult||e.ts>ult) ult=e.ts;
+  });
+  return {h:h,se:se,me:me,ce:campoMes?Math.round(100*ce/campoMes):0,fs:fs,fr:fr,min:min,
+          auto:uniq.length?Math.round(100*auto/uniq.length):0,
+          ult:ult===null?'—':(Date.now()-ult<36e5?'&lt;1 h':(Date.now()-ult<864e5?Math.round((Date.now()-ult)/36e5)+' h':Math.round((Date.now()-ult)/864e5)+' d'))};
+}
+window.gestionesAdmin=function(){
+  var lista=window._burbujas||[]; if(!lista.length) return;
+  var tb=document.querySelector('#gestTabla tbody');
+  var filas=lista.map(function(o){
+    var a=burbujaAct(o);
+    var stats=(Object.keys(o.kv||{}).filter(function(k){return k.indexOf('bm_stats')===0;}).map(function(k){return o.kv[k];})[0])||{};
+    return {nombre:(o.perfil&&o.perfil.nombre)||'?',h:a.h,se:a.se,me:a.me,ce:a.ce,fs:a.fs,fr:a.fr,min:a.min,auto:a.auto,ult:a.ult};
+  }).sort(function(x,y){ return y.me-x.me; });
+  tb.innerHTML=filas.length? filas.map(function(x){
+    return '<tr'+(x.h===0&&x.se===0?'':'')+'><td><b>'+esc(x.nombre)+'</b></td><td><b>'+x.h+'</b></td><td><b>'+x.se+'</b></td><td><b>'+x.me+'</b></td>'
+      +'<td>'+(x.me?x.ce+'%':'—')+'</td><td>'+(x.fs||x.fr?(x.fs+' → '+x.fr):'—')+'</td><td>'+(x.min||'—')+'</td><td>'+(x.auto?x.auto+'%':'—')+'</td><td>'+x.ult+'</td></tr>';
+  }).join('') : '<tr><td colspan="9" style="color:var(--gris-medio)">sin actividad aún</td></tr>';
+  var totH=filas.reduce(function(a,x){return a+x.h;},0), totM=filas.reduce(function(a,x){return a+x.me;},0);
+  document.getElementById('gestEstado').textContent='✔ '+filas.length+' · hoy '+totH+' · mes '+totM;
+};
+/* ── v3.3.0 · banco de prospección compartido ── */
+window.prospeccionAdmin=function(){
+  req('GET','https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/datos/prospeccion.json?ref='+RAMA,undefined,function(st,j){
+    var res=document.getElementById('proRes'), tb=document.querySelector('#proTabla tbody'), est=document.getElementById('proEstado');
+    if(st===404){ res.textContent='aún no hay banco de potenciales (se crea con la primera alta de cualquier comercial)'; if(tb) tb.innerHTML=''; est.textContent='—'; return; }
+    if(st!==200||!j||!j.content){ res.textContent='no se pudo leer prospeccion.json ('+st+')'; est.textContent='✘'; return; }
+    var datos; try{ datos=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))))); }catch(e){ res.textContent='banco ilegible'; est.textContent='✘'; return; }
+    window._proDatos=datos;
+    var lista=datos.lista||[];
+    var c={sin_llamar:0,intento:0,interesado:0,descartado:0,convertido:0,pend:0};
+    var hoy=new Date().toISOString().slice(0,10);
+    lista.forEach(function(r){ c[r.p.e]=(c[r.p.e]||0)+1; if(r.p.pf&&r.p.pf<=hoy&&r.p.e==='intento') c.pend++; });
+    var union=(c.sin_llamar||0)+(c.intento||0)+(c.interesado||0);
+    res.innerHTML='<b>'+union+' activos</b> ('+c.sin_llamar+' sin llamar · '+c.intento+' en ruta · '+c.interesado+' señal)'
+      +' · <b>'+(c.convertido||0)+' convertidos</b> · '+(c.descartado||0)+' descartados · '+c.pend+' con reintento hoy'
+      +' · actualizado: '+esc((datos.ts||'—').slice(0,10));
+    var badges={sin_llamar:'⚪',intento:'🟠',interesado:'🟢',descartado:'⚫',convertido:'🏆'};
+    if(tb){
+      var activos=lista.filter(function(r){return r.p.e!=='convertido';}).sort(function(a,b){return (b.act||0)-(a.act||0);}).slice(0,60);
+      tb.innerHTML=activos.length? activos.map(function(r){
+        return '<tr><td><b>'+esc(r.n)+'</b></td><td>'+esc(r.c||'—')+'</td><td>'+esc(r.s||'—')+'</td>'
+          +'<td>'+(badges[r.p.e]||'')+' '+esc(r.p.e||'—')+'</td><td>'+(r.p.n||0)+'</td>'
+          +'<td>'+esc(r.p.pf||'—')+'</td><td style="color:var(--gris-medio);font-size:.78rem">'+esc(r.ts||'—')+' · '+esc(r.owner||'')+'</td></tr>';
+      }).join('') : '<tr><td colspan="7" style="color:var(--gris-medio)">banco vacío (todo convertido o sin altas)</td></tr>';
+    }
+    est.textContent='✔ '+lista.length+' registros';
+  });
+};
+
+/* ── v3.4.0 · exportar CSV ── */
+window._descarga=function(nombre,txt){
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent('\ufeff'+txt);
+  a.download=nombre; document.body.appendChild(a); a.click(); a.remove();
+};
+window.gestionesCsv=function(){
+  if(!(window._burbujas||[]).length){ alert('Sin burbujas cargadas: pulsa «↻ Actualizar» primero.'); return; }
+  var Filas=[['comercial','fecha','hora','tipo','resultado','detalle','ciudad','min','origen'].join(';')];
+  (window._burbujas||[]).forEach(function(o){
+    var slug=(o.perfil&&o.perfil.slug)||''; var arr=(o.kv||{})['bm_actividad_'+slug]||[];
+    arr.forEach(function(e){
+      Filas.push([slug,e.f||'',e.h||'',e.tipo||'',String(e.resultado||'').replace(/;/g,','),String(e.detalle||'').replace(/[;\n]/g,' ').slice(0,140),e.ciudad||'',e.min||0,e.org||''].join(';'));
+    });
+  });
+  window._descarga('gestiones-equipo.csv',Filas.join('\n'));
+};
+window.proBancoCsv=function(){
+  var d=window._proDatos; if(!d||!(d.lista||[]).length){ alert('Banco no cargado todavía (pulsa «↻ Actualizar»).'); return; }
+  var Filas=[['nombre','teléfono','pueblo','sector','estado','intentos','próx_reintento','owner','alta'].join(';')];
+  d.lista.forEach(function(r){
+    Filas.push([String(r.n||'').replace(/;/g,','),r.tel||'',String(r.c||'').replace(/;/g,','),String(r.s||'').replace(/;/g,','),(r.p&&r.p.e)||'',(r.p&&r.p.n)||0,(r.p&&r.p.pf)||'',r.owner||'',r.ts||''].join(';'));
+  });
+  window._descarga('banco-potenciales.csv',Filas.join('\n'));
+};
+
+window.embudoAdmin=function(){
+  var lista=window._burbujas||[]; if(!lista.length) return;
+  var EST=[['nuevo','🆕','#64748B'],['contactado','📞','#2563EB'],['interesado','🤔','#7C3AED'],['factura','📄','#E8890C'],['cita','📅','#0E9F6E'],['visita','🚶','#0E7490'],['ganado','🏆','#00A650'],['perdido','✗','#D92D20']];
+  var tot=EST.map(function(){return 0;}), fichasT=0, pipeT=0, filas=[];
+  lista.forEach(function(o){
+    var slug=(o.perfil&&o.perfil.slug)||'';
+    var r=(o.kv||{})['bm_crm_resumen_'+slug]||null; if(!r) return;
+    var juego=0;
+    EST.forEach(function(s2,i){ tot[i]+=((r.e||{})[s2[0]]||0); });
+    juego=((r.e||{}).interesado||0)+((r.e||{}).factura||0)+((r.e||{}).cita||0)+((r.e||{}).visita||0);
+    filas.push({nombre:(o.perfil&&o.perfil.nombre)||slug,fichas:r.fichas||0,juego:juego,gan:(r.e||{}).ganado||0,pipe:r.pipe||0,f:r.f||''});
+    fichasT+=r.fichas||0; pipeT+=r.pipe||0;
+  });
+  var max=Math.max.apply(null,tot.concat([1]));
+  document.getElementById('embRes').innerHTML=EST.map(function(s2,i){
+    return '<div style="display:inline-flex;align-items:center;gap:6px;margin:3px 14px 3px 0;font-size:.8rem">'
+      +'<span style="background:'+s2[2]+';color:#fff;border-radius:999px;padding:3px 10px;font-weight:600">'+s2[1]+' '+tot[i]+'</span></div>';
+  }).join('')+'<div style="font-size:.84rem;margin-top:8px"><b>'+fichasT+' fichas</b> en CRM · pipeline equipo <b>💶 '+(pipeT?pipeT.toLocaleString('es-ES',{maximumFractionDigits:0})+' €/mes':'—')+'</b></div>';
+  var tb=document.querySelector('#embTabla tbody');
+  tb.innerHTML=filas.length? filas.sort(function(a,b){return b.pipe-a.pipe;}).map(function(x){
+    return '<tr><td><b>'+esc(x.nombre)+'</b></td><td>'+x.fichas+'</td><td>'+x.juego+'</td><td>'+(x.gan||'—')+'</td><td>'+(x.pipe?x.pipe.toLocaleString('es-ES',{maximumFractionDigits:0})+' €/mes':'—')+'</td><td style="color:var(--gris-medio);font-size:.78rem">'+x.f+'</td></tr>';
+  }).join('') : '<tr><td colspan="6" style="color:var(--gris-medio)">aún sin resúmenes CRM (se publican al guardar cualquier ficha 👥 Clientes)</td></tr>';
+  document.getElementById('embEstado').textContent='✔ '+filas.length+' perfiles';
+};
+
 window.quitar=function(id){
   var m=EQUIPO.autorizados.filter(function(x){return norm(x.id)===norm(id);})[0];
   if(!m) return;
@@ -265,8 +424,9 @@ function refrescar(){
   equipoGet(function(eq,st){
     if(!eq){ msg('No pude leer la lista ('+(st||'sin red')+').'); return; }
     EQUIPO=eq._404?{autorizados:[],_404:true}:eq;
-    LSs('cfb_equipo',{ts:Date.now(),autorizados:EQUIPO.autorizados,metaRoleplay:EQUIPO.metaRoleplay||0});
+    LSs('cfb_equipo',{ts:Date.now(),autorizados:EQUIPO.autorizados,metaRoleplay:EQUIPO.metaRoleplay||0,metaActividad:EQUIPO.metaActividad||0});
     var mi=document.getElementById('metaRol'); if(mi) mi.value=EQUIPO.metaRoleplay||3;
+    var ma=document.getElementById('metaAct'); if(ma) ma.value=EQUIPO.metaActividad||80;
     pintar();
   });
 }
@@ -387,6 +547,8 @@ window.dashboard=function(){
         tb.appendChild(tr);
       });
       est.className='estado ok'; est.textContent='✔ '+filas.length+' perfiles · '+filas.reduce(function(a,x){return a+x.sem;},0)+' 📞 esta semana';
+      window._burbujas=lista.filter(Boolean);
+      try{ window.gestionesAdmin(); window.embudoAdmin(); window.prospeccionAdmin(); }catch(e){}
     });
   });
 };
