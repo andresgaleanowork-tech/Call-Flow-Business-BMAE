@@ -1,0 +1,103 @@
+name: pool-omie (G10)
+
+# ADR-013: la app JAMÁS habla con omie.es — este Action es el acopio.
+# Tras la publicación de resultados del operador (~13:30–14:30 hora peninsular),
+# baja marginalpdbc_<DIA>.1 (media diaria €/MWh), mergea en datos/omie.json
+# (poda 400 días ≈ 13 meses) y hace commit SOLO si hay cambio.
+# Si omie.es no responde: ::warning:: y exit 0 — ni el repo ni la app dependen
+# de que ese día haya dato (las apps toleran 404 y tienen entrada manual local).
+
+on:
+  schedule:
+    - cron: '35 12 * * *'        # 12:35 UTC ≈ 14:35 CEST / 13:35 CET
+  workflow_dispatch: {}          # a mano para la primera carga o rellenos
+
+permissions:
+  contents: write
+
+jobs:
+  omie:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Descarga marginalpdbc y media del día
+        env:
+          TZ: Europe/Madrid
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, urllib.request
+          from datetime import date, timedelta
+
+          UA = {'User-Agent': 'CallFlowBusiness-pool-bot (repo privado)'}
+
+          def fetch_media(d):
+              u = ('https://www.omie.es/es/file-download?parents[]=marginalpdbc'
+                   '&filename=marginalpdbc_%s.1' % d.strftime('%Y%m%d'))
+              try:
+                  req = urllib.request.Request(u, headers=UA)
+                  with urllib.request.urlopen(req, timeout=60) as r:
+                      if r.status != 200:
+                          print('::warning::OMIE %s → http %s' % (d, r.status)); return None
+                      txt = r.read().decode('latin-1', 'replace')
+              except Exception as e:
+                  print('::warning::OMIE %s → %s' % (d, e)); return None
+              tot = 0.0; n = 0
+              for ln in txt.splitlines():
+                  p = [c.strip() for c in ln.split(';')]
+                  if len(p) < 6 or not p[0].lower().startswith('marginalpdbc'):
+                      continue
+                  try:
+                      dia = date(int(p[1]), int(p[2]), int(p[3]))
+                      pre = float(p[5].replace(',', '.'))
+                  except Exception:
+                      continue
+                  if dia != d or not (0 <= pre < 5000):
+                      continue
+                  tot += pre; n += 1
+              if not n:
+                  print('::warning::OMIE %s → fichero sin horas parseables' % d); return None
+              return round(tot / n, 2)
+
+          hoy = date.today()
+          media = None; dia_ok = None
+          for d in (hoy + timedelta(days=1), hoy):     # el resultado de D+1 se publica ~13:30 CET
+              media = fetch_media(d)
+              if media is not None:
+                  dia_ok = d; break
+          if media is None:
+              print('::warning::sin precio OMIE hoy (%s) — se reintenta en el próximo cron' % hoy)
+              sys.exit(0)
+
+          pth = 'datos/omie.json'
+          doc = {'v': 1, 'dias': {}}
+          if os.path.exists(pth):
+              try:
+                  doc = json.load(open(pth, encoding='utf-8'))
+              except Exception:
+                  doc = {'v': 1, 'dias': {}}
+          doc.setdefault('dias', {})[str(dia_ok)] = media
+          ks = sorted(doc['dias'])[-400:]                # poda 400 días — mismo tope que la app
+          doc['v'] = 1
+          doc['dias'] = {k: doc['dias'][k] for k in ks}
+          os.makedirs('datos', exist_ok=True)
+          new = json.dumps(doc, ensure_ascii=False, indent=1, sort_keys=True) + '\n'
+          prev = open(pth, encoding='utf-8').read() if os.path.exists(pth) else ''
+          if prev == new:
+              print('sin cambios (ya estaba %s = %.2f)' % (dia_ok, media))
+          else:
+              open(pth, 'w', encoding='utf-8').write(new)
+              print('omie %s → %.2f €/MWh (%d días)' % (dia_ok, media, len(ks)))
+          PY
+
+      - name: Commit si cambió datos/omie.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datos/omie.json
+          if git diff --cached --quiet; then
+            echo "sin cambios que commitear"
+          else
+            git commit -m "pool OMIE diario (G10) [skip ci]"
+            git push
+          fi

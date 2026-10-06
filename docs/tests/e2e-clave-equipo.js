@@ -180,7 +180,121 @@ try{
  await new Promise(r=>setTimeout(r,1800));
  step(F2.w.eval("localStorage.getItem('cfb_sync_token')")===null,'F20: enlace caducado → NO se guarda clave');
  step(/ya no sirve|caduc/.test(F2.w.eval("document.getElementById('cfbGateError').textContent")),'F21: aviso «pide uno nuevo» (no expone nada)');
- /* F22: el admin CREA el enlace (clipboard capturado) */
+ /* ══ G · v3.10.0 «USUARIOS Y ACCESOS» (F13): contraseña personal por persona ══ */
+step(/function eqEntrada\(/.test(SRC_I)&&/b\.v===2&&Array\.isArray\(b\.entradas\)/.test(SRC_I),'G1: blob multi-entrada v2 soportado (eqEntrada)');
+step(/function eqPayload\(/.test(SRC_I)&&/j&&j\.k/.test(SRC_I)&&/return \{k:t, dk:null\}/.test(SRC_I),'G2: payload doble-clave {k,dk} con legado texto plano (ADR-003)');
+step(/#ap=\(\[\^&\]\+\)/.test(SRC_I)&&SRC_I.includes("'#ap='+encodeURIComponent")===false||/ap=/.test(SRC_I),'G3: enlace personal #ap= parseado');
+step(/eqLimpiarUrl/.test(SRC_I)&&/\(eq\|ap\)=\[\^&\]\*/.test(SRC_I),'G4: limpieza de URL borra ambos patrones (sin fuga)');
+step(SRC_A.includes('Accesos personales')&&SRC_A.includes('accPublicar')&&SRC_A.includes('accRevocar')&&SRC_A.includes('accPassSugerida'),'G5: admin con tarjeta «Accesos personales» (crear/publicar/revocar/reset)');
+step(/cfbMiAcceso/.test(SRC_I)&&/cfbMiPassGuardar/.test(SRC_I)&&/auto-cambio de contraseña/.test(SRC_I),'G6: usuario cambia SU contraseña (recifra su entrada)');
+step(SRC_I.includes('🔑 Mi acceso')&&SRC_I.includes('cfb_data_key'),'G7: chip «Mi acceso» en el saludo + clave de datos guardada');
+
+/* cifra ENTRADA multi con Node (simula lo que publica el admin por persona) */
+async function cifrarEntradaNode(payloadTxt,pass,slug){
+  const salt=webcrypto.getRandomValues(new Uint8Array(16));
+  const iv=webcrypto.getRandomValues(new Uint8Array(12));
+  const ik=await webcrypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  const k=await webcrypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},ik,{name:'AES-GCM',length:256},false,['encrypt']);
+  const buf=await webcrypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(payloadTxt));
+  const b64=u=>Buffer.from(u).toString('base64');
+  return {slug:slug,salt:b64(salt),iv:b64(iv),data:b64(new Uint8Array(buf)),ts:new Date().toISOString()};
+}
+/* descifra ENTRADA con Node (para auditar lo público en el PUT) */
+async function descifrarEntradaNode(ent,pass){
+  const ik=await webcrypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  const k=await webcrypto.subtle.deriveKey({name:'PBKDF2',salt:Buffer.from(ent.salt,'base64'),iterations:250000,hash:'SHA-256'},ik,{name:'AES-GCM',length:256},false,['decrypt']);
+  const buf=await webcrypto.subtle.decrypt({name:'AES-GCM',iv:Buffer.from(ent.iv,'base64')},k,Buffer.from(ent.data,'base64'));
+  return new TextDecoder().decode(buf);
+}
+
+/* G8: el ADMIN publica UN acceso personal (blob multi-entrada nace solo) */
+const P_PASS='sierra-brava-42'; const P_ID='Luis001';
+const callsP=[];
+const domP=new JSDOM(SRC_A,{runScripts:'dangerously',url:'https://local.test/',virtualConsole:vc,
+ beforeParse(w){
+  w.TextEncoder=TextEncoder; w.TextDecoder=TextDecoder;
+  Object.defineProperty(w,'crypto',{value:webcrypto});
+  w.confirm=()=>true; w.alert=()=>{};
+  w.navigator.clipboard={writeText:t=>{w.__cop=t;return Promise.resolve();}};
+  w.fetch=(u,o)=>{ callsP.push({met:(o&&o.method)||'GET',u:String(u),body:o&&o.body});
+    const us=String(u);
+    if(/contents\/clave-equipo\.json/.test(us)&&(o&&o.method)==='PUT') return Promise.resolve({status:201,json:()=>Promise.resolve({content:{sha:'nuevo'}})});
+    if(/contents\//.test(us)) return Promise.resolve({status:404,json:()=>Promise.resolve({})});
+    if(/repos\/[^/]+\/[^/?]+(\?|$)/.test(us)) return Promise.resolve({status:200,json:()=>Promise.resolve({full_name:'x'})});
+    return Promise.resolve({status:404,json:()=>Promise.resolve({})});   /* pages URL: 404 → bloque v2 nace vacío */
+  };
+ }});
+const wP=domP.window;
+wP.eval("localStorage.clear()");
+wP.eval("localStorage.setItem('cfb_perfil',JSON.stringify({nombre:'Ana',slug:'ana',admin:true,autorizado:true}))");
+wP.eval("localStorage.setItem('cfb_sync_token',JSON.stringify('"+TOKEN+"'))");
+wP.eval("document.getElementById('panel').style.display=''");
+wP.eval("window.accEquipo({autorizados:[{id:'"+P_ID+"',nombre:'Luis'}]})");
+wP.eval("window.accCrear(0)");
+await new Promise(r=>setTimeout(r,200));
+wP.eval("document.getElementById('accPass_"+wP.eval("accSlug('"+P_ID+"')")+"').value='"+P_PASS+"'");
+wP.eval("window.accPublicar(0)");
+await new Promise(r=>setTimeout(r,1800));
+const putP=callsP.find(c=>c.met==='PUT'&&/clave-equipo/.test(c.u));
+step(!!putP,'G8: admin publica el acceso personal con PUT al repo de la web');
+let blobV2=null;
+if(putP){
+  blobV2=JSON.parse(Buffer.from(JSON.parse(putP.body).content,'base64').toString('utf8'));
+  step(blobV2.v===2&&Array.isArray(blobV2.entradas)&&blobV2.entradas.length===1,'G9: bloque multi-entrada NACE (v=2, 1 entrada)');
+  step(blobV2.entradas[0].slug==='iluis001','G10: slug de la persona derivado de su ID (iluis001)');
+  const txt=await descifrarEntradaNode(blobV2.entradas[0],P_PASS);
+  const pl=JSON.parse(txt);
+  step(pl.k===TOKEN,'G11: dentro del cifrado va la CLAVE REAL (jamás la contraseña, jamás la clave en claro)');
+  step(typeof pl.dk==='string'&&pl.dk.length>30,'G12: dentro del cifrado va la clave de datos (ADR-003)');
+}
+step(/Acceso de/.test(wP.eval("document.getElementById('accMsg').textContent")||''),'G13: mensaje de éxito al admin');
+/* G14: el ADMIN copia el enlace personal */
+wP.eval("window.accEnlace(0)");
+step((wP.eval("window.__cop")||'').indexOf('#ap='+encodeURIComponent('iluis001:'+P_PASS))>-1,'G14: enlace personal #ap=slug:pass copiado');
+
+/* G15-18: móvil de LUIS con el bloque v2: tarjeta de 2 campos y login por su contraseña */
+const H=jsdomIndex({blob:blobV2});
+await new Promise(r=>setTimeout(r,300));
+const tarjH=H.w.eval("document.getElementById('cfbGate').innerHTML");
+step(/cfbEqId/.test(tarjH)&&/Tu acceso personal|tu contraseña/.test(tarjH),'G15: con bloque v2 la tarjeta pide ID + contraseña (2 campos)');
+H.w.eval("document.getElementById('cfbEqId').value='"+P_ID+"';document.getElementById('cfbClaveEq').value='"+P_PASS+"';");
+H.w.eval("(function(){var f=document.querySelector('#cfbGate form'); window.cfbClaveEqOk(f);})()");
+await new Promise(r=>setTimeout(r,1800));
+step(H.w.eval("localStorage.getItem('cfb_sync_token')")==='"'+TOKEN+'"','G16: su contraseña PERSONAL descifra la clave real');
+step(H.w.eval("localStorage.getItem('cfb_eq_slug')")==='"iluis001"','G17: guarda su slug (necesario para auto-cambio y rotación)');
+step(!!H.w.eval("localStorage.getItem('cfb_data_key')"),'G18: guarda la clave de datos');
+
+/* G19: contraseña mala de otro → no entra */
+const H2=jsdomIndex({blob:blobV2});
+await new Promise(r=>setTimeout(r,300));
+H2.w.eval("document.getElementById('cfbEqId').value='"+P_ID+"';document.getElementById('cfbClaveEq').value='contra-malísima-99';");
+H2.w.eval("(function(){var f=document.querySelector('#cfbGate form'); window.cfbClaveEqOk(f);})()");
+await new Promise(r=>setTimeout(r,1800));
+step(H2.w.eval("localStorage.getItem('cfb_sync_token')")===null,'G19: contraseña mala → no se guarda clave');
+
+/* G20: ID SIN acceso publicado → aviso, no fuga */
+const H3=jsdomIndex({blob:blobV2});
+await new Promise(r=>setTimeout(r,300));
+H3.w.eval("document.getElementById('cfbEqId').value='Nadie999';document.getElementById('cfbClaveEq').value='la-que-sea-1234';");
+H3.w.eval("(function(){var f=document.querySelector('#cfbGate form'); window.cfbClaveEqOk(f);})()");
+await new Promise(r=>setTimeout(r,300));
+step(/no tiene acceso publicado/.test(H3.w.eval("document.getElementById('cfbGateError').textContent")),'G20: ID sin acceso → aviso claro (sin descifrar nada)');
+
+/* G21: ENLACE PERSONAL #ap= → entra sin teclear y limpia la URL */
+const H4=jsdomIndexConUrl('https://local.test/index.html#ap='+encodeURIComponent('iluis001:'+P_PASS),blobV2);
+await new Promise(r=>setTimeout(r,1800));
+step(H4.w.eval("localStorage.getItem('cfb_sync_token')")==='"'+TOKEN+'"','G21: enlace personal → clave guardada SOLO abriendo');
+step(H4.w.eval("localStorage.getItem('cfb_eq_slug')")==='"iluis001"','G22: enlace personal → slug guardado');
+step(H4.w.eval("location.hash").indexOf('ap=')===-1,'G23: la contraseña desapareció de la URL');
+
+/* G24: REVOCACIÓN — eqRotar sin su entrada en el bloque → caduca y limpia */
+const blobV2b={v:2,alg:'AES-GCM-256',kdf:{name:'PBKDF2',hash:'SHA-256',iter:250000},entradas:[],ts:new Date().toISOString()};
+const H5=jsdomIndex({blob:blobV2b});
+H5.w.eval("localStorage.clear(); localStorage.setItem('cfb_eq_pass',JSON.stringify('"+P_PASS+"')); localStorage.setItem('cfb_eq_slug',JSON.stringify('iluis001'));");
+H5.w.eval("(function(){ try{ window.__rot2=null; (window.eqRotar||function(){})(function(ok){ window.__rot2=ok; }); }catch(e){ window.__err2=e.message; } })()");
+await new Promise(r=>setTimeout(r,600));
+step(H5.w.eval("window.__rot2")===false,'G24: revocado → la renovación silenciosa YA NO funciona (ok=false)');
+step(H5.w.eval("localStorage.getItem('cfb_eq_pass')")===null,'G25: …y limpia la contraseña guardada (habrá nueva por el admin si procede)');
  let copiado='';
  const domL=new JSDOM(SRC_A,{runScripts:'dangerously',url:'https://local.test/',virtualConsole:vc,
   beforeParse(w){

@@ -679,9 +679,22 @@ body.cfb-hc img,body.cfb-hc svg{filter:invert(1) hue-rotate(180deg)}
   body.cfb-printing>*{display:none !important}
   body.cfb-printing #cfbFichaPrint{display:block !important;position:static}
   body.cfb-printing #cfbCertPrint{display:block !important;position:static}
+  body.cfb-printing #cfbSimPrint{display:block !important;position:static}
+  body.cfb-printing #cfbInfPrint{display:block !important;position:static}
   @page{margin:14mm}
 }
 #cfbCertPrint{display:none}
+#cfbSimPrint{display:none}
+#cfbSimPrint .sp-head{text-align:center;margin-bottom:14px}
+#cfbSimPrint .sp-logo{font:600 20px 'Inter Tight','Inter',sans-serif;letter-spacing:.04em}
+#cfbSimPrint .sp-sub{font-size:12px;color:#444;margin-top:2px}
+#cfbSimPrint table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 14px}
+#cfbSimPrint th,#cfbSimPrint td{border:1px solid #999;padding:6px 8px;text-align:right}
+#cfbSimPrint th:first-child,#cfbSimPrint td:first-child{text-align:left}
+#cfbSimPrint .sp-ahorro{font-size:16px;font-weight:700;text-align:center;margin:12px 0;padding:10px;border:2px solid #000}
+#cfbSimPrint .sp-nota{font-size:11px;color:#444;line-height:1.5}
+#cfbSimPrint .sp-firma{margin-top:26px;display:flex;gap:48px}
+#cfbSimPrint .sp-firma div{flex:1;border-top:1px solid #000;padding-top:4px;font-size:11px}
 #cfbCertPrint .cert-caja{max-width:640px;margin:0 auto;border:2px solid #111;border-radius:14px;padding:36px 30px;text-align:center;font-family:Georgia,serif}
 #cfbCertPrint .cert-tit{font-size:30px;letter-spacing:.06em}
 #cfbCertPrint .cert-sub{margin-top:14px;font-size:13px;color:#333}
@@ -700,6 +713,55 @@ body.focus #cfbQuickNote{display:block}
 #cfbQuickNote .cfb-btn{flex:1;background:#4C3EBF;color:#fff;border:0;border-radius:8px;padding:7px 6px;font:600 12.5px Inter,sans-serif;cursor:pointer}
 #cfbQuickNote .cfb-btn.cfb-sec{flex:0 0 auto;background:#fff;color:#4C3EBF;border:1px solid #4C3EBF}
 #cfbQuickNote .cfb-btn:active{transform:scale(.97)}
+</style>
+
+<style id="skinPremium">
+/* ═══ SKIN PREMIUM v1 (06-10-2026 · v4.1.3 «Piel premium») — capa FINAL de cascada: solo añade, nunca retira ni renombra tokens.
+   Marca INTACTA: --verde #00A650 Iberdrola, logos y tipografía Inter/Inter Tight ya existentes. ═══ */
+:root{
+  --r2:10px; --r3:14px;
+  --sh-1:0 1px 2px rgba(10,10,10,.05),0 1px 6px rgba(10,10,10,.045);
+  --sh-2:0 2px 6px rgba(10,10,10,.05),0 10px 24px rgba(10,10,10,.07);
+  --sh-3:0 4px 12px rgba(10,10,10,.08),0 24px 48px rgba(10,10,10,.12);
+  --sh-verde:0 2px 8px rgba(0,166,80,.18),0 8px 22px rgba(0,122,59,.16);
+  --anillo:0 0 0 3px rgba(0,166,80,.16);
+  --grad-marca:linear-gradient(135deg,#00A650 0%,#007A3B 100%);
+  --pelo:rgba(10,10,10,.055);
+  --verde-salvia:#A8C5B0;   /* relleno defensivo: en plantillas ya existe con este mismo valor */
+  --t-micro:120ms var(--ease);
+}
+::selection{background:rgba(0,166,80,.16);color:var(--negro)}
+/* — superficies: tarjetas con aire, pelo fino y sombra en capas — */
+.card,.crm-hoy,.reglas{border-radius:var(--r3);border:1px solid var(--pelo);box-shadow:var(--sh-1)}
+/* — filas CRM: elevación al pasar (premium que se NOTA pero no estorba) — */
+.crm-fila{border-radius:var(--r2);box-shadow:var(--sh-1);transition:transform var(--t-micro),box-shadow var(--t-fast)}
+.crm-fila:hover{transform:translateY(-1px);box-shadow:var(--sh-2)}
+/* — chips de segmentos: píldora; el activo es una gota de marca — */
+.crm-chip{border-radius:999px;transition:background var(--t-micro),color var(--t-micro),border-color var(--t-micro),box-shadow var(--t-micro)}
+.crm-chip:hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+.crm-chip.on{background:var(--grad-marca);border-color:transparent;color:#fff;box-shadow:var(--sh-verde)}
+.crm-chip.on b{color:#fff}
+/* — botones: marca con elevación y retorno activo — */
+.btn,.crm-btn{transition:transform var(--t-micro),box-shadow var(--t-micro),background var(--t-fast),border-color var(--t-micro),color var(--t-micro)}
+.btn.verde,.btn.pri,.crm-btn:not(.sec){background:var(--grad-marca);border-color:transparent;color:#fff;box-shadow:var(--sh-1)}
+.btn.verde:hover,.btn.pri:hover,.crm-btn:not(.sec):hover{transform:translateY(-1px);box-shadow:var(--sh-verde);filter:none}
+.btn.verde:active,.btn.pri:active,.crm-btn:not(.sec):active{transform:translateY(0);box-shadow:var(--sh-1)}
+.btn.suave:hover,.btn:not(.verde):not(.pri):hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+.crm-btn{border-radius:999px}
+.crm-btn.sec:hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+/* — campos: foco anillado de marca — */
+.crm-inp,.card input[type=text],.card input[type=number],.card textarea{border-radius:var(--r2);transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.crm-inp:focus,.card input[type=text]:focus,.card input[type=number]:focus,.card textarea:focus{outline:none;border-color:var(--verde);box-shadow:var(--anillo)}
+/* — progreso: marca con brillo — */
+.prog-fill{background:var(--grad-marca)}
+/* — modal: velo más cinematográfico + entrada suave del contenido — */
+.modal{border-radius:var(--r3);box-shadow:var(--sh-3);animation:skinPop var(--t-base)}
+.modal-back{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);background:rgba(10,10,10,.42)}
+@keyframes skinPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+/* — toast: acabado píldora observador — */
+.toast{border-radius:12px;box-shadow:var(--sh-3)}
+/* — cabecera: pelo de elevación — */
+header{box-shadow:var(--sh-1);position:relative;z-index:5}
 </style>
 </head>
 <body>

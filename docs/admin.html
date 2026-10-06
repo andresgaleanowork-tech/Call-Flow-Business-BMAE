@@ -68,6 +68,55 @@
   @media (max-width:640px){ header{padding:16px 18px} main{padding:28px 16px} }
 
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; scroll-behavior:auto !important } }</style>
+
+<style id="skinPremium">
+/* ═══ SKIN PREMIUM v1 (06-10-2026 · v4.1.3 «Piel premium») — capa FINAL de cascada: solo añade, nunca retira ni renombra tokens.
+   Marca INTACTA: --verde #00A650 Iberdrola, logos y tipografía Inter/Inter Tight ya existentes. ═══ */
+:root{
+  --r2:10px; --r3:14px;
+  --sh-1:0 1px 2px rgba(10,10,10,.05),0 1px 6px rgba(10,10,10,.045);
+  --sh-2:0 2px 6px rgba(10,10,10,.05),0 10px 24px rgba(10,10,10,.07);
+  --sh-3:0 4px 12px rgba(10,10,10,.08),0 24px 48px rgba(10,10,10,.12);
+  --sh-verde:0 2px 8px rgba(0,166,80,.18),0 8px 22px rgba(0,122,59,.16);
+  --anillo:0 0 0 3px rgba(0,166,80,.16);
+  --grad-marca:linear-gradient(135deg,#00A650 0%,#007A3B 100%);
+  --pelo:rgba(10,10,10,.055);
+  --verde-salvia:#A8C5B0;   /* relleno defensivo: en plantillas ya existe con este mismo valor */
+  --t-micro:120ms var(--ease);
+}
+::selection{background:rgba(0,166,80,.16);color:var(--negro)}
+/* — superficies: tarjetas con aire, pelo fino y sombra en capas — */
+.card,.crm-hoy,.reglas{border-radius:var(--r3);border:1px solid var(--pelo);box-shadow:var(--sh-1)}
+/* — filas CRM: elevación al pasar (premium que se NOTA pero no estorba) — */
+.crm-fila{border-radius:var(--r2);box-shadow:var(--sh-1);transition:transform var(--t-micro),box-shadow var(--t-fast)}
+.crm-fila:hover{transform:translateY(-1px);box-shadow:var(--sh-2)}
+/* — chips de segmentos: píldora; el activo es una gota de marca — */
+.crm-chip{border-radius:999px;transition:background var(--t-micro),color var(--t-micro),border-color var(--t-micro),box-shadow var(--t-micro)}
+.crm-chip:hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+.crm-chip.on{background:var(--grad-marca);border-color:transparent;color:#fff;box-shadow:var(--sh-verde)}
+.crm-chip.on b{color:#fff}
+/* — botones: marca con elevación y retorno activo — */
+.btn,.crm-btn{transition:transform var(--t-micro),box-shadow var(--t-micro),background var(--t-fast),border-color var(--t-micro),color var(--t-micro)}
+.btn.verde,.btn.pri,.crm-btn:not(.sec){background:var(--grad-marca);border-color:transparent;color:#fff;box-shadow:var(--sh-1)}
+.btn.verde:hover,.btn.pri:hover,.crm-btn:not(.sec):hover{transform:translateY(-1px);box-shadow:var(--sh-verde);filter:none}
+.btn.verde:active,.btn.pri:active,.crm-btn:not(.sec):active{transform:translateY(0);box-shadow:var(--sh-1)}
+.btn.suave:hover,.btn:not(.verde):not(.pri):hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+.crm-btn{border-radius:999px}
+.crm-btn.sec:hover{border-color:var(--verde-salvia);color:var(--verde-oscuro)}
+/* — campos: foco anillado de marca — */
+.crm-inp,.card input[type=text],.card input[type=number],.card textarea{border-radius:var(--r2);transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.crm-inp:focus,.card input[type=text]:focus,.card input[type=number]:focus,.card textarea:focus{outline:none;border-color:var(--verde);box-shadow:var(--anillo)}
+/* — progreso: marca con brillo — */
+.prog-fill{background:var(--grad-marca)}
+/* — modal: velo más cinematográfico + entrada suave del contenido — */
+.modal{border-radius:var(--r3);box-shadow:var(--sh-3);animation:skinPop var(--t-base)}
+.modal-back{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);background:rgba(10,10,10,.42)}
+@keyframes skinPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+/* — toast: acabado píldora observador — */
+.toast{border-radius:12px;box-shadow:var(--sh-3)}
+/* — cabecera: pelo de elevación — */
+header{box-shadow:var(--sh-1);position:relative;z-index:5}
+</style>
 </head>
 <body>
 <header>
@@ -109,6 +158,12 @@
           <div class="nota" id="eqLnkMsg"></div>
         </div>
       </details>
+      <details open style="margin-top:10px;border-top:1px dashed var(--gris-linea);padding-top:10px"><summary style="cursor:pointer;font-size:.9rem;font-weight:600">👥 Accesos personales <span id="accBlobEstado" class="badge-admin">…</span> <span class="sub" style="font-weight:400">(v3.10 · cada persona su contraseña · recomendado)</span></summary>
+        <p class="sub" style="margin-top:6px">La clave real sigue sin verse nunca: se cifra <b>un a per uno</b> con la contraseña PERSONAL de cada trabajador/a. Aquí das de alta un acceso (se genera la contraseña sola, o la escribes), <b>copias su enlace personal</b> (1 clic: entra sin teclear nada) y <b>revocas</b> su acceso si se da de baja. Los enlaces «contraseña del equipo» de antes (<code>#eq=</code>) siguen valiendo solo con la publicación antigua a cuenta entera.</p>
+        <div id="accMsg" class="nota">Para publicar accesos este dispositivo necesita sesión con la clave (entra antes a la app normal o pega la clave en «Publicar / rotar» de arriba).</div>
+        <div style="overflow-x:auto;margin-top:8px"><table id="accTabla" style="min-width:640px"><thead><tr><th>Persona</th><th>ID</th><th>Acceso</th><th></th></tr></thead><tbody></tbody></table></div>
+        <div class="nota" id="accPie"></div>
+      </details>
       <details style="margin-top:10px"><summary style="cursor:pointer;font-size:.9rem;font-weight:600">✏️ Cambiar la clave de ESTE dispositivo</summary>
         <p class="sub" style="margin-top:6px">Cuando GitHub la rote y no quiera esperar a la próxima versión: péguela aquí. Se comprueba en vivo y, si responde ✔, queda guardada al instante en este dispositivo (la embebida no se toca; el equipo se vacuna solo como siempre).</p>
         <div class="fila"><input id="claveNueva" type="password" placeholder="github_pat_…" autocomplete="off" style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font:500 13px ui-monospace,monospace">
@@ -143,6 +198,42 @@
     </div>
 
     <div class="card">
+      <h2>🧭 Cuadro de mando <span class="badge-admin">G3 · v4.1.1</span></h2>
+      <p class="sub">Estilo de trabajo del equipo, sin nombres de clientes: gestiones de los últimos 7 días, pipeline estimado (€/mes en facturas de fichas activas) y túnel de presupuestos. Se alimenta solo: cada vez que un móvil sincroniza fichas sube su propia métrica anónima por persona (<code>datos/metricas-equipo.json</code>, repo privado).</p>
+      <div class="fila" style="display:flex;gap:8px;align-items:center;margin:6px 0 10px">
+        <button class="btn" type="button" onclick="mandoCargar()">🔄 Actualizar</button>
+        <span id="mandoMsg" class="nota" role="status"></span>
+      </div>
+      <div id="mandoCaja" class="nota">Sin cargar todavía — pulsa «Actualizar».</div>
+    </div>
+    <div class="card">
+      <h2>🛡 Auditoría del equipo <span class="badge-admin">S2 · v4.1.1</span></h2>
+      <p class="sub">Cadena simple (sin firma criptográfica) en <code>datos/auditoria.json</code>: quién hizo qué y cuándo — borrados de fichas, purgas RGPD, sincronizaciones masivas y publicaciones del despacho. Tope de 500 eventos (los más viejos rotan). <b>Metadata de mando: jamás nombres ni teléfonos de clientes.</b></p>
+      <div class="fila" style="display:flex;gap:8px;align-items:center;margin:6px 0 10px">
+        <button class="btn" type="button" onclick="audCargar()">🔄 Actualizar</button>
+        <span id="audMsg" class="nota" role="status"></span>
+      </div>
+      <div id="audCaja" class="nota">Sin cargar todavía — pulsa «Actualizar».</div>
+    </div>
+    <div class="card">
+      <h2>🩺 Salud del equipo <span class="badge-admin">Q7 · v4.1.4</span></h2>
+      <p class="sub">Telemetría técnica ANÓNIMA en <code>datos/salud.json</code> (repo privado): velocidad de sincronización por persona (mediana y p95), choques de escritura 409 (dos móviles a la vez), tamaño máximo del lote y versión de app detectada. Se escribe sola tras cada sincronización. <b>Sin nombres ni datos de clientes — solo tiempos, contadores y tamaños.</b></p>
+      <div class="fila" style="display:flex;gap:8px;align-items:center;margin:6px 0 10px">
+        <button class="btn" type="button" onclick="saludCargar()">🔄 Actualizar</button>
+        <span id="saludMsg" class="nota" role="status"></span>
+      </div>
+      <div id="saludCaja" class="nota">Sin cargar todavía — pulsa «Actualizar».</div>
+    </div>
+    <div class="card">
+      <h2>⚡ Pool OMIE <span class="badge-admin">G10 · v4.2.0</span></h2>
+      <p class="sub">Precio medio diario del mercado ibérico (€/MWh) en <code>datos/omie.json</code>. Lo escribe sola la GitHub Action diaria del repo de datos; las apps lo leen con caché de 8 h y avisan de fugas (F22) cotándolo contra lo que paga cada cliente. <b>Dato de mercado público: cero datos de clientes.</b> Si pone «sin datos», la Action aún no corre (actívala en el repo: <code>.github/workflows/omie.yml</code>).</p>
+      <div class="fila" style="display:flex;gap:8px;align-items:center;margin:6px 0 10px">
+        <button class="btn" type="button" onclick="omieAdminCargar()">🔄 Actualizar</button>
+        <span id="omieMsg" class="nota" role="status"></span>
+      </div>
+      <div id="omieCaja" class="nota">Sin cargar todavía — pulsa «Actualizar».</div>
+    </div>
+    <div class="card">
       <h2>🎯 Objetivo de gestiones diario (equipo)</h2>
       <p class="sub">Gestiones por día que la línea del gráfico de <code>actividad.html</code> marca a cada comercial (y el «faltan X»). Cada comercial puede personalizarla en su dispositivo; lo guardado aquí es para todo el equipo. Se propaga igual que la de roleplay (equipo.json).</p>
       <div class="fila" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -151,6 +242,22 @@
         <span id="metaActMsg" class="nota" role="status"></span>
       </div>
     </div>
+    <div class="card">
+      <h2>📦 Catálogo del equipo <span id="catBadge" class="badge-admin">…</span></h2>
+      <p class="sub">Productos/servicios del nicho (energía · ingeniería · mantenimiento · comercial) que el pipeline multi-producto —F2— lista en la app. Se publica en la web pública (<code>datos/catalogo.json</code>, sin datos personales) y la app lo lee sola; si un día falta el fichero, la app usa la semilla embebida. Fijar <b>id estables</b>: no los renombres — los ids antiguos podrían estar ya referenciados en fichas (marca el viejo como inactivo en su lugar).</p>
+      <table id="catTabla" style="margin-top:4px"><thead><tr><th style="width:110px">id</th><th>producto/servicio</th><th style="width:120px">área</th><th style="width:60px">tag</th><th style="width:70px;text-align:center">activo</th><th style="width:36px"></th></tr></thead><tbody><tr><td colspan="6" class="nota">cargando…</td></tr></tbody></table>
+      <div class="fila" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px">
+        <input type="text" id="catId" placeholder="id nuevo (minúsc., sin espacios)" style="width:170px">
+        <input type="text" id="catNom" placeholder="Producto (p. ej. Optimización CPUE)" style="flex:1;min-width:220px">
+        <input type="text" id="catArea" placeholder="área (energia/ingenieria/manto/comer)" style="width:180px">
+        <input type="text" id="catTag" placeholder="tag ⚡" style="width:60px">
+        <button class="btn" type="button" onclick="catAnadir()">＋ Añadir</button>
+        <button class="btn pri" type="button" onclick="catPublicar()">💾 Publicar catálogo</button>
+      </div>
+      <div class="aviso" id="catMsg"></div>
+      <div class="okmsg" id="catOk"></div>
+    </div>
+
     <div class="card">
       <h2>📊 Actividad de guardado</h2>
       <p class="sub">Ficheros vivos en la caja fuerte (<code>datos/</code>): cada uno es la burbuja sincronizada de una persona.</p>
@@ -294,6 +401,73 @@ function eqCifra(txt,pass,cb){
     }).catch(function(){ cb(null,'fallo al cifrar'); });
   }catch(e){ cb(null,'fallo al cifrar: '+e.message); }
 }
+/* ── 📦 Catálogo del equipo (G5 · ADR-006): lectura Pages pública, publicación Contents en WEB_REPO ── */
+var CAT=false;
+function catMsg(t){ var e=document.getElementById('catMsg'); if(e){ e.textContent=t||''; e.style.display=t?'block':'none'; } var ok=document.getElementById('catOk'); if(ok) ok.textContent=''; }
+function catOkMsg(t){ var e=document.getElementById('catOk'); if(e){ e.textContent=t||''; e.style.display=t?'block':'none'; } var m=document.getElementById('catMsg'); if(m) m.textContent=''; }
+function catPinta(){
+  var tb=document.querySelector('#catTabla tbody'); if(!tb) return;
+  var badge=document.getElementById('catBadge');
+  if(!CAT){ tb.innerHTML='<tr><td colspan="6" class="nota">Sin catálogo (publica para crearlo).</td></tr>'; if(badge) badge.textContent='0'; return; }
+  if(badge) badge.textContent=CAT.items.length;
+  tb.innerHTML=CAT.items.map(function(it,ix){
+    return '<tr data-cix="'+ix+'"><td><code>'+escAttr(it.id)+'</code></td>'
+      +'<td><input type="text" value="'+escAttr(it.nombre)+'" onchange="catCampo('+ix+',\'nombre\',this.value)" style="width:100%;border:1px solid var(--gris-linea);border-radius:6px;padding:6px 8px;font:inherit"></td>'
+      +'<td><input type="text" value="'+escAttr(it.area||'')+'" onchange="catCampo('+ix+',\'area\',this.value)" style="width:100%;border:1px solid var(--gris-linea);border-radius:6px;padding:6px 8px;font:inherit"></td>'
+      +'<td><input type="text" value="'+escAttr(it.tag||'')+'" onchange="catCampo('+ix+',\'tag\',this.value)" style="width:44px;text-align:center;border:1px solid var(--gris-linea);border-radius:6px;padding:6px 4px;font:inherit"></td>'
+      +'<td style="text-align:center"><input type="checkbox" '+(it.activo!==false?'checked':'')+' onchange="catCampo('+ix+',\'activo\',this.checked)"></td>'
+      +'<td><button class="btn" type="button" title="quitar del catálogo" onclick="catQuitar('+ix+')">✕</button></td></tr>';
+  }).join('');
+}
+function escAttr(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+window.catCampo=function(ix,campo,v){
+  if(!CAT||!CAT.items[ix]) return;
+  var it=CAT.items[ix];
+  if(campo==='activo') it.activo=!!v;
+  else if(campo==='id'){ /* ids congelados: no editables */ return; }
+  else it[campo]=String(v||'').trim().slice(0,120);
+};
+window.catAnadir=function(){
+  var id=(document.getElementById('catId').value||'').trim().toLowerCase().replace(/[^a-z0-9_\-]/g,'').slice(0,32);
+  var nom=(document.getElementById('catNom').value||'').trim().slice(0,120);
+  var area=(document.getElementById('catArea').value||'').trim().toLowerCase().replace(/[^a-z\-]/g,'').slice(0,24)||'energia';
+  var tag=(document.getElementById('catTag').value||'').trim().slice(0,4);
+  if(!id||!nom){ catMsg('✘ Falta id o nombre del producto'); return; }
+  if(!CAT) CAT={v:1,items:[]};
+  if(CAT.items.some(function(it){ return it.id===id; })){ catMsg('✘ Ya existe un producto con id «'+id+'» (los ids son únicos); edita el existente o usa otro id.'); return; }
+  CAT.items.push({id:id,nombre:nom,area:area,tag:tag,activo:true});
+  document.getElementById('catId').value=''; document.getElementById('catNom').value=''; document.getElementById('catArea').value=''; document.getElementById('catTag').value='';
+  catPinta(); catOkMsg('✔ Añadido «'+nom+'» — queda publicar 💾');
+};
+window.catQuitar=function(ix){
+  if(!CAT||!CAT.items[ix]) return;
+  var nom=CAT.items[ix].nombre;
+  if(!confirm('¿Quitar «'+nom+'» del catálogo? (las fichas que ya lo referencien conservarán el id)')) return;
+  CAT.items.splice(ix,1); catPinta(); catOkMsg('✔ Quitado — queda publicar 💾');
+};
+function catCarga(){
+  fetch('datos/catalogo.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+    .then(function(j){ CAT={v:1,items:(j.items||[]).filter(function(it){ return it&&it.id&&it.nombre; })}; catPinta(); })
+    .catch(function(){ CAT=false; catPinta(); catMsg('Sin catalogo.json público todavía (404/offline) — con «💾 Publicar» se crea. La app funciona igual con su semilla embebida.'); });
+}
+window.catPublicar=function(){
+  var tok=token(); if(!tok){ catMsg('✘ Sin clave en este dispositivo: entra antes a la app o usa la tarjeta «Publicar / rotar».'); return; }
+  if(!CAT||!CAT.items.length){ catMsg('✘ El catálogo está vacío: añade al menos un producto.'); return; }
+  catMsg('… publicando en la web (Contents API)');
+  var doc={v:1,upd:new Date().toISOString().slice(0,10),items:CAT.items.map(function(it){ return {id:it.id,nombre:it.nombre,area:it.area||'energia',tag:it.tag||'',activo:it.activo!==false}; })};
+  reqTok('GET',WEB_REPO,'/contents/datos/catalogo.json?ref=main',undefined,function(st,j){
+    var cuerpo={message:'CFB catálogo · '+new Date().toISOString().slice(0,10),content:btoa(unescape(encodeURIComponent(JSON.stringify(doc,null,2)))),branch:'main'};
+    if(st===200&&j&&j.sha) cuerpo.sha=j.sha;
+    reqTok('PUT',WEB_REPO,'/contents/datos/catalogo.json',cuerpo,function(st2){
+      if(st2===200||st2===201){ catOkMsg('✔ Catálogo publicado ('+doc.items.length+' productos) — la app lo leerá en su próximo arranque (o al pasar la caché de 8 h).'); catCarga(); try{ audAdmin('catalogo_publicar', doc.items.length+' productos', function(){}); }catch(eA){} }
+      else if(st2===404){ catMsg('✘ 404 al escribir: ¿la PAT no tiene acceso al repo de la web o falta la carpeta datos? (revisa la PAT de ambos repos)'); }
+      else if(st2===403){ catMsg('✘ 403: la PAT abre el repo de la web pero NO puede escribir (necesita contents:write).'); }
+      else { catMsg('✘ error al publicar ('+st2+').'); }
+    },tok);
+  },tok);
+};
+try{ catCarga(); }catch(e){}
+
 function reqTok(metodo,repo,u,cuerpo,cb,tok){
   var cab={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'cfb-admin'};
   if(cuerpo!==undefined){ cab['Content-Type']='application/json'; }
@@ -334,11 +508,139 @@ window.eqPublicar=function(){
               try{ comprobarClave(); eqEstado(); }catch(e){}
             } else if(st4===403){ mal('La PAT abre el repo de la web pero NO puede escribir (403) — necesita contents:write también ahí.'); }
             else { mal('Fallo al publicar ('+st4+'). Reintenta con red.'); }
+            if(st4===200||st4===201){ try{ audAdmin('clave_publicar','rotación clave equipo',function(){}); }catch(eA){} }   /* S2 */
           },tok);
         },tok);
       });
     },tok);
   },tok);
+};
+
+/* ═══ Ola 3(a) v4.1.1 · G3/S2 — cuadro de mando + auditoría (ADR-010) ═══ */
+function olaGet(ruta,cb){                                  /* GET JSON del repo privado de datos */
+  var tok=token();
+  if(!tok){ cb(401,null); return; }
+  reqTok('GET',REPO,'/contents/'+ruta+'?ref=main',undefined,function(st,j){
+    var doc=null;
+    if(st===200&&j&&j.content){ try{ doc=JSON.parse(decodeURIComponent(escape(atob(String(j.content).replace(/\n/g,''))))); }catch(e){} }
+    cb(st,doc);
+  },tok);
+}
+function olaPut(ruta,doc,msg,cb){                          /* PUT anti-409 con sha fresco */
+  var tok=token();
+  if(!tok){ cb(401); return; }
+  reqTok('GET',REPO,'/contents/'+ruta+'?ref=main',undefined,function(st,j){
+    var cuerpo={message:msg+' · '+new Date().toISOString().slice(0,16),content:btoa(unescape(encodeURIComponent(JSON.stringify(doc,null,2)))),branch:'main'};
+    if(st===200&&j&&j.sha) cuerpo.sha=j.sha;
+    reqTok('PUT',REPO,'/contents/'+ruta,cuerpo,function(st2){
+      if(st2===409){ setTimeout(function(){ olaPut(ruta,doc,msg,cb); },400); return; }
+      cb(st2);
+    },tok);
+  },tok);
+}
+window.audAdmin=function(ev,det,cb){                       /* S2: el despacho también firma */
+  cb=cb||function(){};
+  olaGet('datos/auditoria.json',function(st,doc){
+    if(st!==200&&st!==404){ cb(false); return; }
+    var a=(doc&&Array.isArray(doc.a))?doc.a:[];
+    var d=new Date(), hh=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+    var quien='admin'; try{ var p=perfil(); if(p&&p.slug) quien=p.slug; }catch(e){}
+    a.push({f:new Date().toISOString().slice(0,10),h:hh,qui:quien,ev:String(ev).slice(0,24),det:String(det==null?'':det).slice(0,120)});
+    a=a.slice(-500);
+    olaPut('datos/auditoria.json',{v:1,upd:new Date().toISOString().slice(0,10),a:a},'S2 auditoría ('+ev+')',function(st2){ cb(st2===200||st2===201); });
+  });
+};
+window.mandoCargar=function(){
+  var mm=document.getElementById('mandoMsg'), caja=document.getElementById('mandoCaja');
+  mm.textContent='… leyendo métricas';
+  olaGet('datos/metricas-equipo.json',function(st,doc){
+    if(st===401){ mm.textContent='✘ Sin clave en este dispositivo.'; return; }
+    if(st===404){ mm.textContent=''; caja.innerHTML='Todavía no hay métricas: llegarán solas la próxima vez que un móvil sincronice fichas (botón ⇄).'; return; }
+    if(st!==200||!doc||!doc.eq){ mm.textContent='✘ error '+st; return; }
+    var filas=[], totA=0, totP=0, emb={prep:0,oferta:0,nego:0,gan:0,per:0}, k;
+    for(k in doc.eq){ var m=doc.eq[k]||{}; filas.push({slug:k,act7:m.act7||0,pipe:m.pipe||0,fichas:m.fichas||0,emb:m.emb||{}});
+      totA+=m.act7||0; totP+=m.pipe||0;
+      ['prep','oferta','nego','gan','per'].forEach(function(e){ emb[e]+=((m.emb||{})[e]||0); }); }
+    filas.sort(function(x,y){ return y.act7-x.act7; });
+    var trs=filas.map(function(f,i){
+      return '<tr><td>'+(i===0?'🥇':'&nbsp;')+' <b>'+esc(f.slug)+'</b></td><td style="text-align:right">'+f.act7+'</td><td style="text-align:right">'+f.fichas+'</td><td style="text-align:right">'+(f.pipe?f.pipe.toLocaleString('es-ES'):'—')+'</td></tr>';
+    }).join('');
+    caja.innerHTML='<table style="margin:0 0 8px"><thead><tr><th>persona (seudónimo)</th><th style="text-align:right">gestiones 7d</th><th style="text-align:right">fichas</th><th style="text-align:right">pipe €/mes est.</th></tr></thead><tbody>'
+      +trs+'<tr style="border-top:2px solid var(--gris-linea)"><td><b>Equipo</b></td><td style="text-align:right"><b>'+totA+'</b></td><td></td><td style="text-align:right"><b>'+(totP?totP.toLocaleString('es-ES'):'—')+'</b></td></tr></tbody></table>'
+      +'<div class="nota">💶 túnel: 🧰 '+emb.prep+' propuestas · 📄 '+emb.oferta+' ofertas · 🤝 '+emb.nego+' negociación · 🏆 '+emb.gan+' ganadas · ✖ '+emb.per+' perdidas · <span id="mandoPre">…presupuestos colaborativos</span></div>';
+    mm.textContent='✔ actualizado '+doc.upd;
+    olaGet('datos/presupuestos.json',function(st2,doc2){
+      var el=document.getElementById('mandoPre'); if(!el) return;
+      if(st2!==200||!doc2||!Array.isArray(doc2.pres)||!doc2.pres.length){ el.textContent='sin presupuestos del equipo aún'; return; }
+      var n={bor:0,rev:0,apr:0};
+      doc2.pres.forEach(function(p){ if(n[p.est]!==undefined) n[p.est]++; });
+      el.textContent='presupuestos: '+n.bor+' borrador · '+n.rev+' en revisión · '+n.apr+' aprobados';
+    });
+  });
+};
+window.audCargar=function(){
+  var am=document.getElementById('audMsg'), caja=document.getElementById('audCaja');
+  am.textContent='… leyendo auditoría';
+  olaGet('datos/auditoria.json',function(st,doc){
+    if(st===401){ am.textContent='✘ Sin clave en este dispositivo.'; return; }
+    if(st===404){ am.textContent=''; caja.innerHTML='Aún no hay eventos: se escriben solos al borrar fichas, purgar RGPD, sincronizar en masa o publicar desde aquí.'; return; }
+    if(st!==200||!doc||!Array.isArray(doc.a)){ am.textContent='✘ error '+st; return; }
+    var ico={borrar:'🗑',rgpd_purga:'🧼',sync_masiva:'⇄',catalogo_publicar:'📦',acceso_revocar:'🚫',clave_publicar:'🔑'};
+    var ult=doc.a.slice(-30).reverse().map(function(x){
+      return '<tr><td style="white-space:nowrap">'+esc(x.f)+' '+esc(x.h)+'</td><td>'+esc(x.qui)+'</td><td>'+(ico[x.ev]||'•')+' '+esc(x.ev)+'</td><td class="nota">'+esc(x.det||'')+'</td></tr>';
+    }).join('');
+    caja.innerHTML='<table style="margin:0"><thead><tr><th>cuándo</th><th>quién</th><th>qué</th><th>detalle</th></tr></thead><tbody>'+(ult||'<tr><td colspan="4" class="nota">cadena vacía</td></tr>')+'</tbody></table>'
+      +'<div class="nota" style="margin-top:6px">'+doc.a.length+' eventos (tope 500). La rotación borra los más viejos primero.</div>';
+    am.textContent='✔ actualizado '+doc.upd;
+  });
+};
+window.saludCargar=function(){
+  var sm=document.getElementById('saludMsg'), caja=document.getElementById('saludCaja');
+  sm.textContent='… leyendo salud';
+  olaGet('datos/salud.json',function(st,doc){
+    if(st===401){ sm.textContent='✘ Sin clave en este dispositivo.'; return; }
+    if(st===404){ sm.textContent=''; caja.innerHTML='Aún no hay telemetría: llega sola la próxima vez que un móvil sincronice fichas.'; return; }
+    if(st!==200||!doc||!doc.eq){ sm.textContent='✘ error '+st; return; }
+    var filas=[], k;
+    function sema(ms){ return ms<2000?'🟢':(ms<5000?'🟠':'🔴'); }
+    function hum(ts){ if(!ts) return '—'; var d=new Date(ts*1000); return d.toISOString().slice(5,10)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+    for(k in doc.eq){ var m=doc.eq[k]||{}; filas.push({slug:k,m:m}); }
+    filas.sort(function(x,y){ return (y.m.ts||0)-(x.m.ts||0); });
+    var trs=filas.map(function(f){
+      var m=f.m;
+      return '<tr><td><b>'+esc(f.slug)+'</b><div class="nota">v'+esc(m.version||'?')+'</div></td>'
+        +'<td style="text-align:right">'+sema(m.p50||0)+' '+(m.p50||0).toLocaleString('es-ES')+' ms</td>'
+        +'<td style="text-align:right">'+sema(m.p95||0)+' '+(m.p95||0).toLocaleString('es-ES')+' ms</td>'
+        +'<td style="text-align:center">'+(m.n409?('⚠ '+m.n409):'—')+'</td>'
+        +'<td style="text-align:right">'+(m.nPush||0)+'</td>'
+        +'<td style="text-align:right">'+(m.kbMax||0)+' KB</td>'
+        +'<td style="white-space:nowrap" class="nota">'+hum(m.ultima)+'</td></tr>';
+    }).join('');
+    caja.innerHTML='<table style="margin:0"><thead><tr><th>persona (seudónimo) · app</th><th style="text-align:right">mediana sync</th><th style="text-align:right">p95 sync</th><th style="text-align:center">409</th><th style="text-align:right">pushes</th><th style="text-align:right">lote máx</th><th>última señal</th></tr></thead><tbody>'+trs+'</tbody></table>'
+      +'<div class="nota" style="margin-top:6px">Semáforo: 🟢 <2 s · 🟠 <5 s · 🔴 ≥5 s. Si alguien acumula 409: sus móviles se pisan (las reglas anti-409 ya cubren los datos; esto es solo ruido de escalado).</div>';
+    sm.textContent='✔ actualizado '+doc.upd;
+  });
+};
+window.omieAdminCargar=function(){                          /* G10 (ADR-013): lectura pública del pool */
+  var mm=document.getElementById('omieMsg'), caja=document.getElementById('omieCaja');
+  mm.textContent='… leyendo pool';
+  olaGet('datos/omie.json',function(st,doc){
+    if(st===401){ mm.textContent='✘ Sin clave en este dispositivo.'; return; }
+    if(st===404){ mm.textContent=''; caja.innerHTML='Sin datos todavía: la GitHub Action diaria (<code>.github/workflows/omie.yml</code>) escribirá <code>datos/omie.json</code> sola tras la publicación del pool (~14:30).'; return; }
+    if(st!==200||!doc||!doc.dias){ mm.textContent='✘ error '+st; return; }
+    var ks=Object.keys(doc.dias).sort(), n=ks.length;
+    var ult=n?{f:ks[n-1],e:Number(doc.dias[ks[n-1]])}:null;
+    function media(d){ var kk=ks.slice(-d),s=0,c=0; kk.forEach(function(k){ var v=Number(doc.dias[k]); if(isFinite(v)){s+=v;c++;} }); return c?(s/c):null; }
+    var m7=media(7), m30=media(30);
+    caja.innerHTML='<table style="margin:0"><thead><tr><th>último día con dato</th><th style="text-align:right">precio</th><th style="text-align:right">media 7d</th><th style="text-align:right">media 30d</th><th style="text-align:right">días guardados</th></tr></thead><tbody><tr>'
+      +'<td><b>'+esc(ult?ult.f:'—')+'</b></td>'
+      +'<td style="text-align:right"><b>'+(ult?ult.e.toFixed(2):'—')+'</b> €/MWh</td>'
+      +'<td style="text-align:right">'+(m7!=null?m7.toFixed(1):'—')+' €/MWh</td>'
+      +'<td style="text-align:right">'+(m30!=null?m30.toFixed(1):'—')+' €/MWh</td>'
+      +'<td style="text-align:right">'+n+'</td></tr></tbody></table>'
+      +'<div class="nota" style="margin-top:6px">Las apps lo convierten a €/kWh (÷1000) para el aviso de fuga: cliente que paga >2,2× la media 30d del pool 🚩 candidato a que la competencia le llame con indexado.</div>';
+    mm.textContent='✔ '+n+' días';
+  });
 };
 
 /* v3.9.0 «Enlace de acceso» — el comercial solo abre el enlace (1 clic) y pone su ID */
@@ -372,7 +674,181 @@ window.eqEstado=function(){
   },function(){ e.innerHTML='clave publicada: sin red para comprobar'; });
 };
 
-/* ── equipo ── */
+/* ── v3.10.0 «Usuarios y accesos» (F13 · ADR-002/003) — un acceso cifrado por persona ── */
+var ACC_URL='https://andresgaleanowork-tech.github.io/Call-Flow-Business-BMAE/'+EQ_RUTA;
+var accBlob=null, accForm={};                                  /* accForm[slug] = pass propuesta/en edición */
+function accSlug(id){ var s='i'+norm(id).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); return s.length>1?s:''; }
+window.accSlug=accSlug;
+function accTok(){ var t=LSg('cfb_sync_token',''); return (t&&t.length>20)?t:null; }
+function accMsg(t,ok){ var e=document.getElementById('accMsg'); if(!e) return;
+  e.style.color=(ok===true?'#1B5E20':(ok===false?'#C62828':'#666')); e.innerHTML=t; }
+function accPie(t){ var e=document.getElementById('accPie'); if(e) e.innerHTML=t||''; }
+function accPub(cb){
+  if(window._accTest&&window._accTest.blob!==undefined){ cb(window._accTest.blob); return; }
+  fetch(ACC_URL,{cache:'no-store'}).then(function(r){
+    if(r.status!==200){ cb(null); return; }
+    r.json().then(function(j){
+      if(j&&j.alg&&j.v===2&&Array.isArray(j.entradas)){ cb(j); return; }
+      if(j&&j.alg&&j.data){ cb(j); return; }                       /* v1 legado */
+      cb(null);
+    },function(){ cb(null); });
+  },function(){ cb(null); });
+}
+function accPassSugerida(){                                         /* 3 palabras + número: fácil de decir por teléfono */
+  var W=['faro','mantel','luna','puente','roble','brisa','viento','cascada','naranja','trueno','sierra','margen','verde','arena','bosque','estrella'];
+  function p(){ return W[Math.floor(Math.random()*W.length)]; }
+  return p()+'-'+p()+'-'+(Math.floor(Math.random()*90)+10);
+}
+function accDkParaPublicar(cb){                                     /* ADR-003: la dk la fija SU dispositivo admin */
+  try{
+    var d=LSg('cfb_data_key',null);
+    if(d){ cb(d,null); return; }
+    if(accBlob&&accBlob.v===2){ cb(null,'Hay accesos publicados pero este dispositivo aún no conoce la <b>clave de datos</b>: entra primero a la app con TU acceso personal, o publica el tuyo abajo (eso la fija).'); return; }
+    var u=new Uint8Array(32); crypto.getRandomValues(u); var s=''; for(var i=0;i<u.length;i++) s+=String.fromCharCode(u[i]);
+    d=btoa(s); LSs('cfb_data_key',d); cb(d,null);
+  }catch(e){ cb(null,'fallo generando la clave de datos'); }
+}
+function accEntradaDe(slug){
+  if(!accBlob||accBlob.v!==2) return null;
+  for(var i=0;i<accBlob.entradas.length;i++){ if(accBlob.entradas[i].slug===slug) return accBlob.entradas[i]; }
+  return null;
+}
+function accPintar(){
+  var tb=document.getElementById('accTabla'); if(!tb) return;
+  var cuerpo=tb.querySelector('tbody'); if(!cuerpo) return;
+  /* conserva las contraseñas que el admin haya editado a mano en los inputs vivos */
+  try{ tb.querySelectorAll("input[id^='accPass_']").forEach(function(inp){
+    var slug=inp.id.slice('accPass_'.length); if(accForm[slug]!==undefined) accForm[slug]=inp.value;
+  }); }catch(e){}
+  var lista=(EQUIPO&&EQUIPO.autorizados)||[];
+  var h='';
+  lista.forEach(function(m,idx){
+    var slug=accSlug(m.id);
+    var ent=accEntradaDe(slug);
+    var estado=accBlob?(accBlob.v===2?(ent?'✔ tiene acceso':'⚠ sin acceso'):'🕰 publicación antigua (contraseña única)'):'🕳 web sin clave publicada';
+    var acciones='';
+    if(accBlob&&accBlob.v===2&&ent){
+      acciones+='<button class="btn" style="font-size:.8rem;padding:5px 10px" title="Nueva contraseña y publicar" onclick="accCrear('+idx+')">🔁 reset contraseña</button> ';
+      acciones+='<button class="btn" style="font-size:.8rem;padding:5px 10px;color:#C62828" onclick="accRevocar('+idx+')">🗑 revocar acceso</button>';
+    } else {
+      acciones+='<button class="btn" style="font-size:.8rem;padding:5px 10px" onclick="accCrear('+idx+')">＋ crear su acceso</button>';
+    }
+    h+='<tr><td><b>'+esc(m.nombre||'')+'</b></td><td><code>'+esc(m.id)+'</code><br><small style="color:#888">'+esc(slug)+'</small></td><td>'+estado+'</td><td style="white-space:nowrap">'+acciones+'</td></tr>';
+    if(accForm[slug]!==undefined){
+      h+='<tr><td colspan="4" style="background:#F8F7F5;padding:10px 12px">';
+      h+='<div style="font-size:.85rem;margin-bottom:6px">🔑 Contraseña para <b>'+esc(m.nombre||m.id)+'</b> — <b>comunísela por el canal interno</b>; aquí SOLO queda cifrada, no se guarda:</div>';
+      h+='<div class="fila"><input id="accPass_'+slug+'" type="text" value="'+esc(accForm[slug])+'" style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font:500 13px ui-monospace,monospace">'
+        +'<button class="btn btnMain" style="font-size:.8rem" onclick="accPublicar('+idx+')">🛡 Publicar su acceso</button>'
+        +'<button class="btn" style="font-size:.8rem" onclick="accEnlace('+idx+')">📋 enlace personal</button>'
+        +'<button class="btn" style="font-size:.8rem" onclick="accCancelar('+idx+')">✖</button></div>';
+      h+='<div class="nota">El enlace personal funciona tras publicar (1-2 min): <b>1 clic</b> y entra sin teclear la contraseña.</div></td></tr>';
+    }
+  });
+  if(!lista.length) h='<tr><td colspan="4" class="sub">(todavía no hay personas autorizadas en «Equipo autorizado» de abajo o la lista aún carga)</td></tr>';
+  cuerpo.innerHTML=h;
+  var be=document.getElementById('accBlobEstado');
+  if(be){ be.textContent=accBlob?(accBlob.v===2?(accBlob.entradas.length+' accesos · multi-entrada ✔'):'publicación antigua (contraseña única)'):'sin clave publicada';
+    be.className='badge-admin '+(accBlob&&accBlob.v===2?'badge-ok':''); }
+  accPie(accBlob?(accBlob.v===2?'bloque multi-entrada vigente desde <b>'+esc((accBlob.ts||'?').slice(0,16).replace('T',' '))+' UTC</b>':'publicación antigua: al crear el primer acceso personal pasa a multi-entrada.')+' Revocar una entrada corta su próxima renovación; si esa persona ya tenía la app abierta, cierra su sesión con «🛡 Publicar/rotar» arriba (rotación completa de la clave real). Ver docs/ROTACION-CLAVE.md.' : 'Descargue la clave/entradas de arriba («🛡 Publicar») o cree el primer acceso personal de abajo.');
+}
+window.accCrear=function(i){
+  var _AU=(EQUIPO&&EQUIPO.autorizados)||[]; var m=_AU[i]; if(!m){ accMsg('La lista del equipo aún carga — espera un segundo.',false); return; }
+  var slug=accSlug(m.id);
+  accForm[slug]=accPassSugerida(); accPintar();
+  var inp=document.getElementById('accPass_'+slug); if(inp) inp.focus();
+};
+window.accCancelar=function(i){
+  var _AU=(EQUIPO&&EQUIPO.autorizados)||[]; var m=_AU[i]; if(!m){ accMsg('La lista del equipo aún carga — espera un segundo.',false); return; }
+  delete accForm[accSlug(m.id)]; accPintar();
+};
+window.accEnlace=function(i){
+  var _AU=(EQUIPO&&EQUIPO.autorizados)||[]; var m=_AU[i]; if(!m){ accMsg('La lista del equipo aún carga — espera un segundo.',false); return; }
+  var slug=accSlug(m.id);
+  var inp=document.getElementById('accPass_'+slug);
+  var pass=(inp?inp.value:accForm[slug])||'';
+  if(pass.length<12){ accMsg('La contraseña debe tener 12+ caracteres.',false); return; }
+  var url=EQ_BASE+'#ap='+encodeURIComponent(slug+':'+pass);
+  function okk(){ accMsg('📋 Enlace personal de <b>'+esc(m.nombre||m.id)+'</b> copiado — pégalo en su WhatsApp. Funciona tras publicar (1-2 min).',true); }
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(okk,function(){ accMsg('Cópialo a mano: <code style="word-break:break-all">'+esc(url)+'</code>'); }); }
+    else { accMsg('Cópialo a mano: <code style="word-break:break-all">'+esc(url)+'</code>'); }
+  }catch(e){ accMsg('Cópialo a mano: <code style="word-break:break-all">'+esc(url)+'</code>'); }
+};
+function accPut(cb,tok,blob,commitMsg){
+  reqTok('GET',WEB_REPO,'/contents/'+EQ_RUTA+'?ref=main',undefined,function(st,j){
+    var sha=(st===200&&j&&j.sha)?j.sha:undefined;
+    var cuerpo={message:commitMsg+' · '+new Date().toISOString().slice(0,16),
+      content:btoa(unescape(encodeURIComponent(JSON.stringify(blob,null,2)))),branch:'main'};
+    if(sha) cuerpo.sha=sha;
+    reqTok('PUT',WEB_REPO,'/contents/'+EQ_RUTA,cuerpo,function(st2){ cb(st2); },tok);
+  },tok);
+}
+window.accPublicar=function(i){
+  var _AU=(EQUIPO&&EQUIPO.autorizados)||[]; var m=_AU[i]; if(!m){ accMsg('La lista del equipo aún carga — espera un segundo.',false); return; }
+  var slug=accSlug(m.id);
+  var inp=document.getElementById('accPass_'+slug);
+  var pass=(inp?inp.value:accForm[slug])||'';
+  if(pass.length<12){ accMsg('La contraseña debe tener 12+ caracteres.',false); return; }
+  var tok=accTok();
+  if(!tok){ accMsg('Este dispositivo NO tiene sesión con la clave real: entra primero a la app normal con tu acceso, o publica la clave arriba («🛡 Publicar / rotar»).',false); return; }
+  accMsg('Comprobando la clave contra el repo de datos…');
+  reqTok('GET',REPO,'',undefined,function(st0){
+    if(st0!==200){ accMsg('La clave local no abre el repo de datos ('+st0+') — ve a «✏️ Cambiar la clave de este dispositivo» o república arriba.',false); return; }
+    accDkParaPublicar(function(dk,errDk){
+      if(!dk){ accMsg(errDk,false); return; }
+      accMsg('Cifrando el acceso de <b>'+esc(m.nombre||m.id)+'</b>…');
+      var payload=JSON.stringify({k:tok,dk:dk});
+      eqCifra(payload,pass,function(ent,err){
+        /* eqCifra (v3.8) da una entrada standalone; aquí la adaptamos a entrada multi */
+        if(!ent){ accMsg('✘ '+(err||'fallo al cifrar'),false); return; }
+        accBlob=accBlob&&accBlob.v===2?accBlob:null;
+        var blob=accBlob||null;
+        /* re-lee el blob REAL de la web no sea que otro lo tocara: merge sobre lo más fresco */
+        accPub(function(fresco){
+          var base=(fresco&&fresco.v===2)?fresco:{v:2,alg:'AES-GCM-256',kdf:{name:'PBKDF2',hash:'SHA-256',iter:250000},entradas:[],by:'admin',ts:new Date().toISOString()};
+          var nueva={slug:slug,salt:ent.kdf.salt,iv:ent.iv,data:ent.data,ts:new Date().toISOString()};
+          var idx2=-1; for(var q=0;q<base.entradas.length;q++){ if(base.entradas[q].slug===slug){ idx2=q; break; } }
+          if(idx2>=0) base.entradas[idx2]=nueva; else base.entradas.push(nueva);
+          base.v=2; base.by=(perfil().slug||'admin'); base.ts=new Date().toISOString();
+          accMsg('Publicando en la web del equipo…');
+          accPut(function(st2){
+            if(st2===200||st2===201){
+              accBlob=base;
+              accMsg('✔ Acceso de <b>'+esc(m.nombre||m.id)+'</b> publicado — en 1-2 min funciona su contraseña y su <b>enlace personal</b> (botón 📋).',true);
+              accPintar();
+            } else if(st2===403){ accMsg('La clave abre el repo de la web pero NO puede escribir (403) — la PAT necesita contents:write también ahí.',false); }
+            else { accMsg('✘ Fallo publicando ('+st2+'). Reintenta con red.',false); }
+          },tok,base,'acceso personal · '+slug);
+        });
+      });
+    });
+  },tok);
+};
+window.accRevocar=function(i){
+  var _AU=(EQUIPO&&EQUIPO.autorizados)||[]; var m=_AU[i]; if(!m){ accMsg('La lista del equipo aún carga — espera un segundo.',false); return; }
+  var slug=accSlug(m.id);
+  if(!confirm('¿REVOCAR el acceso de '+(m.nombre||m.id)+' ('+slug+')? Podrás darle uno nuevo después. Recuerda además quitarlo de «Equipo autorizado» si se va del equipo.')) return;
+  var tok=accTok();
+  if(!tok){ accMsg('Sin sesión con la clave real — no puedo revocar.',false); return; }
+  accMsg('Leyendo el bloque vigente…');
+  accPub(function(fresco){
+    if(!fresco||fresco.v!==2){ accMsg('No hay bloque multi-entrada que tocar.',false); return; }
+    var antes=fresco.entradas.length;
+    fresco.entradas=fresco.entradas.filter(function(e){ return e.slug!==slug; });
+    if(fresco.entradas.length===antes){ accMsg('Esa persona no tenía acceso publicado.'); accBlob=fresco; accPintar(); return; }
+    fresco.by=(perfil().slug||'admin'); fresco.ts=new Date().toISOString();
+    accMsg('Publicando la revocación…');
+    accPut(function(st2){
+      if(st2===200||st2===201){ try{ audAdmin('acceso_revocar', slug, function(){}); }catch(eA){} accBlob=fresco; delete accForm[slug]; accMsg('✔ Acceso de <b>'+esc(m.nombre||m.id)+'</b> revocado. Si sigue con la app abierta arrastra la clave actual hasta la próxima rotación («🛡 Publicar/rotar» arriba la corta del todo).',true); accPintar(); }
+      else { accMsg('✘ Fallo revocando ('+st2+').',false); }
+    },tok,fresco,'revocación acceso · '+slug);
+  });
+};
+window.accRefrescar=function(){
+  accPub(function(j){ accBlob=j; accPintar(); });
+};
+window.accEquipo=function(eq){ if(eq&&(eq.autorizados!==undefined)){ EQUIPO=eq; } try{ accRefrescar(); }catch(e){} };
+
 function msg(t){ var e=document.getElementById('equiMsg'); e.textContent=t; e.style.display=t?'block':'none';
   var o=document.getElementById('equiOk'); o.style.display='none'; return e; }
 function okm(t){ var o=document.getElementById('equiOk'); o.textContent=t; o.style.display=t?'block':'none';
@@ -558,6 +1034,7 @@ function refrescar(){
     var mi=document.getElementById('metaRol'); if(mi) mi.value=EQUIPO.metaRoleplay||3;
     var ma=document.getElementById('metaAct'); if(ma) ma.value=EQUIPO.metaActividad||80;
     pintar();
+    try{ window.accRefrescar(); }catch(e){}
   });
 }
 /* ── actividad ── */

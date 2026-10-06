@@ -1,0 +1,10 @@
+{"v":1,"upd":"2026-10-05","items":[
+{"id":"tarifa20","nombre":"Optimización tarifa luz 2.0TD","area":"energia","tag":"⚡","activo":true},
+{"id":"tarifa30","nombre":"Optimización tarifa luz 3.0TD","area":"energia","tag":"⚡","activo":true},
+{"id":"gas","nombre":"Gas 3.x / punto de gas","area":"energia","tag":"🔥","activo":true},
+{"id":"solar","nombre":"Solar autoconsumo RC","area":"ingenieria","tag":"☀","activo":true},
+{"id":"bateria","nombre":"Batería / almacenamiento","area":"ingenieria","tag":"🔋","activo":true},
+{"id":"manto","nombre":"Mantenimiento integral","area":"mantenimiento","tag":"🔧","activo":true},
+{"id":"ingenieria","nombre":"Ingeniería / proyecto técnico","area":"ingenieria","tag":"📐","activo":true},
+{"id":"comer","nombre":"Comisionamiento / outsourcing comercial","area":"comercial","tag":"🤝","activo":true}
+]}

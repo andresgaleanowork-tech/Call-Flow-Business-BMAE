@@ -1,4 +1,162 @@
-## v3.9.0 «Enlace de acceso» — 2026-10-02 · el comercial SOLO abre un enlace y pone su ID
+## v4.2.0 «Tarifas vivas y riesgo» — 🏁 sello de la Ola 3 · Ola 3(d): G10 OMIE + F22 churn (ADR-013)
+
+> 📞 **Qué verás**: en ☀ Hoy, el botón **⚡** abre el precio del pool OMIE — último día con dato, medias a 7/30 días, tendencia semanal y su equivalente €/kWh — traído cada día por una GitHub Action del repo (la app **jamás** habla con omie.es; lo puedes pegar a mano y entonces solo vive en tu dispositivo). Y una sección nueva **🧯 Riesgo de fuga**: clientes con el contrato a punto de acabar, demasiados días sin tocarlos o pagando muy por encima del pool — cada aviso dice el motivo en lenguaje claro y te lleva a la ficha en un toque. En la ficha: dos campos nuevos (📑 **fin de contrato** · ⚡ **€/kWh que paga hoy**), badge 🧯 en la lista y banner con los motivos al abrirla. El informe semanal suma una línea agregada «en riesgo» (sin nombres) y el CSV exporta las 2 columnas nuevas al final.
+> 👔 Si eres del despacho: tarjeta **⚡ Pool OMIE** en admin.html — último precio, medias 7/30 días y días guardados (dato de mercado público, cero PII). Si pone «sin datos», la Action aún no corre en el repo.
+
+| pieza | qué es |
+|---|---|
+| **G10 · pool OMIE local-first** | `datos/omie.json` escrito por GitHub Action diaria (cron 12:35 UTC, parseo tolerante de marginalpdbc, poda 400 días) · `omieGet/omieMedia/omieUlt` con el patrón catálogo (caché LS 8 h · fetch relativo tolerante a 404) · modal ⚡ desde el Hoy + entrada manual 100 % local (`omieManual`) |
+| **F22 · churn (riesgo de fuga)** | `crmRiesgo` 0–100 determinista: contrato ≤30 d → 50 · ≤60 d → 40 · ≤120 d → 25 · sin tocar ≥45/21/10 d → 25/18/8 · €/kWh >2,2× pool30 → 25 (>1,8× → 8) — fichas ✔ganadas también suenan, ✘perdidas no · `crmRiesgoList` (umbral 25) alimenta KPI+sección 🧯 del Hoy · ficha: badge ≥40, banner ≥25, inputs 📑⚡ + `crmGuardar` · CSV `+fin_contrato,+precio_kwh` · informe F6 con agregado anónimo |
+| **RGPD / privacidad** | la app solo fetcha GitHub (omie.es vive en CI) · el riesgo ve nombres SOLO en el dispositivo · al admin no llega nada nuevo · anexión de campos sin bump de ficha (v6 sigue: la v solo sube con migración activa — W21/W23 intactos) |
+| **certificación** | ADR-013 · batería 803 ✔ (W28 16 + V4c 4) · suite 9 ficheros ✔ · golden D2 ✔ · EXE · 🏁 **OLA 3 TERMINADA** |
+
+## v4.1.4 «Informe y salud» — Ola 3(c) · F6 + Q7 (ADR-012)
+
+> 📞 **Qué verás**: en ☀ Hoy, un botón **📄 Informe** abre tu semana en limpio — gestiones por día (con barritas), pipeline €/mes, túnel, movimientos del embudo y presupuestos del equipo — con **🖨 imprimir/guardar PDF** y **📋 copiar texto** listo para pegar en WhatsApp o correo. Todo **generado en tu móvil, con datos agregados**: no sale del dispositivo y no lleva nombres de clientes.
+> 👔 Si eres del despacho: nueva tarjeta **🩺 Salud del equipo** en admin.html — velocidad de sincronización por persona (mediana y p95 con semáforo 🟢🟠🔴), choques 409, tamaño del lote y versión de app detectada.
+
+| pieza | qué es |
+|---|---|
+| **F6 · informe semanal** | `infSemana()` reusa piezas certificadas (metMia, actividad 7 días, presupuestos); modal + whitelist de impresión (mismo patrón que la propuesta F18+) |
+| **Q7 · telemetría técnica** | latencia `sync_total` + KB se anotan en cada sincronización; todo **409 se contabiliza antes del reintento**; agregado anónimo por seudónimo a `datos/salud.json` (privado): p50/p95, n409, KB máx, versión |
+| **RGPD** | informe: 100 % local y agregado, sin fetch/put entre abrir e imprimir · salud: solo tiempos/contadores/tamaños |
+
+Tests: batería +W27 (12 estáticas + 4 funcionales: mates p50/p95 exactos, ring 120 girando, publicación bajo seudónimo sin PII, agregación real del informe) · suite E2E ✔ · D2 ✔.
+
+## v4.1.3 «Piel premium» — Ola estilo (decisión del usuario: trabajar el diseño antes de Ola 3(c))
+
+> 🎨 **Qué verás**: la app se SIENTE de producto caro sin cambiar ni un menú ni la marca (verde Iberdrola + B&M intactos): tarjetas con aire y sombras en capas, chips en píldora con el segmento activo como una gota de verde degradado, botones que se elevan un pelo al tocarlos, campos con foco anillado de marca, modales que entran suaves con velo cinematográfico y la barra de progreso en degradado.
+> En **las cuatro superficies**: pymes, residencial, la puerta (index) y el panel de despacho (admin) — una sola familia visual (capa `skinPremium`, última de cascada: solo añade, jamás quita).
+
+| toque | detalle |
+|---|---|
+| sombras en capas | `--sh-1/2/3` (mecha fina + halo) en tarjetas, filas y modales |
+| botones con física | degradado de marca, hover +1 px + sombra verde, `:active` que respira |
+| chips píldora | `999 px`, activo = gota degradada `--grad-marca` con brillo verde |
+| foco de marca | anillo `0 0 0 3 px` verde al 16 % en inputs del CRM/despacho |
+| accesibilidad | `prefers-reduced-motion` mata las micro-transiciones (ya heredado): diseño premium sin mareos |
+
+Tests: batería +W26 (estáticas de tokens/paridad/marka intacta) · batería VISUAL 13 ✔ tras la capa · suite E2E ✔ · D2 ✔.
+
+## v4.1.2 «Automatismos» — Ola 3(b) · F4 bus de eventos + reglas en datos (ADR-011)
+
+> 📞 **Qué verás**: en la vista **☀ Hoy** aparece una tarjeta **🔔 Automatismos** cuando la app actúa por ti: al mover un producto a Ofertado te recuerda preparar la comparativa, al ganarlo programa SOLO el post-venta a 15 días (nunca pisa tu agenda), al pedir factura te señala el simulador 📄 y al aprobarse un presupuesto 💶 del equipo te avisa de ir a por la firma. Con botón 🧹 limpiar.
+> ⚙ Las reglas son **datos, no código**: viven sustituibles en `datos/reglas.json` del equipo (semilla embebida si falta; lectura pública sin clave, caché 8 h) — crecer = editar un JSON, no desplegar.
+
+| pieza | qué es |
+|---|---|
+| **M4 · bus interno** | `busOn`/`busEmite` síncrono con oyentes aislados (uno roto no rompe nada) — eventos v1: `ficha.movio` · `pi.movio` · `pre.movio` · `nota.nueva` · `sync.ok` · `sim.hecha` |
+| **M3 · motor de reglas** | `{cuando, todo, haz}` con plantilla `${campo}` saneada; efectos `aviso` (tarjeta 🔔 + toast) / `prox` (solo si la ficha no tiene agenda viva) / `nota`; anti-bucle ≤1/24 h por regla+evento+nombre |
+| **semilla (4)** | oferta→comparativa · ganado→post-venta +15 d · pide factura→📄 simulación · presupuesto aprobado→firma |
+
+Tests: batería +W25 (12 estáticas + 5 funcionales: aislamiento de oyentes, huella 24 h, prox exacto sin pisar, tarjeta, sustitución por JSON) · paridad literal pymes≡residencial · suite E2E ✔ · D2 ✔.
+
+## v4.1.1 «Mando y reglas» — Ola 3(a) · G2+G3+G6+S2 (ADR-010)
+
+> 📞 **Qué verás**: una pestaña nueva **💶 Ofertas** en Clientes (tablón del equipo: borrador → revisión → aprobada, con botón «desde la última simulación»); y si eres del despacho, dos tarjetas nuevas en admin.html: **🧭 Cuadro de mando** (ranking de actividad de 7 días, pipeline €/mes y túnel del equipo) y **🛡 Auditoría** (quién hizo qué y cuándo).
+> 🔒 Nada de esto sale del repo privado y las métricas son **anónimas por persona (seudónimos)**: jamás viajan nombres, teléfonos ni notas de clientes.
+
+| pieza | qué es |
+|---|---|
+| **G2 · métricas al mando** | cada sincronización de fichas sube una ficha agregada por persona (`datos/metricas-equipo.json`): nº de fichas, gestiones de 7 días, pipeline estimado y túnel — cero PII |
+| **G3 · cuadro de mando (admin)** | tarjeta 🧭 en `admin.html`: ranking 7 días con 🥇, pipeline €/mes del equipo y túnel agregado |
+| **G6 · presupuesto colaborativo** | `datos/presupuestos.json` compartido + vista 💶 en la app: alta manual o un clic desde el simulador; merge por id gana la fase más avanzada (nunca baja), tope 100 |
+| **S2 · auditoría** | `datos/auditoria.json` FIFO-500 firmada con seudónimo: borrados, purgas RGPD y sync masivas (flota) + publicar catálogo, revocar acceso y rotar clave (despacho) — tarjeta 🛡 en admin |
+
+Tests: batería **741 ✔** (W24 13 estáticas + 8 funcionales) · suite E2E 9 ficheros ✔ · D2 regen byte a byte ✔ · paridad literal pymes≡residencial del bloque completo.
+
+## v4.1.0 «Pipeline y arma de venta» — 2026-10-06 · 🏁 sello de la Ola 2 (ventana E4 dura)
+- **Qué es 4.1.0**: **ninguna función nueva** — es el sello de que la Ola 2 está terminada y estabilizada: base de venta (v4.0.1), embudo por producto (v4.0.2), simulador de potencia con propuesta imprimible (v4.0.3) y equipo+derechos (v4.0.4), todo endurecido en la ventana E4 dura (suite entera en verde, golden D2 byte a byte, EXE regenerado, documentación al día).
+- **Ola 2 — lo que tenéis ya funcionando**:
+  1. 🧰 **Fontanería del pipeline**: sync de fichas cifrado por equipo, catálogo compartido con editor admin y puente IBERCRM con ibe_id hasta la ficha.
+  2. 🧩 **Embudo multi-producto**: cada empresa en varios negocios a la vez (🧰 Preparando → 📤 Ofertado → 🤝 Negociando → ✔ Ganado · ✘ Perdido), con resumen anónimo por producto×fase para el jefe.
+  3. 📄 **Arma de venta**: simulador de potencia 2.0TD/3.0TD — pegas la factura, sale la propuesta con números e imprimible (sello RGPD), y con 💾 se anota sola en ficha y pasa el producto a Ofertado.
+  4. ⇄🛡 **Equipo sin brújula suelta**: sync automática con la clave, borrados con lápida, ficha privada 🔒, RGPD operativo (borrar persona 1-clic, exportar ficha, retención 12 meses en «Hoy»).
+- **Compatibilidad garantizada**: fichas viejas migran solas (vacuna v6), CSV viejo sigue leyéndose, resumen al admin sigue 100 % anónimo (RGPD por diseño, medido en tests).
+- 🧪 certificado: batería **716** ✔ (+4 V4b del sello: versión/sw/changelog/plan) · suite completa (9 ficheros) ✔ · golden D2 ✔.
+- 🔃 sw `cfb-v373`.
+
+## v4.0.4 «Equipo y derechos» — 2026-10-06 · Ola 2(d): F5 privado⇄equipo + F7 RGPD (ADR-009, decisiones confirmadas por el usuario)
+- **⇄ Sync automática**: si tienes la clave de datos del equipo instalada, tus fichas sincronizan; si no, todo queda en este móvil. **Cero opciones ni flags** — la pertenencia al equipo ES el interruptor (chip «⇄ Equipo: ON/OFF» en la barra de Clientes; clic = sincronizar ahora).
+- **Borrados que dejan LÁPIDA** (`datos/crm-lapidas.json`, repo privado): borras una ficha y se borra en todo el equipo al sincronizar (poda >180 días, cap 300). Una privada jamás la borra la lápida de otro.
+- **🔒 Ficha privada** (vacuna CRM v6, idempotente — migra desde v5 conservándolo todo): botón 🔒/⇄ en la ficha — así no sale de este dispositivo aunque la sync esté ON; el merge la respeta y nunca una remota la pisa. Icono 🔒 en la lista de Clientes.
+- **ℹ RGPD in-app** (chip en la barra): qué datos hay, dónde viven (dispositivo; cifrados en GitHub si hay clave), qué sale (al admin solo números anónimos), derechos y retención.
+- **🧹 Borrado de persona 1-clic** (derecho de supresión): busca por nombre o teléfono en fichas (incl. contactos) y potenciales, muestra el rastro y lo borra TODO de una vez — con su lápida para el equipo si hay clave.
+- **📤 Exportar ficha JSON** (derecho de acceso/portabilidad): botón «📤 JSON» en cada ficha con marca de base jurídica.
+- **🧹 Retención sugerida en «Hoy»**: lo que lleva >12 meses sin actividad (fichas y potenciales) aparece propuesto con su 🧹 — purgar deja de ser oscuridad y se vuelve un gesto diario.
+- 🧪 **716** ✔ batería (+22 W23: lápidas offline con hook, privada vs remota, push filtrado, buscar/borrar persona, retención, export JSON) · suite completa (9 ficheros) ✔.
+- 🔃 sw `cfb-v372`.
+
+## v4.0.3 «Oferta de potencia» — 2026-10-06 · Ola 2(c): F18+ simulador de potencia + propuesta imprimible (ADR-008)
+- **📄 Simulador de potencia (2.0TD / 3.0TD)**: pega el texto de una factura («Potencia contratada P1: 65,2 kW…») o introduce los datos a mano — parser 100 % local, tolerante, que **nunca manda nada fuera del dispositivo** (verificado en tests: 0 fetch).
+- **Regla F18-1 trazable**: potencia óptima = `ceil(demanda máx. × (1+margen) × 100)/100` — margen (10 % por defecto) y precios €/kW·año por periodo **editables y visibles** en la propia vista (valores orientativos de inicio). 📈 SUBIR si la demanda supera lo contratado (evitas excesos), 📉 BAJAR si sobra, «sin cambio (aportar maximétero)» si falta el dato — nunca aconseja bajar sin demanda registrada.
+- **Ahorro en euros, al momento**: Σ(contratada−óptima)×precio por periodo → €/año estimado, listo para decirlo en la llamada.
+- **🖨 Propuesta imprimible (guardar como PDF)**: un clic genera el documento con los números, el desglose por periodo y el sello «esta factura no salió de este móvil en ningún momento» — offline-first (patrón de impresión ya usado por el certificado, sin librerías externas).
+- **💾 Puente al embudo**: «Anotar en ficha» deja la nota con el resultado **y mueve el producto tarifa20/tarifa30 a 📤 Ofertado** (lo añade si no estaba; nunca baja una fase más avanzada) + actividad numérica anónima. La pistola carga sola.
+- 🧪 **694** ✔ batería (+21 W22: parseo 2.0/3.0TD, regla exacta con epsilon de coma flotante, propuesta con sello RGPD, puente sin regresión de fase, defensive sin empresa) · suite completa (9 ficheros) ✔.
+- 🔃 sw `cfb-v371`.
+
+## v4.0.2 «Embudo por producto» — 2026-10-05 · Ola 2(b): F2 multi-producto (ADR-007)
+- **F2 · vacuna v5**: cada empresa del CRM puede estar ahora en **varios negocios a la vez** — su ficha gana el embudo 🧩 por producto del catálogo: hasta 8 piezas `{producto, fase, nota}` con 5 fases cortas (🧰 Preparando → 📤 Ofertado → 🤝 Negociando → ✔ Ganado · ✘ Perdido). «Gané la tarifa pero el solar sigue en negociación» ya se representa sin perder contexto.
+- **Editor 360º**: bloque «🧩 Productos» tras tags/contactos — añadir del catálogo activo (caché 8 h o semilla), cambiar fase en el propio chip, nota corta del negocio, ✕ para quitar. Todo estilo 1-clic como tags/contactos.
+- **Embudo para el mando**: el resumen anónimo al admin agrega ahora **recuentos por producto×fase** (`pc`) — el jefe ve el pipeline por línea ⚡☀🔧 SIN que salga un solo nombre del dispositivo.
+- **Filtro 🧩 por producto** en Clientes (solo negocios vivos), el **buscador global** encaja por producto/fase, y el **CSV** añade última columna `productos` (id:fase;id:fase) — formato viejo leíble igual.
+- **Coherente con la caja fuerte**: `pis` viaja cifrado en el sync G4 (S1 cubierto por round-trip con producto), el resumen sigue 100 % anónimo por diseño.
+- 🧪 **673** ✔ batería (+22 W21: vacuna v4→v5, saneado, CRUD, resumen anónimo, S1 con pis, filtro, opciones del embudo) · suite completa (9 ficheros) ✔.
+- 🔃 sw `cfb-v370`.
+
+## v4.0.1 «Base de venta» — 2026-10-05 · Ola 2(a): G4 + G5 + G7, la fontanería del pipeline (ADR-006)
+- **G4 · sync v2 de fichas por GitHub (instalado, apagado por diseño)**: las fichas del CRM ya saben viajar por `datos/crm-fichas.json` (repo privado) con **pull→merge→push** y reintento de conflictos — cada ficha viaja con **tel/notas/valor/datos seguros cifrados** por equipo (S1 se enciende: AES-GCM-256 con la clave de datos; en claro solo lo de listar/cruzar). **Hoy está apagado** (`cfb_flag_cli_sync`): F5 (Ola 2d) decide la experiencia privado⇄equipo — la infraestructura está probada con 6 tests funcionales offline deterministas.
+- **G5 · catálogo compartido del nicho**: nuevos productos/servicios del equipo viven en `datos/catalogo.json` (web pública, sin datos personales). La app lo lee sola (caché 8 h, **semilla embebida** si falta), y el **admin lo edita desde su panel** (tarjeta «📦 Catálogo»): añadir por id, editar nombre/área/tag, activar/desactivar y 💾 Publicar con la misma clave de ambos repos. 8 productos de inicio (2.0TD·3.0TD·gas·solar·batería·manto·ingeniería·comer).
+- **G7 · extractos IBERCRM → banco**: botón «🟥 IBERCRM» en Potenciales — pega el extracto tal cual (separador automático tab/;/,; cabeceras españolas tolerantes: nombre · teléfono · ciudad · sector · **ibe_id** · factura), dedupe por teléfono, altas con marca de origen `IBERCRM(patrimonio)`. El `ibe_id` viaja también al **convertir en ficha** — el patrimonio queda cruzable desde el minuto uno, listo para el simulador F18+ (Ola 2c).
+- **Correcciones duraderas**: la clave de datos se lee igual que la guarda el admin (LSg ya parsea — bug real cazado por W20); jsdom se reinstala con un script idempotente `tools/setup-jsdom.sh` (el entorno le mordía paquetes entre sesiones); quedan eliminadas las frases «modo local» del código (política de conexión obligatoria coherente).
+- 🧪 **651** ✔ batería (+26 W20: merge/cripta round-trip/push-pull offline con hook/parser ES/cadena IBERCRM→ficha/catálogo fallback) · suite completa (9 ficheros) ✔.
+- 🔃 sw `cfb-v369`.
+
+## v4.0.0 «CRM base y plataforma» — 2026-10-05 · 🏁 sello de la Ola 1 (ventana E4 dura)
+- **Qué es 4.0.0**: **ninguna función nueva** — es el sello de que la Ola 1 está terminada y estabilizada: usuarios con accesos personales (v3.10), ficha empresarial (v3.11) y la vista «Hoy» (v3.12), todo endurecido en la ventana E4 dura (suite entera en verde, golden D2 byte a byte, EXE regenerado, documentación al día).
+- **Ola 1 — lo que tenéis ya funcionando**:
+  1. 🔑 **Cada persona su contraseña personal** (multi-entrada cifrada, enlace 1-clic `#ap=`, revocar/reset por persona, auto-cambio desde la app) — la clave real nunca la ve nadie.
+  2. 🏢 **Ficha de empresa 360º** (contactos, tags, datos fiscales, valor €, origen, ibe_id) con buscador global y vacuna migratoria v→v4 — todo opcional, nada se te escapa.
+  3. ☀ **Vista «Hoy»**: agenda del día (vencidas · toca hoy · potenciales) con acción directa — abriendo la app se ve qué toca.
+- **Compatibilidad garantizada**: fichas viejas migran solas, CSV viejo sigue leyéndose, resumen al admin sigue 100 % anónimo (RGPD por diseño, medido en tests).
+- 🧪 certificado: batería 625 ✔ (+4 V4: versión/sw/changelog/plan del sello) · suite completa (9 ficheros) ✔ · golden D2 ✔.
+- 🔃 sw `cfb-v368` · EXE regenerado.
+- 🚀 **Ola 2 «Pipeline y arma de venta» (v4.1)** arranca con G4/G5/G7 → F2 multi-producto → F18+ simulador de factura.
+
+## v3.12.0 «Hoy» — 2026-10-05 · la agenda del día a un chip (F3)
+- **F3 · ☀ Hoy (ADR-005)**: nueva vista «Hoy» en la pestaña 👥 Clientes con la jornada entera de un vistazo — **⚠ Vencidas** (próx. acciones de fichas abiertas con fecha pasada, marcadas en rojo), **🕐 Toca hoy** (ordenadas por hora) y **🔥 Potenciales a reintentar** (reintento del banco compartido) — más el marcador del día: 📞 llamadas hoy · ⚠ vencidas · 🕐 toca hoy · 🔥 potenciales.
+- Cada fila abre la ficha en Clientes **limpiando filtros** (`crmIrFicha`) y lleva su botón «📞 preparar llamada» (precarga guion en el punto justo). «Día limpio 🌞» con consejo natural si no hay nada.
+- **Hueco de UX cerrado**: se descubrió en E0 que **no había forma de navegar de Clientes → Potenciales** — ahora una **barra de segmentos unificada** («☀ Hoy / 👥 Clientes / 📋 Potenciales») corona las tres vistas y funciona en ambos sentidos. El segmento por defecto sigue siendo Clientes (no rompemos hábitos).
+- Sin esquema ni sync nuevos: vista pura sobre fichas v4 y banco (`proTocaHoy()`); el resumen al admin sigue 100 % anónimo.
+- **Bug cazado por test-first (W19-9)**: las próximas acciones con fecha futura colaban en «toca hoy» por un ternario tibio — corregido a ramales explícitos y cubierto.
+- 🧪 **621** ✔ batería (+14 W19: grupos/recuentos, orden por hora, día limpio, navegación, paridad pymes≡residencial) · suite completa (9 ficheros) ✔ · sintaxis CFB verificada tras escapes.
+- 🔃 sw `cfb-v367`.
+
+## v3.11.0 «Base empresarial» — 2026-10-05 · la ficha cliente pasa a ficha de empresa (F1)
+- **F1 · ficha empresarial v4 (ADR-004)**: el CRM deja de ser «nombre + teléfono + 4 asuntos» — cada ficha ahora puede llevar **datos postales y fiscales** (dirección, CP, email, web), **valor estimado del negocio (€)**, **origen** (⚡ Iberdrola · IBERCRM · IBERU · maestro · manual · referido), **ibe_id** (la llave para cruzar con los extractos IBERCRM de Ola 2) y hasta **8 contactos** (nombre/cargo/teléfono) + **12 tags** por empresa. TODO opcional: la práctica diaria sigue igual de rápida y quien no rellene nada no nota cambios.
+- **Editor 360º** en la propia ficha desplegable: grid de empresa, chips de tags con ＋/✕, listado de contactos con alta/baja en clics, y el bloque Estado/Próx. acción intacto donde estaba.
+- **Buscador global**: antes solo encontraba por nombre/teléfono/sector/ciudad — ahora encuentra también por dirección, CP, email, web, origen, **ibe_id**, tags y contactos (ej.: buscas «ES0021XX000777AAA» o «reforma» y salta la empresa).
+- **Vacuna v4 (ADR-004)**: `crmNorm` migra cualquier ficha vieja v1/v3 → v4 **conservando notas y estado**, determinista e idempotente (round-trip JSON idéntico) — probado funcionalmente.
+- **Importador/CSV**: el lead que llega desde Prospección trae su `origen` a la ficha; la exportación CSV añade 9 columnas F1 **al final** (el formato viejo se sigue leyendo igual).
+- **Resumen al admin sigue 100 % anónimo** (estados + pipeline €): ni ibe_id, ni valor, ni email ni tags viajan fuera — verificado estática y funcionalmente (RGPD por diseño).
+- **S1 encendido modular**: instalada la API `cfCifraParaSync`/`cfDescifraDeSync` del ADR-003 (hoy identidad con TODO F2; se activa cuando el sync de burbuja suba campos sensibles — sin volver a abrir la caja).
+- **Lección de arquitectura aplicada**: el parche se escribió en la **fuente `tools/factory`** y `apps/web` se regeneró (golden D2 byte a byte) — nada de edits sueltos sobre los HTML generados.
+- 🧪 **607** ✔ batería (+32 W18: vacuna, round-trip, saneo de valor/ibe_id/tags, dedupe, buscador, anonimato del resumen, paridad pymes≡residencial) · suite completa (9 ficheros: e2e clave-equipo 54, maestro-admin 33, act 10, admin 7, residencial 71, visual 13, ola4, árbol-i18n) ✔.
+- 🔃 sw `cfb-v366` · EXE regenerado (SHA `5eae89a8…`).
+
+## v3.10.0 «Usuarios y accesos» — 2026-10-05 · cada persona su contraseña, el admin gestiona por persona
+- **F13 · accesos personales (ADR-002)**: `clave-equipo.json` pasa a **multi-entrada** (v2): cada trabajador/a tiene SU entrada cifrada con SU **contraseña personal** (PBKDF2-SHA256 ×250.000 + AES-GCM-256). La tarjeta de entrada pide **tu ID + tu contraseña**; nadie ve la clave real nunca.
+- **Admin → tarjeta «👥 Accesos personales»**: por cada persona del «Equipo autorizado» ves si tiene acceso, le **creas** el acceso (la contraseña se sugiere sola tipo «sierra-brava-42», editable), lo **publicas con un clic**, le copias su **enlace personal** y le puedes **revocar** el acceso o **resetear** su contraseña. Todo con merge del bloque vigente (nunca pisa accesos ajenos).
+- **📨 Enlace personal 1 clic** `index.html#ap=<slug>:<contraseña>`: quien lo abre entra directo; la contraseña viaja en el `#`fragmento (nunca toca servidores) y la app la borra de la barra. El legado `#eq=` (contraseña única v3.9) sigue valiendo mientras no migres a accesos personales.
+- **🔑 «Mi acceso» (auto-servicio)**: cada persona cambia SU contraseña desde el menú de la app — la app recifra **solo su entrada** y la republica (commit «auto-cambio de contraseña»), sin tocar la de nadie más.
+- **Baja de alguien**: el admin revoca su entrada (y lo quita del «Equipo autorizado») → su dispositivo ya no puede renovar la clave tras la próxima rotación; si urge, rotación completa con «🛡 Publicar/rotar» (procedimiento actualizado en ROTACION-CLAVE.md).
+- **S1 infra (ADR-003 · doble clave datos/acceso)**: el payload cifrado incluye una **clave de datos** separada del token — los módulos nuevos cifrarán sus campos sensibles con ella de forma incremental. La fija automáticamente el dispositivo del admin.
+- **Seguridad conservada y medida**: contraseña persistida **solo tras validación 200** de la nube (E6 v3.10), revocada → renovación silenciosa caduca y limpia, sin blob → tarjeta manual intacta.
+- 🧪 **575** ✔ batería (+15 W17) · e2e clave-equipo **54** ✔ (+25: publicación por persona, slug correcto, payload cifrado auditado nodo, tarjeta 2 campos, pass mala, ID sin acceso, enlace personal, revocación) · dos bugs cazados por test-first (firma de sal en entradas v2 · pérdida de la contraseña editada al repintar).
+- 🔃 sw `cfb-v365` · docs: `docs/adrs/ADR-001/002/003` (E0 del sistema de entrega).
+
+
 - **Fricción cero para el equipo**: el admin genera desde su panel un **enlace de acceso** (`index.html#eq=<contraseña>`) y lo pasa por WhatsApp/correo interno. Quien lo abre **entra directo**: la app descifra la clave sola y solo queda poner el ID. Sin teclear contraseñas.
 - **La contraseña viaja en el `#`fragmento**: nunca la envía el navegador a ningún servidor ni queda en logs/analíticas; y la app la **borra de la barra** tras usarla (`replaceState`).
 - **Caducidad natural**: si el admin cambia la contraseña del equipo, los enlaces viejos dejan de servir → tarjeta con aviso «pide uno nuevo» (sin exponer nada). Con clave ya guardada, el enlace solo se limpia y sigue el arranque normal.
