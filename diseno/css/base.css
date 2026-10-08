@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   base.css — Reset moderno + reglas base WCAG-first (C3, §9/§11 maestro).
+   Solo tokens: ningún valor suelto que no venga de tokens.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Fuentes variables self-hosted (§8.3 + §11.2: la descarga se declara aquí,
+   los woff2 viven en src/assets/fonts del repo operativo). */
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/jetbrains-mono-variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../assets/fonts/space-grotesk-variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--superficie-fondo);
+  color: var(--texto-fuerte);
+  font: var(--tipo-body-m);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4 { font-family: var(--font-titular); }
+
+/* ── Focus visible 2px azul + 2px offset (§11.1, regla dura) ─────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primario-azul-claro);
+  outline-offset: 2px;
+}
+/* fallback moderado: browsers sin :focus-visible */
+:focus { outline: 2px solid var(--color-primario-azul-claro); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── Área táctil mínima 44×44 (§11.1) enelementos interactivos nativos ── */
+button, [role="button"], a[href], input, select, textarea, summary {
+  min-height: 44px;
+  min-width: 44px;
+}
+/* …salvo los discretos de texto (documentación/ligas sueltas), que heredan
+   un padding táctil invisible propio en componentes. */
+
+::selection {
+  background: var(--color-secundario-amarillo-energia);
+  color: var(--color-primario-azul-profundo);
+}
+
+/* ── Skip link (§11.1) ──────────────────────────────────────────────── */
+.salto {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: var(--espacio-2xs) var(--espacio-sm);
+  background: var(--color-secundario-amarillo-energia);
+  color: var(--color-primario-azul-profundo);
+  font-weight: 600;
+  border-radius: 0 0 var(--radio-md) 0;
+}
+.salto:focus {
+  left: 0;
+  outline: 2px solid var(--color-primario-azul-claro);
+  outline-offset: 2px;
+}
+
+/* ── Utilidades de lectura de datos (CUPS, facturas, €) ─────────────── */
+.datos { font-family: var(--font-datos); font-variant-numeric: tabular-nums; }
+
+/* Tipos semanticos (clase de ayuda, no jerarquía visual sin etiqueta) */
+.t-h1 { font: var(--tipo-h1); letter-spacing: var(--tracking-h); }
+.t-h2 { font: var(--tipo-h2); letter-spacing: var(--tracking-h); }
+.t-h3 { font: var(--tipo-h3); }
+.t-h4 { font: var(--tipo-h4); }
+.t-body-l { font: var(--tipo-body-l); }
+.t-caption { font: var(--tipo-caption); }
+.t-overline {
+  font: var(--tipo-overline);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-overline);
+}

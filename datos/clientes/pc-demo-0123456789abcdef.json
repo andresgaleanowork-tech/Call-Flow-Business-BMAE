@@ -1,0 +1,13 @@
+{
+  "token": "pc-demo-0123456789abcdef",
+  "demo": true,
+  "nombre": "Panadería de Ejemplo (demo)",
+  "ref": "CLI-DEMO-0001",
+  "contactoComercial": { "nombre": "Tu comercial BMAE", "email": "comercial@example.com" },
+  "visitaProxima": null,
+  "albaranes": [
+    { "numero": "ALB-2026-0001", "concepto": "100 kWh azotea incluida (ejemplo)", "fecha": "2026-10-01", "total": 129.95, "pdf": null }
+  ],
+  "documentos": [],
+  "nota": "Ficha DEMO de integración (B2): datos 100% ficticios. Los dossier reales se escriben como datos/clientes/pc-<ref>-<16 hex>.json, solo superficie benigna, y el repo de operación es PRIVADO (el enlace es la llave)."
+}

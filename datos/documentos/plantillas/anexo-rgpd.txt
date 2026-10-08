@@ -1,0 +1,36 @@
+ANEXO DE PROTECCIÓN DE DATOS (RGPD) — PLANTILLA BASE
+======================================================================
+**BORRADOR B4 — Revise este documento tu abogado antes de firmarlo.**
+
+Responsable del tratamiento: BMAE Energía S.L., NIF {{nif_emisor}},
+domicilio {{direccion_emisor}}, correo privacidad {{email_privacidad}}.
+
+Interesado: {{nombre_cliente}}, NIF {{nif_cliente}}.
+
+FINALIDAD
+Gestión del contrato de suministro/servicio ref. {{ref_cliente}}: alta,
+facturación, soporte técnico y atención al cliente; retribuida de forma
+conjunta a ese contrato.
+
+BASE JURÍDICA
+Ejecución del contrato (art. 6.1.b RGPD); obligaciones legales (art. 6.1.c)
+en materia fiscal y sectorial del sector energético; interés legítimo para la
+seguridad y evolución de los propios sistemas.
+
+CONSERVACIÓN
+Los datos se conservarán mientras dure la relación comercial y después durante
+los plazos exigidos por la legislación fiscal y sectorial aplicable.
+
+DESTINATARIOS
+No se cedirán datos a terceros, salvo obligación legal o proveedores
+necesarios del servicio con contrato de encargado (art. 28 RGPD).
+
+DERECHOS
+Acceso, rectificación, supresión, limitación, portabilidad y oposición
+ejercitándolos ante {{email_privacidad}} indicando NIF y referencia de
+cliente. Puede reclamar ante la Agencia Española de Protección de Datos
+(https://www.aepd.es) si lo considera oportuno.
+
+Firma del interesado: ___________________  Hecho a {{fecha_firma}}.
+======================================================================
+PLANTILLA BASE B4 — REQUIERE REVISIÓN LEGAL ANTES DE SU FIRMA.

@@ -1,0 +1,86 @@
+# auth-exchange.yml — B1 (§4.2 Prompt Maestro)
+# Intercambio OAuth code → JWT RS256. DOS RAMAS:
+#   · PRINCIPAL (síncrona): el endpoint Frappe `auth_exchange` ejecuta el
+#     mismo núcleo y responde al navegador directamente (§4.1 «Token
+#     Exchange: endpoint Frappe»).
+#   · CONTINGENCIA GitOps: DESPACHA EL SERVIDOR (nunca el navegador — no
+#     existe GitHub-token público para dispatch); el paquete se cifra
+#     HKDF(code) en un gist opaco de TTL ≤10 min (ver cron de barrido).
+# En ambos casos la auditoría queda en GitHub (artefacto + log del run).
+
+name: auth-exchange
+
+on:
+  repository_dispatch:
+    types: [auth-exchange]              # dispatch DEL SERVIDOR (justificado §2/§3)
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "code OAuth (replay manual controlado)"
+        required: true
+      state:
+        description: "state CSRF (64 hex)"
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: auth-exchange
+  cancel-in-progress: true              # un reintento anula el anterior (PKCE mismo state)
+
+env:
+  CODE: ${{ github.event.client_payload.code || github.event.inputs.code }}
+  STATE: ${{ github.event.client_payload.state || github.event.inputs.state }}
+
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5                  # PKCE muere a los 10 min: margen holgado
+    if: ${{ env.CODE != '' && env.STATE != '' }}
+    env:
+      AUTH_PRIVATE_KEY_PEM: ${{ secrets.AUTH_PRIVATE_KEY_PEM }}
+      AUTH_PUBLIC_KEY_PEM: ${{ secrets.AUTH_PUBLIC_KEY_PEM }}
+      GITHUB_OAUTH_CLIENT_ID: ${{ vars.GITHUB_OAUTH_CLIENT_ID }}
+      GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.GITHUB_OAUTH_CLIENT_SECRET }}
+      GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Núcleo de autenticación
+        run: pip install -e ./auth requests
+
+      - name: Intercambio code → JWT (canal gist de contingencia)
+        run: |
+          python auth/scripts/auth_exchange.py \
+            --code "$CODE" --state "$STATE" --uso gist \
+            --informe /tmp/auth-exchange-informe.json
+
+      - name: "Informe como artefacto (sin secretos — jti/exp/roles únicamente)"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-exchange-${{ github.run_id }}
+          path: /tmp/auth-exchange-informe.json
+          retention-days: 30
+
+      - name: Fallo → Issue de incidencia auth (sin datos sensibles del usuario)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let inf = {};
+            try { inf = JSON.parse(fs.readFileSync('/tmp/auth-exchange-informe.json','utf8')); } catch (e) {}
+            delete inf.usuario; delete inf.teams;          // mínimo necesario
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `⚠️ auth-exchange falló · ${new Date().toISOString()}`,
+              labels: ['auth', 'incidencia'],
+              body: '```json\n' + JSON.stringify(inf, null, 2) + '\n```',
+            });

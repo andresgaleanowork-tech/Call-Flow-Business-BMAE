@@ -1,25 +1,26 @@
-Copyright (c) 2026 Andrés Galeano — NIE Z0002918W. Todos los derechos reservados.
+Licencia de uso — BMAE Plataforma Corporativa
+=============================================
 
-TITULARIDAD
-El contenido de este repositorio —código fuente, diseño visual, textos, guion comercial,
-materiales de formación y recursos gráficos— es propiedad intelectual de su autor, que se
-reserva todas las facultades conferidas por la Ley de Propiedad Intelectual
-(Real Decreto Legislativo 1/1996).
+Copyright (c) 2026 Eduardo Andrés Galeano Aido (NIE Z0002918W),
+autor y desarrollador del software, por expresa autorización de uso
+a BMAE Energía. Todos los derechos reservados.
 
-LICENCIA DE USO EXCLUSIVO
-Se concede a B&M Asesores Energéticos una licencia de uso exclusiva, interna e
-intransferible de esta obra como herramienta de trabajo de su equipo comercial.
+Este repositorio contiene software, documentación, datos y diseños (“el
+Material”) pertenecientes a BMAE Energía. El acceso al repositorio en GitHub
+NO otorga licencia alguna de copia, uso, modificación, distribución ni
+creación de obras derivadas fuera del ámbito interno de BMAE Energía y sus
+colaboradores autorizados (miembros de esta organización GitHub).
 
-RESTRICCIONES PARA TERCEROS
-Ninguna otra persona u organización está autorizada a copiar, reproducir, distribuir,
-ceder, vender, sublicenciar, publicar o modificar, total ni parcialmente, este repositorio
-o su contenido, sin consentimiento previo, expreso y por escrito del autor.
-El acceso público a esta página/repositorio no constituye bajo ningún concepto una
-concesión de licencia ni cesión de derechos.
+Queda prohibido, sin autorización escrita previa, cualquier uso del Material
+fuera de esa organización, incluido su uso para entrenar sistemas de
+inteligencia artificial de terceros o reconstruir productos competidores.
 
-MARCAS
-«Iberdrola» es marca registrada de Iberdrola, S.A. Esta herramienta es material de apoyo
-de B&M Asesores Energéticos en el marco de su colaboración comercial; no implica
-relación societaria alguna.
+ÚNICA excepción legal de este repositorio: las salidas obligadas por el
+Real Decreto 1007/2023 (facturas y registros VeriFactu) son propiedad de sus
+titulares fiscales, no del fabricante del software.
 
-Contacto para autorizaciones: Andrés Galeano (github.com/andresgaleanowork-tech)
+Para licencias comerciales, auditorías o alianzas: issues de este repositorio
+con la etiqueta `licencia`, o el canal interno documentado en SUPPORT.md.
+
+— Si BMAE decidiera abrir el código, la ruta documentada es: atribución
+  MIT en un nuevo commit que sustituya este archivo (no retroactiva).

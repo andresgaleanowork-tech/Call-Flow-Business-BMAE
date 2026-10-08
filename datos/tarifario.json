@@ -1,0 +1,46 @@
+{
+  "v": 1,
+  "upd": "2026-10-08",
+  "vigencia": "referencia publicada; NO vinculante hasta propuesta firmada",
+  "kwhReferencia": 4000,
+  "kwPotenciaReferencia": 5.5,
+  "notaLegal": "Precios de publicación pública recopilados por el gestor. La comparativa usa 4 000 kWh/año y 5,5 kW de potencia como caso estándar; se declara siempre como orientativa (sello honesto C10 §3).",
+  "items": [
+    {
+      "id": "endesa-one", "marca": "EN", "color": "#0A7A3E",
+      "nombre": "Endesa One Luz", "tipo": "fija",
+      "permanencia": false, "precioKwh": 0.129, "potenciaEurKwDia": 0.098,
+      "fuente": "endesa.com/tarifa (recopilación 08-2026)",
+      "logo": null, "activo": true
+    },
+    {
+      "id": "octopus-relax", "marca": "OC", "color": "#7C3AED",
+      "nombre": "Octopus Relax", "tipo": "indexada", "detalle": "PVPC + 0,01 €/kWh",
+      "permanencia": false, "precioKwh": 0.131, "potenciaEurKwDia": 0.095,
+      "fuente": "octopusenergy.es (recopilación 08-2026)",
+      "logo": null, "activo": true
+    },
+    {
+      "id": "iberdrola-online", "marca": "IB", "color": "#D92626",
+      "nombre": "Iberdrola Plan Online", "tipo": "fija 12 m",
+      "permanencia": true, "precioKwh": 0.134, "potenciaEurKwDia": 0.105,
+      "fuente": "iberdrola.es (recopilación 08-2026)",
+      "logo": "diseno/marca/logo-iberdrola.png",
+      "logoAlt": "Iberdrola® (marca registrada; uso comparativo)", "activo": true
+    },
+    {
+      "id": "repsol-ahorro", "marca": "RE", "color": "#B60A50",
+      "nombre": "Repsol Ahorro Plus", "tipo": "fija",
+      "permanencia": false, "precioKwh": 0.136, "potenciaEurKwDia": 0.107,
+      "fuente": "repsolluzygas.es (recopilación 08-2026)",
+      "logo": null, "activo": true
+    },
+    {
+      "id": "totalenergies-facil", "marca": "TE", "color": "#00A87E",
+      "nombre": "TotalEnergies A Tu Aire", "tipo": "fija 12 m",
+      "permanencia": true, "precioKwh": 0.138, "potenciaEurKwDia": 0.101,
+      "fuente": "totalenergies.es (recopilación 08-2026)",
+      "logo": null, "activo": true
+    }
+  ]
+}

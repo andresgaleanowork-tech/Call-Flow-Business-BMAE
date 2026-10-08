@@ -1,0 +1,4607 @@
+{
+ "meta": {
+  "casos": 50,
+  "tolerancia_eur": "0.01",
+  "generado_por": "tools/generar_fixtures.py (oráculo plano §5.1, sin importar el engine)"
+ },
+ "casos": [
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F001",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-03-01",
+     "fecha_fin": "2025-03-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 150,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 100,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ],
+     "otros": "1.00",
+     "descuentos": "0.50",
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "34.50",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "1.00",
+    "descuentos": "-0.50",
+    "base_iee": "65.25",
+    "iee": "3.34",
+    "alquiler_equipo": "0.00",
+    "base_iva": "68.58",
+    "iva": "14.40",
+    "total_factura": "82.98"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F002",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-06-01",
+     "fecha_fin": "2025-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 90,
+       "potencia_contratada_kw": 3.45,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 3.5
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": 3.45,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 3.5
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "22.68",
+    "termino_energia": "20.70",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "49.00",
+    "iee": "2.51",
+    "alquiler_equipo": "0.00",
+    "base_iva": "51.51",
+    "iva": "10.82",
+    "total_factura": "62.32"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F003",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-06-01",
+     "fecha_fin": "2025-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 0,
+       "potencia_contratada_kw": 3.45,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 3.5
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 0,
+       "potencia_contratada_kw": 3.45,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 3.5
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "22.68",
+    "termino_energia": "0.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "28.30",
+    "iee": "1.45",
+    "alquiler_equipo": "0.00",
+    "base_iva": "29.75",
+    "iva": "6.25",
+    "total_factura": "36.00"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F004",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-07-01",
+     "fecha_fin": "2025-07-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 220,
+       "potencia_contratada_kw": 5.75,
+       "reactiva_kvarh": 40,
+       "potencia_maxima_kw": 5.8
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 140,
+       "potencia_contratada_kw": 5.75,
+       "reactiva_kvarh": 30,
+       "potencia_maxima_kw": 5.8
+      }
+     ],
+     "alquiler_equipo": "0.81"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "34.18",
+    "termino_energia": "42.60",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "82.59",
+    "iee": "4.22",
+    "alquiler_equipo": "0.81",
+    "base_iva": "87.62",
+    "iva": "18.40",
+    "total_factura": "106.02"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F005",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2024-02-01",
+     "fecha_fin": "2024-02-29",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 160,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 5.9
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 120,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.9
+      }
+     ],
+     "tipo_iva": "0.10"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "29.16",
+    "termino_energia": "38.40",
+    "excesos_potencia": "6.87",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.43",
+    "descuentos": "0.00",
+    "base_iee": "79.86",
+    "iee": "4.08",
+    "alquiler_equipo": "0.00",
+    "base_iva": "83.94",
+    "iva": "8.39",
+    "total_factura": "92.34"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F006",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-02-01",
+     "fecha_fin": "2025-02-28",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 160,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 5.9
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 120,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.9
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "28.23",
+    "termino_energia": "38.40",
+    "excesos_potencia": "6.87",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.24",
+    "descuentos": "0.00",
+    "base_iee": "78.74",
+    "iee": "4.03",
+    "alquiler_equipo": "0.00",
+    "base_iva": "82.77",
+    "iva": "17.38",
+    "total_factura": "100.15"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F007",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-08-10",
+     "fecha_fin": "2025-08-10",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 8,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 6,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "1.01",
+    "termino_energia": "1.92",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.19",
+    "descuentos": "0.00",
+    "base_iee": "3.12",
+    "iee": "0.16",
+    "alquiler_equipo": "0.00",
+    "base_iva": "3.27",
+    "iva": "0.69",
+    "total_factura": "3.96"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F008",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": 6.9,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 8.9
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 200,
+       "potencia_contratada_kw": 6.9,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 7.1
+      }
+     ],
+     "otros": "2.50",
+     "descuentos": "5.00",
+     "alquiler_equipo": "1.00"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "39.70",
+    "termino_energia": "59.00",
+    "excesos_potencia": "9.97",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "8.12",
+    "descuentos": "-5.00",
+    "base_iee": "111.79",
+    "iee": "5.72",
+    "alquiler_equipo": "1.00",
+    "base_iva": "118.51",
+    "iva": "24.89",
+    "total_factura": "143.39"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F009",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-04-01",
+     "fecha_fin": "2025-04-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 180,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.4
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 120,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.4
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20I-001",
+     "nombre": "Indexada Liberal 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_market": [
+      "0.09",
+      "0.07"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.01",
+      "0.01"
+     ],
+     "margen": "0.05",
+     "peajes_energia": [
+      "0.03",
+      "0.015"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.015"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "42.84",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "78.70",
+    "iee": "4.02",
+    "alquiler_equipo": "0.00",
+    "base_iva": "82.73",
+    "iva": "17.37",
+    "total_factura": "100.10"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F010",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-04-01",
+     "fecha_fin": "2025-04-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 9.9
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 40,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20I-001",
+     "nombre": "Indexada Liberal 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_market": [
+      "0.09",
+      "0.07"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.01",
+      "0.01"
+     ],
+     "margen": "0.05",
+     "peajes_energia": [
+      "0.03",
+      "0.015"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.015"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "14.28",
+    "excesos_potencia": "30.55",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "80.70",
+    "iee": "4.13",
+    "alquiler_equipo": "0.00",
+    "base_iva": "84.82",
+    "iva": "17.81",
+    "total_factura": "102.64"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F011",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-05-01",
+     "fecha_fin": "2025-05-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 460,
+       "potencia_contratada_kw": 9.2,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 9.25
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": 9.2,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 9.25
+      }
+     ],
+     "alquiler_equipo": "0.81",
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "54.70",
+    "termino_energia": "89.80",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.00",
+    "descuentos": "0.00",
+    "base_iee": "144.50",
+    "iee": "7.39",
+    "alquiler_equipo": "0.81",
+    "base_iva": "152.69",
+    "iva": "32.07",
+    "total_factura": "184.76"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F012",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-09-01",
+     "fecha_fin": "2025-09-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 130,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.83
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 90,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.8
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "30.30",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "66.16",
+    "iee": "3.38",
+    "alquiler_equipo": "0.00",
+    "base_iva": "69.55",
+    "iva": "14.60",
+    "total_factura": "84.15"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F013",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-10-01",
+     "fecha_fin": "2025-10-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 210,
+       "potencia_contratada_kw": 5.75,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 6.05
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 140,
+       "potencia_contratada_kw": 5.75,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 6.04
+      }
+     ],
+     "descuentos": "3.00",
+     "tipo_iva": "0.21"
+    },
+    "oferta": {
+     "id_oferta": "OF-20I-001",
+     "nombre": "Indexada Liberal 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_market": [
+      "0.09",
+      "0.07"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.01",
+      "0.01"
+     ],
+     "margen": "0.05",
+     "peajes_energia": [
+      "0.03",
+      "0.015"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.015"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "39.07",
+    "termino_energia": "49.98",
+    "excesos_potencia": "0.09",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "-3.00",
+    "base_iee": "91.94",
+    "iee": "4.70",
+    "alquiler_equipo": "0.00",
+    "base_iva": "96.64",
+    "iva": "20.30",
+    "total_factura": "116.94"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F014",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-12-15",
+     "fecha_fin": "2026-01-14",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 170,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 110,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "31.25",
+    "termino_energia": "38.70",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "75.76",
+    "iee": "3.87",
+    "alquiler_equipo": "0.00",
+    "base_iva": "79.63",
+    "iva": "16.72",
+    "total_factura": "96.36"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F015",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-03-01",
+     "fecha_fin": "2025-03-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 200,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 800,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 150,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 120,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 600,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 90,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 80,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 60,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "399.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "522.61",
+    "iee": "26.72",
+    "alquiler_equipo": "0.00",
+    "base_iva": "549.33",
+    "iva": "115.36",
+    "total_factura": "664.69"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F016",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-03-01",
+     "fecha_fin": "2025-03-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "16.0",
+        "17.0",
+        "19.5",
+        "18.2",
+        "16.4"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 800,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 600,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "16.0",
+        "17.0",
+        "19.5",
+        "18.2",
+        "16.4"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "399.00",
+    "excesos_potencia": "4.28",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "526.90",
+    "iee": "26.94",
+    "alquiler_equipo": "0.00",
+    "base_iva": "553.83",
+    "iva": "116.31",
+    "total_factura": "670.14"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F017",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-06-01",
+     "fecha_fin": "2025-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 1200,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 700,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 480,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 300,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 200,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 100,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 800,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "alquiler_equipo": "1.50"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "432.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "24.56",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "576.18",
+    "iee": "29.46",
+    "alquiler_equipo": "1.50",
+    "base_iva": "607.14",
+    "iva": "127.50",
+    "total_factura": "734.64"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F018",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-06-01",
+     "fecha_fin": "2025-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 900,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 250,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 700,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 200,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 500,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 150,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 400,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 100,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 300,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 80,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "115.80",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "153.96",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "389.38",
+    "iee": "19.91",
+    "alquiler_equipo": "0.00",
+    "base_iva": "409.29",
+    "iva": "85.95",
+    "total_factura": "495.24"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F019",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2024-02-01",
+     "fecha_fin": "2024-02-29",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 800,
+       "potencia_contratada_kw": "15.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "14",
+        "15",
+        "16.1"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "15.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 600,
+       "potencia_contratada_kw": "15.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "16.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "16.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": "17.5",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "tipo_iva": "0.10"
+    },
+    "oferta": {
+     "id_oferta": "OF-30I-001",
+     "nombre": "Industria Indexada 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_market": [
+      "0.08",
+      "0.08",
+      "0.075",
+      "0.07",
+      "0.07",
+      "0.065"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012"
+     ],
+     "margen": "0.04",
+     "peajes_energia": [
+      "0.028",
+      "0.02",
+      "0.014",
+      "0.012",
+      "0.01",
+      "0.008"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.016",
+      "0.012",
+      "0.01",
+      "0.009",
+      "0.008"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "95.00",
+    "termino_energia": "414.91",
+    "excesos_potencia": "35.70",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.43",
+    "descuentos": "0.00",
+    "base_iee": "551.05",
+    "iee": "28.17",
+    "alquiler_equipo": "0.00",
+    "base_iva": "579.22",
+    "iva": "57.92",
+    "total_factura": "637.14"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F020",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-08-01",
+     "fecha_fin": "2025-08-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 50,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 40,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 30,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 20,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 10,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 5,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "17.40",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "141.01",
+    "iee": "7.21",
+    "alquiler_equipo": "0.00",
+    "base_iva": "148.22",
+    "iva": "31.13",
+    "total_factura": "179.35"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F021",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-09-01",
+     "fecha_fin": "2025-09-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 600,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.0",
+        "17.2",
+        "17.4"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 650,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.0",
+        "17.2",
+        "17.4"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.0",
+        "17.2",
+        "17.4"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 750,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.0",
+        "17.2",
+        "17.4"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 800,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.0",
+        "17.2",
+        "17.4"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 850,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "23.5",
+        "24.0",
+        "24.2"
+       ]
+      }
+     ],
+     "otros": "4.00",
+     "descuentos": "10.00",
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-30I-001",
+     "nombre": "Industria Indexada 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_market": [
+      "0.08",
+      "0.08",
+      "0.075",
+      "0.07",
+      "0.07",
+      "0.065"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012"
+     ],
+     "margen": "0.04",
+     "peajes_energia": [
+      "0.028",
+      "0.02",
+      "0.014",
+      "0.012",
+      "0.01",
+      "0.008"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.016",
+      "0.012",
+      "0.01",
+      "0.009",
+      "0.008"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "516.98",
+    "excesos_potencia": "0.84",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "4.00",
+    "descuentos": "-10.00",
+    "base_iee": "625.83",
+    "iee": "32.00",
+    "alquiler_equipo": "0.00",
+    "base_iva": "657.83",
+    "iva": "138.14",
+    "total_factura": "795.97"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F022",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-05-01",
+     "fecha_fin": "2025-05-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "zona": "baleares"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "285.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "408.61",
+    "iee": "20.89",
+    "alquiler_equipo": "0.00",
+    "base_iva": "429.50",
+    "iva": "90.20",
+    "total_factura": "519.70"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F023",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-05-01",
+     "fecha_fin": "2025-05-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "zona": "canarias"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "285.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "408.61",
+    "iee": "2.86",
+    "alquiler_equipo": "0.00",
+    "base_iva": "411.47",
+    "iva": "86.41",
+    "total_factura": "497.88"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F024",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-05-01",
+     "fecha_fin": "2025-05-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "zona": "ceuta_melilla"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "285.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "408.61",
+    "iee": "2.04",
+    "alquiler_equipo": "0.00",
+    "base_iva": "410.65",
+    "iva": "86.24",
+    "total_factura": "496.89"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F025",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-05-01",
+     "fecha_fin": "2025-05-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 60,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "zona": "canarias",
+     "tipo_iva": "0.05"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "34.20",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "157.81",
+    "iee": "1.10",
+    "alquiler_equipo": "0.00",
+    "base_iva": "158.92",
+    "iva": "7.95",
+    "total_factura": "166.86"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F026",
+     "cups": "ES0031400000000002AB",
+     "peaje": "6.1TD",
+     "fecha_inicio": "2025-07-01",
+     "fecha_fin": "2025-07-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "45",
+        "46"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 1500,
+       "serie": [
+        "59",
+        "60",
+        "60.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59",
+        "60",
+        "60.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59",
+        "60",
+        "60.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59",
+        "60",
+        "60.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 6000,
+       "potencia_contratada_kw": "60",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59",
+        "60",
+        "60.3"
+       ]
+      }
+     ],
+     "alquiler_equipo": "3.20",
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-61F-001",
+     "nombre": "Alta Tensión 6.1",
+     "peaje": "6.1TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "10",
+      "9",
+      "8",
+      "8",
+      "8",
+      "5"
+     ],
+     "precio_energia": [
+      "0.10",
+      "0.09",
+      "0.08",
+      "0.07",
+      "0.06",
+      "0.05"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "189.82",
+    "termino_energia": "2700.00",
+    "excesos_potencia": "249.90",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.00",
+    "descuentos": "0.00",
+    "base_iee": "3139.72",
+    "iee": "160.52",
+    "alquiler_equipo": "3.20",
+    "base_iva": "3303.45",
+    "iva": "693.72",
+    "total_factura": "3997.17"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F027",
+     "cups": "ES0031400000000002AB",
+     "peaje": "6.1TD",
+     "fecha_inicio": "2025-07-01",
+     "fecha_fin": "2025-07-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44.9"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44.9"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44.9"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44.9"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44.9"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": "60",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.5"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-61F-001",
+     "nombre": "Alta Tensión 6.1",
+     "peaje": "6.1TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "10",
+      "9",
+      "8",
+      "8",
+      "8",
+      "5"
+     ],
+     "precio_energia": [
+      "0.10",
+      "0.09",
+      "0.08",
+      "0.07",
+      "0.06",
+      "0.05"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "189.82",
+    "termino_energia": "405.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "600.63",
+    "iee": "30.71",
+    "alquiler_equipo": "0.00",
+    "base_iva": "631.34",
+    "iva": "132.58",
+    "total_factura": "763.92"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F028",
+     "cups": "ES0031400000000002AB",
+     "peaje": "6.1TD",
+     "fecha_inicio": "2024-12-20",
+     "fecha_fin": "2025-01-19",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 2100,
+       "serie": [
+        "44"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 3200,
+       "potencia_contratada_kw": "60",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44"
+       ]
+      }
+     ],
+     "descuentos": "200.00"
+    },
+    "oferta": {
+     "id_oferta": "OF-61F-001",
+     "nombre": "Alta Tensión 6.1",
+     "peaje": "6.1TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "10",
+      "9",
+      "8",
+      "8",
+      "8",
+      "5"
+     ],
+     "precio_energia": [
+      "0.10",
+      "0.09",
+      "0.08",
+      "0.07",
+      "0.06",
+      "0.05"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "189.82",
+    "termino_energia": "1440.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "43.38",
+    "otros_y_bono": "5.80",
+    "descuentos": "-200.00",
+    "base_iee": "1479.01",
+    "iee": "75.62",
+    "alquiler_equipo": "0.00",
+    "base_iva": "1554.63",
+    "iva": "326.47",
+    "total_factura": "1881.10"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F029",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2024-12-16",
+     "fecha_fin": "2024-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 40,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.65
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 30,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.65
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "16.09",
+    "termino_energia": "9.60",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "3.00",
+    "descuentos": "0.00",
+    "base_iee": "28.68",
+    "iee": "1.47",
+    "alquiler_equipo": "0.00",
+    "base_iva": "30.15",
+    "iva": "6.33",
+    "total_factura": "36.48"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F030",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2024-02-28",
+     "fecha_fin": "2024-03-01",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 20,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.65
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 10,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.65
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "3.02",
+    "termino_energia": "4.20",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.56",
+    "descuentos": "0.00",
+    "base_iee": "7.78",
+    "iee": "0.40",
+    "alquiler_equipo": "0.00",
+    "base_iva": "8.18",
+    "iva": "1.72",
+    "total_factura": "9.89"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F031",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2026-02-01",
+     "fecha_fin": "2026-02-28",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 140,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 90,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "28.23",
+    "termino_energia": "31.80",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.24",
+    "descuentos": "0.00",
+    "base_iee": "65.27",
+    "iee": "3.34",
+    "alquiler_equipo": "0.00",
+    "base_iva": "68.61",
+    "iva": "14.41",
+    "total_factura": "83.02"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F032",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2023-06-01",
+     "fecha_fin": "2023-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 140,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 90,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "31.80",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "67.66",
+    "iee": "3.46",
+    "alquiler_equipo": "0.00",
+    "base_iva": "71.12",
+    "iva": "14.94",
+    "total_factura": "86.06"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F033",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2027-06-01",
+     "fecha_fin": "2027-06-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 140,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 90,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "31.80",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "67.66",
+    "iee": "3.46",
+    "alquiler_equipo": "0.00",
+    "base_iva": "71.12",
+    "iva": "14.94",
+    "total_factura": "86.06"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F034",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-01-01",
+     "fecha_fin": "2025-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 1400,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 900,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ],
+     "alquiler_equipo": "9.72"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "322.00",
+    "termino_energia": "272.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "68.35",
+    "descuentos": "0.00",
+    "base_iee": "662.35",
+    "iee": "33.86",
+    "alquiler_equipo": "9.72",
+    "base_iva": "705.93",
+    "iva": "148.25",
+    "total_factura": "854.18"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F035",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-03-15",
+     "fecha_fin": "2025-04-14",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 155,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 5.5
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 105,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 5.0
+      }
+     ],
+     "tipo_iva": "0"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "31.25",
+    "termino_energia": "35.85",
+    "excesos_potencia": "5.06",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "77.97",
+    "iee": "3.99",
+    "alquiler_equipo": "0.00",
+    "base_iva": "81.96",
+    "iva": "0.00",
+    "total_factura": "81.96"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F036",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-10-01",
+     "fecha_fin": "2025-10-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 133,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 133,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 133,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 133,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 133,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 4000,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "228.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.21",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "351.82",
+    "iee": "17.99",
+    "alquiler_equipo": "0.00",
+    "base_iva": "369.81",
+    "iva": "77.66",
+    "total_factura": "447.47"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F037",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-10-01",
+     "fecha_fin": "2025-10-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 134,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 134,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 134,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 134,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 134,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 400,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "228.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.42",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "352.03",
+    "iee": "18.00",
+    "alquiler_equipo": "0.00",
+    "base_iva": "370.03",
+    "iva": "77.71",
+    "total_factura": "447.73"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F038",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-10-01",
+     "fecha_fin": "2025-10-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 3000,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 200,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 350,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 331,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 1000,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 5000,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "570.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "167.30",
+    "otros_y_bono": "5.80",
+    "descuentos": "0.00",
+    "base_iee": "860.91",
+    "iee": "44.02",
+    "alquiler_equipo": "0.00",
+    "base_iva": "904.93",
+    "iva": "190.03",
+    "total_factura": "1094.96"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F039",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-10-01",
+     "fecha_fin": "2025-10-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 231,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 231,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 231,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 232,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 231,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 700,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 231,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "otros": "1.00"
+    },
+    "oferta": {
+     "id_oferta": "OF-30I-001",
+     "nombre": "Industria Indexada 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_market": [
+      "0.08",
+      "0.08",
+      "0.075",
+      "0.07",
+      "0.07",
+      "0.065"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012"
+     ],
+     "margen": "0.04",
+     "peajes_energia": [
+      "0.028",
+      "0.02",
+      "0.014",
+      "0.012",
+      "0.01",
+      "0.008"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.016",
+      "0.012",
+      "0.01",
+      "0.009",
+      "0.008"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "507.11",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.04",
+    "otros_y_bono": "6.80",
+    "descuentos": "0.00",
+    "base_iee": "631.76",
+    "iee": "32.30",
+    "alquiler_equipo": "0.00",
+    "base_iva": "664.06",
+    "iva": "139.45",
+    "total_factura": "803.51"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F040",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.32",
+        "17.33",
+        "18.0",
+        "21.5"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "10",
+        "12",
+        "13"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "25.0",
+        "26.0",
+        "27.0"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.01"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "285.00",
+    "excesos_potencia": "43.29",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "447.91",
+    "iee": "22.90",
+    "alquiler_equipo": "0.00",
+    "base_iva": "470.81",
+    "iva": "98.87",
+    "total_factura": "569.68"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F041",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "18.0",
+        "18.0",
+        "18.0",
+        "18.0"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 450,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-30I-001",
+     "nombre": "Industria Indexada 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_market": [
+      "0.08",
+      "0.08",
+      "0.075",
+      "0.07",
+      "0.07",
+      "0.065"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012"
+     ],
+     "margen": "0.04",
+     "peajes_energia": [
+      "0.028",
+      "0.02",
+      "0.014",
+      "0.012",
+      "0.01",
+      "0.008"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.016",
+      "0.012",
+      "0.01",
+      "0.009",
+      "0.008"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "326.00",
+    "excesos_potencia": "3.81",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.00",
+    "descuentos": "0.00",
+    "base_iee": "443.81",
+    "iee": "22.69",
+    "alquiler_equipo": "0.00",
+    "base_iva": "466.50",
+    "iva": "97.97",
+    "total_factura": "564.47"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F042",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 150,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.83
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 100,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.92
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "34.50",
+    "excesos_potencia": "0.54",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "70.91",
+    "iee": "3.63",
+    "alquiler_equipo": "0.00",
+    "base_iva": "74.53",
+    "iva": "15.65",
+    "total_factura": "90.18"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F043",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 150,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.8305
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 100,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.9295
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-001",
+     "nombre": "Plana Ahorro 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_energia": [
+      "0.15",
+      "0.12"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "30.25",
+    "termino_energia": "34.50",
+    "excesos_potencia": "0.60",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "70.97",
+    "iee": "3.63",
+    "alquiler_equipo": "0.00",
+    "base_iva": "74.60",
+    "iva": "15.67",
+    "total_factura": "90.26"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F044",
+     "cups": "ES0031400000000002AB",
+     "peaje": "6.1TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.999"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.999"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.999"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.999"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "45.001"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 4000,
+       "potencia_contratada_kw": "60",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.999"
+       ]
+      }
+     ]
+    },
+    "oferta": {
+     "id_oferta": "OF-61F-001",
+     "nombre": "Alta Tensión 6.1",
+     "peaje": "6.1TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "10",
+      "9",
+      "8",
+      "8",
+      "8",
+      "5"
+     ],
+     "precio_energia": [
+      "0.10",
+      "0.09",
+      "0.08",
+      "0.07",
+      "0.06",
+      "0.05"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "183.70",
+    "termino_energia": "1800.00",
+    "excesos_potencia": "84.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.62",
+    "descuentos": "0.00",
+    "base_iee": "2073.31",
+    "iee": "106.00",
+    "alquiler_equipo": "0.00",
+    "base_iva": "2179.31",
+    "iva": "457.66",
+    "total_factura": "2636.97"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F045",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-11-01",
+     "fecha_fin": "2025-11-30",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.1"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.1"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "17.320001"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.1"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.1"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 380,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "24.1"
+       ]
+      }
+     ],
+     "otros": "0.50"
+    },
+    "oferta": {
+     "id_oferta": "OF-30F-001",
+     "nombre": "Industria Fija 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_energia": [
+      "0.14",
+      "0.12",
+      "0.10",
+      "0.08",
+      "0.07",
+      "0.06"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "114.01",
+    "termino_energia": "216.60",
+    "excesos_potencia": "38.11",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "6.12",
+    "descuentos": "0.00",
+    "base_iee": "374.83",
+    "iee": "19.16",
+    "alquiler_equipo": "0.00",
+    "base_iva": "394.00",
+    "iva": "82.74",
+    "total_factura": "476.74"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F046",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-12-01",
+     "fecha_fin": "2025-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 500,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 300,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ],
+     "otros": "0.10",
+     "tipo_iva": "0.10"
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "27.35",
+    "termino_energia": "95.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.90",
+    "descuentos": "0.00",
+    "base_iee": "128.25",
+    "iee": "6.56",
+    "alquiler_equipo": "0.00",
+    "base_iva": "134.81",
+    "iva": "13.48",
+    "total_factura": "148.29"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F047",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-12-01",
+     "fecha_fin": "2025-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 5,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 3,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 4.7
+      }
+     ],
+     "zona": "baleares",
+     "financia_bono_social": false
+    },
+    "oferta": {
+     "id_oferta": "OF-20F-002",
+     "nombre": "Plana Hogar 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "35",
+      "35"
+     ],
+     "precio_energia": [
+      "0.13",
+      "0.10"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "27.35",
+    "termino_energia": "0.95",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "0.00",
+    "descuentos": "0.00",
+    "base_iee": "28.30",
+    "iee": "1.45",
+    "alquiler_equipo": "0.00",
+    "base_iva": "29.74",
+    "iva": "6.25",
+    "total_factura": "35.99"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F048",
+     "cups": "ES0031400000000002AB",
+     "peaje": "3.0TD",
+     "fecha_inicio": "2025-12-01",
+     "fecha_fin": "2025-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 560,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 30,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 510,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 60,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 460,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 90,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 410,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 120,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 360,
+       "potencia_contratada_kw": "17.32",
+       "reactiva_kvarh": 150,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 310,
+       "potencia_contratada_kw": "24.0",
+       "reactiva_kvarh": 180,
+       "serie": [
+        "15.0",
+        "16.8",
+        "17.1",
+        "16.9",
+        "17.3"
+       ]
+      }
+     ],
+     "descuentos": "250.00",
+     "alquiler_equipo": "2.00"
+    },
+    "oferta": {
+     "id_oferta": "OF-30I-001",
+     "nombre": "Industria Indexada 3.0",
+     "peaje": "3.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "18",
+      "15",
+      "12",
+      "12",
+      "12",
+      "8"
+     ],
+     "precio_market": [
+      "0.08",
+      "0.08",
+      "0.075",
+      "0.07",
+      "0.07",
+      "0.065"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012",
+      "0.012"
+     ],
+     "margen": "0.04",
+     "peajes_energia": [
+      "0.028",
+      "0.02",
+      "0.014",
+      "0.012",
+      "0.01",
+      "0.008"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.016",
+      "0.012",
+      "0.01",
+      "0.009",
+      "0.008"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "117.81",
+    "termino_energia": "323.37",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "1.30",
+    "otros_y_bono": "5.80",
+    "descuentos": "-250.00",
+    "base_iee": "198.27",
+    "iee": "10.14",
+    "alquiler_equipo": "2.00",
+    "base_iva": "210.41",
+    "iva": "44.19",
+    "total_factura": "254.60"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F049",
+     "cups": "ES0031400000000002AB",
+     "peaje": "6.1TD",
+     "fecha_inicio": "2025-12-01",
+     "fecha_fin": "2025-12-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "44.5"
+       ]
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "44.5"
+       ]
+      },
+      {
+       "periodo": 3,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "44.5"
+       ]
+      },
+      {
+       "periodo": 4,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "44.5"
+       ]
+      },
+      {
+       "periodo": 5,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "45",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "44",
+        "44.5"
+       ]
+      },
+      {
+       "periodo": 6,
+       "energia_kwh": 5500,
+       "potencia_contratada_kw": "60",
+       "reactiva_kvarh": 0,
+       "serie": [
+        "59.9",
+        "60.0"
+       ]
+      }
+     ],
+     "otros": "120.00"
+    },
+    "oferta": {
+     "id_oferta": "OF-61F-001",
+     "nombre": "Alta Tensión 6.1",
+     "peaje": "6.1TD",
+     "modalidad": "fija",
+     "precio_potencia": [
+      "10",
+      "9",
+      "8",
+      "8",
+      "8",
+      "5"
+     ],
+     "precio_energia": [
+      "0.10",
+      "0.09",
+      "0.08",
+      "0.07",
+      "0.06",
+      "0.05"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "189.82",
+    "termino_energia": "2475.00",
+    "excesos_potencia": "0.00",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "125.80",
+    "descuentos": "0.00",
+    "base_iee": "2790.63",
+    "iee": "142.68",
+    "alquiler_equipo": "0.00",
+    "base_iva": "2933.30",
+    "iva": "615.99",
+    "total_factura": "3549.30"
+   }
+  },
+  {
+   "entrada": {
+    "factura": {
+     "id_simulacion": "sim-F050",
+     "cups": "ES0021000000000001AA",
+     "peaje": "2.0TD",
+     "fecha_inicio": "2025-07-01",
+     "fecha_fin": "2025-07-31",
+     "periodos": [
+      {
+       "periodo": 1,
+       "energia_kwh": 260,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 10.4
+      },
+      {
+       "periodo": 2,
+       "energia_kwh": 180,
+       "potencia_contratada_kw": 4.6,
+       "reactiva_kvarh": 0,
+       "potencia_maxima_kw": 10.4
+      }
+     ],
+     "zona": "peninsula",
+     "alquiler_equipo": "0.81",
+     "descuentos": "1.00",
+     "tipo_iva": "0.05"
+    },
+    "oferta": {
+     "id_oferta": "OF-20I-001",
+     "nombre": "Indexada Liberal 2.0",
+     "peaje": "2.0TD",
+     "modalidad": "indexada",
+     "precio_potencia": [
+      "40",
+      "40"
+     ],
+     "precio_market": [
+      "0.09",
+      "0.07"
+     ],
+     "costes_comercializacion": [
+      "0.004",
+      "0.004"
+     ],
+     "perdidas": [
+      "0.01",
+      "0.01"
+     ],
+     "margen": "0.05",
+     "peajes_energia": [
+      "0.03",
+      "0.015"
+     ],
+     "cargos_energia": [
+      "0.02",
+      "0.015"
+     ]
+    }
+   },
+   "esperado": {
+    "termino_potencia": "31.25",
+    "termino_energia": "62.67",
+    "excesos_potencia": "67.13",
+    "energia_reactiva": "0.00",
+    "otros_y_bono": "5.80",
+    "descuentos": "-1.00",
+    "base_iee": "165.86",
+    "iee": "8.48",
+    "alquiler_equipo": "0.81",
+    "base_iva": "175.15",
+    "iva": "8.76",
+    "total_factura": "183.91"
+   }
+  }
+ ]
+}

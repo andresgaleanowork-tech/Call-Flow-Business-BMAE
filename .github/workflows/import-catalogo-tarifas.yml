@@ -1,0 +1,69 @@
+# import-catalogo-tarifas.yml — A5.4 (§7.4 Prompt Maestro)
+# Ingesta de Excel de ofertas de comercializadoras → validación Pydantic
+# ESTRICTA antes de poblar las «Oferta Electricidad» de ERPNext.
+# Regla: PRIMERO valida, LUEGO propone; NUNCA publica sin revisión humana
+# (pull request contra el propio repo de datos, §2 GitHub-first).
+
+name: import-catalogo-tarifas
+
+on:
+  workflow_dispatch:
+    inputs:
+      fichero:
+        description: "Ruta del Excel en repo (datos-entrada/tarifas/)"
+        required: true
+  push:
+    paths:
+      - "datos-entrada/tarifas/**.xlsx"
+      - "datos-entrada/tarifas/**.xlsm"
+
+permissions:
+  contents: write                   # abrir PR contra el propio repo
+  pull-requests: write
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FICHERO: >-
+        ${{ github.event.inputs.fichero ||
+            (github.event.push != null && github.event.push.head_commit.modified[0]) || 'datos-entrada/tarifas/catalogo.xlsx' }}
+      ERPNEXT_BASE_URL: ${{ vars.ERPNEXT_BASE_URL }}
+      ERPNEXT_API_KEY: ${{ secrets.ERPNEXT_API_KEY }}
+      ERPNEXT_API_SECRET: ${{ secrets.ERPNEXT_API_SECRET }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Dependencias de ingesta
+        run: pip install -e ./motor -e ./integracion pandas openpyxl
+
+      - name: Validar Excel → JSON de ofertas (Pydantic estricto; 0 tolerancia al error)
+        run: |
+          python integracion/scripts/import_catalogo.py \
+            --excel "$FICHERO" \
+            --salida /tmp/ofertas-validadas.json \
+            --rechazadas /tmp/ofertas-rechazadas.json
+          test ! -s /tmp/ofertas-rechazadas.json
+
+      - name: Publicar por PR (revisión humana obligatoria antes de poblar ERPNext)
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(tarifas): catálogo validado Pydantic (${{ env.FICHERO }})"
+          branch: bot/tarifas-${{ github.run_id }}
+          title: "📊 Catálogo tarifario validado — ${{ env.FICHERO }}"
+          body: |
+            Ofertas validadas contra `bmae_comparador.schemas.OfertaTarifa`.
+            Al mergear, `deploy-infra` pobla las «Oferta Electricidad»
+            de ERPNext. **Sin merge, no hay catálogo nuevo**: la revisión
+            humana es la última barrera regulatoria (CNMC Circular 3/2020).
+          delete-branch: true

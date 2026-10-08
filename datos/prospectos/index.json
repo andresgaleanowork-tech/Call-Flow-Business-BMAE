@@ -1,0 +1,542 @@
+{
+  "v": 1,
+  "total": 32582,
+  "deduplicadas": 579,
+  "columnas_mapeadas": {
+    "nombre": 0,
+    "direccion": 1,
+    "cp": 2,
+    "ciudad": 3,
+    "estado": 4,
+    "telefono": 5,
+    "email": 6,
+    "web": 7
+  },
+  "ciudades": [
+    {
+      "ciudad": "Valencia",
+      "n": 14158,
+      "archivo": "ciudad_valencia.json"
+    },
+    {
+      "ciudad": "otras ciudades",
+      "n": 1645,
+      "archivo": "ciudad___otras__.json"
+    },
+    {
+      "ciudad": "Paterna",
+      "n": 1046,
+      "archivo": "ciudad_paterna.json"
+    },
+    {
+      "ciudad": "Gandia",
+      "n": 748,
+      "archivo": "ciudad_gandia.json"
+    },
+    {
+      "ciudad": "Torrent",
+      "n": 711,
+      "archivo": "ciudad_torrent.json"
+    },
+    {
+      "ciudad": "Sin ciudad",
+      "n": 485,
+      "archivo": "ciudad_sin-ciudad.json"
+    },
+    {
+      "ciudad": "Alzira",
+      "n": 447,
+      "archivo": "ciudad_alzira.json"
+    },
+    {
+      "ciudad": "Aldaia",
+      "n": 444,
+      "archivo": "ciudad_aldaia.json"
+    },
+    {
+      "ciudad": "Riba-Roja De Turia",
+      "n": 428,
+      "archivo": "ciudad_riba-roja-de-turia.json"
+    },
+    {
+      "ciudad": "Catarroja",
+      "n": 423,
+      "archivo": "ciudad_catarroja.json"
+    },
+    {
+      "ciudad": "Quart De Poblet",
+      "n": 414,
+      "archivo": "ciudad_quart-de-poblet.json"
+    },
+    {
+      "ciudad": "Alaquas",
+      "n": 402,
+      "archivo": "ciudad_alaquas.json"
+    },
+    {
+      "ciudad": "Manises",
+      "n": 397,
+      "archivo": "ciudad_manises.json"
+    },
+    {
+      "ciudad": "Ontinyent",
+      "n": 385,
+      "archivo": "ciudad_ontinyent.json"
+    },
+    {
+      "ciudad": "Burjassot",
+      "n": 370,
+      "archivo": "ciudad_burjassot.json"
+    },
+    {
+      "ciudad": "Port De Sagunt",
+      "n": 370,
+      "archivo": "ciudad_port-de-sagunt.json"
+    },
+    {
+      "ciudad": "Xativa",
+      "n": 330,
+      "archivo": "ciudad_xativa.json"
+    },
+    {
+      "ciudad": "Mislata",
+      "n": 314,
+      "archivo": "ciudad_mislata.json"
+    },
+    {
+      "ciudad": "Xirivella",
+      "n": 264,
+      "archivo": "ciudad_xirivella.json"
+    },
+    {
+      "ciudad": "Paiporta",
+      "n": 260,
+      "archivo": "ciudad_paiporta.json"
+    },
+    {
+      "ciudad": "Silla",
+      "n": 255,
+      "archivo": "ciudad_silla.json"
+    },
+    {
+      "ciudad": "La Pobla De Vallbona",
+      "n": 240,
+      "archivo": "ciudad_la-pobla-de-vallbona.json"
+    },
+    {
+      "ciudad": "Moncada",
+      "n": 237,
+      "archivo": "ciudad_moncada.json"
+    },
+    {
+      "ciudad": "Betera",
+      "n": 223,
+      "archivo": "ciudad_betera.json"
+    },
+    {
+      "ciudad": "Oliva",
+      "n": 214,
+      "archivo": "ciudad_oliva.json"
+    },
+    {
+      "ciudad": "L'Eliana",
+      "n": 210,
+      "archivo": "ciudad_l-eliana.json"
+    },
+    {
+      "ciudad": "Sueca",
+      "n": 208,
+      "archivo": "ciudad_sueca.json"
+    },
+    {
+      "ciudad": "Picassent",
+      "n": 203,
+      "archivo": "ciudad_picassent.json"
+    },
+    {
+      "ciudad": "Algemesi",
+      "n": 198,
+      "archivo": "ciudad_algemesi.json"
+    },
+    {
+      "ciudad": "Albal",
+      "n": 195,
+      "archivo": "ciudad_albal.json"
+    },
+    {
+      "ciudad": "Sagunt",
+      "n": 188,
+      "archivo": "ciudad_sagunt.json"
+    },
+    {
+      "ciudad": "Alfafar",
+      "n": 179,
+      "archivo": "ciudad_alfafar.json"
+    },
+    {
+      "ciudad": "Requena",
+      "n": 179,
+      "archivo": "ciudad_requena.json"
+    },
+    {
+      "ciudad": "Alboraia",
+      "n": 178,
+      "archivo": "ciudad_alboraia.json"
+    },
+    {
+      "ciudad": "Lliria",
+      "n": 178,
+      "archivo": "ciudad_lliria.json"
+    },
+    {
+      "ciudad": "Beniparrell",
+      "n": 176,
+      "archivo": "ciudad_beniparrell.json"
+    },
+    {
+      "ciudad": "Cullera",
+      "n": 173,
+      "archivo": "ciudad_cullera.json"
+    },
+    {
+      "ciudad": "Massanassa",
+      "n": 172,
+      "archivo": "ciudad_massanassa.json"
+    },
+    {
+      "ciudad": "Alboraya",
+      "n": 163,
+      "archivo": "ciudad_alboraya.json"
+    },
+    {
+      "ciudad": "Picanya",
+      "n": 153,
+      "archivo": "ciudad_picanya.json"
+    },
+    {
+      "ciudad": "Puçol",
+      "n": 151,
+      "archivo": "ciudad_pucol.json"
+    },
+    {
+      "ciudad": "Chiva",
+      "n": 147,
+      "archivo": "ciudad_chiva.json"
+    },
+    {
+      "ciudad": "Benetússer",
+      "n": 142,
+      "archivo": "ciudad_benetusser.json"
+    },
+    {
+      "ciudad": "Carlet",
+      "n": 140,
+      "archivo": "ciudad_carlet.json"
+    },
+    {
+      "ciudad": "Sedavi",
+      "n": 136,
+      "archivo": "ciudad_sedavi.json"
+    },
+    {
+      "ciudad": "Rafelbunyol",
+      "n": 133,
+      "archivo": "ciudad_rafelbunyol.json"
+    },
+    {
+      "ciudad": "Tavernes De La Valldigna",
+      "n": 130,
+      "archivo": "ciudad_tavernes-de-la-valldigna.json"
+    },
+    {
+      "ciudad": "Massamagrell",
+      "n": 128,
+      "archivo": "ciudad_massamagrell.json"
+    },
+    {
+      "ciudad": "L'Alcudia",
+      "n": 127,
+      "archivo": "ciudad_l-alcudia.json"
+    },
+    {
+      "ciudad": "Carcaixent",
+      "n": 126,
+      "archivo": "ciudad_carcaixent.json"
+    },
+    {
+      "ciudad": "Godella",
+      "n": 121,
+      "archivo": "ciudad_godella.json"
+    },
+    {
+      "ciudad": "Alcasser",
+      "n": 114,
+      "archivo": "ciudad_alcasser.json"
+    },
+    {
+      "ciudad": "Museros",
+      "n": 112,
+      "archivo": "ciudad_museros.json"
+    },
+    {
+      "ciudad": "Meliana",
+      "n": 111,
+      "archivo": "ciudad_meliana.json"
+    },
+    {
+      "ciudad": "Cheste",
+      "n": 103,
+      "archivo": "ciudad_cheste.json"
+    },
+    {
+      "ciudad": "Naquera",
+      "n": 103,
+      "archivo": "ciudad_naquera.json"
+    },
+    {
+      "ciudad": "El Puig De Santa Maria",
+      "n": 102,
+      "archivo": "ciudad_el-puig-de-santa-maria.json"
+    },
+    {
+      "ciudad": "Utiel",
+      "n": 102,
+      "archivo": "ciudad_utiel.json"
+    },
+    {
+      "ciudad": "Alginet",
+      "n": 101,
+      "archivo": "ciudad_alginet.json"
+    },
+    {
+      "ciudad": "Almussafes",
+      "n": 94,
+      "archivo": "ciudad_almussafes.json"
+    },
+    {
+      "ciudad": "Alberic",
+      "n": 93,
+      "archivo": "ciudad_alberic.json"
+    },
+    {
+      "ciudad": "Canals",
+      "n": 91,
+      "archivo": "ciudad_canals.json"
+    },
+    {
+      "ciudad": "Grao De Gandia",
+      "n": 90,
+      "archivo": "ciudad_grao-de-gandia.json"
+    },
+    {
+      "ciudad": "Buñol",
+      "n": 88,
+      "archivo": "ciudad_bunol.json"
+    },
+    {
+      "ciudad": "Albaida",
+      "n": 84,
+      "archivo": "ciudad_albaida.json"
+    },
+    {
+      "ciudad": "Foios",
+      "n": 83,
+      "archivo": "ciudad_foios.json"
+    },
+    {
+      "ciudad": "Benaguasil",
+      "n": 80,
+      "archivo": "ciudad_benaguasil.json"
+    },
+    {
+      "ciudad": "Benifaio",
+      "n": 77,
+      "archivo": "ciudad_benifaio.json"
+    },
+    {
+      "ciudad": "L'Olleria",
+      "n": 70,
+      "archivo": "ciudad_l-olleria.json"
+    },
+    {
+      "ciudad": "Almassera",
+      "n": 65,
+      "archivo": "ciudad_almassera.json"
+    },
+    {
+      "ciudad": "La Pobla De Farnals",
+      "n": 63,
+      "archivo": "ciudad_la-pobla-de-farnals.json"
+    },
+    {
+      "ciudad": "Vilamarxant",
+      "n": 63,
+      "archivo": "ciudad_vilamarxant.json"
+    },
+    {
+      "ciudad": "Rocafort",
+      "n": 62,
+      "archivo": "ciudad_rocafort.json"
+    },
+    {
+      "ciudad": "Montserrat",
+      "n": 60,
+      "archivo": "ciudad_montserrat.json"
+    },
+    {
+      "ciudad": "Bocairent",
+      "n": 54,
+      "archivo": "ciudad_bocairent.json"
+    },
+    {
+      "ciudad": "Guadassuar",
+      "n": 51,
+      "archivo": "ciudad_guadassuar.json"
+    },
+    {
+      "ciudad": "Ayora",
+      "n": 49,
+      "archivo": "ciudad_ayora.json"
+    },
+    {
+      "ciudad": "Moixent",
+      "n": 47,
+      "archivo": "ciudad_moixent.json"
+    },
+    {
+      "ciudad": "San Antonio De Benageber",
+      "n": 44,
+      "archivo": "ciudad_san-antonio-de-benageber.json"
+    },
+    {
+      "ciudad": "Canet D'En Berenguer",
+      "n": 41,
+      "archivo": "ciudad_canet-d-en-berenguer.json"
+    },
+    {
+      "ciudad": "La Cañada,Paterna",
+      "n": 41,
+      "archivo": "ciudad_la-canada-paterna.json"
+    },
+    {
+      "ciudad": "Aielo De Malferit",
+      "n": 39,
+      "archivo": "ciudad_aielo-de-malferit.json"
+    },
+    {
+      "ciudad": "Albalat Dels Sorells",
+      "n": 39,
+      "archivo": "ciudad_albalat-dels-sorells.json"
+    },
+    {
+      "ciudad": "La Canyada",
+      "n": 39,
+      "archivo": "ciudad_la-canyada.json"
+    },
+    {
+      "ciudad": "Massalfassar",
+      "n": 39,
+      "archivo": "ciudad_massalfassar.json"
+    },
+    {
+      "ciudad": "Beniganim",
+      "n": 38,
+      "archivo": "ciudad_beniganim.json"
+    },
+    {
+      "ciudad": "Enguera",
+      "n": 37,
+      "archivo": "ciudad_enguera.json"
+    },
+    {
+      "ciudad": "Bellreguard",
+      "n": 36,
+      "archivo": "ciudad_bellreguard.json"
+    },
+    {
+      "ciudad": "Villanueva De Castellon",
+      "n": 36,
+      "archivo": "ciudad_villanueva-de-castellon.json"
+    },
+    {
+      "ciudad": "Turis",
+      "n": 35,
+      "archivo": "ciudad_turis.json"
+    },
+    {
+      "ciudad": "Corbera",
+      "n": 34,
+      "archivo": "ciudad_corbera.json"
+    },
+    {
+      "ciudad": "Monte Vedat,Torrent",
+      "n": 34,
+      "archivo": "ciudad_monte-vedat-torrent.json"
+    },
+    {
+      "ciudad": "Alfara Del Patriarca",
+      "n": 33,
+      "archivo": "ciudad_alfara-del-patriarca.json"
+    },
+    {
+      "ciudad": "Masia Del Juez,Torrent",
+      "n": 33,
+      "archivo": "ciudad_masia-del-juez-torrent.json"
+    },
+    {
+      "ciudad": "Real De Gandia",
+      "n": 33,
+      "archivo": "ciudad_real-de-gandia.json"
+    },
+    {
+      "ciudad": "Agullent",
+      "n": 32,
+      "archivo": "ciudad_agullent.json"
+    },
+    {
+      "ciudad": "La Llosa De Ranes",
+      "n": 32,
+      "archivo": "ciudad_la-llosa-de-ranes.json"
+    },
+    {
+      "ciudad": "L'Alcudia De Crespins",
+      "n": 31,
+      "archivo": "ciudad_l-alcudia-de-crespins.json"
+    },
+    {
+      "ciudad": "Sollana",
+      "n": 31,
+      "archivo": "ciudad_sollana.json"
+    },
+    {
+      "ciudad": "Villar Del Arzobispo",
+      "n": 31,
+      "archivo": "ciudad_villar-del-arzobispo.json"
+    },
+    {
+      "ciudad": "Xeraco",
+      "n": 29,
+      "archivo": "ciudad_xeraco.json"
+    },
+    {
+      "ciudad": "Albuixech",
+      "n": 28,
+      "archivo": "ciudad_albuixech.json"
+    },
+    {
+      "ciudad": "Vallada",
+      "n": 28,
+      "archivo": "ciudad_vallada.json"
+    },
+    {
+      "ciudad": "Vinalesa",
+      "n": 28,
+      "archivo": "ciudad_vinalesa.json"
+    },
+    {
+      "ciudad": "Catadau",
+      "n": 25,
+      "archivo": "ciudad_catadau.json"
+    }
+  ]
+}

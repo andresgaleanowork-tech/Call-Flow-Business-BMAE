@@ -1,0 +1,14 @@
+{
+  "name": "bmae-twenty-config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Objetos custom de Twenty CRM para BMAE (Metadata SDK) — Bloque A2 del Prompt Maestro",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p ."
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

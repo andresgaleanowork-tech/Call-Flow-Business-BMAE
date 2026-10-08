@@ -1,0 +1,41 @@
+# Plantilla «invoice-issue» para el SIF (docs/github-total.md §3).
+# Abrir una factura = crear este issue; emitir = label verifactu:emitir (preprod)
+# o verifactu:emitir-produccion (environment con aprobación humana).
+name: 🧾 Factura VeriFactu (invoice-issue)
+description: Emitir y registrar una factura con el SIF GitHub-total (cadena SHA-256 + envío AEAT).
+title: "Factura [YYYY-NNNN] · cliente"
+labels: [factura]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Cómo funciona**: crea este issue con los datos de la factura, etiqueta
+        `verifactu:emitir` (preproducción, sin coste) para validar la cadena;
+        cuando encaje, cambia a `verifactu:emitir-produccion` y un responsable
+        aprueba en el environment protegido. La respuesta AEAT y el commit de
+        `datos/verifactu/cadena.json` quedan en este mismo issue.
+  - type: input
+    id: cliente
+    attributes:
+      label: Cliente (nombre no PII — va en la ficha, aquí solo referencia)
+      placeholder: "Ej.: ref. captación #87"
+    validations:
+      required: false
+  - type: textarea
+    id: factura
+    attributes:
+      label: Datos de la factura (JSON)
+      description: Claves exactas del contrato §3 SIF. Fecha en DD-MM-YYYY. Importes con punto decimal.
+      value: |
+        ```json
+        {
+          "numero_serie": "BMAE-2026-0001",
+          "fecha_expedicion": "07-10-2026",
+          "tipo_factura": "F1",
+          "descripcion": "Suministro eléctrico — periodo",
+          "cuota_total": "21.00",
+          "importe_total": "121.00"
+        }
+        ```
+    validations:
+      required: true

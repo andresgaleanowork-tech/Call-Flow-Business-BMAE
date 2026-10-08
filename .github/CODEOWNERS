@@ -1,0 +1,27 @@
+# CODEOWNERS — revisión automática por zona (GitHub-Total).
+# Los nombres de usuario son REALES del equipo: cumplimentarlos es un gesto
+# humano (Deploy §inicio). Hasta entonces valen los comentarios como guía.
+#
+# Regla: 1 review obligatoria en zonas legales/infra; el resto, por empatía.
+
+# SIF VeriFactu (la cadena es sagrada: docs/github-total.md §3)
+/verifactu/                    @direccion-tecnica
+/integracion/scripts/sif_emitir.py  @direccion-tecnica
+/.github/workflows/verifactu-*.yml  @direccion-tecnica
+/datos/verifactu/              @direccion-tecnica @gestor
+
+# Canal CRM y cola
+/apps/web/src/lib/canalgithub.js    @direccion-tecnica
+/apps/web/src/lib/pipelinegh.js     @direccion-tecnica
+/integracion/scripts/cola_ingest.py @direccion-tecnica
+/.github/workflows/cola-ingest.yml  @direccion-tecnica
+
+# Auth e identidad
+/auth/                         @direccion-tecnica
+/frontend-auth/                @direccion-tecnica
+/apps/web/src/lib/ghdevice.js  @direccion-tecnica
+
+# Datos sellados (nunca tocár sin issue previo)
+/datos/comercial/              @direccion-tecnica @gestor
+/CLEANUP.md                    @direccion-tecnica
+/_cuarentena/                  @direccion-tecnica

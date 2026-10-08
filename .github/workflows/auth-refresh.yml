@@ -1,0 +1,76 @@
+# auth-refresh.yml — B2 (§4.2.10 Prompt Maestro)
+# Rotación ESTRICTA del refresh (30 d): consume el jti viejo en la denylist
+# (gist privado append-only). Reuso de un refresh ya rotado = ROBO →
+# bloqueo en cascada del sujeto + Issue crítico (§4.4 mitigación fuga JWT).
+# Rama principal síncrona: la llama el endpoint Frappe `auth_refresh`
+# con el mismo núcleo.
+
+name: auth-refresh
+
+on:
+  repository_dispatch:
+    types: [auth-refresh]
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: "refresh token a rotar (replay controlado)"
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  REFRESH: ${{ github.event.client_payload.refresh || github.event.inputs.refresh }}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ env.REFRESH != '' }}
+    env:
+      AUTH_PRIVATE_KEY_PEM: ${{ secrets.AUTH_PRIVATE_KEY_PEM }}
+      AUTH_PUBLIC_KEY_PEM: ${{ secrets.AUTH_PUBLIC_KEY_PEM }}
+      GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+      DENYLIST_GIST_ID: ${{ secrets.DENYLIST_GIST_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Núcleo de autenticación
+        run: pip install -e ./auth requests
+
+      - name: Rotación estricta (consume jti viejo)
+        id: rotacion
+        run: |
+          python auth/scripts/auth_refresh.py \
+            --refresh "$REFRESH" --informe /tmp/auth-refresh-informe.json
+
+      - name: "Informe (sin tokens — metadatos únicamente)"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-refresh-${{ github.run_id }}
+          path: /tmp/auth-refresh-informe.json
+          retention-days: 30
+
+      - name: Reuso/robo o fallo → Issue 🔐 crítico
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let inf = {};
+            try { inf = JSON.parse(fs.readFileSync('/tmp/auth-refresh-informe.json','utf8')); } catch (e) {}
+            const esRobo = (inf.error || '').includes('reuso de refresh');
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `${esRobo ? '🔐 REUSO DE REFRESH (posible robo)' : '⚠️ auth-refresh falló'} · ${new Date().toISOString()}`,
+              labels: esRobo ? ['auth', 'critico', 'robo-token'] : ['auth', 'incidencia'],
+              body: esRobo
+                ? '⛔ **No reenviar**: el sujeto está bloqueado en la denylist. Revisión manual obligatoria (§4.4).\n```json\n' + JSON.stringify(inf, null, 2) + '\n```'
+                : '```json\n' + JSON.stringify(inf, null, 2) + '\n```',
+            });

@@ -1,0 +1,125 @@
+{
+  "v": 2,
+  "upd": "2026-10-08",
+  "nota": "Formatos de factura conocidos por el extractor de consumos reales (A2), calibrado con 5 facturas reales del usuario 08-oct-2026 (3 legibles por máquina + 2 no legibles: 1 escaneada sin capa de texto y 1 con glifos mapeados /xx — ambas quedan explícitas como camino manual). Contenido SIN datos de clientes: solo identificadores públicos de cada comercializadora y sus patrones de redacción. Se amplía con cada factura de muestra nueva. Regex Python (el espejo JS del portal las duplica manualmente y los tests cruzan ambos).",
+  "identificadores": [
+    {
+      "nombre": "Apolo Energies",
+      "pistas": [
+        "apolo energies",
+        "apolo business"
+      ],
+      "calibrado_con": "factura 3.0TD/6.1 pyme (real, 08-oct)"
+    },
+    {
+      "nombre": "Energia Libre Comercializadora",
+      "pistas": [
+        "energía libre comercializadora",
+        "energia libre comerc",
+        "elc energía libre"
+      ],
+      "calibrado_con": "factura 6.1TD típica de pyme (real, 08-oct)"
+    },
+    {
+      "nombre": "Endesa",
+      "pistas": [
+        "endesa energía s.a.u",
+        "energía xxi comercializadora",
+        "endesa"
+      ]
+    },
+    {
+      "nombre": "Naturgy",
+      "pistas": [
+        "naturgy comercializadora",
+        "naturgy iberia",
+        "comercializadora regulada gas & power"
+      ]
+    },
+    {
+      "nombre": "Repsol",
+      "pistas": [
+        "repsol comercializadora",
+        "repsol luz y gas",
+        "repsol"
+      ]
+    },
+    {
+      "nombre": "TotalEnergies",
+      "pistas": [
+        "totalenergies comercializadora",
+        "totalenergies",
+        "total energies"
+      ]
+    },
+    {
+      "nombre": "Octopus",
+      "pistas": [
+        "octopus energy españa",
+        "octopus energy"
+      ]
+    },
+    {
+      "nombre": "EDP",
+      "pistas": [
+        "edp comercializadora",
+        "edp s.a.u",
+        "edp"
+      ]
+    },
+    {
+      "nombre": "Podo",
+      "pistas": [
+        "podo"
+      ]
+    },
+    {
+      "nombre": "Holaluz",
+      "pistas": [
+        "holaluz comercializadora",
+        "holaluz"
+      ]
+    },
+    {
+      "nombre": "Iberdrola",
+      "pistas": [
+        "iberdrola clientes",
+        "iberdrola comercialización",
+        "iberdrola"
+      ],
+      "calibrado_con": "factura residencial 2.0TD con autoconsumo (real, 08-oct)"
+    }
+  ],
+  "patrones_campo": {
+    "cups": "ES\\s*(?:\\d{4}\\s*){4}\\d{0,2}\\s*[A-Z0-9]{0,4}",
+    "cups_compacto": "(ES[0-9]{16}[A-Z0-9]{0,4})",
+    "consumo_kwh_total": [
+      "energ(?:í|i)a consumida\\s*([0-9][0-9.]*(?:,[0-9]{1,2})?)\\s*kWh",
+      "consumo(?: acumulado| total(?: de)?)?\\s*[:]?\\s*([0-9][0-9.]*(?:,[0-9]{1,2})?)\\s*kWh",
+      "([0-9][0-9.]*(?:,[0-9]{1,2})?)\\s*kWh"
+    ],
+    "consumo_anual_kwh": "consumo[^\\n]{0,20}?([0-9][0-9.]*)\\s*k\\s*W\\s*h\\s*/\\s*a(?:ñ|n)o",
+    "potencia_kw": [
+      "potencia punta\\s*:?\\s*([0-9]+,[0-9]+)\\s*kW",
+      "potencia[^\\n]{0,30}?([0-9]+[.,][0-9]+)\\s*kW"
+    ],
+    "potencia_p_max": [
+      "P[ot\\.]*\\s*P(\\d+)\\s*\\(?\\s*k[Ww]\\s*\\)?\\s*:?\\s*([0-9]+[.,][0-9]+)",
+      "\\bP(\\d)\\s*:\\s*([0-9]+[.,]\\d{3})"
+    ],
+    "fecha_desde": "(?:desde|periodo(?: de)? facturación|facturación[\\s\\S]{0,30}?|consumo[\\s\\S]{0,30}?)(\\d{2}[/-]\\d{2}[/-]\\d{4})",
+    "fecha_hasta": "(?:al?\\s+|hasta\\s+|–\\s+)(\\d{2}[/-]\\d{2}[/-]\\d{4})",
+    "importe_total": [
+      "total\\s+a\\s+pagar[^0-9]{0,20}([0-9][0-9.]*,[0-9]{2})",
+      "importe\\s+total[^0-9]{0,20}([0-9][0-9.]*,[0-9]{2})",
+      "total\\s+(?:importe\\s+)?factura[^0-9]{0,20}([0-9][0-9.]*,[0-9]{2})",
+      "importe\\s+factura[^0-9]{0,40}([0-9][0-9.]*,[0-9]{2})",
+      "(?:^|\\s)total[^0-9]{1,20}([0-9][0-9.]*,[0-9]{2})\\s*€"
+    ],
+    "consumo_kwh_x_euro": "(\\d{1,7})\\s*kWh\\s*x\\s*0,\\d+"
+  },
+  "casos_no_legibles_conocidos": [
+    "PDF escaneado sin capa de texto (imagen): 0-1 chars por página → camino manual por teléfono",
+    "PDF con glifos mapeados (/47 /58 …): pypdf devuelve códigos en vez de letras → camino manual por teléfono"
+  ]
+}

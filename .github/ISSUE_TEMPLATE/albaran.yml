@@ -1,0 +1,33 @@
+# Plantilla de albarán — documento comercial SIN valor fiscal.
+# Mientras no exista certificado AEAT (F4G·w1), la operativa comercial va así:
+# issue con JSON + label `albaran:crear` → PDF con logo + asiento en el libro.
+name: 📄 Albarán (documento no fiscal)
+description: Generar un albarán numerado con PDF. NO es una factura ni sustituye al registro VeriFactu.
+title: "Albarán [ref-cliente] · concepto"
+labels: [albaran]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Antes de nada**: el albarán es documento comercial de entrega — no
+        sustituye a la factura ni evita la obligación de facturar cuando
+        corresponda. Cliente en `cliente_ref` = referencia sin PII (el guardián
+        rechaza teléfonos/documentos). Descripción corta de cada línea, precios
+        con punto decimal.
+  - type: textarea
+    id: albaran
+    attributes:
+      label: Datos del albarán (JSON)
+      value: |
+        ```json
+        {
+          "cliente_ref": "ref. captación #87",
+          "fecha": "2026-10-08",
+          "lineas": [
+            { "descripcion": "Concepto 1", "cantidad": 1, "precio": 240.00 },
+            { "descripcion": "Concepto 2", "cantidad": 2, "precio": 60.50 }
+          ]
+        }
+        ```
+    validations:
+      required: true

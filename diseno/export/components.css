@@ -1,0 +1,173 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   components.css — C5 (§9 maestro): Button · Input · Table · Card ·
+   Modal · Toast · estados de carga/error/vacío.
+   Requiere tokens.css + base.css. TODOS los estados exigidos están:
+   default/hover/focus/active/disabled/loading/error/vacío, 44×44 mínimo,
+   dark via tokens, reduced-motion congelado.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────── Button (§9) ──────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--espacio-2xs);
+  min-height: 44px; min-width: 44px;
+  padding: 0 var(--espacio-md);
+  border: 0; border-radius: var(--radio-lg);
+  font: 600 var(--tipo-body-m); cursor: pointer;
+  transition: transform var(--duracion-fast) var(--ease-out),
+    background-color var(--duracion-fast) var(--ease-out),
+    box-shadow var(--duracion-fast) var(--ease-out);
+  user-select: none;
+}
+.btn:hover:not(:disabled,.btn--loading) { transform: translateY(-1px); }
+.btn:active:not(:disabled,.btn--loading) { transform: translateY(0); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn--loading { opacity: 0.8; cursor: progress; pointer-events: none; }
+
+.btn--primary { background: var(--color-primario-azul-profundo); color: var(--color-neutro-blanco); box-shadow: var(--sombra-md); }
+.btn--primary:hover:not(:disabled,.btn--loading) { background: var(--color-primario-azul-medio); }
+[data-tema="claro"] .btn--primary { color: #FFFFFF; }
+.btn--secondary { background: var(--superficie-complementaria); color: var(--texto-fuerte); }
+.btn--secondary:hover:not(:disabled,.btn--loading) { background: var(--borde); }
+.btn--ghost { background: transparent; color: var(--color-primario-azul-medio); }
+.btn--ghost:hover:not(:disabled,.btn--loading) { background: color-mix(in srgb, var(--color-primario-azul-claro) 12%, transparent); }
+.btn--danger { background: var(--color-error); color: #FFFFFF; box-shadow: var(--sombra-md); }
+.btn--danger:hover:not(:disabled,.btn--loading) { filter: brightness(0.92); }
+.btn--success { background: var(--color-primario-azul-profundo); color: #FFFFFF; background: var(--color-exito); box-shadow: var(--sombra-md); }
+.btn--success:hover:not(:disabled,.btn--loading) { filter: brightness(0.94); }
+
+.btn--sm { padding: 0 var(--espacio-sm); font: 600 var(--tipo-body-s); }
+.btn--lg { padding: 0 var(--espacio-lg); font: 600 var(--tipo-body-l); }
+
+.btn .spinner, .spinner {
+  inline-size: 18px; block-size: 18px; border-radius: 50%;
+  border: 2px solid currentColor; border-top-color: transparent;
+  animation: giro var(--duracion-slow) linear infinite;
+}
+@keyframes giro { to { transform: rotate(360deg); } }
+
+/* ─────────────────────────── Input (§9) ───────────────────────────── */
+.campo { display: grid; gap: var(--espacio-2xs); }
+.campo__etiqueta { font: 600 var(--tipo-body-s); color: var(--texto-fuerte); }
+.campo__ayuda { font: var(--tipo-caption); color: var(--texto-suave); }
+.campo__control {
+  min-height: 44px; padding: 0 var(--espacio-xs);
+  border: 1.5px solid var(--borde); border-radius: var(--radio-md);
+  background: var(--superficie-tarjeta); color: var(--texto-fuerte);
+  font: var(--tipo-body-m);
+  transition: border-color var(--duracion-fast) var(--ease-out),
+    box-shadow var(--duracion-fast) var(--ease-out);
+}
+.campo__control:hover:not(:disabled) { border-color: var(--color-neutro-gris-400); }
+.campo__control:focus {
+  border-color: var(--color-primario-azul-claro);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario-azul-claro) 25%, transparent);
+  outline: none;
+}
+.campo__control:disabled { opacity: .55; cursor: not-allowed; background: var(--superficie-complementaria); }
+.campo--error .campo__control { border-color: var(--color-error); }
+.campo--error .campo__ayuda { color: var(--color-error); }
+textarea.campo__control { min-height: 96px; padding-top: var(--espacio-xs); padding-bottom: var(--espacio-xs); resize: vertical; }
+.campo__control[aria-invalid="true"] { border-color: var(--color-error); }
+
+/* Checkbox / Radio / Switch con hit-area grande */
+.chk { display: inline-flex; align-items: center; gap: var(--espacio-2xs); min-height: 44px; cursor: pointer; }
+.chk input { inline-size: 20px; block-size: 20px; accent-color: var(--color-primario-azul-medio); margin: 0; }
+.chk input:focus-visible { outline-offset: 2px; }
+
+/* ─────────────────────────── Card KPI (§9) ────────────────────────── */
+.kpi {
+  display: grid; gap: var(--espacio-2xs);
+  padding: var(--espacio-md);
+  background: var(--superficie-tarjeta);
+  border: 1px solid var(--borde); border-radius: var(--radio-xl);
+  box-shadow: var(--sombra-sm);
+  transition: box-shadow var(--duracion-fast) var(--ease-out),
+    transform var(--duracion-fast) var(--ease-out);
+}
+.kpi:hover { box-shadow: var(--sombra-md); transform: translateY(-2px); }
+.kpi__titulo { font: var(--tipo-overline); text-transform: uppercase; letter-spacing: var(--tracking-overline); color: var(--texto-suave); }
+.kpi__valor { font: 600 var(--tipo-display-l); font-family: var(--font-datos); font-variant-numeric: tabular-nums; letter-spacing: var(--tracking-display); }
+.kpi__delta { font: 600 var(--tipo-body-s); }
+.kpi__delta--sube { color: var(--color-exito); }
+.kpi__delta--baja { color: var(--color-error); }
+.kpi__delta--neutro { color: var(--texto-suave); }
+
+/* ─────────────────────────── Table (§9) ───────────────────────────── */
+.tabla-envolvente { overflow-x: auto; border: 1px solid var(--borde); border-radius: var(--radio-lg); background: var(--superficie-tarjeta); }
+.tabla { width: 100%; border-collapse: collapse; font: var(--tipo-body-s); }
+.tabla caption { text-align: left; padding: var(--espacio-sm) var(--espacio-sm) 0; font: var(--tipo-body-s); color: var(--texto-suave); }
+.tabla th, .tabla td { padding: var(--espacio-xs) var(--espacio-sm); text-align: left; border-bottom: 1px solid var(--borde); }
+.tabla thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--superficie-tarjeta);
+  font: var(--tipo-overline); text-transform: uppercase; letter-spacing: var(--tracking-overline);
+  color: var(--texto-suave);
+}
+.tabla tbody tr { transition: background-color var(--duracion-instant) var(--ease-out); }
+.tabla tbody tr:hover { background: var(--superficie-complementaria); }
+.tabla .numerica { text-align: right; font-family: var(--font-datos); font-variant-numeric: tabular-nums; }
+.orden-btn { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; min-height: 44px; }
+.orden-btn:focus-visible { outline: 2px solid var(--color-primario-azul-claro); outline-offset: 2px; border-radius: var(--radio-sm); }
+
+/* skeleton */
+.esqueleto { position: relative; overflow: hidden; background: var(--superficie-complementaria); border-radius: var(--radio-sm); color: transparent; }
+.esqueleto::after {
+  content: ""; position: absolute; inset: 0; translate: -100% 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--superficie-tarjeta) 65%, transparent), transparent);
+  animation: pasada 1.4s var(--ease-in-out) infinite;
+}
+@keyframes pasada { to { translate: 100% 0; } }
+
+/* estados vacío / error */
+.estado-vacio, .estado-error {
+  display: grid; place-items: center; gap: var(--espacio-sm); padding: var(--espacio-xl) var(--espacio-md);
+  text-align: center; color: var(--texto-suave); font: var(--tipo-body-m);
+}
+.estado-error { color: var(--color-error); }
+.estado-vacio .ilustracion, .estado-error .ilustracion { inline-size: 72px; block-size: 72px; opacity: .72; }
+
+/* ─────────────────────────── Modal (§9) ───────────────────────────── */
+.modal-fondo {
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center; padding: var(--espacio-sm);
+  background: rgba(10, 37, 64, 0.55);
+  animation: aparecer var(--duracion-fast) var(--ease-out);
+}
+@keyframes aparecer { from { opacity: 0; } }
+@keyframes subir { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+.modal {
+  width: min(560px, 100%); max-height: min(84vh, 900px); overflow: auto;
+  background: var(--superficie-tarjeta); border-radius: var(--radio-2xl);
+  box-shadow: var(--sombra-2xl); padding: var(--espacio-lg);
+  display: grid; gap: var(--espacio-md);
+  animation: subir var(--duracion-normal) var(--ease-spring);
+}
+.modal__titulo { font: var(--tipo-h2); letter-spacing: var(--tracking-h); }
+.modal__acciones { display: flex; gap: var(--espacio-xs); justify-content: flex-end; flex-wrap: wrap; }
+.modal--pantalla-completa { width: 100%; height: 100%; border-radius: 0; max-height: none; }
+
+/* ─────────────────────────── Toast (§9) ───────────────────────────── */
+.toast-zona { position: fixed; inset-inline: 0; bottom: var(--espacio-sm); z-index: 1100; display: grid; gap: var(--espacio-2xs); justify-items: center; pointer-events: none; }
+.toast {
+  pointer-events: auto; display: flex; align-items: center; gap: var(--espacio-xs);
+  max-width: min(480px, calc(100vw - 2*var(--espacio-sm)));
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border-radius: var(--radio-lg); box-shadow: var(--sombra-lg);
+  background: var(--color-primario-azul-profundo); color: #FFFFFF; font: 600 var(--tipo-body-s);
+  animation: subir var(--duracion-fast) var(--ease-spring);
+}
+.toast--exito { background: var(--color-exito); }
+.toast--error { background: var(--color-error); }
+.toast--info { background: var(--color-primario-azul-medio); }
+.toast__cerrar { all: unset; cursor: pointer; min-width: 44px; min-height: 44px; margin: calc(-1 * var(--espacio-xs)) 0; display: grid; place-items: center; font: 700 var(--tipo-body-l); }
+.toast__cerrar:focus-visible { outline: 2px solid #fff; border-radius: var(--radio-sm); }
+
+/* ─────────────────────── Responsive tabla→cards (§9) ──────────────── */
+@media (max-width: 640px) {
+  .tabla--tarjetas, .tabla--tarjetas tbody, .tabla--tarjetas tr, .tabla--tarjetas td { display: block; width: 100%; }
+  .tabla--tarjetas thead { position: absolute; left: -9999px; }
+  .tabla--tarjetas tr { border-bottom: 2px solid var(--borde); padding: var(--espacio-xs) 0; }
+  .tabla--tarjetas td { display: flex; justify-content: space-between; gap: var(--espacio-xs); border: 0; }
+  .tabla--tarjetas td::before { content: attr(data-col); font: 600 var(--tipo-caption); color: var(--texto-suave); }
+}

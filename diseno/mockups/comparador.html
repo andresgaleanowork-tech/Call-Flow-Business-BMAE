@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparativa — BMAE</title>
+<!-- C7 mockup: comparador de ofertas (estado "datos cargados", §9).
+     Sello honesto visible: 14 meses reales + 22 estimados. -->
+<style>
+  :root{
+    --azul-profundo:#0A2540; --azul-medio:#1E4D8C; --azul-claro:#4A90E2;
+    --amarillo:#FFD93D; --naranja:#FF6B35; --verde:#2ECC71;
+    --blanco:#FFFFFF; --gris-50:#F8FAFC; --gris-200:#E2E8F0; --gris-400:#94A3B8;
+    --gris-600:#475569; --negro:#0F172A; --exito:#16A34A; --info:#0EA5E9;
+    --f-titular:"Space Grotesk",system-ui,sans-serif;
+    --f-cuerpo:"Inter",system-ui,sans-serif;
+    --f-datos:"JetBrains Mono",ui-monospace,monospace;
+    --r-8:8px; --r-12:12px; --r-16:16px;
+    --sombra-1:0 1px 3px rgba(10,37,64,.08),0 1px 2px rgba(10,37,64,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--f-cuerpo);color:var(--negro);background:var(--gris-50);line-height:1.55}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+  header{background:var(--blanco);border-bottom:1px solid var(--gris-200)}
+  .nav{display:flex;align-items:center;gap:28px;height:64px;max-width:1100px;margin:0 auto;padding:0 24px}
+  .logo{font-family:var(--f-titular);font-weight:700;font-size:18px;color:var(--azul-profundo);display:flex;gap:8px;align-items:center;text-decoration:none}
+  .crumbs{color:var(--gris-400);font-size:13.5px}
+  .crumbs b{color:var(--negro);font-weight:600}
+  .avatar{margin-left:auto;width:38px;height:38px;border-radius:50%;background:var(--azul-medio);color:var(--blanco);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
+  /* sello honesto */
+  .sello{display:flex;gap:12px;align-items:center;background:#FFF8E1;border:1.5px solid #F5D969;border-radius:var(--r-12);
+    padding:14px 18px;margin:32px 0 8px;font-size:14px;color:var(--negro)}
+  .sello svg{flex-shrink:0}
+  .sello b{font-weight:700}
+  .cabecera-lista{display:flex;align-items:center;gap:16px;margin:24px 0 16px;flex-wrap:wrap}
+  .cabecera-lista h1{font-family:var(--f-titular);font-size:25px;color:var(--azul-profundo)}
+  .orden{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gris-600)}
+  .orden select{min-height:44px;border:1.5px solid var(--gris-200);border-radius:var(--r-8);font-family:var(--f-cuerpo);font-size:14px;padding:0 12px;background:var(--blanco)}
+  /* filas comparador */
+  .fila{background:var(--blanco);border:1.5px solid var(--gris-200);border-radius:var(--r-16);padding:20px 24px;margin-bottom:14px;
+    display:grid;grid-template-columns:44px 1.6fr 1fr 1fr auto;gap:18px;align-items:center;transition:box-shadow .15s}
+  .fila:hover{box-shadow:var(--sombra-1)}
+  .fila--recomendada{border:2px solid var(--verde);position:relative}
+  .cinta{position:absolute;top:-13px;left:20px;background:var(--verde);color:var(--azul-profundo);font-size:12px;font-weight:800;
+    letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:999px}
+  .marca{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--blanco)}
+  .tarifa h2{font-family:var(--f-titular);font-size:17px;color:var(--azul-profundo)}
+  .tarifa p{font-size:13px;color:var(--gris-600);margin-top:3px}
+  .chip{display:inline-block;background:var(--gris-50);border:1px solid var(--gris-200);border-radius:999px;font-size:12px;padding:3px 10px;margin-right:6px;color:var(--gris-600)}
+  .chip--vf{background:#E9F9EF;border-color:#B7EBC6;color:var(--exito);font-weight:600}
+  .dato .num{font-family:var(--f-datos);font-size:19px;font-weight:700;color:var(--negro);font-variant-numeric:tabular-nums}
+  .dato .lbl{font-size:12px;color:var(--gris-400);margin-top:2px}
+  .ahorro .num{font-family:var(--f-datos);font-size:19px;font-weight:700;color:var(--exito);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:var(--r-8);font-family:var(--f-cuerpo);
+    font-weight:600;cursor:pointer;min-height:44px;padding:0 18px;font-size:14.5px;white-space:nowrap}
+  .btn--primario{background:var(--azul-profundo);color:var(--blanco)}
+  .btn--secundario{background:var(--blanco);color:var(--azul-profundo);border:1.5px solid var(--gris-200)}
+  /* desglose */
+  .desglose{margin-top:40px;background:var(--blanco);border:1px solid var(--gris-200);border-radius:var(--r-16);padding:28px}
+  .desglose h2{font-family:var(--f-titular);font-size:19px;color:var(--azul-profundo);margin-bottom:18px}
+  .barra{display:flex;height:26px;border-radius:8px;overflow:hidden;font-size:12px;font-weight:700}
+  .barra span{display:flex;align-items:center;justify-content:center;color:var(--blanco)}
+  .leyenda{display:flex;gap:24px;margin-top:14px;font-size:13.5px;color:var(--gris-600);flex-wrap:wrap}
+  .punto{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  footer .wrap{padding:32px 24px;text-align:center;color:var(--gris-400);font-size:13px}
+  @media (max-width:820px){
+    .fila{grid-template-columns:1fr;gap:12px;padding:18px}
+    .marca{display:none}
+    .orden{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="#">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      BMAE
+    </a>
+    <span class="crumbs">Simulaciones / <b>Panadería Sol · ES0021…0001AA</b></span>
+    <span class="avatar" aria-label="Cuenta de Ana">PM</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Sello honesto (decisión F23): nunca aparentar más datos de los reales -->
+  <div class="sello" role="status">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.01"/></svg>
+    <p>Comparativa calculada con <b>14 meses reales</b> de tu factura + <b>22 meses estimados</b> por estacionalidad de tu zona. Cuando lleguen tus próximas facturas, la afinamos sola.</p>
+  </div>
+
+  <div class="cabecera-lista">
+    <h1>Tu comparativa</h1>
+    <div class="orden">
+      <label for="orden">Ordenar por</label>
+      <select id="orden">
+        <option>ahorro anual (mayor primero)</option>
+        <option>precio €/kWh</option>
+        <option>cuota fija</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Recomendada -->
+  <article class="fila fila--recomendada">
+    <span class="cinta">Recomendada</span>
+    <span class="marca" style="background:#0A7A3E">EN</span>
+    <div class="tarifa">
+      <h2>Endesa One Luz</h2>
+      <p><span class="chip">fija</span><span class="chip">sin permanencia</span><span class="chip chip--vf">✓ VeriFactu</span></p>
+    </div>
+    <div class="dato"><p class="num">0,1290 €/kWh</p><p class="lbl">energía · potencia 0,098 €/kW·día</p></div>
+    <div class="dato"><p class="num">2 870 €/año</p><p class="lbl">estimado con tu consumo</p></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+      <div class="ahorro"><span class="num">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        −412 €/año</span><p class="lbl">12,6 % menos</p></div>
+      <button class="btn btn--primario" type="button">Pedir esta oferta</button>
+    </div>
+  </article>
+
+  <!-- Otras -->
+  <article class="fila">
+    <span class="marca" style="background:#7C3AED">OC</span>
+    <div class="tarifa">
+      <h2>Octopus Relax</h2>
+      <p><span class="chip">indexada PVPC + 0,01</span><span class="chip chip--vf">✓ VeriFactu</span></p>
+    </div>
+    <div class="dato"><p class="num">0,1310 €/kWh</p><p class="lbl">media 12 m · variable</p></div>
+    <div class="dato"><p class="num">2 915 €/año</p><p class="lbl">estimado con tu consumo</p></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+      <div class="ahorro"><span class="num">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        −367 €/año</span><p class="lbl">11,2 % menos</p></div>
+      <button class="btn btn--secundario" type="button">Pedir esta oferta</button>
+    </div>
+  </article>
+
+  <article class="fila">
+    <span class="marca" style="background:#D92626">IB</span>
+    <div class="tarifa">
+      <h2>Iberdrola Plan Online</h2>
+      <p><span class="chip">fija 12 m</span><span class="chip">permanencia 12 m</span></p>
+    </div>
+    <div class="dato"><p class="num">0,1340 €/kWh</p><p class="lbl">energía · potencia 0,105 €/kW·día</p></div>
+    <div class="dato"><p class="num">2 980 €/año</p><p class="lbl">estimado con tu consumo</p></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+      <div class="ahorro"><span class="num">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        −302 €/año</span><p class="lbl">9,2 % menos</p></div>
+      <button class="btn btn--secundario" type="button">Pedir esta oferta</button>
+    </div>
+  </article>
+
+  <!-- Desglose de dónde se va el dinero -->
+  <section class="desglose" aria-label="Desglose de la factura">
+    <h2>¿A dónde se va tu dinero con la oferta recomendada?</h2>
+    <div class="barra" role="img" aria-label="Composición: energía 58 %, potencia 23 %, impuestos 19 %">
+      <span style="width:58%;background:#1E4D8C">energía 58 %</span>
+      <span style="width:23%;background:#4A90E2">23 %</span>
+      <span style="width:19%;background:#94A3B8">19 %</span>
+    </div>
+    <div class="leyenda">
+      <span><span class="punto" style="background:#1E4D8C"></span>Energía (lo que consumes)</span>
+      <span><span class="punto" style="background:#4A90E2"></span>Potencia (lo contratado)</span>
+      <span><span class="punto" style="background:#94A3B8"></span>Impuestos y peajes</span>
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="wrap">Precios del tarifario del 05-oct-2026 · Simulación informativa, no vinculante</div></footer>
+
+</body>
+</html>

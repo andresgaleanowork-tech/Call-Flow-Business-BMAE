@@ -1,0 +1,29 @@
+name: 🛠 Incidencia o garantía
+description: Registrar una incidencia o reclamación (cada una = 1 issue; SLA = fecha compromiso).
+title: "Inc [ref-cliente] · tema corto"
+labels: [canal:incidencia, "estado-inc:abierta"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cada incidencia es un issue: se etiqueta `canal:incidencia` (ya lo
+        lleva esta plantilla) y se mueve con el label `estado-inc:abierta|
+        en-curso|espera-pieza|resuelta`. El SLA es una fecha compromiso que
+        se marca con el label `compromiso:YYYY-MM-DD` (añádelo en la barra
+        lateral; #/incidencias la pone en rojo si pasa sin resolver). Si
+        deriva en **ticket RMA** (visita técnica/devolución), el número de
+        ticket se anota en el cuerpo como `RMA: <nº>` y se actualiza hasta
+        el cierre — el circuito RMA vive en `datos/rma.json` (ADR-028).
+        Nada de datos personales en el título.
+  - type: textarea
+    id: ficha
+    attributes:
+      label: Ficha de la incidencia (referencia; sin PII)
+      value: |
+        Referencia de cliente: ref. #
+        Origen (instalación solar / suministro / otra): 
+        Descripción (público, sin datos personales): 
+        Fecha compromiso (SLA YYYY-MM-DD): 
+        Urgencia (alta / media / baja): 
+    validations:
+      required: true

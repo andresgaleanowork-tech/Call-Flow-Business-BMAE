@@ -1,0 +1,111 @@
+# cola-ingest.yml — Canal GitHub-total de la cola Call-Flow (docs/github-total.md §4)
+# Buzón = issue fijado «BUZÓN COMERCIAL». Cada comentario JSON del SPA (una
+# gestión por línea, huella djb2) se materializa en issues del pipeline con
+# labels segmento/resultado. Solo miembros del equipo (username asociación
+# OWNER/MEMBER/COLLABORATOR) pueden disparar; el resto se descarta.
+name: cola-ingest
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write   # índice de huellas (commit del bot)
+  issues: write     # creaciones + reacciones
+
+concurrency:
+  group: cola-ingest             # serializa la ingesta para el índice de huellas
+  cancel-in-progress: false
+
+jobs:
+  ingestar:
+    name: Ingestar comentario del buzón
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: >-
+      github.event.comment.author_association == 'OWNER' ||
+      github.event.comment.author_association == 'MEMBER' ||
+      github.event.comment.author_association == 'COLLABORATOR'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validar + materializar gestiones (guardián anti-PII + huellas)
+        id: ing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          COMENTARIO: ${{ github.event.comment.id }}
+          AUTOR: ${{ github.event.comment.user.login }}
+        run: |
+          gh api "/repos/${{ github.repository }}/issues/comments/$COMENTARIO" --jq .body > /tmp/comentario.txt
+          python3 integracion/scripts/cola_ingest.py \
+            --comentario /tmp/comentario.txt \
+            --indice datos/crm/huellas-ingeridas.json \
+            --autor "$AUTOR" \
+            --reporte /tmp/ingesta.json
+          cat /tmp/ingesta.json
+
+      - name: Crear issues de pipeline por gestión aceptada
+        if: steps.ing.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+          rep = json.load(open('/tmp/ingesta.json'))
+          creadas = 0
+          for g in rep.get("aceptadas", []):
+              titulo = f"[{g['segmento'] or 'general'}] {g['resultado']} — llamada {g['ts'][:10]} (origen callflow {g['huella'][:8]})"
+              labels = ",".join(["pipeline", f"segmento:{g['segmento'] or 'general'}",
+                                 f"resultado:{g['resultado'].lower().replace(' ', '-')}", "canal:callflow",
+                                 "estado:contactada"])
+              cuerpo = (f"**Gestión comercial (canal GitHub-total §4)**\n\n"
+                        f"| campo | valor |\n| :-- | :-- |\n"
+                        f"| segmento | `{g['segmento']}` |\n| resultado | `{g['resultado']}` |\n"
+                        f"| nota | {g['nota'] or '—'} |\n| ts | `{g['ts']}` |\n| huella | `{g['huella']}` |\n\n"
+                        f"_El contacto (sin PII por guardián) va en la ficha del cliente._")
+              r = subprocess.run(["gh", "issue", "create", "--title", titulo, "--body", cuerpo,
+                                  "--label", labels.replace(",", " --label ")],
+                                 capture_output=True, text=True)
+              if r.returncode != 0:
+                  labels_simple = [l for l in labels.split(",")]
+                  args = ["gh", "issue", "create", "--title", titulo, "--body", cuerpo]
+                  for l in labels_simple:
+                      args += ["--label", l]
+                  r = subprocess.run(args, capture_output=True, text=True)
+              if r.returncode != 0:
+                  print(f"✗ no se pudo crear issue para {g['huella'][:8]}: {r.stderr.strip()}", file=sys.stderr)
+                  sys.exit(1)
+              print(f"✓ {titulo[:80]}")
+              creadas += 1
+          print(f"total creadas: {creadas}")
+          PY
+
+      - name: Persistir índice de huellas (idempotencia) y reaccionar
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMENTARIO: ${{ github.event.comment.id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          rep = json.load(open('/tmp/ingesta.json'))
+          with open('/tmp/reacciones.txt', 'w') as f:
+              f.write(str(rep.get("aceptadas") and "hooray" or "confused"))
+          if rep.get("duplicadas"):
+              print("duplicadas:", [h[:8] for h in rep["duplicadas"]])
+          PY
+          REAC=$(cat /tmp/reacciones.txt)
+          gh api -X POST "/repos/${{ github.repository }}/issues/comments/$COMENTARIO/reactions" \
+            -f "content=${REAC}" || true
+          if [ -n "$(git status --porcelain datos/crm 2>/dev/null)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add datos/crm/huellas-ingeridas.json
+            git commit -m "cola-ingest: índice de huellas actualizado [bot]"
+            git push || echo "(push no necesario en fork/branch)"
+          fi

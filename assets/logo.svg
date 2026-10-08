@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 40" width="132" height="40" role="img" aria-label="BMAE — Energía e ingeniería">
+  <!-- Logo marca BMAE (paleta tokens §8.2: azul-profundo + naranja). Añadido en
+       Bloque D D6: login.html lo referenciaba y el archivo no existía. -->
+  <rect width="40" height="40" rx="10" fill="#0A2540"/>
+  <path d="M23 7 L13 21 h7 l-1.4 12 L29 19 h-7 Z" fill="#FF6B35"/>
+  <text x="48" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#0A2540" letter-spacing=".5">BMAE</text>
+</svg>

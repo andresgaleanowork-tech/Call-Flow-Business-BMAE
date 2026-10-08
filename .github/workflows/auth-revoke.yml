@@ -1,0 +1,85 @@
+# auth-revoke.yml — B3 (§4.4 Prompt Maestro)
+# Logout forzado: jti concreto (una sesión) o @subject (TODAS las del
+# usuario) a la denylist privada append-only. Se ejecuta por:
+#   · repository_dispatch (lo dispara el endpoint Frappe `auth_revoke`,
+#     p. ej. propio logout del usuario), o
+#   · un comentario «/revoke @usuario» en un Issue etiquetado `auth`
+#     hecho por propietarios/admins (auditoría GitHub §2.5), o
+#   · cron diario de barrido de caducados (orden de la denylist).
+
+name: auth-revoke
+
+on:
+  repository_dispatch:
+    types: [auth-revoke]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: "0 4 * * *"               # barrido diario de jti caducados
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  revoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: >-
+      (github.event_name == 'repository_dispatch' && github.event.client_payload.subject) ||
+      (github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request == null &&
+        contains(github.event.comment.body, '/revoke') &&
+        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      github.event_name == 'schedule'
+    env:
+      SUBJECT: >-
+        ${{(github.event_name == 'issue_comment'
+            && fromJSON(format('"{0}"', github.event.comment.body)).split('/revoke')[1].trim())
+            || github.event.client_payload.subject || ''}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Núcleo de autenticación
+        run: pip install -e ./auth requests
+
+      - name: Revocación por jti/subject
+        if: env.SUBJECT != '' || github.event.client_payload.jti != null
+        env:
+          JTI: ${{ github.event.client_payload.jti || '' }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          DENYLIST_GIST_ID: ${{ secrets.DENYLIST_GIST_ID }}
+        run: |
+          python auth/scripts/auth_revoke.py \
+            ${JTI:+--jti "$JTI"} ${SUBJECT:+--subject "$SUBJECT"} \
+            --informe /tmp/auth-revoke-informe.json
+
+      - name: "Barrido de caducados (cron) — compacta denylist >90 d"
+        if: github.event_name == 'schedule'
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          DENYLIST_GIST_ID: ${{ secrets.DENYLIST_GIST_ID }}
+        run: python auth/scripts/auth_revoke.py --subject "@barrido-orden" --informe /tmp/auth-revoke-informe.json  # placeholder: hook de mantenimiento documentado
+
+      - name: Informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-revoke-${{ github.run_id }}
+          path: /tmp/auth-revoke-informe.json
+          retention-days: 90
+
+      - name: Confirmar en el Issue si vino por comentario
+        if: github.event_name == 'issue_comment' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '🔒 Revocación aplicada y firmada en denylist append-only. Ver artefacto del run.',
+            });

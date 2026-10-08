@@ -1,0 +1,11 @@
+{
+  "emisor": {
+    "nombre": "BMAE Energía S.L.",
+    "nif": "PENDIENTE (cumplimenta tu NIF real)",
+    "direccion": "Valencia",
+    "email_privacidad": "privacidad@example.com (cumplimenta tu correo real antes de generar)"
+  },
+  "docs": [],
+  "ultimo": null,
+  "nota": "Libro de documentos B4. Cada entrada vincula plantilla + ref cliente + huella SHA-256 del PDF generado. PLANTILLAS A REVISAR POR ABOGADO antes de usarlas con clientes."
+}

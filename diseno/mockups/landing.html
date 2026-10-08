@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMAE — Tu factura de la luz, negociada en serio</title>
+<!-- C7 mockup autocontenido. Tokens inline = design-tokens.json §8.2 (fuente única).
+     Sin red: iconos SVG inline, fuentes con stack de reserva. -->
+<style>
+  :root{
+    --azul-profundo:#0A2540; --azul-medio:#1E4D8C; --azul-claro:#4A90E2;
+    --amarillo:#FFD93D; --naranja:#FF6B35; --verde:#2ECC71;
+    --blanco:#FFFFFF; --gris-50:#F8FAFC; --gris-200:#E2E8F0; --gris-400:#94A3B8;
+    --gris-600:#475569; --negro:#0F172A;
+    --exito:#16A34A; --error:#DC2626;
+    --f-titular:"Space Grotesk",system-ui,-apple-system,sans-serif;
+    --f-cuerpo:"Inter",system-ui,-apple-system,sans-serif;
+    --f-datos:"JetBrains Mono",ui-monospace,monospace;
+    --r-8:8px; --r-12:12px; --r-16:16px;
+    --sombra-1:0 1px 3px rgba(10,37,64,.08),0 1px 2px rgba(10,37,64,.06);
+    --sombra-2:0 8px 24px rgba(10,37,64,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--f-cuerpo);color:var(--negro);background:var(--blanco);line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  /* ── header ─────────────────────────────── */
+  header{position:sticky;top:0;background:var(--blanco);border-bottom:1px solid var(--gris-200);z-index:10}
+  .nav{display:flex;align-items:center;gap:32px;height:72px}
+  .logo{font-family:var(--f-titular);font-weight:700;font-size:20px;color:var(--azul-profundo);display:flex;gap:8px;align-items:center}
+  .nav nav{display:flex;gap:24px;margin-left:24px}
+  .nav nav a{color:var(--gris-600);text-decoration:none;font-size:15px;font-weight:500}
+  .nav nav a:hover{color:var(--azul-profundo)}
+  .nav .acciones{margin-left:auto;display:flex;gap:12px;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--r-8);
+       font-family:var(--f-cuerpo);font-weight:600;cursor:pointer;min-height:44px;padding:0 20px;font-size:15px;text-decoration:none}
+  .btn--ghost{background:transparent;color:var(--azul-profundo);border:1.5px solid var(--gris-200)}
+  .btn--primario{background:var(--azul-profundo);color:var(--blanco)}
+  .btn--primario:hover{background:var(--azul-medio)}
+  .btn--lg{min-height:52px;padding:0 28px;font-size:16px}
+  /* ── hero ─────────────────────────────── */
+  .hero{background:linear-gradient(160deg,var(--azul-profundo) 0%,#0D2F52 55%,#123A66 100%);color:var(--blanco);padding:96px 0 120px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-160px;top:-80px;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle,rgba(74,144,226,.28),transparent 65%)}
+  .hero h1{font-family:var(--f-titular);font-size:51px;line-height:1.08;font-weight:700;max-width:640px;letter-spacing:-.01em}
+  .hero h1 em{font-style:normal;color:var(--amarillo)}
+  .hero p.sub{margin-top:20px;font-size:20px;color:#C9D8EB;max-width:560px}
+  .captacion{margin-top:40px;background:var(--blanco);border-radius:var(--r-16);padding:24px;max-width:640px;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+  .captacion .campo{flex:1;min-width:220px}
+  .captacion label{display:block;font-size:13px;font-weight:600;color:var(--negro);margin-bottom:6px}
+  .captacion input{width:100%;min-height:52px;border:1.5px solid var(--gris-200);border-radius:var(--r-8);
+    font-family:var(--f-datos);font-size:15px;padding:0 14px;color:var(--negro)}
+  .captacion input:focus-visible{outline:2px solid var(--azul-claro);outline-offset:2px;border-color:var(--azul-claro)}
+  .captacion .ayuda{font-size:12.5px;color:var(--gris-600);margin-top:6px}
+  .confianza{margin-top:18px;font-size:13.5px;color:#A9BFD9;display:flex;gap:20px;flex-wrap:wrap}
+  .confianza span{display:inline-flex;gap:6px;align-items:center}
+  /* ── secciones ─────────────────────────────── */
+  section{padding:88px 0}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--azul-claro)}
+  h2{font-family:var(--f-titular);font-size:31px;line-height:1.2;color:var(--azul-profundo);margin-top:10px}
+  .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+  .tarjeta{background:var(--gris-50);border:1px solid var(--gris-200);border-radius:var(--r-16);padding:28px}
+  .tarjeta .icono{width:48px;height:48px;border-radius:12px;background:var(--azul-profundo);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .tarjeta h3{font-family:var(--f-titular);font-size:20px;color:var(--azul-profundo);margin-bottom:8px}
+  .tarjeta p{color:var(--gris-600);font-size:15px}
+  /* ── prueba social ─────────────────────────────── */
+  .prueba{background:var(--gris-50)}
+  .cita{max-width:760px}
+  .cita blockquote{font-family:var(--f-titular);font-size:25px;line-height:1.35;color:var(--azul-profundo)}
+  .cita .autor{margin-top:16px;color:var(--gris-600);font-size:15px;display:flex;align-items:center;gap:12px}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--naranja);color:var(--blanco);display:flex;align-items:center;justify-content:center;font-weight:700}
+  .ahorro-chip{margin-left:auto;background:var(--verde);color:var(--azul-profundo);font-family:var(--f-datos);font-weight:700;padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+  .logos{display:flex;gap:48px;margin-top:56px;align-items:center;opacity:.55;flex-wrap:wrap}
+  .logos span{font-family:var(--f-titular);font-weight:700;font-size:18px;color:var(--gris-600)}
+  /* ── footer ─────────────────────────────── */
+  footer{background:var(--azul-profundo);color:#A9BFD9;padding:48px 0;font-size:14px}
+  .pie{display:flex;gap:32px;flex-wrap:wrap;align-items:center}
+  .pie .hueco{margin-left:auto}
+  .pie a{color:#C9D8EB;text-decoration:none;margin-right:20px}
+  @media (max-width:860px){
+    .nav nav{display:none}
+    .hero{padding:64px 0 88px}
+    .hero h1{font-size:36px}
+    .trio{grid-template-columns:1fr}
+    .ahorro-chip{margin-left:0;margin-top:16px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <span class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      BMAE
+    </span>
+    <nav aria-label="principal">
+      <a href="#">Tarifas</a><a href="#">Solar</a><a href="#">Cómo funciona</a><a href="#">FAQ</a>
+    </nav>
+    <div class="acciones">
+      <a class="btn btn--ghost" href="#">Entrar</a>
+      <a class="btn btn--primario" href="#analizar">Pedir oferta</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="analizar">
+    <div class="wrap">
+      <h1>Tu factura de la luz, <em>negociada en serio</em>.</h1>
+      <p class="sub">Comparamos más de 40 comercializadoras con <strong>tu</strong> consumo real — hasta 36 meses — no con medias de sector pensadas para que no mires.</p>
+
+      <form class="captacion" aria-label="Analiza tu suministro">
+        <div class="campo">
+          <label for="cups">Código CUPS</label>
+          <input id="cups" type="text" placeholder="ES0021000000000001AA" autocomplete="off" spellcheck="false">
+          <p class="ayuda">Está en tu factura, arriba a la derecha. O sube el PDF y lo leemos por ti.</p>
+        </div>
+        <div style="align-self:end">
+          <button class="btn btn--primario btn--lg" type="button">Analizar gratis</button>
+        </div>
+      </form>
+
+      <div class="confianza">
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> 1 847 análisis este mes</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Sin spam. Nunca.</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Datos borrados a petición</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker">Cómo funciona</p>
+      <h2>Tres pasos. Cero letra pequeña.</h2>
+      <div class="trio">
+        <div class="tarjeta">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div>
+          <h3>1 · Cuéntanos tu suministro</h3>
+          <p>Un CUPS o un PDF de factura. Si falta algo, trabajamos con lo que tengas y te decimos exactamente con qué.</p>
+        </div>
+        <div class="tarjeta">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 3 5-6"/></svg></div>
+          <h3>2 · Comparativa con 36 meses</h3>
+          <p>Cruzamos tu consumo real con el tarifario completo y te enseñamos la matemática: qué pagas y qué pagarías.</p>
+        </div>
+        <div class="tarjeta">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>3 · Cambio tramitado + VeriFactu</h3>
+          <p>Gestionamos el cambio contigo al tanto en cada etapa, y las facturas salen registradas y encadenadas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="prueba">
+    <div class="wrap">
+      <div class="cita">
+        <blockquote>«Pasamos de 340 € a 251 € al mes. Lo raro no fue el ahorro: fue entender por fin la factura.»</blockquote>
+        <div style="display:flex;align-items:center;flex-wrap:wrap">
+          <p class="autor"><span class="avatar" aria-hidden="true">PM</span> Pilar Marco · Panadería Sol, Valencia</p>
+          <span class="ahorro-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            26 % menos
+          </span>
+        </div>
+      </div>
+      <div class="logos" aria-label="Comercializadoras que comparamos">
+        <span>Endesa</span><span>Iberdrola</span><span>Octopus</span><span>TotalEnergies</span><span>Repsol</span><span>+35 más</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap pie">
+    <span class="logo" style="color:var(--blanco);font-size:17px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      BMAE
+    </span>
+    <span class="hueco"></span>
+    <nav aria-label="legal"><a href="#">Legal</a><a href="#">Privacidad</a><a href="#">Contacto</a></nav>
+    <span>© 2026 BMAE Energía · Valencia</span>
+  </div>
+</footer>
+
+</body>
+</html>

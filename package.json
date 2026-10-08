@@ -1,0 +1,23 @@
+{
+  "name": "bmae-plataforma",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Plataforma BMAE — ERPNext v15 + Twenty + SPA. Monorepo Python+TS+JS vainilla (prompt maestro unificado).",
+  "scripts": {
+    "test": "python3 -m pytest motor/ verifactu/ integracion/ auth/ diseno/tests limpieza -q && cd diseno/componentes && node --test tests-componentes.test.mjs && cd ../../frontend-auth && node --test tests/",
+    "test:limpieza": "python3 -m pytest limpieza/test_limpieza.py -q",
+    "export:check": "python3 diseno/tests/exportar.py --check",
+    "export:build": "python3 diseno/tests/exportar.py",
+    "lint:css": "stylelint 'diseno/**/*.css' --fix",
+    "lint:js": "eslint 'diseno/**/*.js' 'frontend-auth/**/*.js' --fix",
+    "lint:html": "htmlhint '**/*.html'",
+    "format": "prettier --write '**/*.{html,css,js,json,md}'",
+    "clean": "find . -name __pycache__ -type d -prune -exec rm -rf {} + ; find . -name '*.egg-info' -type d -prune -exec rm -rf {} + ; rm -rf .pytest_cache motor/.pytest_cache diseno/.pytest_cache",
+    "verify": "npm run test:limpieza && npm run export:check"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=20",
+    "python": ">=3.11"
+  }
+}

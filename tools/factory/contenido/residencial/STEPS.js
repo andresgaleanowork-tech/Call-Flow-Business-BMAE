@@ -1,1 +1,0 @@
-const STEPS = ['Apertura','Presentación','Motivo','Permiso','Detección','Pitch','Objeción','Cierre','Seguimiento'];

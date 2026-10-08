@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "nombre": "BMAE Design Tokens",
+    "concepto": "Energía Precisa (§8.1 Prompt Maestro)",
+    "version": "1.0.0",
+    "fecha": "2026-10-07",
+    "fuente": "Prompt Maestro §8 (colores, tipografia, espaciado, radios, sombras, animaciones, iconografia)",
+    "nota": "Unica fuente de verdad: css/tokens.css y tailwind/tailwind.config.js se derivan de este fichero (paridad testeada)."
+  },
+  "color": {
+    "primario": {
+      "azul-profundo": "#0A2540",
+      "azul-medio": "#1E4D8C",
+      "azul-claro": "#4A90E2"
+    },
+    "secundario": {
+      "amarillo-energia": "#FFD93D",
+      "naranja-calido": "#FF6B35",
+      "verde-sostenible": "#2ECC71",
+      "verde-oscuro": "#1E8449"
+    },
+    "neutro": {
+      "blanco": "#FFFFFF",
+      "gris-050": "#F8FAFC",
+      "gris-200": "#E2E8F0",
+      "gris-400": "#94A3B8",
+      "gris-600": "#475569",
+      "negro-suave": "#0F172A"
+    },
+    "semantico": {
+      "exito": "#16A34A",
+      "advertencia": "#F59E0B",
+      "error": "#DC2626",
+      "info": "#0EA5E9"
+    },
+    "datos": ["#1E4D8C", "#2ECC71", "#FFD93D", "#FF6B35", "#8B5CF6", "#06B6D4", "#EC4899", "#64748B"],
+    "modo-oscuro": {
+      "fondo": "#0F172A",
+      "fondo-2": "#1E293B",
+      "fondo-3": "#334155",
+      "texto": "#F1F5F9",
+      "texto-2": "#CBD5E1",
+      "bordes": "#475569",
+      "azul": "#60A5FA",
+      "amarillo": "#FCD34D"
+    }
+  },
+  "tipografia": {
+    "familias": {
+      "cuerpo": "Inter",
+      "datos": "JetBrains Mono",
+      "titulares": "Space Grotesk"
+    },
+    "nota_fuentes": "Variables self-hosted WOFF2 (Inter/JetBrains Mono/Space Grotesk); peso regular 400/500/600/700. CLAVE PARIDAD: tokens.css registra @font-face para estas familias y tipografa fallbacks.",
+    "escala": {
+      "razon": 1.25,
+      "descripcion": "Major Third §8.3",
+      "pasos": {
+        "display-xl": { "px": 64, "linea": 72, "tracking": "-0.02em" },
+        "display-l": { "px": 48, "linea": 56, "tracking": "-0.02em" },
+        "h1": { "px": 40, "linea": 48, "tracking": "-0.01em" },
+        "h2": { "px": 32, "linea": 40, "tracking": "-0.01em" },
+        "h3": { "px": 24, "linea": 32, "tracking": "0" },
+        "h4": { "px": 20, "linea": 28, "tracking": "0" },
+        "body-l": { "px": 18, "linea": 28, "tracking": "0" },
+        "body-m": { "px": 16, "linea": 24, "tracking": "0" },
+        "body-s": { "px": 14, "linea": 20, "tracking": "0" },
+        "caption": { "px": 12, "linea": 16, "tracking": "0" },
+        "overline": { "px": 11, "linea": 16, "tracking": "0.08em", "uppercase": true }
+      }
+    }
+  },
+  "espaciado": {
+    "base": "4px",
+    "pasos": {
+      "3xs": 4, "2xs": 8, "xs": 12, "sm": 16, "md": 24, "lg": 32, "xl": 48, "2xl": 64, "3xl": 96
+    }
+  },
+  "grid": {
+    "desktop": { "columnas": 12, "gutter": 24, "maxAncho": 1440 },
+    "tablet": { "columnas": 8, "gutter": 20, "maxAncho": 1024 },
+    "movil": { "columnas": 4, "gutter": 16, "maxAncho": "100%" }
+  },
+  "breakpoints": {
+    "xs": 320, "sm": 640, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536
+  },
+  "radios": {
+    "cero": 0, "sm": 4, "md": 8, "lg": 12, "xl": 16, "2xl": 24, "full": 9999
+  },
+  "sombras": {
+    "xs": "0 1px 2px 0 rgba(15,23,42,0.05)",
+    "sm": "0 1px 3px 0 rgba(15,23,42,0.10), 0 1px 2px -1px rgba(15,23,42,0.10)",
+    "md": "0 4px 6px -1px rgba(15,23,42,0.10), 0 2px 4px -2px rgba(15,23,42,0.10)",
+    "lg": "0 10px 15px -3px rgba(15,23,42,0.10), 0 4px 6px -4px rgba(15,23,42,0.10)",
+    "xl": "0 20px 25px -5px rgba(15,23,42,0.12), 0 8px 10px -6px rgba(15,23,42,0.10)",
+    "2xl": "0 25px 50px -12px rgba(15,23,42,0.25)"
+  },
+  "animaciones": {
+    "duraciones": { "instant": 100, "fast": 200, "normal": 300, "slow": 500, "very-slow": 800 },
+    "easing": {
+      "ease-out": "cubic-bezier(0.33, 1, 0.68, 1)",
+      "ease-in": "cubic-bezier(0.32, 0, 0.67, 0)",
+      "ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+      "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+    },
+    "reduced-motion": "prefers-reduced-motion: todas las animaciones condenadas a state final (regla dura §11.1)"
+  },
+  "iconografia": {
+    "biblioteca": "Lucide (SVG, tree-shakeable)",
+    "trazo": 1.5,
+    "tamanos": [16, 20, 24, 32]
+  }
+}

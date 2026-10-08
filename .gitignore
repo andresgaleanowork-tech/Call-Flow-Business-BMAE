@@ -1,11 +1,28 @@
-# Herramientas internas de build (NO subir a GitHub)
-_dev/
+# Python
+__pycache__/
+*.py[co]
+.pytest_cache/
+*.egg-info/
+.venv/
 
-# Dependencias de testing (se instalan con: npm install)
+# Node
 node_modules/
+dist/
+build/
+coverage/
 
-# Sistema
+# Workspace local (no sube a GitHub)
+.deps/
+_cuarentena/
+
+# SO / editor
 .DS_Store
-Thumbs.db
-*.log
-.npm/
+*.swp
+
+# Secretos JAMÁS en el repo (GitHub-Total: van en secrets de environments)
+*.pem
+*.p12
+*.pfx
+.env
+.env.*
+/tmp/

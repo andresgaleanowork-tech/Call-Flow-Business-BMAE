@@ -1,0 +1,173 @@
+# verifactu-emitir.yml — SIF GitHub-total (decisión opción B, docs/github-total.md §3)
+# Emisión = invoice-issue con label `verifactu:emitir` (JSON en el cuerpo).
+# La cadena de huellas vive en datos/verifactu/cadena.json (commit del bot).
+# SERIALIZADO: nunca dos emisiones en paralelo (fork de la cadena = error fiscal).
+name: verifactu-emitir
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Número del invoice-issue a emitir (replay manual)"
+        required: true
+      entorno:
+        description: "Entorno AEAT"
+        default: "preproduccion"
+        type: choice
+        options: [preproduccion, produccion]
+      simular:
+        description: "Solo generar XML (sin red, sin persistir)"
+        default: "false"
+
+permissions:
+  contents: write          # commit de cadena.json por el bot
+  issues: write            # comentarios + labels
+
+concurrency:
+  group: verifactu-cadena
+  cancel-in-progress: false   # NUNCA cancelar a medias: la cadena es sagrada
+
+jobs:
+  emitir:
+    name: Emitir registro VeriFactu
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: ${{ (github.event.label.name == 'verifactu:emitir-produccion' || github.event.inputs.entorno == 'produccion') && 'verifactu-produccion' || 'verifactu-preproduccion' }}
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.label.name == 'verifactu:emitir' ||
+      github.event.label.name == 'verifactu:emitir-produccion'
+    env:
+      ISSUE: ${{ github.event.inputs.issue || github.event.issue.number }}
+      ENTORNO_IN: ${{ github.event.inputs.entorno || 'preproduccion' }}
+      SIMULAR_IN: ${{ github.event.inputs.simular || 'false' }}
+      AEAT_CERT_PEM: ${{ secrets.AEAT_CERT_PEM }}
+      AEAT_KEY_PEM: ${{ secrets.AEAT_KEY_PEM }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Dependencias del SDK sellado
+        run: python3 -m pip install -e ./verifactu
+
+      - name: Extraer el JSON de la factura del cuerpo del issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue view "$ISSUE" --json body --jq .body > /tmp/issue-body.md
+          python3 - <<'PY'
+          import json, re, sys
+          body = open('/tmp/issue-body.md', encoding='utf-8').read()
+          m = re.search(r"```(?:json)?\s*(\{[\s\S]*\})\s*```", body)
+          if not m:
+              print("✗ el invoice-issue debe incluir un bloque ```json {...}```", file=sys.stderr)
+              sys.exit(2)
+          factura = json.loads(m.group(1))
+          open('/tmp/factura.json', 'w', encoding='utf-8').write(json.dumps(factura))
+          print(f"factura extraída: {factura.get('numero_serie', '?')}")
+          PY
+
+      - name: Entorno efectivo (label de producción gana al dispatch)
+        id: env
+        run: |
+          if [ "${{ github.event.label.name }}" = "verifactu:emitir-produccion" ]; then
+            echo "entorno=produccion" >> "$GITHUB_OUTPUT"
+          else
+            echo "entorno=${ENTORNO_IN}" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ "${SIMULAR_IN}" = "true" ]; then
+            echo "simular=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "simular=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pre-validación SIF (dry-run estructural, sin red)
+        run: |
+          python3 integracion/scripts/sif_emitir.py \
+            --factura /tmp/factura.json \
+            --cadena datos/verifactu/cadena.json \
+            --entorno "${{ steps.env.outputs.entorno }}" \
+            --solo-xml /tmp/registro.xml \
+            --informe /tmp/dry.json
+          test -s /tmp/registro.xml
+
+      - name: Detener si modo simulación — comentar el XML generado y salir
+        if: steps.env.outputs.simular == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "### 🧪 Simulación SIF (sin envío, sin cadena)"
+            echo ""
+            echo '```json'
+            cat /tmp/dry.json
+            echo '```'
+          } | gh issue comment "$ISSUE" --body-file -
+
+      - if: steps.env.outputs.simular == '1'
+        run: |
+          echo "Modo simulación: no hay envío ni persistencia."
+          exit 0
+
+      - name: Emitir contra AEAT (mTLS, certificado cualificado)
+        id: aeat
+        run: |
+          set +e
+          python3 integracion/scripts/sif_emitir.py \
+            --factura /tmp/factura.json \
+            --cadena datos/verifactu/cadena.json \
+            --entorno "${{ steps.env.outputs.entorno }}" \
+            --cert "$AEAT_CERT_PEM" --key "$AEAT_KEY_PEM" \
+            --informe /tmp/resp.json
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          cat /tmp/resp.json
+          exit $rc
+
+      - name: Persistir cadena y registros (commit del bot)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datos/verifactu/cadena.json
+          mkdir -p datos/verifactu/registros
+          NS=$(python3 -c "import json,sys; print(json.load(open('/tmp/factura.json'))['numero_serie'])")
+          cp /tmp/registro.xml "datos/verifactu/registros/${NS}.soap.xml"
+          cp /tmp/resp.json "datos/verifactu/registros/${NS}.respuesta.json"
+          git add "datos/verifactu/registros/${NS}.soap.xml" "datos/verifactu/registros/${NS}.respuesta.json"
+          if git diff --cached --quiet; then
+            echo "REGISTRO changefix: nada que commitear (¿idempotencia?)"
+          else
+            git commit -m "verifactu: registro ${NS} + cadena actualizada [bot del SIF]"
+            git push
+          fi
+
+      - name: Comentar resultado + labels
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RES=$(jq -r '
+            if .ok == true then
+              "OK · Cadena persistida en `datos/verifactu/cadena.json`. CSV: `" + (.extraido.CSV // .extraido.respuesta // "—") + "`"
+            else
+              "ERROR (" + (.returncode|tostring) + ") · " + (.extraido.DescripcionErrorRegistro // .extraido.faultstring // "sin detalle")
+            end' /tmp/resp.json || echo "sin informe")
+          {
+          echo "### VeriFactu · Emisión"
+          echo "$RES"
+          echo ""
+          echo '```json'
+          jq '{numero_serie, huella, huella_anterior, qr}' /tmp/resp.json 2>/dev/null || echo "{}"
+          echo '```'
+          } | gh issue comment "$ISSUE" --body-file - || true
+          if [ "${{ steps.aeat.outcome }}" = "success" ]; then
+            gh issue edit "$ISSUE" --remove-label "verifactu:emitir,verifactu:emitir-produccion" --add-label "verifactu:registrada" || true
+          else
+            gh issue edit "$ISSUE" --remove-label "verifactu:emitir,verifactu:emitir-produccion" --add-label "verifactu:error" || true
+          fi

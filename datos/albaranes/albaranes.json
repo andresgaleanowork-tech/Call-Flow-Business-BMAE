@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "upd": "2026-10-08",
+  "nota": "Libro de ALBARANES: documento comercial SIN valor fiscal. La emisión fiscal de facturas requiere el certificado AEAT (F4G·w1, pendiente).",
+  "emisor": {
+    "nombre_razon": "BMAE Energía",
+    "nif": "PENDIENTE (cumplimentar por gesto humano con el NIF real)",
+    "direccion": "España",
+    "autor_desarrollador": "Eduardo Andrés Galeano Aido — ver AUTHORS.md"
+  },
+  "ultimo": null,
+  "historial": []
+}

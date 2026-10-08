@@ -1,0 +1,188 @@
+/* app.css — F3: layout del shell SPA. SOLO maquetación; colores/tipografía
+   salen SIEMPRE de las variables de diseno/export/tokens.css (C11 §2/§3). */
+
+#app {
+  min-height: 100vh;
+  background: var(--color-neutro-gris-050);
+  color: var(--color-neutro-negro-suave);
+  font-family: var(--fuente-cuerpo, Inter, system-ui, sans-serif);
+}
+
+.app-shell { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+
+.app-side {
+  background: var(--color-primario-azul-profundo);
+  color: var(--color-neutro-gris-400);
+  padding: 20px 0;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.app-side a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px;
+  color: inherit; text-decoration: none; font-size: 14px; font-weight: 500;
+  border-left: 3px solid transparent;
+}
+.app-side a:hover { color: var(--color-neutro-blanco); background: rgba(255,255,255,.06); }
+.app-side a[aria-current="page"] {
+  color: var(--color-neutro-blanco);
+  border-left-color: var(--color-secundario-amarillo-energia);
+  background: rgba(255,255,255,.08);
+}
+.app-logo {
+  font-weight: 700; font-size: 18px; color: var(--color-neutro-blanco);
+  display: flex; gap: 8px; align-items: center;
+  padding: 4px 20px 22px; text-decoration: none;
+}
+
+.app-main { padding: 32px 36px 72px; max-width: 1120px; width: 100%; }
+.app-h1 { font-size: 25px; color: var(--color-primario-azul-profundo); margin: 0 0 4px; }
+.app-sub { color: var(--color-neutro-gris-600); margin: 0 0 24px; font-size: 15px; }
+
+.app-panel {
+  background: var(--color-neutro-blanco);
+  border: 1px solid var(--color-neutro-gris-200);
+  border-radius: 16px; padding: 24px; margin-bottom: 22px;
+}
+.app-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 22px; }
+
+.app-sello {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #FFF8E1; border: 1px solid #F5D969; color: var(--color-neutro-negro-suave);
+  font-size: 12px; font-weight: 600;
+  border-radius: 999px; padding: 4px 12px;
+}
+.app-sello--completo { background: #E9F9EF; border-color: #B7EBC6; color: var(--color-exito); }
+
+.app-fila-oferta {
+  display: grid; grid-template-columns: 44px 1.5fr 1fr 1fr auto; gap: 16px; align-items: center;
+  background: var(--color-neutro-blanco);
+  border: 1.5px solid var(--color-neutro-gris-200);
+  border-radius: 16px; padding: 18px 22px; margin-bottom: 12px;
+}
+.app-fila-oferta--recomendada { border: 2px solid var(--color-secundario-verde-sostenible); }
+.app-marca {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: #fff;
+}
+.app-num { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 18px; display: block; }
+.app-lbl { font-size: 12px; color: var(--color-neutro-gris-400); }
+.app-ahorro { color: var(--color-exito); }
+
+.app-chip { display: inline-block; background: var(--color-neutro-gris-050); border: 1px solid var(--color-neutro-gris-200); border-radius: 999px; font-size: 12px; padding: 3px 10px; margin: 2px 6px 2px 0; color: var(--color-neutro-gris-600); }
+.app-chip--vf { background: #E9F9EF; border-color: #B7EBC6; color: var(--color-exito); font-weight: 600; }
+.app-chip--aviso { background: #FFF3D6; border-color: #F5D969; color: #8A6D1A; }
+.app-chip--error { background: #FDEBEC; border-color: #F3B4B8; color: var(--color-error); }
+
+.app-barra-desglose { display: flex; height: 24px; border-radius: 8px; overflow: hidden; font-size: 12px; font-weight: 700; color: #fff; margin-top: 14px; }
+.app-barra-desglose span { display: flex; align-items: center; justify-content: center; }
+
+.app-columnas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.app-columna h3 { font-size: 12px; letter-spacing: .08em; color: var(--color-neutro-gris-400); margin: 0 0 10px; }
+.app-tarjeta-pedido { background: var(--color-neutro-blanco); border: 1px solid var(--color-neutro-gris-200); border-radius: 12px; padding: 14px; margin-bottom: 10px; font-size: 14px; }
+
+.app-progreso { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-neutro-gris-600); margin-bottom: 24px; }
+.app-progreso b { color: var(--color-primario-azul-profundo); }
+
+.app-acciones-form { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.app-grid-form { display: grid; gap: 16px; max-width: 520px; }
+
+.app-nota { background: #FFF8E1; border: 1.5px solid #F5D969; border-radius: 12px; padding: 14px 18px; font-size: 13.5px; }
+
+/* ── guiones callflow (semana 3 F3) ─────────────────── */
+.cf-marca-cue { font-size: 12px; color: var(--color-neutro-gris-400); margin: 4px 0; font-style: italic; }
+.cf-linea { margin: 8px 0; font-size: 16px; line-height: 1.55; }
+.cf-tecnica { font-size: 11px; letter-spacing: .05em; color: var(--color-primario-azul-claro); font-weight: 700; margin: -4px 0 0; }
+.cf-ctx { background: var(--color-neutro-gris-050); border-left: 3px solid var(--color-secundario-amarillo-energia); padding: 10px 12px; margin: 10px 0; font-size: 13.5px; color: var(--color-neutro-gris-600); }
+.cf-notas { margin: 10px 0 0; padding-left: 18px; font-size: 13px; color: var(--color-neutro-gris-600); }
+.cf-detalles { margin-top: 10px; font-size: 13px; }
+.app-select { min-height: 44px; border-radius: 8px; border: 1.5px solid var(--color-neutro-gris-200); padding: 0 12px; font-size: 14px; max-width: 100%; background: var(--color-neutro-blanco); }
+.cf-area { width: 100%; min-height: 80px; border-radius: 8px; border: 1.5px solid var(--color-neutro-gris-200); padding: 10px; font: inherit; margin-top: 12px; box-sizing: border-box; resize: vertical; }
+.cf-obj-fase { font-size: 11px; letter-spacing: .06em; font-weight: 700; color: var(--color-primario-azul-claro); margin: 14px 0 2px; text-transform: uppercase; }
+.cf-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px; }
+/* wraps y filas compartidas (antes: inline idéntico en 3 páginas) */
+.app-wrap { max-width: 640px; margin: 0 auto; padding: 36px 24px 72px; }
+.app-wrap--ancho { max-width: 1100px; padding: 28px 24px 64px; }
+.app-cab-fila { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.app-col-end { display: grid; justify-items: end; gap: 6px; }
+.app-ml-8 { margin-left: 8px; }
+.app-mt18 { margin-top: 18px; }
+.cf-funnel { display: flex; height: 22px; border-radius: 8px; overflow: hidden; font-size: 11.5px; font-weight: 700; color: #fff; }
+.cf-funnel span { display: flex; align-items: center; justify-content: center; min-width: 0; overflow: hidden; white-space: nowrap; }
+.cf-funnel .cf-seg--0 { background: var(--color-primario-azul-medio); }
+.cf-funnel .cf-seg--1 { background: var(--color-primario-azul-claro); }
+.cf-funnel .cf-seg--2 { background: var(--color-secundario-verde-sostenible); }
+.cf-funnel .cf-seg--3 { background: var(--color-neutro-gris-400); }
+.cf-funnel .cf-seg--4 { background: var(--color-secundario-naranja-calido); }
+.cf-funnel .cf-seg--5 { background: var(--color-secundario-amarillo-energia); }
+/* ── w3 · estilos extraídos de inline → clases reutilizables (calidad) ── */
+/* alta: consentimientos RGPD */
+.app-consent { border: 1px solid var(--color-neutro-gris-200); border-radius: 12px; padding: 16px; margin-top: 18px; }
+.app-consent legend { font-weight: 600; font-size: 14px; padding: 0 6px; }
+.app-consent label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; }
+.app-consent label:first-of-type { margin-bottom: 10px; }
+.app-consent input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; flex: none; }
+/* titulares de sección azul (comparador, dashboard) */
+.app-h2-azul { margin: 0 0 4px; font-size: 18px; color: var(--color-primario-azul-profundo); }
+.app-h2-azul--mb10 { margin: 0 0 10px; font-size: 18px; color: var(--color-primario-azul-profundo); }
+.app-h2-azul--flat { margin: 0; font-size: 18px; color: var(--color-primario-azul-profundo); }
+/* comparador: barra de desglose (el % queda inline: es dato) */
+.app-barra-desglose .seg--energia { background: var(--color-primario-azul-medio); }
+.app-barra-desglose .seg--potencia { background: var(--color-primario-azul-claro); }
+.app-barra-desglose .seg--impuestos { background: var(--color-neutro-gris-400); }
+.app-oferta-nombre { display: block; color: var(--color-primario-azul-profundo); }
+/* dashboard */
+.app-kpi-delta { font-size: 12px; margin: 6px 0 0; color: var(--color-neutro-gris-600); }
+.app-cab-flex { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.app-grid-duo { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.app-alerta { margin: 0 0 12px; font-size: 14px; }
+.app-pedido-linea { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; font-size: 14px; }
+/* gestor */
+.app-mb2 { margin: 0 0 2px; }
+.app-lbl--mb10 { margin: 0 0 10px; }
+.app-fw600 { font-weight: 600; }
+/* solar */
+.app-dl-kpis { display: grid; gap: 14px; margin: 0; }
+.app-dl-fila { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--color-neutro-gris-200); padding-bottom: 10px; align-items: baseline; }
+.app-lbl--caps { text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.app-dd-right { margin: 0; text-align: right; }
+.app-hero-solar { background: linear-gradient(120deg, var(--color-primario-azul-profundo), #123A66); border-radius: 12px; padding: 18px 20px; color: #fff; margin-top: 18px; }
+.app-hero-solar__total { margin: 0; font-size: 26px; font-weight: 700; color: var(--color-secundario-amarillo-energia); }
+.app-lbl--hero { color: #C9D8EB; margin: 4px 0 0; }
+.app-hero-nota { font-size: 12px; color: #9FB6D4; margin: 8px 0 0; font-style: italic; }
+/* suministro + rejillas auto (también usada por callflow) */
+.app-grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: none; }
+.app-num--16 { font-size: 16px; }
+.app-mt10 { margin-top: 10px; }
+.app-mt16 { margin-top: 16px; }
+.app-ml-auto { margin-left: auto; }
+/* shell pública */
+.app-cab-publica { display: flex; align-items: center; gap: 16px; padding: 14px 24px; background: #fff; border-bottom: 1px solid var(--color-neutro-gris-200); }
+.app-logo--plano { padding: 0; color: var(--color-primario-azul-profundo); }
+
+/* Marca real del repo (diseno/marca), altura sello cabecera/sidebar */
+.app-logo img { height: 22px; width: auto; display: block; }
+/* módulo callflow: estilos extraídos de inline (calidad): títulos, cards, avisos y embudo */
+.cf-h3 { margin: 0 0 12px; font-size: 15px; }
+.cf-h3--16 { font-size: 16px; }
+.cf-h3--azul { margin: 0 0 6px; font-size: 16px; color: var(--color-primario-azul-profundo); }
+.cf-summary { font-weight: 600; cursor: pointer; }
+.cf-ol-top { margin-top: 10px; }
+.cf-fase { margin: 0; color: var(--color-primario-azul-profundo); font-size: 19px; }
+.cf-titulo-nodo { font-weight: 700; font-size: 15px; margin: 0 0 10px; }
+.cf-btn-top { margin-top: 12px; }
+.cf-aviso { min-height: 1.4em; font-size: 13px; }
+.cf-aviso--error { color: var(--color-error); }
+.cf-aviso--ok { color: var(--color-exito); }
+.cf-leyenda { margin-top: 10px; }
+.estado-error { margin: 40px auto; max-width: 640px; }
+
+@media (max-width: 860px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .app-side { flex-direction: row; overflow-x: auto; padding: 0 8px; align-items: center; }
+  .app-side a { border-left: 0; border-bottom: 3px solid transparent; white-space: nowrap; padding: 12px; }
+  .app-side a[aria-current="page"] { border-bottom-color: var(--color-secundario-amarillo-energia); }
+  .app-logo { padding: 10px 12px; }
+  .app-main { padding: 22px 16px 56px; }
+  .app-fila-oferta { grid-template-columns: 1fr; gap: 10px; }
+}

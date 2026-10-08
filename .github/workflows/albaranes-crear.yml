@@ -1,0 +1,103 @@
+# albaranes-crear.yml — Operativa diaria SIN certificado AEAT (modo albarán).
+# Un issue con label `albaran:crear` + JSON → PDF + asiento en el libro.
+# La cadena fiscal VeriFactu sigue SIN tocarse (verifactu-cadena, sagrada).
+name: albaranes-crear
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Número del issue de albarán (replay manual)"
+        required: true
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: albaranes-numeracion          # serializa la numeración ALB-YYYY-####
+  cancel-in-progress: false
+
+jobs:
+  crear:
+    name: Crear albarán
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.label.name == 'albaran:crear'
+    env:
+      ISSUE: ${{ github.event.inputs.issue || github.event.issue.number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Dependencias (reportlab para el PDF con marca)
+        run: python3 -m pip install reportlab pillow
+
+      - name: Extraer el JSON del cuerpo del issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue view "$ISSUE" --json body --jq .body > /tmp/issue-body.md
+          python3 - <<'PY'
+          import json, re, sys
+          body = open('/tmp/issue-body.md', encoding='utf-8').read()
+          m = re.search(r"```(?:json)?\s*(\{[\s\S]*\})\s*```", body)
+          if not m:
+              print("✗ el issue debe incluir un bloque ```json {...}```", file=sys.stderr)
+              sys.exit(2)
+          open('/tmp/albaran.json', 'w', encoding='utf-8').write(json.dumps(json.loads(m.group(1))))
+          print("JSON de albarán extraído")
+          PY
+
+      - name: Generar albarán (libro + PDF)
+        run: |
+          python3 integracion/scripts/albaran_crear.py \
+            --entrada /tmp/albaran.json \
+            --libro datos/albaranes/albaranes.json \
+            --pdf-dir datos/albaranes/pdf \
+            --logo diseno/marca/logo-bm.png \
+            --informe /tmp/albaran-informe.json
+          cat /tmp/albaran-informe.json
+
+      - name: Commit libro + PDF (bot albaranes)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          NS=$(jq -r .registro.numero_serie /tmp/albaran-informe.json)
+          git add datos/albaranes/albaranes.json "datos/albaranes/pdf/${NS}.pdf"
+          if git diff --cached --quiet; then
+            echo "nada que commitear"
+          else
+            git commit -m "albaranes: ${NS} registrado [bot]"
+            git push
+          fi
+
+      - name: Comentar resultado + labels
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -s /tmp/albaran-informe.json ] && [ "$(jq -r .ok /tmp/albaran-informe.json)" = "true" ]; then
+            NS=$(jq -r .registro.numero_serie /tmp/albaran-informe.json)
+            RES=$(jq -r '"OK · `" + .registro.numero_serie + "` — total `" + .registro.total + " €` · PDF: `datos/albaranes/pdf/" + .registro.numero_serie + ".pdf` · huella integridad `" + .registro.huella_integridad[:16] + "…`"' /tmp/albaran-informe.json)
+            {
+              echo "### Albarán generado"
+              echo "$RES"
+              echo ""
+              echo "> Documento no fiscal. Recuerda: no sustituye a la factura ni al obligado registro VeriFactu (pendiente certificado)."
+            } | gh issue comment "$ISSUE" --body-file - || true
+            gh issue edit "$ISSUE" --remove-label "albaran:crear" --add-label "albaran:registrado" || true
+          else
+            ERRORES=$(jq -r '.errores | join(" · ")' /tmp/albaran-informe.json 2>/dev/null || echo "error sin informe")
+            echo "### Albarán NO generado (revisa y re-etiqueta)"$'\n'"$ERRORES" | gh issue comment "$ISSUE" --body-file - || true
+            gh issue edit "$ISSUE" --remove-label "albaran:crear" --add-label "albaran:error" || true
+            exit 1
+          fi

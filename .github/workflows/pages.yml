@@ -1,0 +1,77 @@
+# pages.yml — Publicación en GitHub Pages CON sello bloqueante (07-oct-2026).
+# Segunda puerta tras clean-and-verify.yml: nadie publica en producción algo
+# que no pasa los 147 pytest + 36 node. Modo recomendado de deploy:
+# Settings → Pages → Build and deployment → Source: «GitHub Actions».
+# (Compatible con el modo clásico «Deploy from branch → main/(root)»: ese modo
+#  publica sin esta puerta; usar UNO de los dos.)
+name: pages-deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  sello:
+    name: Sello pre-publicación (147 pytest + 36 node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Instalar editables y dependencias
+        run: python3 -m pip install -e ./motor -e ./verifactu -e ./integracion -e ./auth cryptography pyyaml
+      - name: pytest global (147)
+        run: python3 -m pytest motor/ verifactu/ integracion/ auth/ diseno/tests limpieza -q
+      - name: jsdom fuera del repo (mismo patrón que local)
+        run: npm --prefix "$HOME/.deps" install jsdom@24
+      - name: node — componentes (8) · frontend-auth (10) · SPA (18)
+        run: |
+          node --test diseno/componentes/tests-componentes.test.mjs
+          node --test frontend-auth/tests
+          node --test apps/web/tests/app.test.mjs
+      - name: Integridad del export de diseño (SHA-256)
+        run: python3 diseno/tests/exportar.py --check
+      - name: YAML de workflows parseables
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import yaml, glob
+          fs = glob.glob('.github/workflows/*.yml')
+          [yaml.safe_load(open(f)) for f in fs]
+          assert len(fs) >= 9, fs
+          PY
+
+  publicar:
+    name: Publicar sitio estático (raíz del repo)
+    needs: sello
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Empaquetar raíz (index.html + .nojekyll; excluye .git por defecto)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

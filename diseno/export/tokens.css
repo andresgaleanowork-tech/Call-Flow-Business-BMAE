@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   tokens.css — Custom properties BMAE «Energía Precisa» (C3, §8 maestro)
+   DERIVADO de tokens/design-tokens.json (paridad literal testeada:
+   tests/test_paridad_tokens.py — tocar AQUÍ sin tocar el JSON rompe CI).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Color · Primario ─────────────────────────────────────────────── */
+  --color-primario-azul-profundo: #0A2540;
+  --color-primario-azul-medio: #1E4D8C;
+  --color-primario-azul-claro: #4A90E2;
+
+  /* ── Color · Secundario ───────────────────────────────────────────── */
+  --color-secundario-amarillo-energia: #FFD93D;
+  --color-secundario-naranja-calido: #FF6B35;
+  --color-secundario-verde-sostenible: #2ECC71;
+  --color-secundario-verde-oscuro: #1E8449;
+
+  /* ── Color · Neutro ───────────────────────────────────────────────── */
+  --color-neutro-blanco: #FFFFFF;
+  --color-neutro-gris-050: #F8FAFC;
+  --color-neutro-gris-200: #E2E8F0;
+  --color-neutro-gris-400: #94A3B8;
+  --color-neutro-gris-600: #475569;
+  --color-neutro-negro-suave: #0F172A;
+
+  /* ── Color · Semántico ────────────────────────────────────────────── */
+  --color-exito: #16A34A;
+  --color-advertencia: #F59E0B;
+  --color-error: #DC2626;
+  --color-info: #0EA5E9;
+
+  /* ── Color · Datos (gráficos) ─────────────────────────────────────── */
+  --color-dato-1: #1E4D8C;
+  --color-dato-2: #2ECC71;
+  --color-dato-3: #FFD93D;
+  --color-dato-4: #FF6B35;
+  --color-dato-5: #8B5CF6;
+  --color-dato-6: #06B6D4;
+  --color-dato-7: #EC4899;
+  --color-dato-8: #64748B;
+
+  /* ── Modo claro (superficie apilada: fondo → tarjeta → complementaria) */
+  --superficie-fondo: var(--color-neutro-gris-050);
+  --superficie-tarjeta: var(--color-neutro-blanco);
+  --superficie-complementaria: var(--color-neutro-gris-200);
+  --texto-fuerte: var(--color-neutro-negro-suave);
+  --texto-suave: var(--color-neutro-gris-600);
+  --borde: var(--color-neutro-gris-200);
+
+  /* ── Tipografía (escala Major Third 1.250, §8.3) ─────────────────── */
+  --font-cuerpo: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-datos: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --font-titular: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --tipo-display-xl: 400 4rem/4.5rem var(--font-titular);
+  --tipo-display-l: 400 3rem/3.5rem var(--font-titular);
+  --tipo-h1: 600 2.5rem/3rem var(--font-titular);
+  --tipo-h2: 600 2rem/2.5rem var(--font-titular);
+  --tipo-h3: 600 1.5rem/2rem var(--font-titular);
+  --tipo-h4: 600 1.25rem/1.75rem var(--font-cuerpo);
+  --tipo-body-l: 400 1.125rem/1.75rem var(--font-cuerpo);
+  --tipo-body-m: 400 1rem/1.5rem var(--font-cuerpo);
+  --tipo-body-s: 400 0.875rem/1.25rem var(--font-cuerpo);
+  --tipo-caption: 400 0.75rem/1rem var(--font-cuerpo);
+  --tipo-overline: 600 0.6875rem/1rem var(--font-cuerpo);
+
+  --tracking-display: -0.02em;
+  --tracking-h: -0.01em;
+  --tracking-overline: 0.08em;
+
+  /* ── Espaciado (base 4, §8.4) ─────────────────────────────────────── */
+  --espacio-3xs: 0.25rem;  /* 4px  */
+  --espacio-2xs: 0.5rem;   /* 8px  */
+  --espacio-xs: 0.75rem;   /* 12px */
+  --espacio-sm: 1rem;      /* 16px */
+  --espacio-md: 1.5rem;    /* 24px */
+  --espacio-lg: 2rem;      /* 32px */
+  --espacio-xl: 3rem;      /* 48px */
+  --espacio-2xl: 4rem;     /* 64px */
+  --espacio-3xl: 6rem;     /* 96px */
+
+  /* ── Grid y breakpoints (§8.4) ────────────────────────────────────── */
+  --grid-desktop-columnas: 12;
+  --grid-desktop-gutter: 24px;
+  --grid-desktop-max: 1440px;
+  --grid-tablet-columnas: 8;
+  --grid-tablet-gutter: 20px;
+  --grid-tablet-max: 1024px;
+  --grid-movil-columnas: 4;
+  --grid-movil-gutter: 16px;
+
+  --bp-xs: 320px; --bp-sm: 640px; --bp-md: 768px;
+  --bp-lg: 1024px; --bp-xl: 1280px; --bp-2xl: 1536px;
+
+  /* ── Radios (§8.5) ────────────────────────────────────────────────── */
+  --radio-cero: 0;
+  --radio-sm: 4px;
+  --radio-md: 8px;
+  --radio-lg: 12px;
+  --radio-xl: 16px;
+  --radio-2xl: 24px;
+  --radio-full: 9999px;
+
+  /* ── Sombras (§8.5) ───────────────────────────────────────────────── */
+  --sombra-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --sombra-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.10), 0 1px 2px -1px rgba(15, 23, 42, 0.10);
+  --sombra-md: 0 4px 6px -1px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.10);
+  --sombra-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.10), 0 4px 6px -4px rgba(15, 23, 42, 0.10);
+  --sombra-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.10);
+  --sombra-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+
+  /* ── Animaciones (§8.5) ───────────────────────────────────────────── */
+  --duracion-instant: 100ms;
+  --duracion-fast: 200ms;
+  --duracion-normal: 300ms;
+  --duracion-slow: 500ms;
+  --duracion-very-slow: 800ms;
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Iconografía Lucide (§8.6) ────────────────────────────────────── */
+  --icon-trazo: 1.5;
+  --icon-16: 16px; --icon-20: 20px; --icon-24: 24px; --icon-32: 32px;
+
+  color-scheme: light;
+}
+
+/* ── Modo oscuro (tokens explícitos §8.2, puros por prefers-color-scheme) ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Tokens explícitos del maestro §8.2 «DARK MODE» */
+    --superficie-fondo: #0F172A;
+    --superficie-tarjeta: #1E293B;
+    --superficie-complementaria: #334155;
+    --color-neutro-blanco: #1E293B;   /* las tarjetas "blancas" se oscurecen */
+    --texto-fuerte: #F1F5F9;
+    --texto-suave: #CBD5E1;
+    --borde: #475569;
+    --color-primario-azul-medio: #60A5FA;   /* azul luminoso sobre oscuro   */
+    --color-primario-azul-claro: #4A90E2;   /* intacto: ya luce sobre fondo3 */
+    --color-secundario-amarillo-energia: #FCD34D;
+
+    --sombra-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.40);
+    --sombra-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.45), 0 1px 2px -1px rgba(0, 0, 0, 0.40);
+    --sombra-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.40);
+    --sombra-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.50), 0 4px 6px -4px rgba(0, 0, 0, 0.45);
+    --sombra-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.45);
+    --sombra-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+
+    color-scheme: dark;
+  }
+}
+
+/* ── prefers-reduced-motion: congelar TODO lo animado (§11.1, regla dura) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,26 @@
+name: 🌞 Presupuesto/obra solar
+description: Abrir un proyecto solar (cada uno = 1 issue; se mueve con el label estado-solar:*).
+title: "Solar [ref-cliente] · proyecto"
+labels: [canal:solar, "estado-solar:visita"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cada proyecto solar es un issue: se etiqueta `canal:solar` (ya lo
+        lleva esta plantilla) y se mueve con `estado-solar:visita|presupuesto|
+        instalacion|garantia`. Una visita programada se marca con un label
+        `visita:YYYY-MM-DD` (puedes añadirlo en la barra lateral al guardar).
+        La garantía viva se activa con `estado-solar:garantia` + fecha en el
+        cuerpo. Sin datos personales en campos públicos del título.
+  - type: textarea
+    id: ficha
+    attributes:
+      label: Datos del proyecto (referencia, sin PII)
+      value: |
+        Referencia de cliente: ref. #
+        Dirección técnica (ciudad/provincia): 
+        Potencia prevista (kWp): 
+        Fechas clave (visita, compromiso): 
+        Notas del despacho: 
+    validations:
+      required: true

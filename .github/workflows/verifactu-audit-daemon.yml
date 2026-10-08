@@ -1,0 +1,80 @@
+# verifactu-audit-daemon.yml — A5.3 (§7.3 Prompt Maestro)
+# Verificación DIARIA de la cadena de huellas SHA-256 de VeriFactu:
+# si un solo eslabón no cuadra, la cadena está comprometida y se abre
+# Issue crítico al momento (el riesgo «Incumplimiento VeriFactu» es
+# BAJO/CRÍTICO → la mitigación es este guardián continuo).
+
+name: verifactu-audit-daemon
+
+on:
+  schedule:
+    - cron: "0 3 * * *"             # cada día a las 03:00 UTC
+  workflow_dispatch:
+    inputs:
+      serie:
+        description: "Serie a auditar (vacío = todas)"
+        default: ""
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ERPNEXT_BASE_URL: ${{ vars.ERPNEXT_BASE_URL }}
+      ERPNEXT_API_KEY: ${{ secrets.ERPNEXT_API_KEY }}
+      ERPNEXT_API_SECRET: ${{ secrets.ERPNEXT_API_SECRET }}
+      SERIE: ${{ github.event.inputs.serie || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar módulo VeriFactu
+        run: pip install -e ./verifactu -e ./integracion requests tenacity
+
+      - name: Auditar cadena de huellas (recomputación íntegra por serie)
+        run: |
+          python integracion/scripts/verifactu_audit.py \
+            --erpnext "$ERPNEXT_BASE_URL" \
+            --serie "$SERIE" \
+            --informe /tmp/verifactu-audit.json
+
+      - name: Cadena OK → artefacto de evidencia (7 años ≈ exigencia fiscal)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verifactu-audit-${{ github.run_id }}
+          path: /tmp/verifactu-audit.json
+          retention-days: 400       # tope GitHub; el histórico largo vive en Releases anuales
+
+      - name: Cadena ROTA → Issue CRÍTICO inmediato
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let informe = {};
+            try { informe = JSON.parse(fs.readFileSync('/tmp/verifactu-audit.json','utf8')); } catch (e) {}
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 CADENA VERIFACTU COMPROMETIDA · ${new Date().toISOString()}`,
+              labels: ['critico', 'verifactu', 'dlq'],
+              body: [
+                'La recomputación SHA-256 de la cadena de facturas ha sufrido',
+                'una divergencia. Intervención manual urgente ANTES de emitir.',
+                '',
+                '```json',
+                JSON.stringify(informe, null, 2).slice(0, 55000),
+                '```',
+              ].join('\n'),
+            });

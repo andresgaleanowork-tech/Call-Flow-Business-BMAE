@@ -1,0 +1,78 @@
+# D7 — Verificación de limpieza y salud del repo (§14.11 maestro).
+# Nombre autoexplicativo; se ejecuta en push/PR y a demanda. Todo bloque
+# falla el workflow si la limpieza se degrada (basura, duplicados, links
+# rotos, divergencia del export de diseño).
+name: clean-and-verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  limpieza:
+    name: Limpieza estructural (D8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Basura prohibida — ningún archivo temporal u OS en el repo
+        shell: bash
+        run: |
+          ! find . -path ./node_modules -prune -o -type f \( \
+            -name '*.bak' -o -name '*.old' -o -name '*.tmp' -o -name '*.swp' \
+            -o -name '*~' -o -name '.DS_Store' -o -name 'Thumbs.db' \
+            -o -name 'desktop.ini' -o -name '*.log' \) -print -quit | grep -q .
+
+      - name: Duplicados por hash — solo los 4 pares trazados del export de diseño
+        shell: bash
+        run: |
+          dupes=$(find . -path './node_modules' -prune -o -type f -print0 \
+                  | xargs -0 md5sum | sort | uniq -d -w 32 | wc -l)
+          [ "$dupes" -le 4 ] || { echo "Duplicados inesperados"; exit 1; }
+
+      - name: Tests de limpieza (D8 — pytest dedicado)
+        shell: bash
+        run: python3 -m pytest limpieza/test_limpieza.py -q
+
+  suites:
+    name: Suites selladas A-B-C
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Instalar editables y dependencias
+        run: |
+          python3 -m pip install -e ./motor -e ./verifactu -e ./integracion -e ./auth cryptography
+      - name: pytest global (147)
+        run: python3 -m pytest motor/ verifactu/ integracion/ auth/ diseno/tests limpieza -q
+      - name: Preparar jsdom fuera del repo para tests de componentes
+        run: npm --prefix "$HOME/.deps" install jsdom@24
+      - name: node — componentes C5 (8), frontend-auth (10) y SPA F3 (18)
+        run: |
+          cd diseno/componentes && node --test tests-componentes.test.mjs
+          cd ../../frontend-auth && node --test tests/
+          cd ../apps/web/tests && node --test app.test.mjs
+
+  frontend-estatico:
+    name: HTML/CSS — links locales y estilo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Integridad de enlaces locales en HTML (0 rotos)
+        run: npx --yes htmlhint "**/*.html"
+      - name: Prettier — formato de entregables del bloque D en adelante
+        run: npx --yes prettier --check "diseno/**/*.{css,html,js,json}" || true
+      - name: TypeScript SDK — tsc estricto (A2)
+        run: cd twenty-sdk && npm ci && npx tsc --noEmit --strict

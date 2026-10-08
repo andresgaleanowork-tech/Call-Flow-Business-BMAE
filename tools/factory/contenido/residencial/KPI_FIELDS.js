@@ -1,1 +1,0 @@
-const KPI_FIELDS=[['k_llam','Llamadas realizadas'],['k_cont','Contactos con decisor'],['k_citas','Estudios / citas'],['k_vent','Ventas / altas']];

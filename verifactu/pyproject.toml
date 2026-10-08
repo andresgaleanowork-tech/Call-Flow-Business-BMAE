@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bmae-verifactu"
+version = "0.1.0"
+description = "Módulo VeriFactu (Orden HAC/1177/2024): huella SHA-256 encadenada, XML RegistroFacturacionAlta y QR de cotejo (Bloque A4 BMAE)"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bmae_verifactu*"]

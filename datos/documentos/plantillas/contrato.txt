@@ -1,0 +1,38 @@
+CONTRATO DE SUMINISTRO Y/O INSTALACIÓN — PLANTILLA BASE
+======================================================================
+**BORRADOR B4 — Revise este documento tu abogado antes de firmarlo.**
+Este texto es una plantilla operativa, no un documento jurídico cerrado.
+
+PARTES
+- Comercializadora: BMAE Energía S.L., con NIF {{nif_emisor}} y
+  domicilio {{direccion_emisor}}.
+- Cliente: {{nombre_cliente}}, con NIF {{nif_cliente}}, en la dirección
+  {{direccion_cliente}}.
+
+OBJETO
+Suministro / servicio contratado (ref. cliente {{ref_cliente}}):
+{{descripcion_servicio}}
+
+CUPS / punto de suministro: {{cups}}
+Potencia contratada: {{potencia_kw}} kW · Consumo estimado: {{consumo_kwh}} kWh/año
+
+PRECIO Y FORMA DE PAGO
+El precio del servicio se detalla en la hoja de OFERTA adjunta; los importes que
+figuran en esta plantilla se sustituirán SOLO con números literal de oferta.
+Método de pago: {{forma_pago}}.
+
+DURACIÓN Y PERMANENCIA
+{{duracion_permanencia}}
+
+PROTECCIÓN DE DATOS
+El tratamiento de datos se rige por el anexo RGPD firmado por separado
+(anexo-rgpd.pdf), que forma parte integrante de este contrato.
+
+FIRMAS
+Hecho a {{lugar}}, a {{fecha_firma}}.
+
+Por la comercializadora                    Por el cliente
+_________________                          _________________
+{{nombre_firmante_emisor}}                 {{nombre_cliente}}
+======================================================================
+PLANTILLA BASE B4 — REQUIERE REVISIÓN LEGAL ANTES DE SU FIRMA.

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- CSP estricta §4.4: nada de terceros; connect-src solo al backend VPS
+     y a GitHub (OAuth). style-src 'unsafe-inline' declarado intencionalmente
+     por el CSS critico embebido tras línea base (ver §11.2). -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.github.com https://erp.bmae.example; frame-ancestors 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Acceso — Portal BMAE</title>
+<meta name="description" content="Acceso al portal corporativo BMAE con tu cuenta de GitHub (PKCE).">
+<style>
+/* Tokens §8.2-8.5 (espera del Bloque C: fuentes Space Grotesk/Inter self-host) */
+:root{
+  --azul-profundo:#0A2540; --azul-medio:#1E4D8C; --azul-claro:#4A90E2;
+  --amarillo:#FFD93D; --gris-050:#F8FAFC; --gris-200:#E2E8F0;
+  --gris-500:#64748B; --gris-900:#0F172A; --texto:#0F172A; --fondo:#FFFFFF;
+  --radio:12px; --sombra-lg:0 10px 15px -3px rgba(10,37,64,.20),0 4px 6px -4px rgba(10,37,64,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --fondo:#0F172A; --texto:#F1F5F9; --gris-050:#1E293B; --gris-200:#334155; }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+body{
+  min-height:100vh; display:grid; grid-template-columns: 3fr 2fr;
+  font:400 16px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color:var(--texto); background:var(--fondo);
+}
+.salto{position:absolute;left:-9999px;top:0;background:var(--amarillo);color:var(--azul-profundo);
+  padding:8px 16px;border-radius:0 0 8px 8px;z-index:10;font-weight:600}
+.salto:focus{left:12px;outline:2px solid var(--azul-claro);outline-offset:2px}
+/* ---- panel marca (60%) ---- */
+.marca{
+  background:linear-gradient(160deg,var(--azul-profundo) 0%,var(--azul-medio) 78%,var(--azul-claro) 130%);
+  color:#fff; padding:clamp(24px,6vw,80px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:32px;
+}
+.marca h1{font:600 clamp(36px,5vw,64px)/1.1 "Space Grotesk",Inter,system-ui,sans-serif;letter-spacing:-.02em;max-width:14ch}
+.marca h1 span{color:var(--amarillo)}
+.marca .lema{font-size:18px;opacity:.92;max-width:46ch;margin-top:12px}
+.marca ul{list-style:none;display:grid;gap:14px;font-size:15px}
+.marca li{display:flex;gap:10px;align-items:flex-start}
+.marca li::before{content:"▸";color:var(--amarillo);font-weight:700}
+.marca small{opacity:.72}
+/* ---- panel formulario (40%) ---- */
+.acceso{
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(24px,5vw,64px);background:var(--fondo);
+}
+.tarjeta{width:min(380px,100%);display:grid;gap:16px}
+.tarjeta h2{font:600 32px/1.2 "Space Grotesk",Inter,sans-serif;letter-spacing:-.01em}
+.tarjeta p{color:var(--gris-500);font-size:15px}
+.boton-github{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:44px;padding:12px 20px;border:0;border-radius:var(--radio);
+  background:var(--azul-profundo);color:#fff;font:600 16px Inter,system-ui,sans-serif;
+  cursor:pointer;box-shadow:var(--sombra-lg);
+  transition:transform .2s ease-out, background-color .2s ease-out;
+}
+.boton-github:hover{background:var(--azul-medio);transform:translateY(-1px)}
+.boton-github:focus-visible{outline:2px solid var(--azul-claro);outline-offset:2px}
+.boton-github:active{transform:translateY(0)}
+.boton-github[aria-disabled="true"]{opacity:.6;cursor:progress;pointer-events:none}
+.estado{min-height:20px;font-size:14px;color:var(--gris-500)}
+.estado[role="alert"]{color:#DC2626}
+.nota{font-size:12px;color:var(--gris-500);max-width:38ch}
+@media (max-width:820px){
+  body{grid-template-columns:1fr}
+  .marca{padding:32px 24px;gap:16px}
+  .marca h1{font-size:36px}
+}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<main id="contenido" aria-label="Acceso al portal BMAE">
+  <section class="marca" aria-label="Presentación BMAE">
+    <div>
+      <img src="../assets/logo.svg" alt="BMAE — Energía e ingeniería" width="132" height="40"
+           onerror="this.replaceWith(Object.assign(document.createElement('strong'),{textContent:'BMAE',style:'font-size:28px'}))">
+      <h1>Tu energía,<br>con <span>precisión</span><br>de ingeniería.</h1>
+      <p class="lema">Comparador multitarifa 2.0TD/3.0TD/6.XTD, estudios
+      fotovoltaicos y facturación VeriFactu — en un solo portal</p>
+    </div>
+    <ul aria-label="Ventajas del portal">
+      <li>Oferta con desglose real de peajes y cargos, línea a línea</li>
+      <li>Datos en tu sesión: nada persiste en tu navegador al cerrarla</li>
+      <li>Acceso con tu cuenta de GitHub — sin contraseñas nuevas</li>
+    </ul>
+    <small>© 2026 BMAE · Portal corporativo v1.0 · WCAG 2.1 AA</small>
+  </section>
+
+  <section class="acceso" aria-label="Formulario de acceso">
+    <div class="tarjeta">
+      <h2>Accede al portal</h2>
+      <p>Usa tu cuenta de GitHub corporativa. Te llevaremos a GitHub y
+      volveremos aquí en unos segundos —flujo OAuth PKCE, §4.2.</p>
+      <button id="btn-acceder" class="boton-github" type="button">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.71.08-.71 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.96.11-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.27 1.19-3.07-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.17a11 11 0 0 1 5.78 0c2.21-1.48 3.18-1.17 3.18-1.17.63 1.59.23 2.76.11 3.05.74.8 1.19 1.82 1.19 3.07 0 4.41-2.69 5.38-5.25 5.66.41.35.78 1.05.78 2.13v3.16c0 .3.2.66.8.55A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
+        </svg>
+        Continuar con GitHub
+      </button>
+      <p id="estado" class="estado" role="status" aria-live="polite"></p>
+      <p class="nota">Al entrar aceptas la política de uso interno del portal.
+      La sesión caduca a las 8 h y por 30 min de inactividad.</p>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { iniciarLogin } from './auth.js';
+
+const btn = document.getElementById('btn-acceder');
+const estado = document.getElementById('estado');
+
+btn.addEventListener('click', async () => {
+  btn.setAttribute('aria-disabled', 'true');
+  estado.removeAttribute('role');
+  estado.textContent = 'Preparando redirección segura a GitHub…';
+  try {
+    const url = await iniciarLogin({
+      clientId: '__GITHUB_OAUTH_CLIENT_ID__',      // inyectado por deploy
+      redirectUri: new URL('callback.html', location.href).toString(),
+    });
+    location.assign(url);                          // §4.2.2
+  } catch (e) {
+    estado.setAttribute('role', 'alert');
+    estado.textContent = 'No se pudo iniciar la redirección: ' + e.message;
+    btn.removeAttribute('aria-disabled');
+  }
+});
+</script>
+</body>
+</html>
