@@ -11,7 +11,7 @@
 import { ApiError } from "./api.js";
 import { aPayload, huella as _huella } from "./twenty.js"; // reutiliza lote e idempotencia
 
-export const REPO_OPERACION = ""; // F4G: "org/repo-operacion" (privado, §4 del ADR)
+export const Ov23liDmMs16qvV65SOM = ""; // F4G: "org/repo-operacion" (privado, §4 del ADR)
 const API = "https://api.github.com";
 const BUZON_DEFAULT = 1; // number del issue «BUZÓN COMERCIAL» del repo de operación
 const TIMEOUT_MS = 10000;
