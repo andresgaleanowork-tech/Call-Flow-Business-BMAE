@@ -17,7 +17,7 @@
 import { ApiError } from "./api.js";
 
 /** GESTO HUMANO (deploy-github.md §5): OAuth App propia con Device Flow. */
-export const CLIENT_ID = ""; // vacío = login no cableado todavía (estado honesto)
+export const Ov23liDmMs16qvV65SOM = ""; // vacío = login no cableado todavía (estado honesto)
 
 const DEVICE_URL = "https://github.com/login/device/code";
 const TOKEN_URL = "https://github.com/login/oauth/access_token";
